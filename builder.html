@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Character Forge — Savage Worlds Character Builder</title>
+<title>Savage Worlds Character Builder — Free Online Tool | Character Forge by DiceForge Studios</title>
+<meta name="description" content="Free Savage Worlds character builder. Step-by-step creation with live validation, budget tracking, powers, gear, and export to Fantasy Grounds, PDF, and HTML. No login required.">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -16,10 +17,71 @@
   ::-webkit-scrollbar-track { background:#0A0908; }
   ::-webkit-scrollbar-thumb { background:#2A2520; border-radius:3px; }
   ::selection { background:#C4A44A; color:#0A0908; }
+
+/* ── SITE NAV ── */
+.site-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9000;
+  background: #0A0908E8; backdrop-filter: blur(12px);
+  border-bottom: 1px solid #2A2520; padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between; height: 64px;
+}
+.site-nav .nav-brand {
+  font-family: 'Cinzel', serif; font-weight: 700; font-size: 16px;
+  color: #C4A44A; letter-spacing: 3px; text-transform: uppercase;
+  text-decoration: none; display: flex; align-items: center; gap: 10px;
+}
+.site-nav .nav-brand .anvil { font-size: 22px; color: #D4B45A; }
+.site-nav .nav-links {
+  display: flex; gap: 32px; list-style: none; margin: 0; padding: 0;
+}
+.site-nav .nav-links a {
+  font-family: 'Cinzel', serif; font-size: 12px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; color: #8A8070;
+  text-decoration: none; transition: color 0.3s; position: relative;
+}
+.site-nav .nav-links a:hover, .site-nav .nav-links a.active { color: #C4A44A; }
+.site-nav .nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+  height: 1px; background: #C4A44A; transform: scaleX(0); transition: transform 0.3s;
+}
+.site-nav .nav-links a:hover::after, .site-nav .nav-links a.active::after { transform: scaleX(1); }
+.site-nav .hamburger {
+  display: none; flex-direction: column; gap: 5px; cursor: pointer;
+  padding: 8px; background: none; border: none; z-index: 9001;
+}
+.site-nav .hamburger span { display: block; width: 24px; height: 2px; background: #C4A44A; transition: all 0.3s; }
+.site-nav .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.site-nav .hamburger.open span:nth-child(2) { opacity: 0; }
+.site-nav .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+@media (max-width: 768px) {
+  .site-nav { padding: 0 20px; }
+  .site-nav .hamburger { display: flex; }
+  .site-nav .nav-links {
+    position: fixed; top: 64px; left: 0; right: 0; background: #0A0908F5;
+    backdrop-filter: blur(16px); flex-direction: column; padding: 32px 40px;
+    gap: 24px; border-bottom: 1px solid #2A2520;
+    transform: translateY(-100%); opacity: 0; pointer-events: none; transition: all 0.3s;
+  }
+  .site-nav .nav-links.open { transform: translateY(0); opacity: 1; pointer-events: all; }
+  .site-nav .nav-links a { font-size: 14px; letter-spacing: 3px; }
+}
+
 </style>
 </head>
 <body>
-<div id="root"></div>
+<nav class="site-nav">
+  <a href="/" class="nav-brand"><span class="anvil">⚒</span> DiceForge Studios</a>
+  <button class="hamburger" onclick="this.classList.toggle('open');document.getElementById('bldrNav').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="bldrNav">
+    <li><a href="/">Home</a></li>
+    <li><a href="/builder" class="active">Character Builder</a></li>
+    <li><a href="/#page-arrath">World of Arr'ath</a></li>
+    <li><a href="/#page-about">About</a></li>
+  </ul>
+</nav>
+<div id="root" style="padding-top:64px"></div>
 
 <!-- ═══ MODULE REGISTRY — must load before data modules ═══ -->
 <script>
@@ -1082,7 +1144,7 @@ function CharacterForgeApp() {
         </div>
         <div style={{fontSize:'10px',color:C.textDim,textAlign:'center',marginTop:'32px',lineHeight:'1.5',padding:'12px',borderTop:'1px solid '+C.border}}>
           This tool references Savage Worlds, property of Pinnacle Entertainment Group, under the Fan License. Not for resale. You will need the Savage Worlds core rules to play.
-          {activeSupplements.length > 0 ? ' Supplement content \u00A9 DiceForge Studios Ltd.' : ''}
+          {activeSupplements.length > 0 ? ' Supplement content \u00A9 DiceForge Studios.' : ''}
         </div>
       </div>
     </div>
@@ -1093,3 +1155,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(<CharacterForgeApp /
 </script>
 </body>
 </html>
+
