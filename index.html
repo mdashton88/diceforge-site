@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DiceForge Studios — Savage Worlds Content & Tools</title>
-<meta name="description" content="Free character creation tools for Savage Worlds and original grimdark fantasy settings. The Tribute Lands: Paradise Lost — regional supplements for Savage Worlds.">
+<title>Savage Worlds Character Builder — Free Online Tool & Grimdark Fantasy Settings | DiceForge Studios</title>
+<meta name="description" content="Free Savage Worlds character builder with step-by-step creation, live validation, and Fantasy Grounds export. Plus The Tribute Lands — grimdark fantasy setting supplements for Savage Worlds. No login required.">
 
 <!-- Open Graph -->
-<meta property="og:title" content="DiceForge Studios — Tools & Worlds for Savage Worlds">
-<meta property="og:description" content="Free character builder for every Savage Worlds player. Original grimdark fantasy settings built to professional standards.">
+<meta property="og:title" content="Savage Worlds Character Builder — Free Tool & Grimdark Settings">
+<meta property="og:description" content="Free character builder with export to Fantasy Grounds, PDF, and HTML. Original grimdark fantasy supplements for Savage Worlds.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.diceforgestudios.com">
 <meta property="og:site_name" content="DiceForge Studios">
@@ -16,7 +16,41 @@
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="DiceForge Studios — Tools & Worlds for Savage Worlds">
-<meta name="twitter:description" content="Free character builder and grimdark fantasy settings for Savage Worlds.">
+<meta name="twitter:description" content="Free Savage Worlds character builder. Step-by-step creation, live validation, Fantasy Grounds export. Plus grimdark fantasy setting supplements.">
+<link rel="canonical" href="https://diceforgestudios.pages.dev/">
+<meta name="keywords" content="Savage Worlds, character builder, character creator, SWADE, grimdark fantasy, tabletop RPG, Fantasy Grounds, Savage Worlds tools, Savage Worlds character sheet, free RPG tools, Tribute Lands, DiceForge Studios">
+<meta name="robots" content="index, follow">
+<meta name="author" content="DiceForge Studios">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "DiceForge Studios",
+  "url": "https://diceforgestudios.pages.dev",
+  "description": "Free Savage Worlds character builder and grimdark fantasy setting supplements.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "DiceForge Studios"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Savage Worlds Character Builder",
+  "applicationCategory": "GameApplication",
+  "operatingSystem": "Web browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "GBP"
+  },
+  "description": "Free browser-based character creation tool for Savage Worlds tabletop RPG. Step-by-step wizard with live validation, budget tracking, and export to Fantasy Grounds, PDF, and HTML.",
+  "url": "https://diceforgestudios.pages.dev/builder"
+}
+</script>
 
 <!-- Favicon (anvil emoji as SVG) -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚒</text></svg>">
@@ -652,22 +686,6 @@ footer a:hover { color: var(--gold); }
   margin: 80px 0;
 }
 
-/* ── AMMARIA PAGE SPECIFIC ── */
-.ammaria-hero {
-  position: relative;
-  padding: 120px 40px 80px;
-  text-align: center;
-  overflow: hidden;
-}
-
-.ammaria-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 40%, #1A1508 0%, var(--bg) 70%);
-}
-
-.ammaria-hero .hero-content { position: relative; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
@@ -697,9 +715,9 @@ footer a:hover { color: var(--gold); }
   </button>
   <ul class="nav-links" id="navLinks">
     <li><a href="#" onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
-    <li><a href="#" onclick="showPage('builder')" id="nav-builder">Character Builder</a></li>
+    <li><a href="/builder" id="nav-builder">Character Builder</a></li>
     <li><a href="#" onclick="showPage('arrath')" id="nav-arrath">World of Arr'ath</a></li>
-    <li><a href="#" onclick="showPage('ammaria')" id="nav-ammaria">Ammaria</a></li>
+    <li><a href="#" onclick="showPage('about')" id="nav-about">About</a></li>
   </ul>
 </nav>
 
@@ -710,12 +728,12 @@ footer a:hover { color: var(--gold); }
 
   <div class="hero">
     <div class="hero-content">
-      <div class="hero-overline">DiceForge Studios Ltd</div>
+      <div class="hero-overline">DiceForge Studios</div>
       <h1>Tools &amp; Worlds<span>for Savage Worlds</span></h1>
       <div class="hero-rule"></div>
       <p class="hero-desc">Free character creation tools for every Savage Worlds player. Original settings for those who like their fantasy dark, complex, and dangerously human.</p>
       <div class="hero-cta">
-        <a href="builder.html" class="btn btn-primary">Character Builder <span style="font-size:11px;margin-left:8px;padding:3px 8px;background:rgba(90,180,90,0.3);border:1px solid rgba(90,180,90,0.5);letter-spacing:1px;">LIVE</span></a>
+        <a href="/builder" class="btn btn-primary">Character Builder <span style="font-size:11px;margin-left:8px;padding:3px 8px;background:rgba(90,180,90,0.3);border:1px solid rgba(90,180,90,0.5);letter-spacing:1px;">LIVE</span></a>
         <a href="#" class="btn" onclick="showPage('arrath')">Explore Arr'ath</a>
       </div>
     </div>
@@ -723,113 +741,24 @@ footer a:hover { color: var(--gold); }
 
   <!-- WHAT WE DO -->
   <section>
-    <div class="section-overline">What We Do</div>
-    <h2>Two Things. Both Free to Start.</h2>
-    <p class="section-intro">We build free tools for the Savage Worlds community and publish original grimdark fantasy content set in the world of Arr'ath.</p>
+    <p class="section-intro">We build free tools for the <em>Savage Worlds</em> community and publish original grimdark content set in the fantasy world of Arr'ath.</p>
 
     <div class="card-grid">
-      <div class="card">
+      <a href="/builder" class="card" style="text-decoration:none;color:inherit;cursor:pointer;">
         <span class="card-icon">⚔</span>
         <h3>Character Builder <span style="font-size:11px;margin-left:8px;padding:3px 8px;background:rgba(90,180,90,0.3);border:1px solid rgba(90,180,90,0.5);color:#6ABA6A;letter-spacing:1px;vertical-align:middle;">LIVE</span></h3>
         <p>A free, browser-based character creation tool for Savage Worlds. Step-by-step wizard with live validation, budget tracking, powers, and gear. No login. No subscription. Works with core rules out of the box.</p>
-      </div>
-      <div class="card">
+      </a>
+      <a href="#" onclick="showPage('arrath');return false;" class="card" style="text-decoration:none;color:inherit;cursor:pointer;">
         <span class="card-icon">🌍</span>
         <h3>The Tribute Lands</h3>
         <p>Arr'ath is a continent crushed beneath ten thousand years of immortal tyranny. Five regions, each with its own culture, conflicts, and reasons to fight. Regional supplements for Savage Worlds, built to professional standards.</p>
-      </div>
-      <div class="card card-greyed">
-        <span class="card-icon">📜</span>
-        <h3>Weekly Adventures <span class="coming-soon-badge">Coming Soon</span></h3>
-        <p>One-sheet adventures published weekly on DriveThruRPG. Each one runs in a single session, requires only the Savage Worlds core rules, and drops your players into a world where easy answers don't exist.</p>
-      </div>
+      </a>
+
     </div>
   </section>
 
   <section>
-    <div class="divider"></div>
-    <div class="section-overline">About</div>
-    <h2>DiceForge Studios</h2>
-    <div class="two-col">
-      <div>
-        <p>DiceForge Studios is a small independent publisher creating content and tools for Savage Worlds by Pinnacle Entertainment Group.</p>
-        <p style="margin-top:16px;">We believe the Savage Worlds community deserves the best digital tools and the richest, most <em>Fast, Furious, Fun!</em> settings. The Character Builder is our contribution to the first. The Tribute Lands is our offering to the second.</p>
-        <p style="margin-top:16px;">Everything we build works standalone. The Character Builder serves any Savage Worlds campaign, not just ours. The setting supplements require nothing beyond the core rules.</p>
-      </div>
-      <div>
-        <div class="quote-block">
-          "We learned to look at horror and call it commerce. We count souls instead of saving them, and we sleep in fine beds bought with that counting. Judge us if you must. But judge us knowing that our alternative is fire."
-          <cite>— Aldric Thorne, Ammarian Merchant Factor</cite>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-
-<!-- ════════════════════════════════════════════════════════════ -->
-<!-- CHARACTER BUILDER PAGE                                       -->
-<!-- ════════════════════════════════════════════════════════════ -->
-<div class="page" id="page-builder">
-
-  <section style="padding-top:120px;">
-    <div class="section-overline">Free Tool</div>
-    <h2>Savage Worlds Character Builder</h2>
-    <p class="section-intro">Build legal Savage Worlds characters in minutes. Eight guided steps, live budget tracking, colour-coded validation. Free, forever, for everyone.</p>
-
-    <div style="text-align:center; margin-bottom:80px;">
-      <a href="builder.html" class="btn btn-primary" style="font-size:16px; padding:20px 60px;">Launch Character Builder</a>
-      <p style="font-size:15px; color:var(--text-dim); margin-top:20px;">Free, browser-based, no account required. Works with core Savage Worlds rules out of the box. Supplement modules coming soon.</p>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- HOW IT WORKS -->
-    <h3 style="text-align:center; font-size:28px; margin-bottom:16px;">How It Will Work</h3>
-    <p style="text-align:center; color:var(--text-dim); margin-bottom:48px; max-width:600px; margin-left:auto; margin-right:auto;">Here's what we're building. Eight steps to a finished character, each validated in real time.</p>
-
-    <div class="help-section">
-      <h3>Eight Steps to a Finished Character</h3>
-      <p>The builder walks you through Savage Worlds character creation one step at a time. Each step validates your choices in real time — green means complete, red means over budget, amber means still in progress.</p>
-
-      <div class="step-row"><span class="step-number">1</span><strong>Concept</strong> Name your character, write a concept, toggle any setting modules.</div>
-      <div class="step-row"><span class="step-number">2</span><strong>Ancestry</strong> Choose from nine core ancestries. Each shows racial abilities, Pace, Size, and Toughness modifiers.</div>
-      <div class="step-row"><span class="step-number">3</span><strong>Attributes</strong> Distribute points across Agility, Smarts, Spirit, Strength, and Vigor. Humans get 6 points; others get 5.</div>
-      <div class="step-row"><span class="step-number">4</span><strong>Skills</strong> Spend 12 skill points. Core skills start at d4 free. Costs double above linked attribute. If you've taken an Arcane Background, the builder reminds you which skill to buy.</div>
-      <div class="step-row"><span class="step-number">5</span><strong>Hindrances &amp; Edges</strong> Take Hindrances to earn points, then allocate them to bonus Edges, attribute raises, skill points, or starting funds. Every character gets 1 free Edge; Humans and Half-Elves get 2.</div>
-      <div class="step-row"><span class="step-number">6</span><strong>Powers</strong> If you selected an Arcane Background, choose your tradition and pick powers. Power Point and power slot budgets update live.</div>
-      <div class="step-row"><span class="step-number">7</span><strong>Gear</strong> Browse weapons, armour, shields, and general equipment. Starting funds default to 500 (increased by hindrance allocation). Armour updates Toughness; shields update Parry — instantly.</div>
-      <div class="step-row"><span class="step-number">8</span><strong>Summary</strong> Your complete character at a glance: derived stats, skills, edges, hindrances, powers, and gear. Green across the board means you're legal.</div>
-    </div>
-
-    <div class="help-section">
-      <h3>Validation Colours</h3>
-      <p>Every tab in the step navigator is colour-coded:</p>
-      <div class="step-row"><span class="status-dot green"></span><strong>Green</strong> Step is complete and within budget.</div>
-      <div class="step-row"><span class="status-dot red"></span><strong>Red</strong> You've overspent or violated a requirement.</div>
-      <div class="step-row"><span class="status-dot yellow"></span><strong>Amber</strong> Still in progress — points remaining to spend.</div>
-      <p style="margin-top:16px;">A persistent stats bar at the bottom of the screen shows your Pace, Parry, Toughness, and Bennies updating in real time as you make choices.</p>
-    </div>
-
-    <div class="help-section">
-      <h3>Hindrance Points — How They Work</h3>
-      <p>You may take as many Hindrances as you like for narrative flavour, but the maximum <em>benefit</em> is 4 points (Major = 2, Minor = 1). Those points can be spent four ways:</p>
-      <div class="step-row"><strong>2 points</strong> One additional Edge</div>
-      <div class="step-row"><strong>2 points</strong> Raise one attribute by a die step</div>
-      <div class="step-row"><strong>1 point</strong> One additional skill point</div>
-      <div class="step-row"><strong>1 point</strong> Bonus starting funds (+1,000)</div>
-      <p style="margin-top:16px;">Mix and match freely up to your 4-point cap.</p>
-    </div>
-
-    <div class="help-section">
-      <h3>Setting Modules</h3>
-      <p>The builder ships with Savage Worlds core rules. Setting-specific content can be toggled on from the Concept step. When regional supplements become available, their Edges, Hindrances, and equipment will appear alongside core options, clearly tagged so you always know what's from where.</p>
-    </div>
-
-    <div class="help-section">
-      <h3>What This Builder Doesn't Do</h3>
-      <p>The builder handles mechanical character creation — the numbers, the budgets, the legality checks. It does not reproduce descriptive text from any Pinnacle publication. Edge and Hindrance descriptions for core Savage Worlds content will read "See Savage Worlds core rules for full description." Setting-specific content from DiceForge supplements includes our own descriptions.</p>
-      <p>This tool references the Savage Worlds game system, available from Pinnacle Entertainment Group at <a href="https://www.peginc.com" style="color:var(--gold);">peginc.com</a>.</p>
-    </div>
 
   </section>
 </div>
@@ -888,7 +817,7 @@ footer a:hover { color: var(--gold); }
     <div class="region-card vinlands">
       <h3>The Vinlands</h3>
       <div class="subtitle">Forest and Fury</div>
-      <p>The frozen north, where the forest remembers everything and forgives nothing. Holtscarl warriors defend territories their families have held for centuries, Felsgard highlanders forge weapons in mountain holds, and the old ways persist in sacred groves the Empire has never reached. The Vinlands pay tribute through Ammarian intermediaries and hate every coin of it. Classic dungeon crawls and ancient ruins belong here.</p>
+      <p>Forest and fury. Four peoples hold this territory against everything that wants to take it: Holtscarl warriors in the ancient Valdmork, Felsgard highlanders in their mountain holds, and darker things in the deep places between. The Vinlands pay tribute through Ammarian intermediaries and hate every coin of it. Classic dungeon crawls, ancient ruins, and enemies on every side.</p>
     </div>
 
     <div class="region-card concordium">
@@ -927,79 +856,41 @@ footer a:hover { color: var(--gold); }
 </div>
 
 <!-- ════════════════════════════════════════════════════════════ -->
-<!-- AMMARIA PAGE                                                 -->
+<!-- ABOUT PAGE                                                   -->
 <!-- ════════════════════════════════════════════════════════════ -->
-<div class="page" id="page-ammaria">
-
-  <div class="ammaria-hero">
-    <div class="hero-content">
-      <div class="hero-overline" style="animation-delay:0.2s;">Regional Supplement for Savage Worlds</div>
-      <h1 style="animation-delay:0.4s;">Ammaria<span>Land of the Merchant Guilds</span></h1>
-      <div class="hero-rule" style="animation-delay:0.5s;"></div>
-      <p class="hero-desc" style="animation-delay:0.6s;">Where every transaction has a price and the only unforgivable sin is being too poor to matter.</p>
-    </div>
-  </div>
-
+<div class="page" id="page-about">
   <section>
+    <div class="section-overline">About</div>
+    <h2>DiceForge Studios</h2>
     <div class="two-col">
       <div>
-        <h3>The Guildlands</h3>
-        <p>In Ammaria, seven powerful merchant cities form a confederation bound by need rather than choice. Between those cities stretch vast forests and rolling farmland — a countryside the guild maps barely acknowledge and guild law barely reaches. The merchants talk of Ammaria as though it were their counting houses and warehouses. The peasants who feed them know better.</p>
-        <p style="margin-top:16px;">In the cities, guilds wield more power than armies. Criminal gangs murder for profit. Even the temples understand transactional relationships. The countryside remembers older ways, though tribute comes due regardless. Bad years mean debt, debt means bondage, and every village has empty houses where families used to live.</p>
+        <p>DiceForge Studios is a small independent publisher creating content and tools for Savage Worlds by Pinnacle Entertainment Group.</p>
+        <p style="margin-top:16px;">We believe the Savage Worlds community deserves the best digital tools and the richest, most <em>Fast, Furious, Fun!</em> settings. The Character Builder is our contribution to the first. The Tribute Lands is our offering to the second.</p>
+        <p style="margin-top:16px;">Everything we build works standalone. The Character Builder serves any Savage Worlds campaign, not just ours. The setting supplements require nothing beyond the core rules.</p>
       </div>
       <div>
         <div class="quote-block">
-          "In Ammaria, everything is commerce. Love, loyalty, justice — all negotiable. The only sin is being poor."
+          "We learned to look at horror and call it commerce. We count souls instead of saving them, and we sleep in fine beds bought with that counting. Judge us if you must. But judge us knowing that our alternative is fire."
+          <cite>— Aldric Thorne, Ammarian Merchant Factor</cite>
         </div>
-        <p style="margin-top:24px;">Ammaria prospers under tribute because it learned the lesson the other realms couldn't stomach: if you make yourself useful enough, the Dragon Throne lets you keep a larger share. The Ammarian genius lies not in defiance but in transformation — Vinlander iron becomes Ammarian steel, rough gems become jewellery for Glasryan Houses, and raw materials from across Arr'ath arrive tainted by suffering and depart bearing proud guild stamps and premium prices.</p>
       </div>
     </div>
 
     <div class="divider"></div>
 
-    <div class="section-overline">Inside the Supplement</div>
-    <h2>What You'll Find</h2>
-    <p class="section-intro">A complete regional supplement for Savage Worlds. Everything you need to run campaigns in the Guildlands.</p>
-
-    <div class="card-grid">
-      <div class="card">
-        <span class="card-icon">🏰</span>
-        <h3>Seven Merchant Cities</h3>
-        <p>From Mottgorte's smoke-choked canals to Salzfeld's consuming mines, each city has its own character, politics, and secrets worth killing for.</p>
-      </div>
-      <div class="card">
-        <span class="card-icon">⚔</span>
-        <h3>Character Options</h3>
-        <p>17 new Edges and 12 new Hindrances built for merchant campaigns. Guild Halberd Guard, Commercial Caster, Convincing Lie — options worth building characters around.</p>
-      </div>
-      <div class="card">
-        <span class="card-icon">🎴</span>
-        <h3>Trade Goods Deck</h3>
-        <p>52 cards generating hundreds of commercial opportunities, plot hooks, and moral complications. Draw a card, build a session.</p>
-      </div>
-      <div class="card">
-        <span class="card-icon">⚗</span>
-        <h3>Magic Traditions</h3>
-        <p>Guild Alchemists and Contract Wizards — regional magic traditions where the arcane is a trade, not a mystery. New Edges for practitioners who understand that spellcraft is a business.</p>
-      </div>
-      <div class="card">
-        <span class="card-icon">🗡</span>
-        <h3>Guilds &amp; Underworld</h3>
-        <p>The guild system with mechanical benefits and story complications. The criminal underworld and its hidden connections to legitimate power. The complex web that defines Ammarian politics.</p>
-      </div>
-      <div class="card">
-        <span class="card-icon">📖</span>
-        <h3>Adventures &amp; NPCs</h3>
-        <p>Campaign frameworks, adventure seeds, a full bestiary, and pre-generated characters ready to play tonight. Morally complex adventures where profit and principle constantly conflict.</p>
-      </div>
+    <div style="max-width:640px; margin:0 auto;">
+      <h3 style="text-align:center;">What We Build</h3>
+      <p style="margin-top:16px;">The <strong style="color:var(--gold);">Character Builder</strong> is a free, browser-based tool for creating legal Savage Worlds characters. Eight guided steps, live validation, and export to Fantasy Grounds, PDF, and HTML. No login. No subscription. No catch. It works with core rules out of the box, and setting modules plug in as they become available.</p>
+      <p style="margin-top:16px;"><strong style="color:var(--gold);">The Tribute Lands</strong> is a grimdark fantasy setting for Savage Worlds. Five regional supplements, each playable on its own, each built to compete with the best in the industry. A world where immortal sorcerer-lords rule through systematic tribute extraction, and every human realm has found its own way to survive — or profit — under occupation.</p>
+      <p style="margin-top:16px;">Everything we publish requires nothing beyond the Savage Worlds core rulebook. The Fantasy Companion is recommended but never mandatory.</p>
     </div>
 
     <div class="divider"></div>
 
-    <div style="text-align:center; max-width:600px; margin:0 auto;">
-      <h3 style="text-align:center;">Requirements</h3>
-      <p style="text-align:center; color:var(--text-dim);">This supplement requires the <strong style="color:var(--text);">Savage Worlds</strong> core rulebook. The Savage Worlds Fantasy Companion is recommended but not required.</p>
-      <p style="text-align:center; margin-top:32px;"><a href="#" class="btn btn-disabled">Available on DriveThruRPG <span class="coming-soon-badge">Coming Soon</span></a></p>
+    <div style="max-width:640px; margin:0 auto; text-align:center;">
+      <h3>Contact</h3>
+      <p style="margin-top:16px; color:var(--text-dim);">Questions, feedback, or licensing enquiries:</p>
+      <p style="margin-top:8px;"><a href="mailto:info@diceforgestudios.com" style="color:var(--gold);">info@diceforgestudios.com</a></p>
     </div>
   </section>
 </div>
@@ -1008,9 +899,9 @@ footer a:hover { color: var(--gold); }
 <!-- FOOTER (all pages)                                           -->
 <!-- ════════════════════════════════════════════════════════════ -->
 <footer>
-  <div class="footer-brand">DiceForge Studios Ltd</div>
+  <div class="footer-brand">DiceForge Studios</div>
   <p>This site references the Savage Worlds game system, available from <a href="https://www.peginc.com">Pinnacle Entertainment Group</a>. Savage Worlds and all associated logos and trademarks are copyrights of Pinnacle Entertainment Group. Used with permission. Pinnacle makes no representation or warranty as to the quality, viability, or suitability for purpose of this product.</p>
-  <p style="margin-top:16px;">Arr'ath, The Tribute Lands, Ammaria, and all associated content &copy; 2025 DiceForge Studios Ltd. All rights reserved.</p>
+  <p style="margin-top:16px;">Arr'ath, The Tribute Lands, Ammaria, and all associated content &copy; 2025 DiceForge Studios. All rights reserved.</p>
 </footer>
 
 <!-- ════════════════════════════════════════════════════════════ -->
@@ -1035,4 +926,7 @@ function toggleMenu() {
 </script>
 </body>
 </html>
+
+
+
 
