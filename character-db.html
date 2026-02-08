@@ -212,13 +212,39 @@ function mergeModules(modules) {
 // ═══════════════════════════════════════
 // BOOT
 // ═══════════════════════════════════════
+function seedCharacters(modules) {
+  // Auto-load canonical characters from registered modules
+  var existing = npcs.map(function(n){ return n.name; });
+  var added = 0;
+  modules.forEach(function(m) {
+    if (!m.characters) return;
+    m.characters.forEach(function(c) {
+      if (existing.indexOf(c.name) >= 0) return; // user version wins
+      var entry = JSON.parse(JSON.stringify(c)); // deep copy
+      entry.id = nextId();
+      entry.source = m.id; // track canonical origin
+      entry.gear = entry.gear || [];
+      npcs.push(entry);
+      existing.push(entry.name);
+      added++;
+    });
+  });
+  if (added > 0) saveDB();
+  return added;
+}
 function boot() {
   loadDB();
-  data = mergeModules(window.CharacterForge ? window.CharacterForge.modules : []);
+  var modules = window.CharacterForge ? window.CharacterForge.modules : [];
+  data = mergeModules(modules);
+  var seeded = seedCharacters(modules);
   // Populate region filter
   var sel = document.getElementById('filter-region');
   REGIONS.forEach(function(r) { var o = document.createElement('option'); o.value = r; o.textContent = r; sel.appendChild(o); });
   renderList();
+  if (seeded > 0) {
+    document.getElementById('editor').className = 'editor active';
+    document.getElementById('editor').innerHTML = '<div style="padding:2rem;text-align:center;color:#C49A4A;font-size:1.1em">Loaded ' + seeded + ' canonical characters from modules.</div>';
+  }
 }
 
 // ═══════════════════════════════════════
