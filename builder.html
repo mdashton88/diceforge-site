@@ -680,7 +680,7 @@ function CharacterForgeApp() {
     });
     var gearList = gear.map(function(g){return {name:g.name,qty:g.qty||1,cost:g.cost,wt:g.wt||0,dmg:g.dmg,armor:g.armor,parry:g.parry,range:g.range,notes:g.notes}});
     return {
-      name: charName||'Unnamed Hero', concept: charConcept, ancestry: ancestry||'Human', portrait: portrait,
+      name: charName||'Unnamed Hero', concept: charConcept, ancestry: ancestry||'Human', ancestryData: anc, portrait: portrait,
       attrs: Object.assign({},attrs), skills: allSkills, hindrances: hindList, edges: edgeList,
       powers: powerList, gear: gearList, derived: Object.assign({},derived),
       hasAB: hasAB, abData: abData, totalPP: totalPP, startFunds: startFunds, gearCost: gearCost,
@@ -802,124 +802,75 @@ function CharacterForgeApp() {
     var doc = new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
     var W=210, H=297, M=15, CW=W-2*M;
     var y = M;
-    var colGold = [196,164,74], colDark = [20,18,16], colText = [60,55,48], colDim = [120,110,100], colRed = [140,48,48];
+    var colGold = [196,164,74], colDark = [20,18,16], colText = [60,55,48], colDim = [120,110,100];
 
     // Header bar
     doc.setFillColor(colDark[0],colDark[1],colDark[2]);
-    doc.rect(0,0,W,38,'F');
+    doc.rect(0,0,W,32,'F');
     doc.setFillColor(colGold[0],colGold[1],colGold[2]);
-    doc.rect(0,36,W,2,'F');
+    doc.rect(0,30,W,2,'F');
 
     // Portrait
     if (ch.portrait) {
-      try { doc.addImage(ch.portrait, 'JPEG', M, 6, 24, 28); } catch(e){}
+      try { doc.addImage(ch.portrait, 'JPEG', M, 5, 22, 24); } catch(e){}
     }
-    var nameX = ch.portrait ? M+28 : M;
+    var nameX = ch.portrait ? M+26 : M;
     doc.setFont('helvetica','bold'); doc.setFontSize(22); doc.setTextColor(colGold[0],colGold[1],colGold[2]);
-    doc.text(ch.name, nameX, 16);
+    doc.text(ch.name, nameX, 15);
     doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.setTextColor(200,190,175);
-    doc.text(ch.ancestry + (ch.concept ? ' \u2014 ' + ch.concept : ''), nameX, 23);
+    var subtitleParts = [];
+    if (ch.ancestry) subtitleParts.push(ch.ancestry);
+    if (ch.concept) subtitleParts.push(ch.concept);
+    if (subtitleParts.length) doc.text(subtitleParts.join(' \u2014 '), nameX, 22);
     doc.setFontSize(9); doc.setTextColor(160,150,135);
-    doc.text('Novice | Savage Worlds', nameX, 29);
-    y = 44;
+    doc.text('Novice  |  Savage Worlds', nameX, 28);
+    y = 40;
 
-    // Derived stats bar
-    doc.setFillColor(240,235,225);
-    doc.rect(M, y, CW, 12, 'F');
-    doc.setDrawColor(colGold[0],colGold[1],colGold[2]); doc.setLineWidth(0.4);
-    doc.rect(M, y, CW, 12, 'S');
-    var stats = [['Pace',ch.derived.pace],['Parry',ch.derived.parry],['Toughness',ch.derived.toughness+(ch.derived.armor>0?' ('+ch.derived.armor+')':'')],['Size',ch.derived.size],['Bennies',ch.derived.bennies]];
-    if (ch.hasAB) stats.push(['PP',ch.totalPP]);
-    var sw = CW/stats.length;
-    stats.forEach(function(s,i){
-      var cx = M + sw*i + sw/2;
-      doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(colDim[0],colDim[1],colDim[2]);
-      doc.text(s[0], cx, y+4, {align:'center'});
-      doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.setTextColor(colText[0],colText[1],colText[2]);
-      doc.text(String(s[1]), cx, y+10, {align:'center'});
-    });
-    y += 18;
-
-    function sectionHead(title) {
-      doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(colGold[0],colGold[1],colGold[2]);
-      doc.text(title, M, y); y+=1;
-      doc.setDrawColor(colGold[0],colGold[1],colGold[2]); doc.setLineWidth(0.3);
-      doc.line(M, y, M+CW, y); y+=5;
-    }
     function checkPage(need) { if (y+need > H-M) { doc.addPage(); y=M; } }
+    function statLine(label, value) {
+      checkPage(8);
+      var lines = doc.splitTextToSize(value, CW - 30);
+      doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(colGold[0],colGold[1],colGold[2]);
+      doc.text(label, M, y);
+      doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(colText[0],colText[1],colText[2]);
+      doc.text(lines, M + doc.getTextWidth(label) + 2, y);
+      y += lines.length * 5 + 2;
+    }
 
-    // Attributes
-    sectionHead('ATTRIBUTES');
-    doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(colText[0],colText[1],colText[2]);
-    var attrStr = ['agility','smarts','spirit','strength','vigor'].map(function(a){
+    // SWADE Canonical Stat Block
+    statLine('Attributes: ', ['agility','smarts','spirit','strength','vigor'].map(function(a){
       return a.charAt(0).toUpperCase()+a.slice(1)+' '+dieLabel(ch.attrs[a]);
-    }).join(',  ');
-    doc.text(attrStr, M, y); y+=8;
+    }).join(', '));
 
-    // Skills
-    checkPage(30);
-    sectionHead('SKILLS');
-    doc.setFontSize(9);
-    var skillCol1 = [], skillCol2 = [];
-    ch.skills.forEach(function(s,i){ (i<Math.ceil(ch.skills.length/2)?skillCol1:skillCol2).push(s); });
-    var sy = y;
-    skillCol1.forEach(function(s){ doc.setFont('helvetica','normal'); doc.setTextColor(colText[0],colText[1],colText[2]); doc.text(s.name+' '+dieLabel(s.die), M, y); y+=4.5; });
-    var maxY1=y; y=sy;
-    skillCol2.forEach(function(s){ doc.text(s.name+' '+dieLabel(s.die), M+CW/2, y); y+=4.5; });
-    y = Math.max(y,maxY1)+4;
+    statLine('Skills: ', ch.skills.map(function(s){return s.name+' '+dieLabel(s.die)}).join(', '));
 
-    // Hindrances
+    // Pace; Parry; Toughness on one line
+    var derivedLine = ch.derived.pace+';  Parry: '+ch.derived.parry+';  Toughness: '+ch.derived.toughness+(ch.derived.armor>0?' ('+ch.derived.armor+')':'');
+    statLine('Pace: ', derivedLine);
+
     if (ch.hindrances.length) {
-      checkPage(20);
-      sectionHead('HINDRANCES');
-      doc.setFontSize(9); doc.setTextColor(colText[0],colText[1],colText[2]);
-      var hindStr = ch.hindrances.map(function(h){return h.name+' ('+h.severity+')'}).join(', ');
-      var hindLines = doc.splitTextToSize(hindStr, CW);
-      doc.text(hindLines, M, y); y+=hindLines.length*4.5+4;
+      statLine('Hindrances: ', ch.hindrances.map(function(h){return h.name+' ('+h.severity+')'}).join(', '));
     }
-
-    // Edges
     if (ch.edges.length) {
-      checkPage(20);
-      sectionHead('EDGES');
-      doc.setFontSize(9); doc.setTextColor(colText[0],colText[1],colText[2]);
-      var edgeStr = ch.edges.map(function(e){return e.name}).join(', ');
-      var edgeLines = doc.splitTextToSize(edgeStr, CW);
-      doc.text(edgeLines, M, y); y+=edgeLines.length*4.5+4;
+      statLine('Edges: ', ch.edges.map(function(e){return e.name}).join(', '));
     }
-
-    // Powers
-    if (ch.hasAB && ch.abData && ch.powers.length) {
-      checkPage(20);
-      sectionHead('POWERS (' + ch.abData.name.toUpperCase() + ' \u2014 ' + ch.totalPP + ' PP)');
-      doc.setFontSize(9);
-      ch.powers.forEach(function(p){
-        checkPage(6);
-        doc.setFont('helvetica','bold'); doc.setTextColor(colText[0],colText[1],colText[2]);
-        doc.text(p.name, M, y);
-        doc.setFont('helvetica','normal'); doc.setTextColor(colDim[0],colDim[1],colDim[2]);
-        doc.text('PP '+p.pp+', '+p.range+', '+p.dur, M+50, y);
-        y+=4.5;
-      });
-      y+=4;
-    }
-
-    // Gear
     if (ch.gear.length) {
-      checkPage(20);
-      sectionHead('GEAR');
-      doc.setFontSize(9); doc.setTextColor(colText[0],colText[1],colText[2]);
       var gearStr = ch.gear.map(function(g){
-        var s = g.name;
-        if (g.qty>1) s += ' \u00d7'+g.qty;
-        if (g.dmg) s += ' ('+g.dmg+')';
-        if (g.armor) s += ' (+'+g.armor+')';
+        var s = g.name; if(g.qty>1) s+=' \u00d7'+g.qty;
+        if(g.dmg) s+=' ('+g.dmg+')'; if(g.armor) s+=' (+'+g.armor+' Armour)';
         return s;
-      }).join(', ');
-      var gearLines = doc.splitTextToSize(gearStr, CW);
-      doc.text(gearLines, M, y); y+=gearLines.length*4.5+4;
-      doc.setTextColor(colDim[0],colDim[1],colDim[2]);
-      doc.text('Remaining funds: '+(ch.startFunds-ch.gearCost), M, y); y+=8;
+      }).join(', ')+'.';
+      statLine('Gear: ', gearStr);
+      doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(colDim[0],colDim[1],colDim[2]);
+      doc.text('Remaining funds: '+(ch.startFunds-ch.gearCost), M, y); y+=6;
+    }
+    if (ch.hasAB && ch.abData && ch.powers.length) {
+      statLine('Powers ('+ch.abData.name+', '+ch.totalPP+' PP): ',
+        ch.powers.map(function(p){return p.name+' ('+p.pp+' PP)'}).join(', '));
+    }
+    if (ch.ancestry && ch.ancestryData) {
+      var abils = Object.keys(ch.ancestryData.abilities||{}).join(', ');
+      if (abils) statLine('Special Abilities: ', abils);
     }
 
     // Footer
@@ -938,65 +889,55 @@ function CharacterForgeApp() {
   function exportHTML() {
     var ch = collectCharData();
     var portraitBlock = ch.portrait ? '<div style="text-align:center;margin-bottom:16px"><img src="'+ch.portrait+'" style="width:140px;height:175px;object-fit:cover;border:3px solid #C4A44A" /></div>' : '';
-    var powersBlock = '';
-    if (ch.hasAB && ch.abData && ch.powers.length) {
-      powersBlock = '<p><strong>Powers</strong> ('+esc(ch.abData.name)+', '+ch.totalPP+' PP)<strong>:</strong> '+ch.powers.map(function(p){return esc(p.name)+' (PP '+esc(p.pp)+', '+esc(p.range)+', '+esc(p.dur)+')'}).join(', ')+'</p>';
-    }
     var html = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">';
     html += '<title>'+esc(ch.name)+' \u2014 Savage Worlds Character Sheet</title>';
     html += '<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">';
     html += '<style>';
-    html += 'body{margin:0;padding:40px;background:#F5F0E8;font-family:"Crimson Pro",Georgia,serif;color:#3C3730;font-size:15px;line-height:1.6}';
+    html += 'body{margin:0;padding:40px;background:#F5F0E8;font-family:"Crimson Pro",Georgia,serif;color:#3C3730;font-size:15px;line-height:1.8}';
     html += '.sheet{max-width:700px;margin:0 auto;background:#fff;padding:40px;box-shadow:0 2px 20px rgba(0,0,0,.12);border:1px solid #E0D8C8}';
     html += '.header{border-bottom:3px solid #C4A44A;padding-bottom:16px;margin-bottom:20px}';
     html += 'h1{font-family:Cinzel,serif;font-size:28px;color:#2A2520;margin:0;letter-spacing:2px}';
     html += '.subtitle{font-size:14px;color:#8A8070;font-style:italic;margin-top:4px}';
-    html += '.stats-bar{display:flex;justify-content:space-around;padding:12px 0;border:2px solid #C4A44A;background:#FAF8F2;margin-bottom:20px}';
-    html += '.stat{text-align:center}.stat-label{font-family:Cinzel,serif;font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#8A7A3A}.stat-val{font-size:22px;font-weight:700;color:#2A2520}';
-    html += 'h2{font-family:Cinzel,serif;font-size:13px;text-transform:uppercase;letter-spacing:3px;color:#C4A44A;border-bottom:1px solid #E0D8C8;padding-bottom:4px;margin:20px 0 8px}';
-    html += 'p{margin:0 0 8px}strong{color:#2A2520}';
+    html += '.stat-block{margin:0}';
+    html += '.stat-block p{margin:0 0 4px}.stat-block strong{color:#2A2520}';
     html += '.footer{margin-top:24px;padding-top:12px;border-top:1px solid #E0D8C8;font-size:10px;color:#AAA098;text-align:center}';
     html += '@media print{body{padding:0;background:#fff}.sheet{box-shadow:none;border:none}}';
     html += '</style></head><body><div class="sheet">';
     html += '<div class="header">';
     html += portraitBlock;
     html += '<h1>'+esc(ch.name)+'</h1>';
-    html += '<div class="subtitle">'+esc(ch.ancestry)+(ch.concept?' \u2014 '+esc(ch.concept):'')+'</div>';
+    var subtParts = [];
+    if (ch.ancestry) subtParts.push(ch.ancestry);
+    if (ch.concept) subtParts.push(ch.concept);
+    if (subtParts.length) html += '<div class="subtitle">'+esc(subtParts.join(' \u2014 '))+'</div>';
     html += '</div>';
-    // Stats bar
-    var statsArr = [['Pace',ch.derived.pace],['Parry',ch.derived.parry],['Toughness',ch.derived.toughness+(ch.derived.armor>0?' ('+ch.derived.armor+')':'')],['Bennies',ch.derived.bennies]];
-    if (ch.hasAB) statsArr.push(['PP',ch.totalPP]);
-    html += '<div class="stats-bar">';
-    statsArr.forEach(function(s){html += '<div class="stat"><div class="stat-label">'+s[0]+'</div><div class="stat-val">'+s[1]+'</div></div>';});
-    html += '</div>';
-    // Attributes
-    html += '<h2>Attributes</h2>';
-    html += '<p><strong>'+['agility','smarts','spirit','strength','vigor'].map(function(a){return a.charAt(0).toUpperCase()+a.slice(1)+' '+dieLabel(ch.attrs[a])}).join(', ')+'</strong></p>';
-    // Skills
-    html += '<h2>Skills</h2>';
-    html += '<p>'+ch.skills.map(function(s){return esc(s.name)+' '+dieLabel(s.die)}).join(', ')+'</p>';
-    // Hindrances
+    // SWADE Canonical Stat Block
+    html += '<div class="stat-block">';
+    html += '<p><strong>Attributes:</strong> '+['agility','smarts','spirit','strength','vigor'].map(function(a){return a.charAt(0).toUpperCase()+a.slice(1)+' '+dieLabel(ch.attrs[a])}).join(', ')+'</p>';
+    html += '<p><strong>Skills:</strong> '+ch.skills.map(function(s){return esc(s.name)+' '+dieLabel(s.die)}).join(', ')+'</p>';
+    html += '<p><strong>Pace:</strong> '+ch.derived.pace+'; <strong>Parry:</strong> '+ch.derived.parry+'; <strong>Toughness:</strong> '+ch.derived.toughness+(ch.derived.armor>0?' ('+ch.derived.armor+')':'')+'</p>';
     if (ch.hindrances.length) {
-      html += '<h2>Hindrances</h2>';
-      html += '<p>'+ch.hindrances.map(function(h){return '<strong>'+esc(h.name)+'</strong> ('+h.severity+')'}).join(', ')+'</p>';
+      html += '<p><strong>Hindrances:</strong> '+ch.hindrances.map(function(h){return esc(h.name)+' ('+h.severity+')'}).join(', ')+'</p>';
     }
-    // Edges
     if (ch.edges.length) {
-      html += '<h2>Edges</h2>';
-      html += '<p>'+ch.edges.map(function(e){return '<strong>'+esc(e.name)+'</strong>'}).join(', ')+'</p>';
+      html += '<p><strong>Edges:</strong> '+ch.edges.map(function(e){return esc(e.name)}).join(', ')+'</p>';
     }
-    // Powers
-    if (powersBlock) { html += '<h2>Powers</h2>'+powersBlock; }
-    // Gear
     if (ch.gear.length) {
-      html += '<h2>Gear</h2>';
-      html += '<p>'+ch.gear.map(function(g){
+      html += '<p><strong>Gear:</strong> '+ch.gear.map(function(g){
         var s = esc(g.name); if(g.qty>1) s+=' \u00d7'+g.qty;
-        if(g.dmg) s+=' ('+esc(g.dmg)+')'; if(g.armor) s+=' (+'+g.armor+')';
+        if(g.dmg) s+=' ('+esc(g.dmg)+')'; if(g.armor) s+=' (+'+g.armor+' Armour)';
         return s;
-      }).join(', ')+'</p>';
+      }).join(', ')+'.</p>';
       html += '<p style="font-size:13px;color:#8A8070">Remaining funds: '+(ch.startFunds-ch.gearCost)+'</p>';
     }
+    if (ch.hasAB && ch.abData && ch.powers.length) {
+      html += '<p><strong>Powers</strong> ('+esc(ch.abData.name)+', '+ch.totalPP+' PP)<strong>:</strong> '+ch.powers.map(function(p){return esc(p.name)+' ('+p.pp+' PP)'}).join(', ')+'</p>';
+    }
+    if (ch.ancestry && ch.ancestryData) {
+      var abils = Object.keys(ch.ancestryData.abilities||{}).join(', ');
+      if (abils) html += '<p><strong>Special Abilities:</strong> '+esc(abils)+'</p>';
+    }
+    html += '</div>';
     html += '<div class="footer">Savage Worlds, property of Pinnacle Entertainment Group. Created with Character Forge by DiceForge Studios.<br/>Modules: '+ch.modules.join(', ')+'</div>';
     html += '</div></body></html>';
     downloadFile((ch.name.replace(/[^a-zA-Z0-9]+/g,'_')||'character')+'.html', html, 'text/html');
@@ -1011,43 +952,37 @@ function CharacterForgeApp() {
     rtf += '\\paperw11906\\paperh16838\\margl1134\\margr1134\\margt1134\\margb1134\n';
     // Title
     rtf += '\\pard\\qc\\f0\\b\\fs36\\cf2 '+rtfEsc(ch.name)+'\\b0\\par\n';
-    rtf += '\\pard\\qc\\f1\\fs22\\cf3\\i '+rtfEsc(ch.ancestry+(ch.concept?' \\u8212? '+ch.concept:''))+'\\i0\\par\n';
+    var subtParts = [];
+    if (ch.ancestry) subtParts.push(ch.ancestry);
+    if (ch.concept) subtParts.push(ch.concept);
+    if (subtParts.length) rtf += '\\pard\\qc\\f1\\fs22\\cf3\\i '+rtfEsc(subtParts.join(' \\u8212? '))+'\\i0\\par\n';
     rtf += '\\pard\\qc\\f0\\fs18\\cf1 \\u9472?\\u9472?\\u9472?\\u9472?\\u9472?\\u9472?\\u9472?\\u9472?\\u9472?\\u9472?\\u9472?\\u9472?\\u9472?\\u9472?\\u9472?\\par\\par\n';
-    // Derived stats
-    var statsLine = 'Pace: '+ch.derived.pace+';  Parry: '+ch.derived.parry+';  Toughness: '+ch.derived.toughness+(ch.derived.armor>0?' ('+ch.derived.armor+')':'')+';  Bennies: '+ch.derived.bennies;
-    if (ch.hasAB) statsLine += ';  PP: '+ch.totalPP;
-    rtf += '\\pard\\qc\\f0\\b\\fs20\\cf2 '+rtfEsc(statsLine)+'\\b0\\par\\par\n';
-    // Attributes
-    rtf += '\\pard\\f0\\b\\fs22\\cf1 ATTRIBUTES\\b0\\par\n';
-    rtf += '\\pard\\f1\\fs20\\cf2 '+['agility','smarts','spirit','strength','vigor'].map(function(a){return '\\b '+a.charAt(0).toUpperCase()+a.slice(1)+'\\b0  '+dieLabel(ch.attrs[a])}).join(',  ')+'\\par\\par\n';
-    // Skills
-    rtf += '\\pard\\f0\\b\\fs22\\cf1 SKILLS\\b0\\par\n';
-    rtf += '\\pard\\f1\\fs20\\cf2 '+ch.skills.map(function(s){return rtfEsc(s.name)+' '+dieLabel(s.die)}).join(', ')+'\\par\\par\n';
-    // Hindrances
+    // SWADE Canonical Stat Block
+    rtf += '\\pard\\f1\\fs20\\cf2 \\b\\cf1 Attributes:\\b0\\cf2  '+['agility','smarts','spirit','strength','vigor'].map(function(a){return a.charAt(0).toUpperCase()+a.slice(1)+' '+dieLabel(ch.attrs[a])}).join(', ')+'\\par\n';
+    rtf += '\\pard\\f1\\fs20\\cf2 \\b\\cf1 Skills:\\b0\\cf2  '+ch.skills.map(function(s){return rtfEsc(s.name)+' '+dieLabel(s.die)}).join(', ')+'\\par\n';
+    rtf += '\\pard\\f1\\fs20\\cf2 \\b\\cf1 Pace:\\b0\\cf2  '+ch.derived.pace+';  \\b\\cf1 Parry:\\b0\\cf2  '+ch.derived.parry+';  \\b\\cf1 Toughness:\\b0\\cf2  '+ch.derived.toughness+(ch.derived.armor>0?' ('+ch.derived.armor+')':'')+'\\par\n';
     if (ch.hindrances.length) {
-      rtf += '\\pard\\f0\\b\\fs22\\cf1 HINDRANCES\\b0\\par\n';
-      rtf += '\\pard\\f1\\fs20\\cf2 '+ch.hindrances.map(function(h){return '\\b '+rtfEsc(h.name)+'\\b0  ('+h.severity+')'}).join(', ')+'\\par\\par\n';
+      rtf += '\\pard\\f1\\fs20\\cf2 \\b\\cf1 Hindrances:\\b0\\cf2  '+ch.hindrances.map(function(h){return rtfEsc(h.name)+' ('+h.severity+')'}).join(', ')+'\\par\n';
     }
-    // Edges
     if (ch.edges.length) {
-      rtf += '\\pard\\f0\\b\\fs22\\cf1 EDGES\\b0\\par\n';
-      rtf += '\\pard\\f1\\fs20\\cf2 '+ch.edges.map(function(e){return '\\b '+rtfEsc(e.name)+'\\b0'}).join(', ')+'\\par\\par\n';
+      rtf += '\\pard\\f1\\fs20\\cf2 \\b\\cf1 Edges:\\b0\\cf2  '+ch.edges.map(function(e){return rtfEsc(e.name)}).join(', ')+'\\par\n';
     }
-    // Powers
-    if (ch.hasAB && ch.abData && ch.powers.length) {
-      rtf += '\\pard\\f0\\b\\fs22\\cf1 POWERS ('+rtfEsc(ch.abData.name.toUpperCase())+' \\u8212? '+ch.totalPP+' PP)\\b0\\par\n';
-      rtf += '\\pard\\f1\\fs20\\cf2 '+ch.powers.map(function(p){return '\\b '+rtfEsc(p.name)+'\\b0  (PP '+rtfEsc(p.pp)+', '+rtfEsc(p.range)+', '+rtfEsc(p.dur)+')'}).join(', ')+'\\par\\par\n';
-    }
-    // Gear
     if (ch.gear.length) {
-      rtf += '\\pard\\f0\\b\\fs22\\cf1 GEAR\\b0\\par\n';
-      rtf += '\\pard\\f1\\fs20\\cf2 '+ch.gear.map(function(g){
+      rtf += '\\pard\\f1\\fs20\\cf2 \\b\\cf1 Gear:\\b0\\cf2  '+ch.gear.map(function(g){
         var s = rtfEsc(g.name); if(g.qty>1) s+=' \\u215?'+g.qty;
-        if(g.dmg) s+=' ('+rtfEsc(g.dmg)+')'; if(g.armor) s+=' (+'+g.armor+')';
+        if(g.dmg) s+=' ('+rtfEsc(g.dmg)+')'; if(g.armor) s+=' (+'+g.armor+' Armour)';
         return s;
-      }).join(', ')+'\\par\n';
-      rtf += '\\pard\\f1\\fs18\\cf3 Remaining funds: '+(ch.startFunds-ch.gearCost)+'\\par\\par\n';
+      }).join(', ')+'.\\par\n';
+      rtf += '\\pard\\f1\\fs18\\cf3 Remaining funds: '+(ch.startFunds-ch.gearCost)+'\\par\n';
     }
+    if (ch.hasAB && ch.abData && ch.powers.length) {
+      rtf += '\\pard\\f1\\fs20\\cf2 \\b\\cf1 Powers\\b0\\cf2  ('+rtfEsc(ch.abData.name)+', '+ch.totalPP+' PP): '+ch.powers.map(function(p){return rtfEsc(p.name)+' ('+p.pp+' PP)'}).join(', ')+'\\par\n';
+    }
+    if (ch.ancestry && ch.ancestryData) {
+      var abils = Object.keys(ch.ancestryData.abilities||{}).join(', ');
+      if (abils) rtf += '\\pard\\f1\\fs20\\cf2 \\b\\cf1 Special Abilities:\\b0\\cf2  '+rtfEsc(abils)+'\\par\n';
+    }
+    rtf += '\\par\n';
     // Footer
     rtf += '\\pard\\qc\\f0\\fs14\\cf3 Savage Worlds, property of Pinnacle Entertainment Group. Created with Character Forge by DiceForge Studios.\\par\n';
     rtf += '}';
