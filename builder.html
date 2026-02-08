@@ -598,8 +598,8 @@ function CharacterForgeApp() {
             var owned=gear.find(function(g){return g.name===item.name;});
             return (<div key={item.name} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 12px',borderBottom:'1px solid '+C.border}}>
               <div style={{flex:1}}>
-                <div style={{fontSize:'13px',fontWeight:600,color:C.text}}>{item.name}{owned?<span style={{color:C.gold,marginLeft:'6px'}}>{'(\u00d7'+(owned.qty||1)+')'}</span>:null}</div>
-                <div style={{fontSize:'11px',color:C.textDim,marginTop:'2px'}}>
+                <div style={{fontSize:'13px',fontWeight:600,color:C.text}}>{item.name}{owned?<span style={{color:C.gold,marginLeft:'6px'}}>{'(\u00d7'+(owned.qty||1)+')'}</span>:null}<span style={{fontSize:'11px',color:C.textDim,fontWeight:400,marginLeft:'8px'}}>{'Cost: '+item.cost}</span></div>
+                {owned?<div style={{fontSize:'11px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>
                   {item.dmg?'Dmg: '+item.dmg+' | ':''}
                   {item.range?'Range: '+item.range+' | ':''}
                   {item.ap?'AP '+item.ap+' | ':''}
@@ -607,10 +607,9 @@ function CharacterForgeApp() {
                   {item.parry?'Parry +'+item.parry+' | ':''}
                   {item.cover?'Cover +'+item.cover+' | ':''}
                   {item.minStr?'Min Str: '+item.minStr+' | ':''}
-                  {'Cost: '+item.cost}
-                  {item.wt?' | Wt: '+item.wt:''}
+                  {'Wt: '+(item.wt||0)}
                   {item.notes?' | '+item.notes:''}
-                </div>
+                </div>:null}
               </div>
               <div style={{display:'flex',gap:'4px',flexShrink:0}}>
                 {owned?<button onClick={function(e){e.stopPropagation();removeGear(item.name)}} style={{width:'28px',height:'28px',border:'1px solid '+C.border,background:'transparent',color:C.redBright,fontSize:'14px',cursor:'pointer',lineHeight:'26px',textAlign:'center'}}>{'\u2212'}</button>:null}
