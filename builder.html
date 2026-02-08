@@ -268,7 +268,7 @@ function CharacterForgeApp() {
       pace:anc.pace, size:anc.size||0, runDie:runDie, bennies:bennies,
       parry:(fd>0?2+Math.floor(fd/2):2)+shieldParry,
       toughness:2+Math.floor(attrs.vigor/2)+anc.toughMod+(anc.size||0),
-      armor:wornArmor,
+      armor:wornArmor+(anc.naturalArmor||0),
     };
   }, [attrs,skills,ancestry,wornArmor,shieldParry,selectedEdges,data]);
 
@@ -473,8 +473,8 @@ function CharacterForgeApp() {
                   {['Minor','Major'].map(function(s){return <button key={s} onClick={function(){setHindranceSeverities(function(p){var n=Object.assign({},p);n[h.name]=s;return n;})}} style={{padding:'2px 6px',fontSize:'10px',border:'1px solid '+(sev===s?(s==='Major'?C.redBright:C.gold):C.border),background:sev===s?(s==='Major'?C.redBright:C.gold):'transparent',color:sev===s?C.bg:C.textDim,cursor:'pointer'}}>{s}</button>;})}
                 </div>):(<span style={{fontSize:'11px',color:h.sev==='Major'?C.redBright:C.goldDim,fontWeight:600}}>{h.sev}</span>)}
               </div>
-              {sel&&h.desc?<div style={{fontSize:'12px',color:C.textDim,marginTop:'4px',lineHeight:'1.5'}}>{h.desc}</div>:null}
-              {sel&&!h.desc?<div style={{fontSize:'12px',color:C.textDim,marginTop:'4px',lineHeight:'1.5',fontStyle:'italic'}}>See Savage Worlds core rules for full description.</div>:null}
+              {sel&&h.summary?<div style={{fontSize:'12px',color:C.textDim,marginTop:'4px',lineHeight:'1.5',fontStyle:'italic'}}>{h.summary}</div>:null}
+              {sel&&!h.summary?<div style={{fontSize:'12px',color:C.textDim,marginTop:'4px',lineHeight:'1.5',fontStyle:'italic'}}>See Savage Worlds core rules for full description.</div>:null}
             </div>);
           })}
         </div>
@@ -520,6 +520,7 @@ function CharacterForgeApp() {
                 <span style={{fontSize:'11px',color:C.goldDim}}>{RANK_LABELS[e.rank]||e.rank}</span>
               </div>
               <div style={{fontSize:'11px',color:C.textDim,marginTop:'2px'}}>{'Requires: '+e.reqs}</div>
+              {e.summary?<div style={{fontSize:'11px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>{e.summary}</div>:null}
               {sel&&e.desc?<div style={{fontSize:'12px',color:C.textDim,marginTop:'4px',lineHeight:'1.5'}}>{e.desc}</div>:null}
               {sel&&!e.desc?<div style={{fontSize:'12px',color:C.textDim,marginTop:'4px',lineHeight:'1.5',fontStyle:'italic'}}>See Savage Worlds core rules for full description.</div>:null}
             </div>);
@@ -567,6 +568,7 @@ function CharacterForgeApp() {
                 <span style={{fontSize:'11px',color:C.goldDim}}>{RANK_LABELS[pw.rank]}</span>
               </div>
               <div style={{fontSize:'11px',color:C.textDim,marginTop:'2px'}}>{'PP: '+pw.pp+' | Range: '+pw.range+' | Duration: '+pw.dur}</div>
+              {pw.summary?<div style={{fontSize:'11px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>{pw.summary}</div>:null}
             </div>);
           })}
         </div>
@@ -595,9 +597,11 @@ function CharacterForgeApp() {
                 <div style={{fontSize:'11px',color:C.textDim,marginTop:'2px'}}>
                   {item.dmg?'Dmg: '+item.dmg+' | ':''}
                   {item.range?'Range: '+item.range+' | ':''}
+                  {item.ap?'AP '+item.ap+' | ':''}
                   {item.armor?'Armour +'+item.armor+' | ':''}
                   {item.parry?'Parry +'+item.parry+' | ':''}
                   {item.cover?'Cover +'+item.cover+' | ':''}
+                  {item.minStr?'Min Str: '+item.minStr+' | ':''}
                   {'Cost: '+item.cost}
                   {item.wt?' | Wt: '+item.wt:''}
                   {item.notes?' | '+item.notes:''}
@@ -640,9 +644,9 @@ function CharacterForgeApp() {
       </div>
       <div style={{marginBottom:'16px'}}><div style={Object.assign({},lbl,{marginBottom:'8px'})}>Attributes</div><div style={{display:'flex',gap:'16px',flexWrap:'wrap'}}>{Object.entries(attrs).map(function(p){return <div key={p[0]} style={{textAlign:'center'}}><div style={{fontSize:'11px',color:C.textDim,textTransform:'capitalize'}}>{p[0]}</div><div style={{fontSize:'16px',fontWeight:700,color:C.text}}>{'d'+p[1]}</div></div>;})}</div></div>
       <div style={{marginBottom:'16px'}}><div style={Object.assign({},lbl,{marginBottom:'8px'})}>Skills</div><div style={{display:'flex',gap:'6px',flexWrap:'wrap'}}>{data.coreSkills.filter(function(s){return !skills[s]}).map(function(s){return[s,4]}).concat(Object.entries(skills).filter(function(p){return p[1]>0})).sort(function(a,b){return a[0].localeCompare(b[0])}).map(function(p){return <span key={p[0]} style={{padding:'3px 10px',background:C.bg,border:'1px solid '+C.border,fontSize:'13px',color:p[1]>4?C.text:C.textDim}}>{p[0]+' d'+p[1]}</span>;})}</div></div>
-      {selectedHindrances.length>0?<div style={{marginBottom:'16px'}}><div style={Object.assign({},lbl,{marginBottom:'8px'})}>Hindrances</div>{selectedHindrances.map(function(h){var hData=data.hindrances.find(function(x){return x.name===h});return <div key={h} style={{marginBottom:'4px'}}><span style={{fontSize:'14px',fontWeight:600,color:C.text}}>{h}</span><span style={{fontSize:'11px',color:hindranceSeverities[h]==='Major'?C.redBright:C.goldDim,marginLeft:'8px'}}>{'('+hindranceSeverities[h]+')'}</span>{hData?<SourceTag source={hData.source} />:null}{hData&&hData.desc?<div style={{fontSize:'12px',color:C.textDim,marginTop:'2px'}}>{hData.desc}</div>:null}</div>;})}</div>:null}
-      {selectedEdges.length>0?<div style={{marginBottom:'16px'}}><div style={Object.assign({},lbl,{marginBottom:'8px'})}>Edges</div>{selectedEdges.map(function(n,i){var eData=data.edges.find(function(x){return x.name===n});return <div key={n+i} style={{marginBottom:'6px'}}><span style={{fontSize:'14px',fontWeight:600,color:C.text}}>{n}</span>{eData?<SourceTag source={eData.source} />:null}{eData&&eData.desc?<div style={{fontSize:'12px',color:C.textDim,marginTop:'2px',lineHeight:'1.5'}}>{eData.desc}</div>:null}</div>;})}</div>:null}
-      {hasAB&&abData?<div style={{marginBottom:'16px'}}><div style={Object.assign({},lbl,{marginBottom:'8px'})}>Powers ({abData.name} — {abData.skill})</div>{selectedPowers.length>0?selectedPowers.map(function(n){var pw=data.powers.find(function(x){return x.name===n});return <div key={n} style={{marginBottom:'4px'}}><span style={{fontSize:'14px',fontWeight:600,color:C.text}}>{n}</span><span style={{fontSize:'11px',color:C.textDim,marginLeft:'8px'}}>{'PP '+pw.pp+', '+pw.range+', '+pw.dur}</span></div>;}):null}</div>:null}
+      {selectedHindrances.length>0?<div style={{marginBottom:'16px'}}><div style={Object.assign({},lbl,{marginBottom:'8px'})}>Hindrances</div>{selectedHindrances.map(function(h){var hData=data.hindrances.find(function(x){return x.name===h});return <div key={h} style={{marginBottom:'4px'}}><span style={{fontSize:'14px',fontWeight:600,color:C.text}}>{h}</span><span style={{fontSize:'11px',color:hindranceSeverities[h]==='Major'?C.redBright:C.goldDim,marginLeft:'8px'}}>{'('+hindranceSeverities[h]+')'}</span>{hData?<SourceTag source={hData.source} />:null}{hData&&hData.summary?<div style={{fontSize:'12px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>{hData.summary}</div>:null}</div>;})}</div>:null}
+      {selectedEdges.length>0?<div style={{marginBottom:'16px'}}><div style={Object.assign({},lbl,{marginBottom:'8px'})}>Edges</div>{selectedEdges.map(function(n,i){var eData=data.edges.find(function(x){return x.name===n});return <div key={n+i} style={{marginBottom:'6px'}}><span style={{fontSize:'14px',fontWeight:600,color:C.text}}>{n}</span>{eData?<SourceTag source={eData.source} />:null}{eData&&eData.summary?<div style={{fontSize:'12px',color:C.textDim,marginTop:'2px',lineHeight:'1.5',fontStyle:'italic'}}>{eData.summary}</div>:null}</div>;})}</div>:null}
+      {hasAB&&abData?<div style={{marginBottom:'16px'}}><div style={Object.assign({},lbl,{marginBottom:'8px'})}>Powers ({abData.name} — {abData.skill})</div>{selectedPowers.length>0?selectedPowers.map(function(n){var pw=data.powers.find(function(x){return x.name===n});return <div key={n} style={{marginBottom:'6px'}}><span style={{fontSize:'14px',fontWeight:600,color:C.text}}>{n}</span><span style={{fontSize:'11px',color:C.textDim,marginLeft:'8px'}}>{'PP '+pw.pp+', '+pw.range+', '+pw.dur}</span>{pw&&pw.summary?<div style={{fontSize:'11px',color:C.textDim,fontStyle:'italic',marginTop:'1px'}}>{pw.summary}</div>:null}</div>;}):null}</div>:null}
       {gear.length>0?<div style={{marginBottom:'16px'}}><div style={Object.assign({},lbl,{marginBottom:'8px'})}>Gear</div><div style={{fontSize:'13px',color:C.text,lineHeight:'1.8'}}>{gear.map(function(g){return g.name+((g.qty||1)>1?' \u00d7'+g.qty:'');}).join(', ')}</div><div style={{fontSize:'12px',color:C.goldDim,marginTop:'4px'}}>Remaining funds: {startFunds-gearCost}</div></div>:null}
       <div style={{fontSize:'12px',color:C.textDim,marginTop:'8px'}}>
         <strong style={{color:C.goldDim}}>Modules:</strong> {allModules.filter(function(m){return m.alwaysOn || activeSupplements.indexOf(m.id)>=0}).map(function(m){return m.name}).join(', ')}
@@ -660,15 +664,15 @@ function CharacterForgeApp() {
       .sort(function(a,b){return a.name.localeCompare(b.name)});
     var hindList = selectedHindrances.map(function(h){
       var hd = data.hindrances.find(function(x){return x.name===h});
-      return {name:h, severity:hindranceSeverities[h]||'Minor', desc:hd?hd.desc:null, source:hd?hd.source:'swade-core'};
+      return {name:h, severity:hindranceSeverities[h]||'Minor', summary:hd?hd.summary:null, source:hd?hd.source:'swade-core'};
     });
     var edgeList = selectedEdges.map(function(n,i){
       var ed = data.edges.find(function(x){return x.name===n});
-      return {name:n, desc:ed?ed.desc:null, source:ed?ed.source:'swade-core'};
+      return {name:n, summary:ed?ed.summary:null, source:ed?ed.source:'swade-core'};
     });
     var powerList = selectedPowers.map(function(n){
       var pw = data.powers.find(function(x){return x.name===n});
-      return pw ? {name:n,pp:pw.pp,range:pw.range,dur:pw.dur} : {name:n};
+      return pw ? {name:n,pp:pw.pp,range:pw.range,dur:pw.dur,summary:pw.summary||''} : {name:n};
     });
     var gearList = gear.map(function(g){return {name:g.name,qty:g.qty||1,cost:g.cost,wt:g.wt||0,dmg:g.dmg,armor:g.armor,parry:g.parry,range:g.range,notes:g.notes}});
     return {
