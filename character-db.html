@@ -185,6 +185,26 @@ table.data-table td { padding: 4px 8px; border-bottom: 1px solid #2a2a2a; }
     <div class="form-actions"><button class="btn" onclick="closeNewNPCModal()">Cancel</button><button class="btn primary" onclick="createNPC()">Create NPC</button></div>
   </div>
 </div>
+<script>
+// CharacterForge Engine Bootstrap
+window.CharacterForge = (function(){
+  var modules = [];
+  return {
+    data: {},
+    registerModule: function(mod) {
+      modules.push(mod);
+      // Merge alwaysOn module data into CF.data
+      if (mod.alwaysOn) {
+        ['edges','hindrances','skills','ancestries','powers','gear'].forEach(function(k){
+          if (mod[k]) { if (!this.data[k]) this.data[k] = []; this.data[k] = this.data[k].concat(mod[k]); }
+        }.bind(this));
+      }
+    },
+    getModules: function() { return modules; },
+    getModule: function(id) { return modules.find(function(m){ return m.id === id; }); }
+  };
+})();
+</script>
 <script src="swade-core.js"></script>
 <script src="ammaria.js"></script>
 <script>
