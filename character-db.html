@@ -606,7 +606,7 @@ function runBuildAudit(n){
 
 function renderAuditPanel(n){
   const results=runBuildAudit(n);
-  let html='<div class="audit-block">',curSec='';
+  let html=`<div class="audit-block"><h4 style="color:var(--accent);margin-bottom:8px;font-size:14px">${esc(n.name)} — Build Audit</h4>`,curSec='';
   results.forEach(r=>{
     if(r.section!==curSec){curSec=r.section;html+=`<div class="audit-section"><h4>${esc(curSec)}</h4>`;}
     const cls=r.pass?'audit-pass':'audit-fail';
