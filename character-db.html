@@ -193,10 +193,12 @@ window.CharacterForge = (function(){
     data: {},
     registerModule: function(mod) {
       modules.push(mod);
-      // Merge alwaysOn module data into CF.data
       if (mod.alwaysOn) {
-        ['edges','hindrances','skills','ancestries','powers','gear'].forEach(function(k){
-          if (mod[k]) { if (!this.data[k]) this.data[k] = []; this.data[k] = this.data[k].concat(mod[k]); }
+        ['edges','hindrances','skills','ancestries','powers','gear','skillLinks','coreSkills'].forEach(function(k){
+          if (mod[k]) {
+            if (Array.isArray(mod[k])) { if (!this.data[k]) this.data[k] = []; this.data[k] = this.data[k].concat(mod[k]); }
+            else if (typeof mod[k] === 'object') { if (!this.data[k]) this.data[k] = {}; Object.assign(this.data[k], mod[k]); }
+          }
         }.bind(this));
       }
     },
@@ -205,6 +207,7 @@ window.CharacterForge = (function(){
   };
 })();
 </script>
+<script src="swade-rules.js"></script>
 <script src="swade-core.js"></script>
 <script src="ammaria.js"></script>
 <script>
@@ -257,10 +260,13 @@ function normaliseChar(c,moduleId){
 }
 
 function calcDerived(n){
-  n.pace=6;
-  const f=n.skills['Fighting']||0;
-  n.parry=f>0?2+Math.floor(f/2):2;
-  n.toughness=2+(n.vigor>0?Math.floor(n.vigor/2):0)+(n.toughnessArmor||0);
+  var CF=window.CharacterForge;
+  var ancestryData=(CF&&CF.data&&CF.data.ancestries&&CF.data.ancestries[n.ancestry])||{pace:6,size:0,toughMod:0};
+  var d=window.SWADERules?window.SWADERules.calcDerived(
+    {agility:n.agility,smarts:n.smarts,spirit:n.spirit,strength:n.strength,vigor:n.vigor},
+    n.skills, ancestryData, []
+  ):{pace:6,parry:2,toughness:5,armor:0};
+  n.pace=d.pace; n.parry=d.parry; n.toughness=d.toughness+(n.toughnessArmor||0);
   n.bennies=n.tier==='Wild Card'?3:0;
 }
 
@@ -581,27 +587,17 @@ function switchExportTab(el,tab){document.querySelectorAll('.export-tab').forEac
 function copyExport(type){const el=type==='html'?document.getElementById('exportFmt'):document.getElementById('exportMd');navigator.clipboard.writeText(el.innerText).then(()=>alert('Copied to clipboard'));}
 
 function runBuildAudit(n){
-  const results=[];
-  const fDie=n.skills['Fighting']||0;
-  const expParry=fDie>0?2+Math.floor(fDie/2):2;
-  const expTough=2+(n.vigor>0?Math.floor(n.vigor/2):0)+(n.toughnessArmor||0);
-  results.push({section:'Derived Statistics',label:`Pace ${n.pace}`,pass:n.pace===6,detail:n.pace===6?'✓':'Expected 6'});
-  results.push({section:'Derived Statistics',label:`Parry ${n.parry} = 2 + ${d(fDie)}÷2`,pass:n.parry===expParry,detail:n.parry===expParry?'✓':`Expected ${expParry}`});
-  results.push({section:'Derived Statistics',label:`Toughness ${n.toughness}`,pass:n.toughness===expTough,detail:n.toughness===expTough?'✓':`Expected ${expTough}`});
-  const attrPoints=[n.agility,n.smarts,n.spirit,n.strength,n.vigor].reduce((s,v)=>s+(v>0?(v-4)/2:0),0);
-  const maxAttr=n.ancestry==='Human'?6:5;
-  results.push({section:'Attribute Budget',label:`Attribute points: ${attrPoints}/${maxAttr}`,pass:attrPoints<=maxAttr,detail:attrPoints<=maxAttr?'✓':'Over budget'});
-  const majorCount=n.hindrances.filter(h=>/major/i.test(h)).length;
-  const minorCount=n.hindrances.length-majorCount;
-  const effectivePts=majorCount*2+minorCount;
-  results.push({section:'Hindrance Limits',label:`Hindrance points: ${effectivePts}/4 effective (${majorCount} Major, ${minorCount} Minor)`,pass:effectivePts<=4,detail:effectivePts<=4?'✓':'Check limits'});
-  const skillPoints=Object.values(n.skills).reduce((s,v)=>s+(v>0?(v-4)/2+1:0),0);
-  results.push({section:'Skill Budget',label:`Skill points: ${skillPoints}/12`,pass:skillPoints<=15,detail:skillPoints<=12?'✓':(skillPoints<=15?'Over 12 — hindrance spend?':'Significantly over')});
-  const freeEdge=n.ancestry==='Human'?1:0;
-  const hindEdges=Math.min(Math.floor(effectivePts/2),2);
-  const maxEdges=freeEdge+hindEdges;
-  results.push({section:'Edge Budget',label:`Edge count: ${n.edges.length} (${freeEdge} free + up to ${hindEdges} from Hindrances at 2pts each)`,pass:n.edges.length<=maxEdges+1,detail:n.edges.length<=maxEdges?'✓':'Check budget'});
-  return results;
+  var CF=window.CharacterForge;
+  var ancestryData=(CF.data.ancestries&&CF.data.ancestries[n.ancestry])||{attrBonus:1,freeEdges:1,pace:6,size:0,toughMod:0};
+  var skillLinks=CF.data.skillLinks||{};
+  var coreSkills=CF.data.coreSkills||['Athletics','Common Knowledge','Notice','Persuasion','Stealth'];
+  return window.SWADERules.runBuildAudit({
+    attrs:{agility:n.agility,smarts:n.smarts,spirit:n.spirit,strength:n.strength,vigor:n.vigor},
+    skills:n.skills, edges:n.edges, hindrances:n.hindrances,
+    tier:n.tier, ancestryData:ancestryData,
+    skillLinks:skillLinks, coreSkills:coreSkills,
+    pace:n.pace, parry:n.parry, toughness:n.toughness, toughnessArmor:n.toughnessArmor||0
+  });
 }
 
 function renderAuditPanel(n){
