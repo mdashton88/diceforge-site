@@ -521,8 +521,6 @@ function CharacterForgeApp() {
               </div>
               <div style={{fontSize:'11px',color:C.textDim,marginTop:'2px'}}>{'Requires: '+e.reqs}</div>
               {e.summary?<div style={{fontSize:'11px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>{e.summary}</div>:null}
-              {sel&&e.desc?<div style={{fontSize:'12px',color:C.textDim,marginTop:'4px',lineHeight:'1.5'}}>{e.desc}</div>:null}
-              {sel&&!e.desc?<div style={{fontSize:'12px',color:C.textDim,marginTop:'4px',lineHeight:'1.5',fontStyle:'italic'}}>See Savage Worlds core rules for full description.</div>:null}
             </div>);
           })}
         </div>
