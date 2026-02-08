@@ -397,7 +397,6 @@ function CharacterForgeApp() {
               {sel && <span style={{color:C.gold}}>{'\u2713'}</span>}
             </div>
             <p style={{fontSize:'13px',color:C.textDim,lineHeight:'1.4',margin:'0 0 8px'}}>{a.summary}</p>
-            <div style={{fontSize:'12px',color:C.text,lineHeight:'1.6'}}>{a.abilities.map(function(ab,i){return <div key={i}>{'\u2022'} {ab}</div>;})}</div>
             <div style={{marginTop:'8px',fontSize:'11px',color:C.textDim}}>{'Pace '+a.pace+' | Size '+(a.size>=0?'+':'')+a.size+' | Tough mod '+(a.toughMod>=0?'+':'')+a.toughMod+(a.freeEdges>0?' | +'+a.freeEdges+' free Edge':'')+(a.attrBonus>0?' | +'+a.attrBonus+' attr pt':'')}</div>
           </div>);
         })}
