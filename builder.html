@@ -527,7 +527,7 @@ function CharacterForgeApp() {
                 <span style={{fontSize:'11px',color:C.goldDim}}>{RANK_LABELS[e.rank]||e.rank}</span>
               </div>
               <div style={{fontSize:'11px',color:C.textDim,marginTop:'2px'}}>{'Requires: '+e.reqs}</div>
-              {e.summary?<div style={{fontSize:'11px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>{e.summary}</div>:null}
+              {sel&&e.summary?<div style={{fontSize:'11px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>{e.summary}</div>:null}
             </div>);
           })}
         </div>
@@ -573,7 +573,7 @@ function CharacterForgeApp() {
                 <span style={{fontSize:'11px',color:C.goldDim}}>{RANK_LABELS[pw.rank]}</span>
               </div>
               <div style={{fontSize:'11px',color:C.textDim,marginTop:'2px'}}>{'PP: '+pw.pp+' | Range: '+pw.range+' | Duration: '+pw.dur}</div>
-              {pw.summary?<div style={{fontSize:'11px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>{pw.summary}</div>:null}
+              {sel&&pw.summary?<div style={{fontSize:'11px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>{pw.summary}</div>:null}
             </div>);
           })}
         </div>
