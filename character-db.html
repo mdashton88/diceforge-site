@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Character Database — DiceForge Studios</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<script>window.CharacterForge = { modules: [], registerModule: function(mod) { this.modules.push(mod); } };</script>
+<script src="swade-core.js"></script>
+<script src="ammaria.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#141210;color:#D4C8B0;font-family:'Crimson Pro',Georgia,serif;font-size:15px;line-height:1.6}
+::selection{background:#C4A44A;color:#141210}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#1A1816}::-webkit-scrollbar-thumb{background:#3A3530;border-radius:3px}
+a{color:#C4A44A}
+/* Password Gate */
+#gate{display:flex;align-items:center;justify-content:center;height:100vh;background:#0E0D0C}
+#gate-box{text-align:center;padding:40px;border:1px solid #3A3530;background:#1A1816;max-width:400px}
+#gate-box h1{font-family:'Cinzel',serif;color:#C4A44A;font-size:22px;letter-spacing:3px;margin-bottom:8px}
+#gate-box p{color:#8A7A60;font-size:13px;margin-bottom:20px}
+#gate-box input{width:100%;padding:10px;background:#141210;border:1px solid #3A3530;color:#D4C8B0;font-size:14px;text-align:center;font-family:'Crimson Pro',serif;margin-bottom:12px}
+#gate-box button{padding:10px 30px;background:#C4A44A;color:#141210;border:none;font-family:'Cinzel',serif;font-weight:700;font-size:13px;letter-spacing:2px;cursor:pointer}
+#gate-box .error{color:#8C3030;font-size:12px;margin-top:8px}
+/* App Layout */
+#app{display:none}
+.topbar{background:#1A1816;border-bottom:2px solid #C4A44A;padding:10px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.topbar h1{font-family:'Cinzel',serif;color:#C4A44A;font-size:16px;letter-spacing:2px}
+.topbar-actions{display:flex;gap:8px}
+.topbar-actions button{padding:6px 14px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;font-weight:700;border:1px solid #3A3530;background:transparent;color:#8A7A60;cursor:pointer;text-transform:uppercase}
+.topbar-actions button:hover{border-color:#C4A44A;color:#C4A44A}
+.topbar-actions button.primary{background:#C4A44A;color:#141210;border-color:#C4A44A}
+/* Main content */
+.container{max-width:1100px;margin:0 auto;padding:20px}
+/* NPC List */
+.npc-list{margin-bottom:20px}
+.npc-row{display:flex;align-items:center;padding:10px 16px;border-bottom:1px solid #2A2520;cursor:pointer;transition:background .1s}
+.npc-row:hover{background:#1A1816}
+.npc-row.selected{background:#C4A44A15;border-left:3px solid #C4A44A}
+.npc-name{font-weight:700;color:#D4C8B0;flex:1;font-size:15px}
+.npc-meta{font-size:12px;color:#8A7A60;display:flex;gap:16px}
+.npc-tag{padding:2px 8px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;font-family:'Cinzel',serif}
+.npc-tag.wc{background:#C4A44A20;color:#C4A44A;border:1px solid #C4A44A40}
+.npc-tag.extra{background:#3A353020;color:#8A7A60;border:1px solid #3A353060}
+.npc-tag.valid{background:#5A9A5A20;color:#5A9A5A;border:1px solid #5A9A5A40}
+.npc-tag.invalid{background:#8C303020;color:#8C3030;border:1px solid #8C303040}
+.npc-tag.region{background:#4A7A9A20;color:#4A7A9A;border:1px solid #4A7A9A40}
+.npc-tag.pregen{background:#9A5AAA20;color:#B07AC0;border:1px solid #9A5AAA40}
+.npc-tag.npc-cat{background:#6A8A5A20;color:#6A8A5A;border:1px solid #6A8A5A40}
+.npc-tag.product{background:#AA7A4A20;color:#AA7A4A;border:1px solid #AA7A4A40;font-size:9px}
+/* Editor panels */
+.editor{display:none}
+.editor.active{display:block}
+.card{background:#1A1816;border:1px solid #2A2520;padding:20px;margin-bottom:16px}
+.card-title{font-family:'Cinzel',serif;font-size:16px;color:#C4A44A;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;border-bottom:1px solid #2A2520;padding-bottom:8px}
+.field-row{display:flex;gap:12px;margin-bottom:10px;align-items:center;flex-wrap:wrap}
+.field-row label{font-size:13px;color:#8A7A60;min-width:90px;font-weight:600}
+.field-row input,.field-row select,.field-row textarea{background:#141210;border:1px solid #3A3530;color:#D4C8B0;padding:6px 10px;font-family:'Crimson Pro',serif;font-size:14px;flex:1;min-width:0}
+.field-row select{cursor:pointer}
+.field-row textarea{min-height:60px;resize:vertical}
+.die-grid{display:flex;gap:4px;flex-wrap:wrap}
+.die-btn{width:40px;height:30px;border:1px solid #3A3530;background:transparent;color:#8A7A60;font-size:12px;font-weight:700;cursor:pointer;font-family:'Crimson Pro',serif}
+.die-btn.active{background:#C4A44A;color:#141210;border-color:#C4A44A}
+.die-btn:hover:not(.active){border-color:#C4A44A;color:#C4A44A}
+/* Chip selector */
+.chip-area{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.chip{padding:3px 10px;font-size:12px;border:1px solid #3A3530;background:transparent;color:#8A7A60;cursor:pointer;transition:all .1s}
+.chip.selected{background:#C4A44A20;color:#C4A44A;border-color:#C4A44A}
+.chip:hover:not(.selected){border-color:#C4A44A40}
+/* Validator */
+.val-pass{color:#5A9A5A;font-size:13px}.val-fail{color:#8C3030;font-size:13px}.val-warn{color:#C4A44A;font-size:13px}
+.val-section{margin-bottom:12px;padding:8px 12px;border-left:3px solid #3A3530}
+.val-section.ok{border-left-color:#5A9A5A}.val-section.err{border-left-color:#8C3030}.val-section.warn{border-left-color:#C4A44A}
+/* Stat block output */
+.stat-block{background:#141210;border:1px solid #C4A44A40;padding:20px;font-size:14px;line-height:2}
+.stat-block .sb-name{font-family:'Cinzel',serif;font-size:20px;color:#C4A44A;letter-spacing:2px;text-align:center;margin-bottom:4px}
+.stat-block .sb-sub{text-align:center;color:#8A7A60;font-style:italic;font-size:13px;margin-bottom:12px}
+.stat-block .sb-line{margin-bottom:2px}
+.stat-block .sb-label{color:#C4A44A;font-weight:700}
+.stat-block .sb-blue{color:#4A7A9A;font-weight:700}
+/* Search & filter bar */
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-bar input{background:#141210;border:1px solid #3A3530;color:#D4C8B0;padding:6px 12px;font-family:'Crimson Pro',serif;font-size:14px;flex:1;min-width:200px}
+.filter-bar select{background:#141210;border:1px solid #3A3530;color:#D4C8B0;padding:6px 10px;font-family:'Crimson Pro',serif;font-size:13px;cursor:pointer}
+.count-badge{font-size:12px;color:#8A7A60;padding:6px 12px}
+/* Footer */
+.footer{text-align:center;padding:20px;font-size:11px;color:#5A5040;border-top:1px solid #2A2520;margin-top:40px}
+</style>
+</head>
+<body>
+
+<!-- Password Gate -->
+<div id="gate">
+<div id="gate-box">
+<h1>Character Database</h1>
+<p>DiceForge Studios — Internal Production Tool</p>
+<input type="password" id="gate-pw" placeholder="Enter password" autofocus />
+<button onclick="tryLogin()">Enter</button>
+<div class="error" id="gate-err"></div>
+</div>
+</div>
+
+<!-- Main App (hidden until auth) -->
+<div id="app">
+<div class="topbar">
+  <h1>Character Database</h1>
+  <div class="topbar-actions">
+    <button onclick="newNPC()" class="primary">+ New Character</button>
+    <button onclick="exportAllJSON()">Export JSON</button>
+    <button onclick="document.getElementById('import-file').click()">Import JSON</button>
+    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSON(event)" />
+    <button onclick="logout()" style="color:#8C3030;border-color:#8C3030">Logout</button>
+  </div>
+</div>
+<div class="container">
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <input type="text" id="search" placeholder="Search characters..." oninput="renderList()" />
+    <select id="filter-category" onchange="renderList()"><option value="">All Categories</option><option>NPC</option><option>Pre-gen</option></select>
+    <select id="filter-region" onchange="renderList()"><option value="">All Regions</option></select>
+    <select id="filter-tier" onchange="renderList()"><option value="">All Tiers</option><option>Wild Card</option><option>Extra</option></select>
+    <select id="filter-rank" onchange="renderList()"><option value="">All Ranks</option><option>Novice</option><option>Seasoned</option><option>Veteran</option><option>Heroic</option><option>Legendary</option></select>
+    <select id="filter-valid" onchange="renderList()"><option value="">All Status</option><option value="valid">Valid</option><option value="invalid">Has Errors</option></select>
+    <span class="count-badge" id="count-badge">0 characters</span>
+  </div>
+  <!-- NPC List -->
+  <div id="npc-list" class="npc-list"></div>
+  <!-- Editor -->
+  <div id="editor" class="editor"></div>
+</div>
+<div class="footer">
+  This tool references Savage Worlds, property of Pinnacle Entertainment Group, under the Fan License. Not for resale. Internal production tool — DiceForge Studios Ltd.
+</div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════
+var AUTH_KEY = 'diceforge_npc_auth';
+var AUTH_PASS = '54546-44-56456-7567-2345';
+
+function tryLogin() {
+  var pw = document.getElementById('gate-pw').value;
+  if (pw === AUTH_PASS) {
+    localStorage.setItem(AUTH_KEY, AUTH_PASS);
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    boot();
+  } else {
+    document.getElementById('gate-err').textContent = 'Access denied.';
+  }
+}
+function logout() {
+  localStorage.removeItem(AUTH_KEY);
+  location.reload();
+}
+document.getElementById('gate-pw').addEventListener('keydown', function(e) { if (e.key === 'Enter') tryLogin(); });
+if (localStorage.getItem(AUTH_KEY) === AUTH_PASS) {
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  setTimeout(boot, 0);
+}
+
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+var DB_KEY = 'diceforge_npc_db';
+var npcs = [];
+var currentId = null;
+var data = null; // merged SWADE data
+
+var DICE = [4,6,8,10,12];
+var RANKS = ['Novice','Seasoned','Veteran','Heroic','Legendary'];
+var REGIONS = ['Ammaria','Saltlands','Vinlands','Concordium','Glasrya','Cross-Region','Core'];
+var ATTRS = ['agility','smarts','spirit','strength','vigor'];
+
+function dieLabel(v) { return v > 12 ? 'd12+' + (v - 12) : 'd' + v; }
+
+function loadDB() {
+  try { npcs = JSON.parse(localStorage.getItem(DB_KEY)) || []; } catch(e) { npcs = []; }
+}
+function saveDB() {
+  localStorage.setItem(DB_KEY, JSON.stringify(npcs));
+}
+function nextId() {
+  return npcs.length ? Math.max.apply(null, npcs.map(function(n){return n.id})) + 1 : 1;
+}
+
+// ═══════════════════════════════════════
+// MERGE SWADE DATA (same as builder)
+// ═══════════════════════════════════════
+function mergeModules(modules) {
+  var skillLinks = {}, coreSkills = [], edges = [], hindrances = [], powers = [], gear = {};
+  ['melee','ranged','armor','shields','general'].forEach(function(c){ gear[c] = []; });
+  modules.forEach(function(m) {
+    if (m.skillLinks) Object.assign(skillLinks, m.skillLinks);
+    if (m.coreSkills) m.coreSkills.forEach(function(s) { if (coreSkills.indexOf(s)<0) coreSkills.push(s); });
+    if (m.edges) m.edges.forEach(function(e) { edges.push(Object.assign({}, e, {source:m.id})); });
+    if (m.hindrances) m.hindrances.forEach(function(h) { hindrances.push(Object.assign({}, h, {source:m.id})); });
+    if (m.powers) m.powers.forEach(function(p) { if (!powers.some(function(x){return x.name===p.name})) powers.push(p); });
+    if (m.gear) {
+      ['melee','ranged','armor','shields','general'].forEach(function(cat) {
+        if (m.gear[cat]) gear[cat] = gear[cat].concat(m.gear[cat]);
+      });
+    }
+  });
+  return { skillLinks: skillLinks, coreSkills: coreSkills, edges: edges, hindrances: hindrances, powers: powers, gear: gear };
+}
+
+// ═══════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════
+function boot() {
+  loadDB();
+  data = mergeModules(window.CharacterForge ? window.CharacterForge.modules : []);
+  // Populate region filter
+  var sel = document.getElementById('filter-region');
+  REGIONS.forEach(function(r) { var o = document.createElement('option'); o.value = r; o.textContent = r; sel.appendChild(o); });
+  renderList();
+}
+
+// ═══════════════════════════════════════
+// NPC LIST
+// ═══════════════════════════════════════
+function renderList() {
+  var search = (document.getElementById('search').value || '').toLowerCase();
+  var fCategory = document.getElementById('filter-category').value;
+  var fRegion = document.getElementById('filter-region').value;
+  var fTier = document.getElementById('filter-tier').value;
+  var fRank = document.getElementById('filter-rank').value;
+  var fValid = document.getElementById('filter-valid').value;
+
+  var filtered = npcs.filter(function(n) {
+    if (search && n.name.toLowerCase().indexOf(search) < 0 && (n.region||'').toLowerCase().indexOf(search) < 0 && (n.product||'').toLowerCase().indexOf(search) < 0) return false;
+    if (fCategory && (n.category||'NPC') !== fCategory) return false;
+    if (fRegion && n.region !== fRegion) return false;
+    if (fTier && n.tier !== fTier) return false;
+    if (fRank && n.rank !== fRank) return false;
+    if (fValid) {
+      var v = validate(n);
+      if (fValid === 'valid' && v.errors.length > 0) return false;
+      if (fValid === 'invalid' && v.errors.length === 0) return false;
+    }
+    return true;
+  });
+
+  var catLabel = fCategory ? fCategory + 's' : 'characters';
+  document.getElementById('count-badge').textContent = filtered.length + ' / ' + npcs.length + ' ' + catLabel;
+
+  var html = '';
+  filtered.forEach(function(n) {
+    var v = validate(n);
+    var sel = currentId === n.id ? ' selected' : '';
+    var cat = n.category || 'NPC';
+    html += '<div class="npc-row' + sel + '" onclick="editNPC(' + n.id + ')">';
+    html += '<span class="npc-name">' + esc(n.name || 'Unnamed') + '</span>';
+    html += '<div class="npc-meta">';
+    html += '<span class="npc-tag ' + (cat === 'Pre-gen' ? 'pregen' : 'npc-cat') + '">' + esc(cat) + '</span>';
+    if (n.region) html += '<span class="npc-tag region">' + esc(n.region) + '</span>';
+    html += '<span class="npc-tag ' + (n.tier === 'Wild Card' ? 'wc' : 'extra') + '">' + esc(n.tier || 'Extra') + '</span>';
+    html += '<span>' + esc(n.rank || 'Novice') + '</span>';
+    if (n.product) html += '<span class="npc-tag product">' + esc(n.product) + '</span>';
+    html += '<span class="npc-tag ' + (v.errors.length ? 'invalid' : 'valid') + '">' + (v.errors.length ? v.errors.length + ' error' + (v.errors.length > 1 ? 's' : '') : 'Valid') + '</span>';
+    html += '</div></div>';
+  });
+  if (!filtered.length) html = '<div style="padding:40px;text-align:center;color:#5A5040">No characters found. Click "+ New Character" to create one.</div>';
+  document.getElementById('npc-list').innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+// NEW / EDIT
+// ═══════════════════════════════════════
+function blankNPC() {
+  return {
+    id: nextId(), name: '', concept: '', ancestry: 'Human', region: 'Ammaria', tier: 'Extra', rank: 'Novice',
+    category: 'NPC', product: '',
+    attrs: {agility:4,smarts:4,spirit:4,strength:4,vigor:4},
+    skills: {}, edges: [], hindrances: [], powers: [], gear: [],
+    abName: '', abSkill: '', pp: 0,
+    notes: '', tactics: '', quote: ''
+  };
+}
+function newNPC() {
+  var n = blankNPC();
+  npcs.push(n);
+  saveDB();
+  editNPC(n.id);
+}
+function editNPC(id) {
+  currentId = id;
+  renderList();
+  renderEditor();
+}
+function deleteNPC() {
+  if (!confirm('Delete this character permanently?')) return;
+  npcs = npcs.filter(function(n){return n.id !== currentId});
+  currentId = null;
+  saveDB();
+  document.getElementById('editor').className = 'editor';
+  document.getElementById('editor').innerHTML = '';
+  renderList();
+}
+function duplicateNPC() {
+  var src = npcs.find(function(n){return n.id===currentId});
+  if (!src) return;
+  var dup = JSON.parse(JSON.stringify(src));
+  dup.id = nextId();
+  dup.name = src.name + ' (copy)';
+  npcs.push(dup);
+  saveDB();
+  editNPC(dup.id);
+}
+
+// ═══════════════════════════════════════
+// EDITOR
+// ═══════════════════════════════════════
+function getNPC() { return npcs.find(function(n){return n.id===currentId}); }
+
+function renderEditor() {
+  var n = getNPC();
+  if (!n) return;
+  var el = document.getElementById('editor');
+  el.className = 'editor active';
+
+  var html = '';
+
+  // Identity card
+  html += '<div class="card"><div class="card-title">Identity</div>';
+  html += '<div class="field-row"><label>Name</label><input id="f-name" value="' + esc(n.name) + '" oninput="updateField(\'name\',this.value)" /></div>';
+  html += '<div class="field-row"><label>Quote</label><input id="f-quote" value="' + esc(n.quote||'') + '" oninput="updateField(\'quote\',this.value)" placeholder="Signature quote..." /></div>';
+  html += '<div class="field-row"><label>Concept</label><input id="f-concept" value="' + esc(n.concept||'') + '" oninput="updateField(\'concept\',this.value)" placeholder="Brief description..." /></div>';
+  html += '<div class="field-row"><label>Ancestry</label><input id="f-ancestry" value="' + esc(n.ancestry) + '" oninput="updateField(\'ancestry\',this.value)" /></div>';
+  html += '<div class="field-row"><label>Region</label><select id="f-region" onchange="updateField(\'region\',this.value)">';
+  REGIONS.forEach(function(r){ html += '<option' + (n.region===r?' selected':'') + '>' + r + '</option>'; });
+  html += '</select></div>';
+  html += '<div class="field-row"><label>Category</label><select id="f-category" onchange="updateField(\'category\',this.value);renderEditor()"><option' + ((n.category||'NPC')==='NPC'?' selected':'') + '>NPC</option><option' + (n.category==='Pre-gen'?' selected':'') + '>Pre-gen</option></select></div>';
+  html += '<div class="field-row"><label>Product</label><input id="f-product" value="' + esc(n.product||'') + '" oninput="updateField(\'product\',this.value)" placeholder="e.g. Ammaria, Weekly Pack W03, Quickstart..." /></div>';
+  html += '<div class="field-row"><label>Tier</label><select id="f-tier" onchange="updateField(\'tier\',this.value)"><option' + (n.tier==='Extra'?' selected':'') + '>Extra</option><option' + (n.tier==='Wild Card'?' selected':'') + '>Wild Card</option></select></div>';
+  html += '<div class="field-row"><label>Rank</label><select id="f-rank" onchange="updateField(\'rank\',this.value)">';
+  RANKS.forEach(function(r){ html += '<option' + (n.rank===r?' selected':'') + '>' + r + '</option>'; });
+  html += '</select></div>';
+  html += '</div>';
+
+  // Attributes
+  html += '<div class="card"><div class="card-title">Attributes</div>';
+  ATTRS.forEach(function(attr) {
+    html += '<div class="field-row"><label>' + attr.charAt(0).toUpperCase() + attr.slice(1) + '</label><div class="die-grid">';
+    [4,6,8,10,12].forEach(function(d) {
+      var active = n.attrs[attr] === d ? ' active' : '';
+      html += '<button class="die-btn' + active + '" onclick="setAttr(\'' + attr + '\',' + d + ')">d' + d + '</button>';
+    });
+    html += '</div></div>';
+  });
+  html += '</div>';
+
+  // Skills
+  html += '<div class="card"><div class="card-title">Skills</div>';
+  html += '<div style="margin-bottom:8px;font-size:12px;color:#8A7A60">Click to add/remove. Use die buttons to set level.</div>';
+  var allSkills = Object.keys(data.skillLinks).sort();
+  allSkills.forEach(function(sk) {
+    var cur = n.skills[sk] || 0;
+    var linked = data.skillLinks[sk] || 'agility';
+    var isCore = data.coreSkills.indexOf(sk) >= 0;
+    html += '<div style="display:flex;align-items:center;margin-bottom:2px">';
+    html += '<span style="min-width:150px;font-size:13px;color:' + (cur > 0 ? '#D4C8B0' : '#5A5040') + '">' + sk + (isCore ? ' <span style="font-size:10px;color:#8A7A60">(core)</span>' : '') + '</span>';
+    html += '<div class="die-grid">';
+    [0,4,6,8,10,12].forEach(function(d) {
+      var label = d === 0 ? '\u2014' : 'd' + d;
+      var active = cur === d ? ' active' : '';
+      html += '<button class="die-btn' + active + '" style="width:' + (d===0?'30px':'36px') + '" onclick="setSkill(\'' + sk.replace(/'/g,"\\'") + '\',' + d + ')">' + label + '</button>';
+    });
+    html += '</div>';
+    if (cur > 0 && cur > (n.attrs[linked]||4)) html += '<span style="font-size:10px;color:#8C3030;margin-left:4px">\u00d72</span>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Edges
+  html += '<div class="card"><div class="card-title">Edges</div>';
+  html += '<div class="chip-area">';
+  data.edges.forEach(function(e) {
+    var sel = n.edges.indexOf(e.name) >= 0 ? ' selected' : '';
+    html += '<span class="chip' + sel + '" onclick="toggleChip(\'edges\',\'' + esc(e.name).replace(/'/g,"\\'") + '\')" title="' + esc(e.reqs||'') + '">' + esc(e.name) + '</span>';
+  });
+  html += '</div></div>';
+
+  // Hindrances
+  html += '<div class="card"><div class="card-title">Hindrances</div>';
+  html += '<div class="chip-area">';
+  data.hindrances.forEach(function(h) {
+    var sel = n.hindrances.some(function(x){return x === h.name || (typeof x === 'object' && x.name === h.name)}) ? ' selected' : '';
+    html += '<span class="chip' + sel + '" onclick="toggleChip(\'hindrances\',\'' + esc(h.name).replace(/'/g,"\\'") + '\')">' + esc(h.name) + '</span>';
+  });
+  html += '</div></div>';
+
+  // Powers
+  html += '<div class="card"><div class="card-title">Powers & Arcane Background</div>';
+  html += '<div class="field-row"><label>AB Name</label><input value="' + esc(n.abName||'') + '" oninput="updateField(\'abName\',this.value)" placeholder="e.g. Gifted, Magic..." /></div>';
+  html += '<div class="field-row"><label>AB Skill</label><input value="' + esc(n.abSkill||'') + '" oninput="updateField(\'abSkill\',this.value)" placeholder="e.g. Focus, Spellcasting..." /></div>';
+  html += '<div class="field-row"><label>PP</label><input type="number" value="' + (n.pp||0) + '" style="width:60px;flex:none" oninput="updateField(\'pp\',parseInt(this.value)||0)" /></div>';
+  if (n.abName) {
+    html += '<div class="chip-area" style="margin-top:8px">';
+    data.powers.forEach(function(p) {
+      var sel = n.powers.indexOf(p.name) >= 0 ? ' selected' : '';
+      html += '<span class="chip' + sel + '" onclick="toggleChip(\'powers\',\'' + esc(p.name).replace(/'/g,"\\'") + '\')">' + esc(p.name) + ' (' + p.pp + ')</span>';
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Gear (free text — NPCs don't follow budgets, pre-gens get starting gear)
+  html += '<div class="card"><div class="card-title">Gear</div>';
+  html += '<div class="field-row"><label>Gear</label><textarea oninput="updateField(\'gearText\',this.value)" placeholder="Longsword (Str+d8), Chain Shirt (+3 Armour), Backpack...">' + esc(n.gearText||'') + '</textarea></div>';
+  html += '</div>';
+
+  // Notes & Tactics
+  html += '<div class="card"><div class="card-title">Notes</div>';
+  html += '<div class="field-row"><label>Tactics</label><textarea oninput="updateField(\'tactics\',this.value)" placeholder="Combat behaviour...">' + esc(n.tactics||'') + '</textarea></div>';
+  html += '<div class="field-row"><label>Notes</label><textarea oninput="updateField(\'notes\',this.value)" placeholder="Background, connections, secrets...">' + esc(n.notes||'') + '</textarea></div>';
+  html += '</div>';
+
+  // Action buttons
+  html += '<div style="display:flex;gap:8px;margin-bottom:16px">';
+  html += '<button onclick="duplicateNPC()" style="padding:8px 16px;background:transparent;border:1px solid #3A3530;color:#8A7A60;cursor:pointer;font-family:Cinzel,serif;font-size:11px;letter-spacing:1px">Duplicate</button>';
+  html += '<button onclick="deleteNPC()" style="padding:8px 16px;background:transparent;border:1px solid #8C3030;color:#8C3030;cursor:pointer;font-family:Cinzel,serif;font-size:11px;letter-spacing:1px">Delete</button>';
+  html += '</div>';
+
+  // Validator
+  html += renderValidation(n);
+
+  // Stat Block Output
+  html += renderStatBlock(n);
+
+  el.innerHTML = html;
+}
+
+function updateField(field, value) {
+  var n = getNPC();
+  if (!n) return;
+  n[field] = value;
+  saveDB();
+  renderList(); // update list badges
+}
+function setAttr(attr, val) {
+  var n = getNPC();
+  if (!n) return;
+  n.attrs[attr] = val;
+  saveDB();
+  renderEditor();
+}
+function setSkill(sk, val) {
+  var n = getNPC();
+  if (!n) return;
+  if (val === 0) { delete n.skills[sk]; } else { n.skills[sk] = val; }
+  saveDB();
+  renderEditor();
+}
+function toggleChip(field, name) {
+  var n = getNPC();
+  if (!n) return;
+  var arr = n[field];
+  var idx = arr.indexOf(name);
+  if (idx >= 0) arr.splice(idx, 1); else arr.push(name);
+  saveDB();
+  renderEditor();
+}
+
+// ═══════════════════════════════════════
+// VALIDATOR
+// ═══════════════════════════════════════
+function validate(n) {
+  var errors = [], warnings = [];
+  var rankIdx = RANKS.indexOf(n.rank || 'Novice');
+
+  // Edge requirements
+  (n.edges || []).forEach(function(eName) {
+    var eData = data.edges.find(function(e){return e.name === eName});
+    if (!eData) { warnings.push('Edge "' + eName + '": not found in data'); return; }
+    // Rank check
+    var eRankIdx = RANKS.indexOf(eData.rank || 'Novice');
+    if (rankIdx < eRankIdx) errors.push('Edge "' + eName + '": requires ' + (eData.rank||'Novice') + ' rank (character is ' + n.rank + ')');
+    // Parse requirements string
+    if (eData.reqs && eData.reqs !== '\u2014') {
+      var reqs = eData.reqs;
+      // Check attribute requirements
+      ATTRS.forEach(function(attr) {
+        var attrCap = attr.charAt(0).toUpperCase() + attr.slice(1);
+        var m = reqs.match(new RegExp(attrCap + '\\s+d(\\d+)\\+?'));
+        if (m) {
+          var needed = parseInt(m[1]);
+          if ((n.attrs[attr]||4) < needed) errors.push('Edge "' + eName + '": needs ' + attrCap + ' d' + needed + '+ (has d' + (n.attrs[attr]||4) + ')');
+        }
+      });
+      // Check skill requirements
+      Object.keys(data.skillLinks).forEach(function(sk) {
+        var m = reqs.match(new RegExp(sk.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '\\s+d(\\d+)\\+?'));
+        if (m) {
+          var needed = parseInt(m[1]);
+          if ((n.skills[sk]||0) < needed) errors.push('Edge "' + eName + '": needs ' + sk + ' d' + needed + '+ (has ' + (n.skills[sk] ? 'd'+n.skills[sk] : 'none') + ')');
+        }
+      });
+    }
+  });
+
+  // Derived stats check
+  var derived = calcDerived(n);
+  // Category-aware checks
+  var cat = n.category || 'NPC';
+  var isPregen = cat === 'Pre-gen';
+
+  if (n.tier === 'Wild Card' && !n.edges.length && !n.notes) {
+    if (isPregen) {
+      errors.push('Pre-gen Wild Card has no Edges — all pre-gens should have Edges');
+    } else {
+      warnings.push('Wild Card with no Edges — intentional?');
+    }
+  }
+
+  if (isPregen) {
+    if (n.tier !== 'Wild Card') errors.push('Pre-gen characters must be Wild Cards');
+    if (!n.name) errors.push('Pre-gen requires a name');
+    if (!n.concept) warnings.push('Pre-gen should have a concept/description');
+    if (!n.hindrances || !n.hindrances.length) warnings.push('Pre-gen has no Hindrances — most starting characters take at least one');
+  }
+
+  // Parry sanity (if Fighting exists)
+  var fighting = n.skills['Fighting'] || 0;
+  var expectedParry = 2 + Math.floor(fighting / 2);
+  // Check for shield/block bonuses would go here
+
+  return { errors: errors, warnings: warnings, derived: derived };
+}
+
+function calcDerived(n) {
+  var fighting = n.skills['Fighting'] || 0;
+  var parry = 2 + Math.floor(fighting / 2);
+  var vigor = n.attrs.vigor || 4;
+  var toughness = 2 + Math.floor(vigor / 2);
+  var size = 0;
+  var armor = 0;
+  var pace = 6;
+  var bennies = n.tier === 'Wild Card' ? 3 : 0;
+
+  // Edge modifiers
+  if (n.edges.indexOf('Block') >= 0) parry += 1;
+  if (n.edges.indexOf('Improved Block') >= 0) parry += 2;
+  if (n.edges.indexOf('Brawny') >= 0) { size += 1; toughness += 1; }
+  if (n.edges.indexOf('Small') >= 0 || (n.hindrances && n.hindrances.indexOf('Small') >= 0)) { size -= 1; toughness -= 1; }
+  if (n.edges.indexOf('Fleet-Footed') >= 0) pace += 2;
+
+  return { parry: parry, toughness: toughness, size: size, armor: armor, pace: pace, bennies: bennies };
+}
+
+function renderValidation(n) {
+  var v = validate(n);
+  var cat = n.category || 'NPC';
+  var html = '<div class="card"><div class="card-title">Build Validator <span style="font-size:11px;color:#8A7A60;text-transform:none;letter-spacing:0">(' + (cat === 'Pre-gen' ? 'Strict — point-buy legality' : 'Lenient — GM stat block') + ')</span></div>';
+
+  if (!v.errors.length && !v.warnings.length) {
+    html += '<div class="val-section ok"><span class="val-pass">\u2713 Build is SWADE-legal. No errors detected.</span></div>';
+  }
+  v.errors.forEach(function(e) {
+    html += '<div class="val-section err"><span class="val-fail">\u2717 ' + esc(e) + '</span></div>';
+  });
+  v.warnings.forEach(function(w) {
+    html += '<div class="val-section warn"><span class="val-warn">\u26A0 ' + esc(w) + '</span></div>';
+  });
+
+  // Derived stats
+  var d = v.derived;
+  html += '<div style="margin-top:12px;font-size:13px;color:#8A7A60">';
+  html += '<strong style="color:#C4A44A">Derived:</strong> ';
+  html += 'Pace ' + d.pace + '; Parry ' + d.parry + '; Toughness ' + d.toughness + (d.armor > 0 ? ' (' + d.armor + ')' : '') + '; Bennies ' + d.bennies;
+  if (d.size !== 0) html += '; Size ' + d.size;
+  html += '</div>';
+  html += '</div>';
+  return html;
+}
+
+// ═══════════════════════════════════════
+// STAT BLOCK OUTPUT
+// ═══════════════════════════════════════
+function renderStatBlock(n) {
+  var d = calcDerived(n);
+  var html = '<div class="card"><div class="card-title">Stat Block Output</div>';
+  html += '<div class="stat-block">';
+
+  // Name
+  html += '<div class="sb-name">' + esc(n.name || 'Unnamed Character') + (n.tier === 'Wild Card' ? ' (Wild Card)' : '') + '</div>';
+  if (n.quote) html += '<div class="sb-sub">\u201C' + esc(n.quote) + '\u201D</div>';
+  if (n.concept) html += '<div class="sb-sub">' + esc(n.concept) + '</div>';
+
+  // Attributes
+  html += '<div class="sb-line"><span class="sb-label">Attributes:</span> ' + ATTRS.map(function(a){return a.charAt(0).toUpperCase()+a.slice(1)+' '+dieLabel(n.attrs[a]||4)}).join(', ') + '</div>';
+
+  // Skills
+  var skillList = Object.keys(n.skills).filter(function(s){return n.skills[s]>0}).sort().map(function(s){return s+' '+dieLabel(n.skills[s])});
+  if (skillList.length) html += '<div class="sb-line"><span class="sb-label">Skills:</span> ' + skillList.join(', ') + '</div>';
+
+  // Derived
+  html += '<div class="sb-line"><span class="sb-label">Pace:</span> ' + d.pace + '; <span class="sb-label">Parry:</span> ' + d.parry + '; <span class="sb-label">Toughness:</span> ' + d.toughness + (d.armor > 0 ? ' (' + d.armor + ')' : '') + '</div>';
+
+  // Hindrances
+  if (n.hindrances && n.hindrances.length) {
+    html += '<div class="sb-line"><span class="sb-label">Hindrances:</span> ' + n.hindrances.map(function(h){return esc(typeof h === 'object' ? h.name : h)}).join(', ') + '</div>';
+  }
+
+  // Edges
+  if (n.edges.length) {
+    html += '<div class="sb-line"><span class="sb-label">Edges:</span> ' + n.edges.map(esc).join(', ') + '</div>';
+  }
+
+  // Gear
+  if (n.gearText) {
+    html += '<div class="sb-line"><span class="sb-label">Gear:</span> ' + esc(n.gearText) + '</div>';
+  }
+
+  // Powers
+  if (n.abName && n.powers && n.powers.length) {
+    html += '<div class="sb-line"><span class="sb-blue">Powers</span> (' + esc(n.abName) + ', ' + (n.pp||0) + ' PP): ' + n.powers.map(function(p){
+      var pd = data.powers.find(function(x){return x.name===p});
+      return esc(p) + (pd ? ' (' + pd.pp + ' PP)' : '');
+    }).join(', ') + '</div>';
+  }
+
+  // Tactics
+  if (n.tactics) html += '<div class="sb-line"><span class="sb-label">Tactics:</span> ' + esc(n.tactics) + '</div>';
+
+  html += '</div>';
+
+  // Copy button
+  html += '<div style="margin-top:8px;text-align:right"><button onclick="copyStatBlock()" style="padding:6px 16px;background:transparent;border:1px solid #3A3530;color:#8A7A60;cursor:pointer;font-family:Cinzel,serif;font-size:11px;letter-spacing:1px">Copy to Clipboard</button></div>';
+  html += '</div>';
+  return html;
+}
+
+function copyStatBlock() {
+  var n = getNPC();
+  if (!n) return;
+  var d = calcDerived(n);
+  var lines = [];
+  lines.push(n.name + (n.tier === 'Wild Card' ? ' (Wild Card)' : ''));
+  if (n.quote) lines.push('\u201C' + n.quote + '\u201D');
+  if (n.concept) lines.push(n.concept);
+  lines.push('');
+  lines.push('Attributes: ' + ATTRS.map(function(a){return a.charAt(0).toUpperCase()+a.slice(1)+' '+dieLabel(n.attrs[a]||4)}).join(', '));
+  var sk = Object.keys(n.skills).filter(function(s){return n.skills[s]>0}).sort().map(function(s){return s+' '+dieLabel(n.skills[s])});
+  if (sk.length) lines.push('Skills: ' + sk.join(', '));
+  lines.push('Pace: ' + d.pace + '; Parry: ' + d.parry + '; Toughness: ' + d.toughness + (d.armor>0?' ('+d.armor+')':''));
+  if (n.hindrances && n.hindrances.length) lines.push('Hindrances: ' + n.hindrances.map(function(h){return typeof h==='object'?h.name:h}).join(', '));
+  if (n.edges.length) lines.push('Edges: ' + n.edges.join(', '));
+  if (n.gearText) lines.push('Gear: ' + n.gearText);
+  if (n.abName && n.powers && n.powers.length) lines.push('Powers (' + n.abName + ', ' + (n.pp||0) + ' PP): ' + n.powers.join(', '));
+  if (n.tactics) lines.push('Tactics: ' + n.tactics);
+
+  navigator.clipboard.writeText(lines.join('\n')).then(function(){alert('Copied!')});
+}
+
+// ═══════════════════════════════════════
+// JSON EXPORT / IMPORT
+// ═══════════════════════════════════════
+function exportAllJSON() {
+  var blob = new Blob([JSON.stringify(npcs, null, 2)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a'); a.href = url; a.download = 'character-database-' + new Date().toISOString().slice(0,10) + '.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+function importJSON(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var imported = JSON.parse(e.target.result);
+      if (!Array.isArray(imported)) { alert('Invalid format — expected array of characters'); return; }
+      // Merge: skip duplicates by name
+      var existing = npcs.map(function(n){return n.name});
+      var added = 0;
+      imported.forEach(function(n) {
+        if (existing.indexOf(n.name) < 0) {
+          n.id = nextId();
+          npcs.push(n);
+          existing.push(n.name);
+          added++;
+        }
+      });
+      saveDB();
+      renderList();
+      alert('Imported ' + added + ' new characters (' + (imported.length - added) + ' duplicates skipped)');
+    } catch(err) {
+      alert('Error parsing JSON: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ═══════════════════════════════════════
+// UTILITY
+// ═══════════════════════════════════════
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>
