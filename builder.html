@@ -444,12 +444,17 @@ function CharacterForgeApp() {
             <div style={{fontSize:'12px',color:C.goldDim,textTransform:'uppercase',letterSpacing:'1px',fontFamily:"'Cinzel',serif",borderBottom:'1px solid '+C.border,paddingBottom:'4px',marginBottom:'8px'}}>{attr.charAt(0).toUpperCase()+attr.slice(1)+' ('+dieLabel(attrs[attr])+')'}</div>
             {list.map(function(sk) {
               var isCore=data.coreSkills.includes(sk),cur=skills[sk]||(isCore?4:0),linked=attrs[attr];
-              return (<div key={sk} style={{display:'flex',alignItems:'center',gap:'6px',marginBottom:'4px'}}>
-                <span style={{fontSize:'13px',color:cur>0?C.text:C.textDim,minWidth:'140px'}}>{sk}{isCore?<span style={{fontSize:'10px',color:C.goldDim}}> (core)</span>:null}</span>
-                {cur>(isCore?4:0)?<button onClick={function(){if(!isCore&&cur<=4)setSkills(function(p){var n=Object.assign({},p);delete n[sk];return n;});else setSkills(function(p){var n=Object.assign({},p);n[sk]=DICE[DICE.indexOf(cur)-1];return n;});}} style={{width:'24px',height:'24px',border:'1px solid '+C.border,background:'transparent',color:C.red,fontSize:'12px',cursor:'pointer',lineHeight:'22px',textAlign:'center'}}>{'\u2212'}</button>:null}
-                <span style={{width:'32px',textAlign:'center',fontSize:'13px',fontWeight:600,color:cur>0?C.text:C.textDim}}>{cur>0?dieLabel(cur):'\u2014'}</span>
-                {(cur===0||(cur>0&&cur<12))?<button onClick={function(){if(cur===0)setSkills(function(p){var n=Object.assign({},p);n[sk]=4;return n;});else{var i=DICE.indexOf(cur);if(i<DICE.length-1)setSkills(function(p){var n=Object.assign({},p);n[sk]=DICE[i+1];return n;});}}} style={{width:'24px',height:'24px',border:'1px solid '+C.border,background:'transparent',color:C.greenBright,fontSize:'12px',cursor:'pointer',lineHeight:'22px',textAlign:'center'}}>+</button>:null}
-                {cur>linked?<span style={{fontSize:'10px',color:C.red,marginLeft:'2px'}}>{'\u00d72'}</span>:null}
+              var minVal=isCore?4:0, maxVal=12;
+              var canDown=cur>minVal, canUp=cur<maxVal;
+              var stepBtn=function(label,enabled,fn){return <button onClick={enabled?fn:undefined} style={{width:'26px',height:'26px',border:'1px solid '+(enabled?C.border:C.border+'40'),background:'transparent',color:enabled?(label==='+'?C.greenBright:C.red):C.border+'40',fontSize:'14px',cursor:enabled?'pointer':'default',lineHeight:'24px',textAlign:'center',fontWeight:700,opacity:enabled?1:0.3}}>{label}</button>;};
+              return (<div key={sk} style={{display:'flex',alignItems:'center',marginBottom:'3px'}}>
+                <span style={{fontSize:'13px',color:cur>minVal?C.text:C.textDim,minWidth:'140px',flexShrink:0}}>{sk}{isCore?<span style={{fontSize:'10px',color:C.goldDim}}> (core)</span>:null}</span>
+                <div style={{display:'flex',alignItems:'center',gap:'4px',minWidth:'110px',justifyContent:'center'}}>
+                  {stepBtn('\u2212',canDown,function(){if(!isCore&&cur<=4)setSkills(function(p){var n=Object.assign({},p);delete n[sk];return n;});else setSkills(function(p){var n=Object.assign({},p);n[sk]=DICE[DICE.indexOf(cur)-1];return n;});})}
+                  <span style={{width:'36px',textAlign:'center',fontSize:'13px',fontWeight:600,color:cur>0?C.text:C.textDim}}>{cur>0?dieLabel(cur):'\u2014'}</span>
+                  {stepBtn('+',canUp,function(){if(cur===0)setSkills(function(p){var n=Object.assign({},p);n[sk]=4;return n;});else{var i=DICE.indexOf(cur);if(i<DICE.length-1)setSkills(function(p){var n=Object.assign({},p);n[sk]=DICE[i+1];return n;});}})}
+                </div>
+                <span style={{fontSize:'10px',color:C.red,marginLeft:'4px',width:'20px'}}>{cur>linked?'\u00d72':''}</span>
               </div>);
             })}
           </div>);
