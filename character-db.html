@@ -320,7 +320,7 @@ function updateHeaderStats(){
   document.getElementById('headerStats').innerHTML=`<span><span class="stat-num">${t}</span> NPCs</span><span><span class="stat-num">${c}</span> Complete</span><span><span class="stat-num">${f}</span> FG Ready</span>`;
 }
 
-function selectNPC(name){currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;activePanel=null;renderDetail();filterNPCs();}
+function selectNPC(name){currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;activePanel='audit';renderDetail();filterNPCs();}
 
 function renderDetail(){
   const n=currentNPC;if(!n)return;
@@ -588,7 +588,7 @@ function runBuildAudit(n){
   results.push({section:'Derived Statistics',label:`Pace ${n.pace}`,pass:n.pace===6,detail:n.pace===6?'✓':'Expected 6'});
   results.push({section:'Derived Statistics',label:`Parry ${n.parry} = 2 + ${d(fDie)}÷2`,pass:n.parry===expParry,detail:n.parry===expParry?'✓':`Expected ${expParry}`});
   results.push({section:'Derived Statistics',label:`Toughness ${n.toughness}`,pass:n.toughness===expTough,detail:n.toughness===expTough?'✓':`Expected ${expTough}`});
-  const attrPoints=[n.agility,n.smarts,n.spirit,n.strength,n.vigor].reduce((s,v)=>s+(v>0?(v-4)/2+1:0),0);
+  const attrPoints=[n.agility,n.smarts,n.spirit,n.strength,n.vigor].reduce((s,v)=>s+(v>0?(v-4)/2:0),0);
   const maxAttr=n.ancestry==='Human'?6:5;
   results.push({section:'Attribute Budget',label:`Attribute points: ${attrPoints}/${maxAttr}`,pass:attrPoints<=maxAttr,detail:attrPoints<=maxAttr?'✓':'Over budget'});
   const majorCount=n.hindrances.filter(h=>/major/i.test(h)).length;
