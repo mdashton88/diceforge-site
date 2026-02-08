@@ -594,9 +594,9 @@ function CharacterForgeApp() {
           {tabs.map(function(t){return <button key={t[0]} onClick={function(){setGearTab(t[0])}} style={{padding:'4px 10px',fontSize:'10px',fontWeight:600,letterSpacing:'1px',textTransform:'uppercase',border:'1px solid '+(gearTab===t[0]?C.gold:C.border),background:gearTab===t[0]?C.gold:'transparent',color:gearTab===t[0]?C.bg:C.textDim,cursor:'pointer',fontFamily:"'Cinzel',serif"}}>{t[1]}</button>;})}
         </div>
         <div style={{maxHeight:'350px',overflowY:'auto'}}>
-          {tableData.map(function(item) {
-            var owned=gear.find(function(g){return g.name===item.name;});
-            return (<div key={item.name} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 12px',borderBottom:'1px solid '+C.border}}>
+          {tableData.map(function(item, idx) {
+            var owned=gear.find(function(g){return g.name===item.name && g.armor===item.armor && g.dmg===item.dmg;});
+            return (<div key={gearTab+'-'+idx} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 12px',borderBottom:'1px solid '+C.border}}>
               <div style={{flex:1}}>
                 <div style={{fontSize:'13px',fontWeight:600,color:C.text}}>{item.name}{owned?<span style={{color:C.gold,marginLeft:'6px'}}>{'(\u00d7'+(owned.qty||1)+')'}</span>:null}<span style={{fontSize:'11px',color:C.textDim,fontWeight:400,marginLeft:'8px'}}>{'Cost: '+item.cost}</span></div>
                 {owned?<div style={{fontSize:'11px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>
