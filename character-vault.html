@@ -54,6 +54,7 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .tier-tag.extra { background: var(--tag-extra); color: #fff; }
 .tier-tag.walkon { background: var(--tag-walkon); color: #fff; }
 .tier-tag.pregen { background: #6a5aaa; color: #fff; }
+.tier-tag.npc { background: #5a7a9a; color: #fff; }
 .list-section-header { padding: 8px 16px 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); border-bottom: 1px solid var(--border); margin-top: 4px; }
 .status-dots { display: inline-flex; gap: 3px; margin-left: 6px; vertical-align: middle; }
 .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
@@ -446,7 +447,7 @@ function renderNPCList(npcs){
   function renderItem(n){
     const tc=n.tier==='Wild Card'?'wc':n.tier==='Walk-on'?'walkon':'extra';
     const tl=n.tier==='Wild Card'?'WC':n.tier==='Walk-on'?'W-O':'EXT';
-    const catTag=(n.category||'NPC')==='Pre-gen'?'<span class="tier-tag pregen">PG</span>':'';
+    const catTag=(n.category||'NPC')==='Pre-gen'?'<span class="tier-tag pregen">PG</span>':'<span class="tier-tag npc">NPC</span>';
     const act=currentNPC&&currentNPC.name===n.name?'active':'';
     const title=n.concept?` — ${n.concept}`:'';
     const audit=runBuildAudit(n);
@@ -487,7 +488,7 @@ function renderDetail(){
   const ancestryTag=n.ancestry&&n.ancestry!=='Human'?` · ${esc(n.ancestry)}`:'';
   const titleLine=n.concept?`<div class="npc-title-line">${esc(n.concept)}${ancestryTag}</div>`:(n.ancestry?`<div class="npc-title-line">${esc(n.ancestry)}</div>`:'');
   const canonBadge=canonCommitted.has(n.name)?'<span style="font-size:13px;margin-left:10px;color:var(--green)" title="Committed to Canon">📦 In Canon</span>':'<span style="font-size:13px;margin-left:10px;color:var(--text-dim)" title="Not yet committed">📦 Not in Canon</span>';
-  const catBadge=(n.category||'NPC')==='Pre-gen'?'<span class="tier-tag pregen" style="margin-left:10px;font-size:11px;padding:2px 8px">PRE-GEN</span>':'<span class="tier-tag extra" style="margin-left:10px;font-size:11px;padding:2px 8px">NPC</span>';
+  const catBadge=(n.category||'NPC')==='Pre-gen'?'<span class="tier-tag pregen" style="margin-left:10px;font-size:11px;padding:2px 8px">PRE-GEN</span>':'<span class="tier-tag npc" style="margin-left:10px;font-size:11px;padding:2px 8px">NPC</span>';
   const tierBadgeClass=n.tier==='Wild Card'?'wc':n.tier==='Walk-on'?'walkon':'extra';
   const tierBadgeText=n.tier==='Wild Card'?'WILD CARD':n.tier==='Walk-on'?'WALK-ON':'EXTRA';
   const tierBadge='<span class="tier-tag '+tierBadgeClass+'" style="margin-left:6px;font-size:11px;padding:2px 8px">'+tierBadgeText+'</span>';
