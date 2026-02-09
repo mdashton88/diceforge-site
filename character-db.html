@@ -33,12 +33,13 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .header-stats .stat-num { color: var(--accent); font-weight: 600; }
 .container { display: flex; flex: 1; min-height: 0; }
 .sidebar { width: 300px; min-width: 300px; background: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-.sidebar-controls { padding: 10px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+#sidebarInner { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
+.sidebar-controls { padding: 10px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
 .filter-row { display: flex; gap: 6px; }
 .sidebar-controls input, .sidebar-controls select { background: var(--bg-input); border: 1px solid var(--border); color: var(--text); padding: 6px 8px; border-radius: 3px; font-size: 13px; }
 .sidebar-controls input { flex: 1; }
 .sidebar-controls select { min-width: 100px; }
-.npc-list { flex: 1; overflow-y: scroll; padding: 4px; scrollbar-width: thin; scrollbar-color: var(--accent-dim) var(--bg-dark); }
+.npc-list { flex: 1; overflow-y: scroll; padding: 4px; scrollbar-width: auto; scrollbar-color: var(--accent-dim) var(--bg-dark); }
 .npc-list::-webkit-scrollbar { width: 10px; }
 .npc-list::-webkit-scrollbar-track { background: var(--bg-dark); }
 .npc-list::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 5px; border: 2px solid var(--bg-dark); }
@@ -55,7 +56,7 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .status-dot.on { background: var(--green); }
 .status-dot.off { background: var(--border); }
-.sidebar-footer { padding: 8px 10px; border-top: 1px solid var(--border); display: flex; gap: 6px; }
+.sidebar-footer { padding: 8px 10px; border-top: 1px solid var(--border); display: flex; gap: 6px; flex-shrink: 0; }
 .main { flex: 1; overflow: hidden; padding: 20px 28px; display: flex; flex-direction: column; }
 .main.empty-state { display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 15px; }
 .npc-header { margin-bottom: 16px; flex-shrink: 0; }
