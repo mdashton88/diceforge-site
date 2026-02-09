@@ -284,7 +284,7 @@ function loadData(){
 }
 
 function normaliseChar(c,moduleId){
-  const n={name:c.name,concept:c.concept||'',ancestry:c.ancestry||'Human',region:c.region||'Ammaria',tier:c.tier||'Wild Card',rank:c.rank||'Novice',category:c.category||'NPC',product:c.product||'',source:moduleId,agility:c.attrs?.agility||0,smarts:c.attrs?.smarts||0,spirit:c.attrs?.spirit||0,strength:c.attrs?.strength||0,vigor:c.attrs?.vigor||0,skills:c.skills||{},edges:c.edges||[],hindrances:c.hindrances||[],powers:c.powers||[],armour:c.armour||[],weapons:c.weapons||[],gearText:c.gearText||'',quote:c.quote||'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:c.abName||'',abSkill:c.abSkill||'',pp:c.pp||0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
+  const n={name:c.name,refCode:c.refCode||'',concept:c.concept||'',ancestry:c.ancestry||'Human',region:c.region||'Ammaria',tier:c.tier||'Wild Card',rank:c.rank||'Novice',category:c.category||'NPC',product:c.product||'',source:moduleId,agility:c.attrs?.agility||0,smarts:c.attrs?.smarts||0,spirit:c.attrs?.spirit||0,strength:c.attrs?.strength||0,vigor:c.attrs?.vigor||0,skills:c.skills||{},edges:c.edges||[],hindrances:c.hindrances||[],powers:c.powers||[],armour:c.armour||[],weapons:c.weapons||[],gearText:c.gearText||'',quote:c.quote||'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:c.abName||'',abSkill:c.abSkill||'',pp:c.pp||0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
   // Parse gear text into structured armour/weapons if not already populated
   if(!n.armour.length&&!n.weapons.length&&n.gearText) parseGearInto(n);
   n.toughnessArmor=n.armour.reduce((best,a)=>Math.max(best,a.armor||0),0);
@@ -462,7 +462,7 @@ function renderNPCList(npcs){
           <span class="status-dot ${n.narrativeComplete?'on':'off'}"></span>
           <span class="status-dot ${n.fgReady?'on':'off'}"></span>
         </span></div>
-      <div class="npc-meta">${esc(n.region)}${esc(title)}</div></div>`;
+      <div class="npc-meta">${n.refCode?'<span style="font-family:monospace;font-size:10px;color:var(--accent);margin-right:6px">'+esc(n.refCode)+'</span>':''}${esc(n.region)}${esc(title)}</div></div>`;
   }
   let html='';
   if(pregens.length){html+=`<div class="list-section-header">Pre-gens (${pregens.length})</div>`;html+=pregens.map(renderItem).join('');}
@@ -492,7 +492,8 @@ function renderDetail(){
   const tierBadgeClass=n.tier==='Wild Card'?'wc':n.tier==='Walk-on'?'walkon':'extra';
   const tierBadgeText=n.tier==='Wild Card'?'WILD CARD':n.tier==='Walk-on'?'WALK-ON':'EXTRA';
   const tierBadge='<span class="tier-tag '+tierBadgeClass+'" style="margin-left:6px;font-size:11px;padding:2px 8px">'+tierBadgeText+'</span>';
-  el.innerHTML=`<div class="npc-header"><h2>${esc(n.name)}${catBadge}${tierBadge}${canonBadge}</h2>${titleLine}</div><div class="detail-columns"><div class="col-stats" id="colStats"></div><div class="col-middle" id="colMiddle"></div><div class="col-narrative" id="colNarrative"></div></div>`;
+  const refBadge=n.refCode?`<span style="font-family:monospace;font-size:11px;color:var(--text-dim);margin-right:8px;background:var(--bg-card);padding:2px 6px;border-radius:3px;border:1px solid var(--border)">${esc(n.refCode)}</span>`:'';
+  el.innerHTML=`<div class="npc-header"><h2>${refBadge}${esc(n.name)}${catBadge}${tierBadge}${canonBadge}</h2>${titleLine}</div><div class="detail-columns"><div class="col-stats" id="colStats"></div><div class="col-middle" id="colMiddle"></div><div class="col-narrative" id="colNarrative"></div></div>`;
   renderStatColumn(n);renderMiddleColumn(n);renderNarrativeColumn(n);
 }
 
@@ -590,7 +591,7 @@ function renderEditPanel(n){
   const el=document.getElementById('panelContent');
   const dieSel=(id,val)=>{const opts=[0,4,6,8,10,12].map(v=>`<option value="${v}" ${val===v?'selected':''}>${v?'d'+v:'—'}</option>`).join('');return `<select id="${id}">${opts}</select>`;};
   el.innerHTML=`
-    <div class="form-row"><div class="form-group"><label>Name *</label><input id="ed_name" value="${esc(n.name)}"></div><div class="form-group"><label>Title / Role</label><input id="ed_concept" value="${esc(n.concept)}"></div></div>
+    <div class="form-row"><div class="form-group" style="max-width:140px"><label>Ref Code</label><input id="ed_refCode" value="${esc(n.refCode||'')}" placeholder="AM-C001" style="font-family:monospace;font-size:13px;letter-spacing:0.5px"></div><div class="form-group"><label>Name *</label><input id="ed_name" value="${esc(n.name)}"></div><div class="form-group"><label>Title / Role</label><input id="ed_concept" value="${esc(n.concept)}"></div></div>
     <div class="form-row">
       <div class="form-group"><label>Region *</label><select id="ed_region">${['Ammaria','Saltlands','Vinlands','Concordium','Glasrya','Global'].map(r=>`<option ${n.region===r?'selected':''}>${r}</option>`).join('')}</select></div>
       <div class="form-group"><label>Tier *</label><select id="ed_tier">${['Wild Card','Extra','Walk-on'].map(t=>`<option ${n.tier===t?'selected':''}>${t}</option>`).join('')}</select></div>
@@ -612,7 +613,7 @@ function renderEditPanel(n){
 }
 function saveEdit(){
   const n=currentNPC;
-  n.name=document.getElementById('ed_name').value.trim();n.concept=document.getElementById('ed_concept').value.trim();n.region=document.getElementById('ed_region').value;n.tier=document.getElementById('ed_tier').value;n.category=document.getElementById('ed_category').value;n.ancestry=document.getElementById('ed_ancestry').value;n.quote=document.getElementById('ed_quote').value.trim();n.description=document.getElementById('ed_description').value.trim();n.background=document.getElementById('ed_background').value.trim();
+  n.name=document.getElementById('ed_name').value.trim();n.refCode=document.getElementById('ed_refCode').value.trim();n.concept=document.getElementById('ed_concept').value.trim();n.region=document.getElementById('ed_region').value;n.tier=document.getElementById('ed_tier').value;n.category=document.getElementById('ed_category').value;n.ancestry=document.getElementById('ed_ancestry').value;n.quote=document.getElementById('ed_quote').value.trim();n.description=document.getElementById('ed_description').value.trim();n.background=document.getElementById('ed_background').value.trim();
   n.agility=parseInt(document.getElementById('ed_agility').value);n.smarts=parseInt(document.getElementById('ed_smarts').value);n.spirit=parseInt(document.getElementById('ed_spirit').value);n.strength=parseInt(document.getElementById('ed_strength').value);n.vigor=parseInt(document.getElementById('ed_vigor').value);
   n.pace=parseInt(document.getElementById('ed_pace').value);n.parry=parseInt(document.getElementById('ed_parry').value);n.toughness=parseInt(document.getElementById('ed_toughness').value);n.toughnessArmor=parseInt(document.getElementById('ed_tougharmor').value);n.bennies=parseInt(document.getElementById('ed_bennies').value);
   n.edges=csvToList(document.getElementById('ed_edges').value);n.hindrances=csvToList(document.getElementById('ed_hindrances').value);n.gearText=document.getElementById('ed_gear').value.trim();
@@ -913,7 +914,7 @@ function openNewNPCModal(){document.getElementById('newNpcModal').classList.add(
 function closeNewNPCModal(){document.getElementById('newNpcModal').classList.remove('active');}
 function createNPC(){
   const name=document.getElementById('new_name').value.trim();if(!name){alert('Name is required');return;}
-  const npc={name,concept:document.getElementById('new_concept')?.value?.trim()||'',ancestry:document.getElementById('new_ancestry').value,region:document.getElementById('new_region').value,tier:document.getElementById('new_tier').value,rank:'Novice',category:document.getElementById('new_category').value,product:'',source:'custom',agility:0,smarts:0,spirit:0,strength:0,vigor:0,skills:{},edges:[],hindrances:[],powers:[],gearText:'',quote:'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:'',abSkill:'',pp:0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
+  const npc={name,refCode:'',concept:document.getElementById('new_concept')?.value?.trim()||'',ancestry:document.getElementById('new_ancestry').value,region:document.getElementById('new_region').value,tier:document.getElementById('new_tier').value,rank:'Novice',category:document.getElementById('new_category').value,product:'',source:'custom',agility:0,smarts:0,spirit:0,strength:0,vigor:0,skills:{},edges:[],hindrances:[],powers:[],gearText:'',quote:'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:'',abSkill:'',pp:0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
   calcDerived(npc);allNPCs.push(npc);saveCustomNPC(npc);closeNewNPCModal();filterNPCs();updateHeaderStats();selectNPC(name);
 }
 function showStatusView(){
@@ -921,9 +922,9 @@ function showStatusView(){
   const rows=allNPCs.map(n=>{
     const audit=runBuildAudit(n);const legal=audit.every(r=>r.pass);
     const inCanon=canonCommitted.has(n.name);
-    return `<tr><td>${esc(n.name)}</td><td>${esc(n.category||'NPC')}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td>${legal?'✅':'❌'}</td><td>${inCanon?'📦':'—'}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">&#${n.statComplete?'10003':'8212'};</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">&#${n.narrativeComplete?'10003':'8212'};</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">&#${n.fgReady?'10003':'8212'};</td></tr>`;
+    return `<tr><td style="font-family:monospace;font-size:11px;color:var(--text-dim)">${esc(n.refCode||'—')}</td><td>${esc(n.name)}</td><td>${esc(n.category||'NPC')}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td>${legal?'✅':'❌'}</td><td>${inCanon?'📦':'—'}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">&#${n.statComplete?'10003':'8212'};</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">&#${n.narrativeComplete?'10003':'8212'};</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">&#${n.fgReady?'10003':'8212'};</td></tr>`;
   }).join('');
-  el.innerHTML=`<h2 style="color:var(--accent);margin-bottom:14px">Production Status</h2><table class="data-table"><tr><th>Name</th><th>Type</th><th>Region</th><th>Tier</th><th>Build</th><th>Canon</th><th>Stats</th><th>Narrative</th><th>FG Ready</th></tr>${rows}</table>`;
+  el.innerHTML=`<h2 style="color:var(--accent);margin-bottom:14px">Production Status</h2><table class="data-table"><tr><th>Ref</th><th>Name</th><th>Type</th><th>Region</th><th>Tier</th><th>Build</th><th>Canon</th><th>Stats</th><th>Narrative</th><th>FG Ready</th></tr>${rows}</table>`;
 }
 
 // ── CANON COMMIT SYSTEM ──
@@ -931,7 +932,7 @@ const CANON_API='/api/commit';
 
 function buildCanonCharacter(n){
   return {
-    name:n.name, concept:n.concept||'', ancestry:n.ancestry||'Human', region:n.region||'Ammaria',
+    name:n.name, refCode:n.refCode||'', concept:n.concept||'', ancestry:n.ancestry||'Human', region:n.region||'Ammaria',
     tier:n.tier||'Wild Card', rank:n.rank||'Novice', category:n.category||'NPC', product:n.product||n.region||'Ammaria',
     attrs:{agility:n.agility||4,smarts:n.smarts||4,spirit:n.spirit||4,strength:n.strength||4,vigor:n.vigor||4},
     skills:Object.assign({},n.skills), edges:[...(n.edges||[])], hindrances:[...(n.hindrances||[])],
