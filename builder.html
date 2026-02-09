@@ -12,7 +12,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:#0A0908; color:#D4C9B8; font-family:'Crimson Pro','Georgia',serif; font-size:15px; line-height:1.5; }
+  body { background:#0A0908; color:#D4C9B8; font-family:'Segoe UI', Tahoma, Geneva, sans-serif; font-size:15px; line-height:1.5; }
   ::-webkit-scrollbar { width:6px; }
   ::-webkit-scrollbar-track { background:#0A0908; }
   ::-webkit-scrollbar-thumb { background:#2A2520; border-radius:3px; }
@@ -325,12 +325,12 @@ function CharacterForgeApp() {
         <p style={{fontSize:'15px',color:C.textDim,lineHeight:'1.6',marginBottom:'16px'}}>Start with a name and a concept. A sentence that captures who this person is and what drives them.</p>
         <div style={{marginBottom:'16px'}}>
           <label style={lbl}>Name</label>
-          <input style={{background:C.bg,border:'1px solid '+C.border,color:C.text,padding:'10px 14px',fontSize:'16px',fontFamily:"'Crimson Pro',serif",width:'100%',boxSizing:'border-box',outline:'none'}}
+          <input style={{background:C.bg,border:'1px solid '+C.border,color:C.text,padding:'10px 14px',fontSize:'16px',fontFamily:'inherit',width:'100%',boxSizing:'border-box',outline:'none'}}
             value={charName} onChange={function(e){setCharName(e.target.value)}} placeholder="What do they call you?" />
         </div>
         <div>
           <label style={lbl}>Concept</label>
-          <textarea style={{background:C.bg,border:'1px solid '+C.border,color:C.text,padding:'10px 14px',fontSize:'16px',fontFamily:"'Crimson Pro',serif",width:'100%',minHeight:'60px',boxSizing:'border-box',outline:'none',resize:'vertical'}}
+          <textarea style={{background:C.bg,border:'1px solid '+C.border,color:C.text,padding:'10px 14px',fontSize:'16px',fontFamily:'inherit',width:'100%',minHeight:'60px',boxSizing:'border-box',outline:'none',resize:'vertical'}}
             value={charConcept} onChange={function(e){setCharConcept(e.target.value)}} placeholder="Who are you, and what drives you?" />
         </div>
         <div style={{marginTop:'16px'}}>
@@ -417,7 +417,7 @@ function CharacterForgeApp() {
           return (<div key={a} style={{display:'flex',alignItems:'center',gap:'8px'}}>
             <span style={{fontSize:'15px',color:C.text,minWidth:'100px',textTransform:'capitalize'}}>{a}</span>
             <div style={{display:'flex',gap:'4px'}}>{steps.map(function(d){
-              return <button key={d} disabled={d<minD||d>maxD} onClick={function(){setAttrs(function(p){var n=Object.assign({},p);n[a]=d;return n;})}} style={{width:'42px',height:'32px',border:'1px solid '+(d===attrs[a]?C.gold:C.border),background:d===attrs[a]?C.gold:'transparent',color:d===attrs[a]?C.bg:d<minD?C.border:C.textDim,fontSize:d>12?'11px':'13px',fontWeight:d===attrs[a]?700:400,cursor:d<minD||d>maxD?'default':'pointer',fontFamily:"'Crimson Pro',serif",opacity:d<minD?0.3:1}}>{dieLabel(d)}</button>;
+              return <button key={d} disabled={d<minD||d>maxD} onClick={function(){setAttrs(function(p){var n=Object.assign({},p);n[a]=d;return n;})}} style={{width:'42px',height:'32px',border:'1px solid '+(d===attrs[a]?C.gold:C.border),background:d===attrs[a]?C.gold:'transparent',color:d===attrs[a]?C.bg:d<minD?C.border:C.textDim,fontSize:d>12?'11px':'13px',fontWeight:d===attrs[a]?700:400,cursor:d<minD||d>maxD?'default':'pointer',fontFamily:'inherit',opacity:d<minD?0.3:1}}>{dieLabel(d)}</button>;
             })}</div>
           </div>);
         })}
@@ -1059,7 +1059,7 @@ function CharacterForgeApp() {
 
   // ── RENDER ──
   return (
-    <div style={{background:C.bg,color:C.text,minHeight:'100vh',fontFamily:"'Crimson Pro','Georgia',serif",padding:0}}>
+    <div style={{background:C.bg,color:C.text,minHeight:'100vh',fontFamily:'inherit',padding:0}}>
       <div style={{background:'linear-gradient(180deg,'+C.bgCard+','+C.bg+')',borderBottom:'1px solid '+C.border,padding:'24px 20px 16px',textAlign:'center'}}>
         <h1 style={{fontFamily:"'Cinzel',serif",fontSize:'28px',fontWeight:700,color:C.gold,letterSpacing:'3px',margin:0,textTransform:'uppercase'}}>Character Forge</h1>
         <div style={{fontSize:'14px',color:C.textDim,letterSpacing:'2px',marginTop:'4px',textTransform:'uppercase'}}>For Savage Worlds</div>
