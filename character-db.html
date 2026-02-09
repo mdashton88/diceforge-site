@@ -56,10 +56,12 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .npc-header { margin-bottom: 16px; }
 .npc-header h2 { font-size: 24px; color: var(--text-bright); font-weight: 600; }
 .npc-header .npc-title-line { font-size: 15px; color: var(--accent); margin-top: 2px; }
-.detail-columns { display: flex; gap: 16px; }
-.col-stats { width: 400px; min-width: 400px; flex-shrink: 0; }
-.col-middle { min-width: 380px; flex: 1; }
-.col-narrative { width: 360px; min-width: 300px; flex-shrink: 0; }
+.detail-columns { display: flex; gap: 16px; height: calc(100vh - 130px); }
+.col-stats { width: 400px; min-width: 400px; flex-shrink: 0; display: flex; flex-direction: column; }
+.col-stats-scroll { flex: 1; overflow-y: auto; }
+.col-stats-footer { flex-shrink: 0; border-top: 1px solid var(--border); background: var(--bg-card); }
+.col-middle { min-width: 380px; flex: 1; overflow-y: auto; }
+.col-narrative { width: 360px; min-width: 300px; flex-shrink: 0; overflow-y: auto; }
 .stat-block-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; padding: 14px 16px; font-size: 13px; }
 .stat-block-panel .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .stat-block-panel .tier-label { font-size: 13px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
@@ -425,7 +427,7 @@ function renderStatColumn(n){
     <label><input type="checkbox" ${n.narrativeComplete?'checked':''} onchange="toggleStatus('narrativeComplete',this.checked)"> Narrative</label>
     <label><input type="checkbox" ${n.fgReady?'checked':''} onchange="toggleStatus('fgReady',this.checked)"> FG Ready</label></div>
     <div class="action-btns"><button class="btn sm" onclick="showPanel('edit')">Edit</button><button class="btn sm" onclick="showPanel('statblock')">Stat Block</button><button class="btn sm" onclick="showPanel('audit')">Audit</button><button class="btn sm danger" onclick="deleteNPC()" style="margin-left:auto">Delete</button></div></div>`;
-  el.innerHTML=statsHTML+`<div class="section-box-pair">${hindBox}${edgeBox}</div><div class="section-box-pair">${armourBox}${weaponBox}</div><div class="section-box-pair">${powersBox}${gearBox}</div>`+statusHTML;
+  el.innerHTML=`<div class="col-stats-scroll">${statsHTML}<div class="section-box-pair">${hindBox}${edgeBox}</div><div class="section-box-pair">${armourBox}${weaponBox}</div><div class="section-box-pair">${powersBox}${gearBox}</div></div><div class="col-stats-footer">${statusHTML}</div>`;
 }
 
 function buildSectionBox(title,panel,items,renderItem,isLegacy){
