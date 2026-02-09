@@ -231,8 +231,7 @@ var DICEFORGE_AUTH=false;
   <div class="modal">
     <h3 id="commitModalTitle">📦 Commit to Canon</h3>
     <div id="commitDiff" style="margin-bottom:14px;font-size:13px;max-height:200px;overflow-y:auto;background:var(--bg-body);padding:10px;border-radius:4px;border:1px solid var(--border)"></div>
-    <div class="form-group"><label>Summary *</label><input id="commit_summary" placeholder="e.g. Added missing hindrances for Vella Ashford" style="width:100%;box-sizing:border-box"></div>
-    <div class="form-group"><label>Confirmation *</label><input id="commit_secret" placeholder="Type COMMIT to confirm" style="width:100%;box-sizing:border-box" autocomplete="off"></div>
+
     <div id="commitStatus" style="margin-top:8px;font-size:13px"></div>
     <div class="form-actions"><button class="btn" onclick="closeCommitModal()">Cancel</button><button class="btn primary" id="commitBtn" onclick="executeCommit()">🔒 Commit to Canon</button></div>
   </div>
@@ -1142,8 +1141,7 @@ async function openCommitModal(){await flushSave();
     <div><strong>Powers:</strong> ${canon.powers.join(', ')||'None'}</div>
     <div><strong>Gear:</strong> ${canon.gearText||canon.gear.map(g=>typeof g==='string'?g:g.name).join(', ')||'None'}</div>`;
   document.getElementById('commitDiff').innerHTML=diffHtml;
-  document.getElementById('commit_summary').value='';
-  document.getElementById('commitStatus').innerHTML='';
+    document.getElementById('commitStatus').innerHTML='';
   document.getElementById('commitBtn').disabled=false;
   document.getElementById('commitModalTitle').textContent=inCanon?'🔄 Update Canon':'📦 Commit to Canon';
   document.getElementById('commitBtn').textContent=inCanon?'🔄 Update Canon':'🔒 Commit to Canon';
@@ -1152,11 +1150,8 @@ async function openCommitModal(){await flushSave();
 function closeCommitModal(){document.getElementById('commitModal').classList.remove('active');}
 
 async function executeCommit(){
-  const confirmation=document.getElementById('commit_secret').value.trim();
-  const summary=document.getElementById('commit_summary').value.trim();
+  const summary='Updated '+currentNPC.name;
   const statusEl=document.getElementById('commitStatus');
-  if(confirmation!=='COMMIT'){statusEl.innerHTML='<span style="color:var(--red)">❌ Type COMMIT to confirm</span>';return;}
-  if(!summary){statusEl.innerHTML='<span style="color:var(--red)">❌ Summary required</span>';return;}
   document.getElementById('commitBtn').disabled=true;
   statusEl.innerHTML='<span style="color:var(--accent)">⏳ Committing to canon...</span>';
   try{
