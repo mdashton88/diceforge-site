@@ -85,14 +85,32 @@
 
 <!-- ═══ MODULE REGISTRY — must load before data modules ═══ -->
 <script>
-window.CharacterForge = {
-  modules: [],
-  registerModule: function(mod) { this.modules.push(mod); }
-};
+window.CharacterForge = (function(){
+  var modules = [];
+  return {
+    data: {},
+    modules: modules,
+    registerModule: function(mod) {
+      modules.push(mod);
+      if (mod.alwaysOn) {
+        ['edges','hindrances','skills','ancestries','powers','gear','skillLinks','coreSkills','arcaneBGs'].forEach(function(k){
+          if (mod[k]) {
+            if (Array.isArray(mod[k])) { if (!this.data[k]) this.data[k] = []; this.data[k] = this.data[k].concat(mod[k]); }
+            else if (typeof mod[k] === 'object') { if (!this.data[k]) this.data[k] = {}; Object.assign(this.data[k], mod[k]); }
+          }
+        }.bind(this));
+      }
+    },
+    getModules: function() { return modules; },
+    getModule: function(id) { return modules.find(function(m){ return m.id === id; }); }
+  };
+})();
 </script>
 
 <!-- ═══ DATA MODULES — add more script tags here for supplements ═══ -->
+<script src="swade-rules.js"></script>
 <script src="swade-core.js"></script>
+<script src="ammaria.js"></script>
 
 <!-- ═══ ENGINE ═══ -->
 <script type="text/babel">
@@ -214,30 +232,21 @@ function CharacterForgeApp() {
 
   // ── BUDGETS ──
   var attrPoints = useMemo(function() {
-    var base = 5 + (ancestry && data.ancestries[ancestry] ? data.ancestries[ancestry].attrBonus : 0) + hindAlloc.attrs;
-    var spent = 0;
-    var starts = (ancestry && data.ancestries[ancestry] && data.ancestries[ancestry].startAttrs) || {};
-    Object.entries(attrs).forEach(function(p){spent += dieCost(starts[p[0]]||4, p[1]);});
-    return {total:base,spent:spent,rem:base-spent};
+    var anc = ancestry && data.ancestries[ancestry] ? data.ancestries[ancestry] : {};
+    var r = window.SWADERules.calcAttributeBudget(attrs, anc, hindAlloc.attrs);
+    return {total:r.total, spent:r.spent, rem:r.remaining};
   }, [attrs,ancestry,hindAlloc.attrs,data]);
 
   var skillPoints = useMemo(function() {
-    var spent = 0;
-    Object.entries(skills).forEach(function(p) {
-      var sk=p[0],die=p[1];
-      if(die>0) {
-        var linked=data.skillLinks[sk], linkedDie=linked?attrs[linked]:4, isCore=data.coreSkills.includes(sk);
-        if(!isCore){var cost=1,cur=4;while(cur<die){cost+=(DICE[DICE.indexOf(cur)+1]>linkedDie)?2:1;cur=DICE[DICE.indexOf(cur)+1];}spent+=cost;}
-        else{var cur2=4;while(cur2<die){spent+=(DICE[DICE.indexOf(cur2)+1]>linkedDie)?2:1;cur2=DICE[DICE.indexOf(cur2)+1];}}
-      }
-    });
-    return {total:12+hindAlloc.skills,spent:spent,rem:12+hindAlloc.skills-spent};
+    var r = window.SWADERules.calcSkillBudget(skills, attrs, data.skillLinks, data.coreSkills, hindAlloc.skills);
+    return {total:r.total, spent:r.spent, rem:r.remaining};
   }, [skills,attrs,hindAlloc.skills,data]);
 
-  var hindPtsRaw = useMemo(function() {
-    var pts=0; selectedHindrances.forEach(function(h){pts+=hindranceSeverities[h]==='Major'?2:1;}); return pts;
+  var hindCalc = useMemo(function() {
+    return window.SWADERules.calcHindrancePoints(selectedHindrances, hindranceSeverities);
   }, [selectedHindrances,hindranceSeverities]);
-  var hindPts = Math.min(hindPtsRaw, 4);
+  var hindPtsRaw = hindCalc.raw;
+  var hindPts = hindCalc.effective;
 
   useEffect(function() {
     var used=hindAlloc.edges*2+hindAlloc.attrs*2+hindAlloc.skills+hindAlloc.funds;
@@ -245,33 +254,21 @@ function CharacterForgeApp() {
   }, [hindPts]);
 
   var edgeBudget = useMemo(function() {
-    var ancFree = ancestry && data.ancestries[ancestry] ? data.ancestries[ancestry].freeEdges : 0;
-    return {total:1+ancFree+hindAlloc.edges,spent:selectedEdges.length};
+    var anc = ancestry && data.ancestries[ancestry] ? data.ancestries[ancestry] : {};
+    var r = window.SWADERules.calcEdgeBudget(selectedEdges.length, anc, hindAlloc.edges);
+    return {total:r.total, spent:r.spent};
   }, [ancestry,hindAlloc.edges,selectedEdges,data]);
 
   var gearCost = useMemo(function(){var t=0;gear.forEach(function(g){t+=g.cost*(g.qty||1);});return t;}, [gear]);
   var gearWeight = useMemo(function(){var t=0;gear.forEach(function(g){t+=g.wt*(g.qty||1);});return t;}, [gear]);
   var startFunds = START_FUNDS_BASE + (hindAlloc.funds * START_FUNDS_BASE * 2);
 
-  var wornArmor = useMemo(function() {
-    var best=0; gear.forEach(function(g){if(g.armor && g.armor>best) best=g.armor;}); return best;
-  }, [gear]);
-  var shieldParry = useMemo(function() {
-    var best=0; gear.forEach(function(g){if(g.parry && g.parry>best) best=g.parry;}); return best;
-  }, [gear]);
-
   var derived = useMemo(function() {
     var anc = ancestry && data.ancestries[ancestry] ? data.ancestries[ancestry] : {pace:6,size:0,toughMod:0};
-    var fd = skills['Fighting'] || 0;
-    var runDie = (anc.runDie || 6);
+    var r = window.SWADERules.calcDerived(attrs, skills, anc, gear);
     var bennies = 3 + (anc.bonusBennies || 0) + (selectedEdges.includes('Luck') ? 1 : 0) + (selectedEdges.includes('Great Luck') ? 1 : 0);
-    return {
-      pace:anc.pace, size:anc.size||0, runDie:runDie, bennies:bennies,
-      parry:(fd>0?2+Math.floor(fd/2):2)+shieldParry,
-      toughness:2+Math.floor(attrs.vigor/2)+anc.toughMod+(anc.size||0),
-      armor:wornArmor+(anc.naturalArmor||0),
-    };
-  }, [attrs,skills,ancestry,wornArmor,shieldParry,selectedEdges,data]);
+    return {pace:r.pace, size:r.size, runDie:r.runDie, bennies:bennies, parry:r.parry, toughness:r.toughness, armor:r.armor};
+  }, [attrs,skills,ancestry,gear,selectedEdges,data]);
 
   var edgeCats = useMemo(function(){return ['All'].concat(Array.from(new Set(data.edges.map(function(e){return e.cat;}))));}, [data]);
 
@@ -1098,4 +1095,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(<CharacterForgeApp /
 </script>
 </body>
 </html>
+
 
