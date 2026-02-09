@@ -1107,9 +1107,14 @@ function buildCanonCharacter(n){
     tier:n.tier||'Wild Card', rank:n.rank||'Novice', category:n.category||'NPC', product:n.product||n.region||'Ammaria',
     attrs:{agility:n.agility||4,smarts:n.smarts||4,spirit:n.spirit||4,strength:n.strength||4,vigor:n.vigor||4},
     skills:Object.assign({},n.skills), edges:[...(n.edges||[])], hindrances:[...(n.hindrances||[])],
-    powers:[...(n.powers||[])], gear:[...(n.gear||[])],
-    gearText:n.gearText||'', abName:n.abName||'', abSkill:n.abSkill||'', pp:n.pp||0,
-    notes:n.notes||'', tactics:n.tactics||'', quote:n.quote||''
+    powers:[...(n.powers||[])], weapons:[...(n.weapons||[])], armour:[...(n.armour||[])],
+    gear:[...(n.gear||[])], gearText:n.gearText||'',
+    abName:n.abName||'', abSkill:n.abSkill||'', pp:n.pp||0,
+    pace:n.pace||6, parry:n.parry||2, toughness:n.toughness||5, toughnessArmor:n.toughnessArmor||0, bennies:n.bennies||0,
+    startingFunds:n.startingFunds||500, gearCost:n.gearCost||0,
+    quote:n.quote||'', description:n.description||'', background:n.background||'',
+    motivation:n.motivation||'', secret:n.secret||'', services:n.services||'',
+    adventureHook:n.adventureHook||'', tactics:n.tactics||'', notes:n.notes||''
   };
 }
 
@@ -1132,7 +1137,11 @@ async function openCommitModal(){await flushSave();
     <div><strong>Edges:</strong> ${canon.edges.join(', ')||'None'}</div>
     <div><strong>Hindrances:</strong> ${canon.hindrances.join(', ')||'None'}</div>
     <div><strong>Powers:</strong> ${canon.powers.join(', ')||'None'}</div>
-    <div><strong>Gear:</strong> ${canon.gearText||canon.gear.map(g=>typeof g==='string'?g:g.name).join(', ')||'None'}</div>`;
+    <div><strong>Weapons:</strong> ${canon.weapons.map(w=>w.name).join(', ')||'None'}</div>
+    <div><strong>Armour:</strong> ${canon.armour.map(a=>a.name+' (+'+a.armor+')').join(', ')||'None'}</div>
+    <div><strong>Gear:</strong> ${canon.gearText||canon.gear.map(g=>typeof g==='string'?g:g.name).join(', ')||'None'}</div>
+    <div><strong>Derived:</strong> Pace ${canon.pace}, Parry ${canon.parry}, Toughness ${canon.toughness}${canon.toughnessArmor?' ('+canon.toughnessArmor+')':''}</div>
+    <div><strong>Funds:</strong> ${canon.startingFunds}₡ starting, ${canon.gearCost}₡ spent</div>`;
   document.getElementById('commitDiff').innerHTML=diffHtml;
     document.getElementById('commitStatus').innerHTML='';
   document.getElementById('commitBtn').disabled=false;
