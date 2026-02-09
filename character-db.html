@@ -310,8 +310,11 @@ function renderNPCList(npcs){
     const tl=n.tier==='Wild Card'?'WC':'EXT';
     const act=currentNPC&&currentNPC.name===n.name?'active':'';
     const title=n.concept?` — ${n.concept}`:'';
+    const audit=runBuildAudit(n);
+    const legal=audit.every(r=>r.pass);
+    const legalIcon=n.agility>0?(legal?'<span style="color:var(--green);font-size:11px;margin-left:4px" title="Build Legal">●</span>':'<span style="color:var(--red);font-size:11px;margin-left:4px" title="Build Issues">●</span>'):'<span style="color:var(--text-dim);font-size:11px;margin-left:4px" title="No stats">●</span>';
     return `<div class="npc-item ${act}" onclick="selectNPC('${esc(n.name).replace(/'/g,"\\'")}')">
-      <div class="npc-name">${esc(n.name)}<span class="tier-tag ${tc}">${tl}</span>
+      <div class="npc-name">${esc(n.name)}<span class="tier-tag ${tc}">${tl}</span>${legalIcon}
         <span class="status-dots" title="Stats / Narrative / FG">
           <span class="status-dot ${n.statComplete?'on':'off'}"></span>
           <span class="status-dot ${n.narrativeComplete?'on':'off'}"></span>
