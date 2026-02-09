@@ -174,6 +174,11 @@ var DICEFORGE_AUTH=false;
 <header>
   <div><h1>TRIBUTE LANDS — CHARACTER VAULT</h1><div class="subtitle">DiceForge Studios Ltd</div></div>
   <div class="header-stats" id="headerStats"></div>
+  <div id="syncIndicator" style="text-align:right;padding:2px 10px;display:flex;align-items:center;justify-content:flex-end;gap:8px">
+    <span id="syncLabel" style="font-size:11px;font-family:monospace;color:var(--text-dim)">●</span>
+    <button onclick="forceRefresh()" style="font-size:10px;padding:1px 6px;background:none;border:1px solid var(--border);color:var(--text-dim);border-radius:3px;cursor:pointer" title="Reload from remote">↻ Refresh</button>
+    <button onclick="promptForToken()" id="tokenBtn" style="font-size:10px;padding:1px 6px;background:none;border:1px solid var(--border);color:var(--text-dim);border-radius:3px;cursor:pointer;display:none" title="Set GitHub token">🔑 Token</button>
+  </div>
 </header>
 <div class="container">
   <div class="sidebar">
@@ -265,9 +270,85 @@ window.CharacterForge = (function(){
 let allNPCs=[], currentNPC=null, activePanel=null;
 let canonCommitted=new Set();
 const LS_KEY='tl_npc_db';
+const CACHE_KEY='tl_npc_cache';
 
-function loadData(){
-  const CF=window.CharacterForge; if(!CF) return;
+// ═══ REMOTE DATA STORE CONFIG ═══
+// Fill these in after creating your GitHub Gist.
+// GIST_ID: the alphanumeric ID from the Gist URL (e.g. 'a1b2c3d4e5f6...')
+// GIST_TOKEN: a GitHub personal access token with 'gist' scope only
+// GIST_FILENAME: must match the filename in your Gist
+const GIST_ID = '7fa2d50c458ed95c21a3c6d283f863d6';
+const GIST_TOKEN = localStorage.getItem('diceforge_gist_token')||'';
+const GIST_FILENAME = 'ammaria-characters.json';
+
+function promptForToken(){
+  const t=prompt('Enter your GitHub Gist token (one-time setup per device):');
+  if(t&&t.startsWith('github_pat_')){localStorage.setItem('diceforge_gist_token',t);location.reload();}
+  else if(t){alert('Token should start with github_pat_...');promptForToken();}
+}
+
+let syncStatus='idle'; // idle | loading | saving | error | offline
+let saveTimer=null;
+const SAVE_DEBOUNCE_MS=2000; // batch rapid edits into one save
+
+function setSyncStatus(s,msg){
+  syncStatus=s;
+  const el=document.getElementById('syncLabel');
+  if(!el)return;
+  const map={idle:['●','var(--green)','Synced'],loading:['↻','var(--accent)','Loading...'],saving:['↑','var(--accent)','Saving...'],error:['✖','#c44','Sync error'],offline:['○','var(--text-dim)','Offline (cached)']};
+  const[icon,col,label]=map[s]||map.idle;
+  el.style.color=col;
+  el.textContent=`${icon} ${msg||label}`;
+  el.title=msg||label;
+}
+
+async function forceRefresh(){
+  if(saveTimer){clearTimeout(saveTimer);saveTimer=null;}
+  await loadData();filterNPCs();updateHeaderStats();
+  if(currentNPC){const fresh=allNPCs.find(n=>n.name===currentNPC.name);if(fresh){currentNPC=fresh;renderDetail();}else{currentNPC=null;document.getElementById('mainContent').innerHTML='<span style="color:var(--text-dim)">Character no longer exists</span>';}}
+}
+
+async function loadData(){
+  const CF=window.CharacterForge;
+  // If no Gist configured, fall back to module-seeded + localStorage (legacy mode)
+  if(!GIST_ID||!GIST_TOKEN){
+    console.warn('No Gist configured — running in local-only mode');
+    setSyncStatus('offline','No remote store — click 🔑 to set up');
+    const tb=document.getElementById('tokenBtn');if(tb)tb.style.display='';
+    loadDataLegacy(CF);
+    return;
+  }
+  setSyncStatus('loading');
+  try{
+    const resp=await fetch(`https://api.github.com/gists/${GIST_ID}`,{headers:{'Authorization':`token ${GIST_TOKEN}`,'Accept':'application/vnd.github.v3+json'}});
+    if(!resp.ok) throw new Error(`GitHub ${resp.status}: ${resp.statusText}`);
+    const gist=await resp.json();
+    const raw=gist.files[GIST_FILENAME]?.content;
+    if(!raw) throw new Error(`File "${GIST_FILENAME}" not found in Gist`);
+    const data=JSON.parse(raw);
+    // Normalise each character
+    allNPCs=data.characters.map(c=>normaliseChar(c,'ammaria'));
+    // Cache locally for offline fallback
+    localStorage.setItem(CACHE_KEY,raw);
+    setSyncStatus('idle',`Synced — ${allNPCs.length} characters`);
+    console.log(`Loaded ${allNPCs.length} characters from Gist`);
+  }catch(err){
+    console.error('Gist load failed, trying cache:',err);
+    const cached=localStorage.getItem(CACHE_KEY);
+    if(cached){
+      const data=JSON.parse(cached);
+      allNPCs=data.characters.map(c=>normaliseChar(c,'ammaria'));
+      setSyncStatus('offline',`Offline — ${allNPCs.length} characters (cached)`);
+    }else{
+      // Last resort: load from module seed data
+      loadDataLegacy(CF);
+      setSyncStatus('error','No remote data or cache available');
+    }
+  }
+}
+
+function loadDataLegacy(CF){
+  if(!CF)return;
   const seeded=[];
   const modules=CF.getModules?CF.getModules():[];
   modules.forEach(m=>{if(m.characters) m.characters.forEach(c=>seeded.push(normaliseChar(c,m.id)));});
@@ -283,12 +364,73 @@ function loadData(){
   if(stored.deleted) allNPCs=allNPCs.filter(n=>!stored.deleted.includes(n.name));
 }
 
+function saveCharacter(npc){
+  // Update in allNPCs array
+  const idx=allNPCs.findIndex(n=>n.name===npc.name);
+  if(idx>=0) allNPCs[idx]=npc; else allNPCs.push(npc);
+  // Debounced remote save
+  scheduleSave();
+}
+
+function scheduleSave(){
+  if(saveTimer) clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>pushToGist(),SAVE_DEBOUNCE_MS);
+}
+
+async function pushToGist(){
+  if(!GIST_ID||!GIST_TOKEN){
+    // Legacy fallback: save to localStorage
+    const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
+    if(!s.overrides)s.overrides={};
+    if(currentNPC)s.overrides[currentNPC.name]=currentNPC;
+    localStorage.setItem(LS_KEY,JSON.stringify(s));
+    return;
+  }
+  setSyncStatus('saving');
+  try{
+    const data={
+      version:'1.0',
+      region:'ammaria',
+      lastModified:new Date().toISOString(),
+      lastModifiedBy:'character-vault',
+      characterCount:allNPCs.length,
+      characters:allNPCs.map(n=>({
+        name:n.name,refCode:n.refCode||'',concept:n.concept||'',ancestry:n.ancestry||'Human',
+        region:n.region||'Ammaria',tier:n.tier||'Wild Card',rank:n.rank||'Novice',
+        category:n.category||'NPC',product:n.product||n.region||'Ammaria',
+        attrs:{agility:n.agility||0,smarts:n.smarts||0,spirit:n.spirit||0,strength:n.strength||0,vigor:n.vigor||0},
+        skills:n.skills||{},edges:n.edges||[],hindrances:n.hindrances||[],powers:n.powers||[],
+        gearText:n.gearText||'',quote:n.quote||'',notes:n.notes||'',
+        description:n.description||'',background:n.background||'',motivation:n.motivation||'',
+        secret:n.secret||'',services:n.services||'',adventureHook:n.adventureHook||'',tactics:n.tactics||'',
+        abName:n.abName||'',abSkill:n.abSkill||'',pp:n.pp||0,
+        statComplete:n.statComplete||false,narrativeComplete:n.narrativeComplete||false,fgReady:n.fgReady||false
+      }))
+    };
+    const raw=JSON.stringify(data,null,2);
+    const resp=await fetch(`https://api.github.com/gists/${GIST_ID}`,{
+      method:'PATCH',
+      headers:{'Authorization':`token ${GIST_TOKEN}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      body:JSON.stringify({files:{[GIST_FILENAME]:{content:raw}}})
+    });
+    if(!resp.ok) throw new Error(`GitHub ${resp.status}: ${resp.statusText}`);
+    // Update cache
+    localStorage.setItem(CACHE_KEY,raw);
+    setSyncStatus('idle',`Saved — ${allNPCs.length} characters`);
+  }catch(err){
+    console.error('Gist save failed:',err);
+    setSyncStatus('error','Save failed — will retry');
+    // Retry once after 5 seconds
+    setTimeout(()=>{if(syncStatus==='error')pushToGist();},5000);
+  }
+}
+
 function normaliseChar(c,moduleId){
-  const n={name:c.name,refCode:c.refCode||'',concept:c.concept||'',ancestry:c.ancestry||'Human',region:c.region||'Ammaria',tier:c.tier||'Wild Card',rank:c.rank||'Novice',category:c.category||'NPC',product:c.product||'',source:moduleId,agility:c.attrs?.agility||0,smarts:c.attrs?.smarts||0,spirit:c.attrs?.spirit||0,strength:c.attrs?.strength||0,vigor:c.attrs?.vigor||0,skills:c.skills||{},edges:c.edges||[],hindrances:c.hindrances||[],powers:c.powers||[],armour:c.armour||[],weapons:c.weapons||[],gearText:c.gearText||'',quote:c.quote||'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:c.abName||'',abSkill:c.abSkill||'',pp:c.pp||0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
+  const n={name:c.name,refCode:c.refCode||'',concept:c.concept||'',ancestry:c.ancestry||'Human',region:c.region||'Ammaria',tier:c.tier||'Wild Card',rank:c.rank||'Novice',category:c.category||'NPC',product:c.product||'',source:moduleId,agility:c.attrs?.agility||c.agility||0,smarts:c.attrs?.smarts||c.smarts||0,spirit:c.attrs?.spirit||c.spirit||0,strength:c.attrs?.strength||c.strength||0,vigor:c.attrs?.vigor||c.vigor||0,skills:c.skills||{},edges:c.edges||[],hindrances:c.hindrances||[],powers:c.powers||[],armour:c.armour||[],weapons:c.weapons||[],gearText:c.gearText||'',quote:c.quote||'',description:c.description||'',background:c.background||'',motivation:c.motivation||'',secret:c.secret||'',services:c.services||'',adventureHook:c.adventureHook||'',tactics:c.tactics||'',abName:c.abName||'',abSkill:c.abSkill||'',pp:c.pp||0,statComplete:c.statComplete||false,narrativeComplete:c.narrativeComplete||false,fgReady:c.fgReady||false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
   // Parse gear text into structured armour/weapons if not already populated
   if(!n.armour.length&&!n.weapons.length&&n.gearText) parseGearInto(n);
   n.toughnessArmor=n.armour.reduce((best,a)=>Math.max(best,a.armor||0),0);
-  if(c.notes){
+  if(c.notes && !n.description && !n.motivation){
     const notes=c.notes;
     const motM=notes.match(/What (?:They|He|She) Want[s]?:\s*(.+?)(?:\n|$)/i);
     const secM=notes.match(/(?:Their|His|Her) Secret:\s*(.+?)(?:\n|$)/i);
@@ -325,8 +467,8 @@ function calcDerived(n){
   n.bennies=n.tier==='Wild Card'?3:0;
 }
 
-function saveOverride(npc){const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(!s.overrides)s.overrides={};s.overrides[npc.name]=npc;localStorage.setItem(LS_KEY,JSON.stringify(s));}
-function saveCustomNPC(npc){const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(!s.custom)s.custom=[];const i=s.custom.findIndex(c=>c.name===npc.name);if(i>=0)s.custom[i]=npc;else s.custom.push(npc);localStorage.setItem(LS_KEY,JSON.stringify(s));}
+function saveCharacter(npc){const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(!s.overrides)s.overrides={};s.overrides[npc.name]=npc;localStorage.setItem(LS_KEY,JSON.stringify(s));}
+function saveCharacter(npc){const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(!s.custom)s.custom=[];const i=s.custom.findIndex(c=>c.name===npc.name);if(i>=0)s.custom[i]=npc;else s.custom.push(npc);localStorage.setItem(LS_KEY,JSON.stringify(s));}
 function d(v){return v>0?'d'+v:'—';}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function csvToList(s){return s?s.split(',').map(x=>x.trim()).filter(x=>x):[];}
@@ -617,7 +759,7 @@ function saveEdit(){
   n.agility=parseInt(document.getElementById('ed_agility').value);n.smarts=parseInt(document.getElementById('ed_smarts').value);n.spirit=parseInt(document.getElementById('ed_spirit').value);n.strength=parseInt(document.getElementById('ed_strength').value);n.vigor=parseInt(document.getElementById('ed_vigor').value);
   n.pace=parseInt(document.getElementById('ed_pace').value);n.parry=parseInt(document.getElementById('ed_parry').value);n.toughness=parseInt(document.getElementById('ed_toughness').value);n.toughnessArmor=parseInt(document.getElementById('ed_tougharmor').value);n.bennies=parseInt(document.getElementById('ed_bennies').value);
   n.edges=csvToList(document.getElementById('ed_edges').value);n.hindrances=csvToList(document.getElementById('ed_hindrances').value);n.gearText=document.getElementById('ed_gear').value.trim();
-  saveOverride(n);closePanel();updateHeaderStats();
+  saveCharacter(n);closePanel();updateHeaderStats();
 }
 
 function renderHindrancesPanel(n){
@@ -644,11 +786,11 @@ function addHindrance(){
   const sev=document.getElementById('hind_sev').value;
   const notes=document.getElementById('hind_notes').value.trim();
   currentNPC.hindrances.push(notes?`${name} (${sev} — ${notes})`:`${name} (${sev})`);
-  saveOverride(currentNPC);renderHindrancesPanel(currentNPC);renderStatColumn(currentNPC);
+  saveCharacter(currentNPC);renderHindrancesPanel(currentNPC);renderStatColumn(currentNPC);
 }
 function removeHindrance(btn){
   const val=btn.dataset.val;currentNPC.hindrances=currentNPC.hindrances.filter(x=>x!==val);
-  saveOverride(currentNPC);renderHindrancesPanel(currentNPC);renderStatColumn(currentNPC);
+  saveCharacter(currentNPC);renderHindrancesPanel(currentNPC);renderStatColumn(currentNPC);
 }
 
 function renderEdgesPanel(n){
@@ -668,8 +810,8 @@ function filterEdgeCat(){
   const el=document.getElementById('edgeCatList');if(!el)return;
   el.innerHTML=cat.slice(0,30).map(e=>`<div class="catalogue-item" onclick="document.getElementById('edge_name').value='${esc(e.name)}'"><span class="cat-name">${esc(e.name)}</span> <span class="cat-detail">${esc(e.rank||'')} ${esc(e.type||'')} — ${esc(e.source)}</span></div>`).join('');
 }
-function addEdge(){const name=document.getElementById('edge_name').value.trim();if(!name)return;currentNPC.edges.push(name);saveOverride(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
-function removeEdge(btn){const val=btn.dataset.val;currentNPC.edges=currentNPC.edges.filter(x=>x!==val);saveOverride(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
+function addEdge(){const name=document.getElementById('edge_name').value.trim();if(!name)return;currentNPC.edges.push(name);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
+function removeEdge(btn){const val=btn.dataset.val;currentNPC.edges=currentNPC.edges.filter(x=>x!==val);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
 
 function renderSkillsPanel(n){
   const el=document.getElementById('panelContent');
@@ -693,8 +835,8 @@ function filterSkillCatalogue(s){
   el.innerHTML=cat.slice(0,30).map(sk=>`<div class="catalogue-item" onclick="selectCatalogueSkill('${esc(sk.name)}')"><span class="cat-name">${esc(sk.name)}</span> <span class="cat-detail">(${esc(sk.attr)}) — ${esc(sk.source)}</span></div>`).join('');
 }
 function selectCatalogueSkill(name){document.getElementById('skill_name').value=name;}
-function addSkill(){const name=document.getElementById('skill_name').value.trim(),die=parseInt(document.getElementById('skill_die').value);if(!name)return;currentNPC.skills[name]=die;calcDerived(currentNPC);saveOverride(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
-function removeSkill(name){delete currentNPC.skills[name];calcDerived(currentNPC);saveOverride(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
+function addSkill(){const name=document.getElementById('skill_name').value.trim(),die=parseInt(document.getElementById('skill_die').value);if(!name)return;currentNPC.skills[name]=die;calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
+function removeSkill(name){delete currentNPC.skills[name];calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
 
 function renderWeaponsPanel(n){
   const current=n.weapons.map((w,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${esc(w.name)} <span style="color:var(--text-dim)">${esc(w.damage)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''}</span></span><button class="btn sm danger" onclick="removeWeapon(${i})">×</button></div>`).join('');
@@ -727,9 +869,9 @@ function addWeapon(){
   const name=document.getElementById('wep_name').value.trim(),dmg=document.getElementById('wep_damage').value.trim();
   if(!name||!dmg)return;
   currentNPC.weapons.push({name,damage:dmg,ap:parseInt(document.getElementById('wep_ap').value)||0,range:document.getElementById('wep_range').value.trim(),notes:document.getElementById('wep_notes').value.trim(),source:'Manual'});
-  saveOverride(currentNPC);renderWeaponsPanel(currentNPC);renderStatColumn(currentNPC);
+  saveCharacter(currentNPC);renderWeaponsPanel(currentNPC);renderStatColumn(currentNPC);
 }
-function removeWeapon(idx){currentNPC.weapons.splice(idx,1);saveOverride(currentNPC);renderWeaponsPanel(currentNPC);renderStatColumn(currentNPC);}
+function removeWeapon(idx){currentNPC.weapons.splice(idx,1);saveCharacter(currentNPC);renderWeaponsPanel(currentNPC);renderStatColumn(currentNPC);}
 function addWeaponToGear(){addWeapon();}
 
 function renderArmourPanel(n){
@@ -764,9 +906,9 @@ function addArmour(){
   const name=document.getElementById('arm_name').value.trim();if(!name)return;
   const armor=parseInt(document.getElementById('arm_prot').value)||0;
   currentNPC.armour.push({name,armor,notes:document.getElementById('arm_notes').value.trim(),source:'Manual'});
-  recalcArmour();saveOverride(currentNPC);renderArmourPanel(currentNPC);renderStatColumn(currentNPC);
+  recalcArmour();saveCharacter(currentNPC);renderArmourPanel(currentNPC);renderStatColumn(currentNPC);
 }
-function removeArmour(idx){currentNPC.armour.splice(idx,1);recalcArmour();saveOverride(currentNPC);renderArmourPanel(currentNPC);renderStatColumn(currentNPC);}
+function removeArmour(idx){currentNPC.armour.splice(idx,1);recalcArmour();saveCharacter(currentNPC);renderArmourPanel(currentNPC);renderStatColumn(currentNPC);}
 function addArmourToGear(){addArmour();}
 function recalcArmour(){currentNPC.toughnessArmor=currentNPC.armour.reduce((best,a)=>Math.max(best,a.armor||0),0);calcDerived(currentNPC);}
 
@@ -792,8 +934,8 @@ function filterGearCatalogue(s){
     return `<div class="catalogue-item" onclick="document.getElementById('gear_name').value='${esc(g.name)}'"><span class="cat-name">${esc(g.name)}</span> <span class="cat-detail">${g.cost?g.cost+'₡':''}${detail} — ${esc(g.source)}</span></div>`;
   }).join('');
 }
-function addGearItem(){const item=document.getElementById('gear_name').value.trim();if(!item)return;currentNPC.gearText=currentNPC.gearText?currentNPC.gearText+', '+item:item;saveOverride(currentNPC);renderGearPanel(currentNPC);renderStatColumn(currentNPC);}
-function removeGearItem(idx){const items=currentNPC.gearText.split(',').map(g=>g.trim()).filter(g=>g);items.splice(idx,1);currentNPC.gearText=items.join(', ');saveOverride(currentNPC);renderGearPanel(currentNPC);renderStatColumn(currentNPC);}
+function addGearItem(){const item=document.getElementById('gear_name').value.trim();if(!item)return;currentNPC.gearText=currentNPC.gearText?currentNPC.gearText+', '+item:item;saveCharacter(currentNPC);renderGearPanel(currentNPC);renderStatColumn(currentNPC);}
+function removeGearItem(idx){const items=currentNPC.gearText.split(',').map(g=>g.trim()).filter(g=>g);items.splice(idx,1);currentNPC.gearText=items.join(', ');saveCharacter(currentNPC);renderGearPanel(currentNPC);renderStatColumn(currentNPC);}
 
 function renderPowersPanel(n){
   const rows=n.powers.map((p,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;padding:4px 0">${esc(p)} <button class="btn sm danger" onclick="removePower(${i})">×</button></div>`).join('');
@@ -816,9 +958,9 @@ function filterPowerCatalogue(s){
   const el=document.getElementById('powCatList');if(!el)return;
   el.innerHTML=cat.slice(0,30).map(p=>`<div class="catalogue-item" onclick="document.getElementById('pow_name').value='${esc(p.name)}'"><span class="cat-name">${esc(p.name)}</span> <span class="cat-detail">${esc(p.rank)} ${esc(p.pp)}PP ${p.range?p.range:''} — ${esc(p.source)}</span></div>`).join('');
 }
-function addPower(){const name=document.getElementById('pow_name').value.trim();if(!name)return;currentNPC.powers.push(name);saveOverride(currentNPC);renderPowersPanel(currentNPC);renderStatColumn(currentNPC);}
-function removePower(idx){currentNPC.powers.splice(idx,1);saveOverride(currentNPC);renderPowersPanel(currentNPC);renderStatColumn(currentNPC);}
-function savePowerSettings(){currentNPC.abName=document.getElementById('pow_ab').value.trim();currentNPC.pp=parseInt(document.getElementById('pow_pp').value)||0;saveOverride(currentNPC);renderStatColumn(currentNPC);}
+function addPower(){const name=document.getElementById('pow_name').value.trim();if(!name)return;currentNPC.powers.push(name);saveCharacter(currentNPC);renderPowersPanel(currentNPC);renderStatColumn(currentNPC);}
+function removePower(idx){currentNPC.powers.splice(idx,1);saveCharacter(currentNPC);renderPowersPanel(currentNPC);renderStatColumn(currentNPC);}
+function savePowerSettings(){currentNPC.abName=document.getElementById('pow_ab').value.trim();currentNPC.pp=parseInt(document.getElementById('pow_pp').value)||0;saveCharacter(currentNPC);renderStatColumn(currentNPC);}
 
 function renderNarrativePanel(n){
   document.getElementById('panelContent').innerHTML=`
@@ -831,7 +973,7 @@ function renderNarrativePanel(n){
     <div class="form-group"><label>Tactics</label><textarea id="nar_tac" rows="2">${esc(n.tactics)}</textarea></div>
     <div class="form-actions"><button class="btn" onclick="closePanel()">Cancel</button><button class="btn primary" onclick="saveNarrative()">Save Narrative</button></div>`;
 }
-function saveNarrative(){const n=currentNPC;n.description=document.getElementById('nar_desc').value.trim();n.background=document.getElementById('nar_bg').value.trim();n.motivation=document.getElementById('nar_mot').value.trim();n.secret=document.getElementById('nar_sec').value.trim();n.services=document.getElementById('nar_svc').value.trim();n.adventureHook=document.getElementById('nar_hook').value.trim();n.tactics=document.getElementById('nar_tac').value.trim();saveOverride(n);closePanel();}
+function saveNarrative(){const n=currentNPC;n.description=document.getElementById('nar_desc').value.trim();n.background=document.getElementById('nar_bg').value.trim();n.motivation=document.getElementById('nar_mot').value.trim();n.secret=document.getElementById('nar_sec').value.trim();n.services=document.getElementById('nar_svc').value.trim();n.adventureHook=document.getElementById('nar_hook').value.trim();n.tactics=document.getElementById('nar_tac').value.trim();saveCharacter(n);closePanel();}
 
 function renderStatBlockPanel(n){
   const skillStr=Object.entries(n.skills).map(([k,v])=>`${k} ${d(v)}`).join(', ');
@@ -898,14 +1040,11 @@ function renderAuditPanel(n){
   document.getElementById('panelContent').innerHTML=html;
 }
 
-function toggleStatus(field,val){currentNPC[field]=val;saveOverride(currentNPC);filterNPCs();updateHeaderStats();}
+function toggleStatus(field,val){currentNPC[field]=val;saveCharacter(currentNPC);filterNPCs();updateHeaderStats();}
 function deleteNPC(){
   if(!confirm(`Delete ${currentNPC.name}?`))return;
-  const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
-  if(s.custom)s.custom=s.custom.filter(c=>c.name!==currentNPC.name);
-  if(!s.deleted)s.deleted=[];s.deleted.push(currentNPC.name);
-  localStorage.setItem(LS_KEY,JSON.stringify(s));
   allNPCs=allNPCs.filter(n=>n.name!==currentNPC.name);currentNPC=null;
+  scheduleSave();
   document.getElementById('mainContent').innerHTML='Select an NPC or create a new one';
   document.getElementById('mainContent').classList.add('empty-state');
   filterNPCs();updateHeaderStats();
@@ -915,7 +1054,7 @@ function closeNewNPCModal(){document.getElementById('newNpcModal').classList.rem
 function createNPC(){
   const name=document.getElementById('new_name').value.trim();if(!name){alert('Name is required');return;}
   const npc={name,refCode:'',concept:document.getElementById('new_concept')?.value?.trim()||'',ancestry:document.getElementById('new_ancestry').value,region:document.getElementById('new_region').value,tier:document.getElementById('new_tier').value,rank:'Novice',category:document.getElementById('new_category').value,product:'',source:'custom',agility:0,smarts:0,spirit:0,strength:0,vigor:0,skills:{},edges:[],hindrances:[],powers:[],gearText:'',quote:'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:'',abSkill:'',pp:0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
-  calcDerived(npc);allNPCs.push(npc);saveCustomNPC(npc);closeNewNPCModal();filterNPCs();updateHeaderStats();selectNPC(name);
+  calcDerived(npc);allNPCs.push(npc);saveCharacter(npc);closeNewNPCModal();filterNPCs();updateHeaderStats();selectNPC(name);
 }
 function showStatusView(){
   const el=document.getElementById('mainContent');el.classList.remove('empty-state');el.style.overflowY='auto';
@@ -1117,11 +1256,12 @@ async function loadCanonStatus(){
   }catch(e){/* silent fail — just means no canon icons */}
 }
 
-function unlockApp(){
-  document.getElementById('mainContent').innerHTML='<span style="color:var(--text-dim)">Select an NPC or create a new one</span>';
+async function unlockApp(){
+  document.getElementById('mainContent').innerHTML='<span style="color:var(--text-dim)">Loading characters...</span>';
   document.getElementById('mainContent').classList.add('empty-state');
   document.getElementById('sidebarInner').style.display='';
-  loadData();filterNPCs();updateHeaderStats();loadCanonStatus();
+  await loadData();filterNPCs();updateHeaderStats();loadCanonStatus();
+  document.getElementById('mainContent').innerHTML='<span style="color:var(--text-dim)">Select an NPC or create a new one</span>';
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
