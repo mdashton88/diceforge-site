@@ -51,15 +51,15 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .status-dot.on { background: var(--green); }
 .status-dot.off { background: var(--border); }
 .sidebar-footer { padding: 8px 10px; border-top: 1px solid var(--border); display: flex; gap: 6px; }
-.main { flex: 1; overflow-y: auto; padding: 20px 28px; }
+.main { flex: 1; overflow: hidden; padding: 20px 28px; display: flex; flex-direction: column; }
 .main.empty-state { display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 15px; }
-.npc-header { margin-bottom: 16px; }
+.npc-header { margin-bottom: 16px; flex-shrink: 0; }
 .npc-header h2 { font-size: 24px; color: var(--text-bright); font-weight: 600; }
 .npc-header .npc-title-line { font-size: 15px; color: var(--accent); margin-top: 2px; }
-.detail-columns { display: flex; gap: 16px; height: calc(100vh - 130px); }
+.detail-columns { display: flex; gap: 16px; flex: 1; min-height: 0; }
 .col-stats { width: 400px; min-width: 400px; flex-shrink: 0; display: flex; flex-direction: column; }
 .col-stats-scroll { flex: 1; overflow-y: auto; }
-.col-stats-footer { flex-shrink: 0; border-top: 1px solid var(--border); background: var(--bg-card); }
+.col-stats-footer { flex-shrink: 0; border-top: 1px solid var(--border); background: var(--bg-card); padding-bottom: 4px; }
 .col-middle { min-width: 380px; flex: 1; overflow-y: auto; }
 .col-narrative { width: 360px; min-width: 300px; flex-shrink: 0; overflow-y: auto; }
 .stat-block-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; padding: 14px 16px; font-size: 13px; }
@@ -396,7 +396,7 @@ function selectNPC(name){currentNPC=allNPCs.find(n=>n.name===name);if(!currentNP
 function renderDetail(){
   const n=currentNPC;if(!n)return;
   const el=document.getElementById('mainContent');
-  el.classList.remove('empty-state');
+  el.classList.remove('empty-state');el.style.overflowY='hidden';
   const ancestryTag=n.ancestry&&n.ancestry!=='Human'?` · ${esc(n.ancestry)}`:'';
   const titleLine=n.concept?`<div class="npc-title-line">${esc(n.concept)}${ancestryTag}</div>`:(n.ancestry?`<div class="npc-title-line">${esc(n.ancestry)}</div>`:'');
   const canonBadge=canonCommitted.has(n.name)?'<span style="font-size:13px;margin-left:10px;color:var(--green)" title="Committed to Canon">📦 In Canon</span>':'<span style="font-size:13px;margin-left:10px;color:var(--text-dim)" title="Not yet committed">📦 Not in Canon</span>';
@@ -712,7 +712,7 @@ function createNPC(){
   calcDerived(npc);allNPCs.push(npc);saveCustomNPC(npc);closeNewNPCModal();filterNPCs();updateHeaderStats();selectNPC(name);
 }
 function showStatusView(){
-  const el=document.getElementById('mainContent');el.classList.remove('empty-state');
+  const el=document.getElementById('mainContent');el.classList.remove('empty-state');el.style.overflowY='auto';
   const rows=allNPCs.map(n=>{
     const audit=runBuildAudit(n);const legal=audit.every(r=>r.pass);
     const inCanon=canonCommitted.has(n.name);
@@ -929,3 +929,4 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 </body>
 </html>
+
