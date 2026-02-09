@@ -655,8 +655,10 @@ function renderAuditPanel(n){
   html+='</div></div>';
   const inCanon=canonCommitted.has(n.name);
   const commitLabel=inCanon?'🔄 Update Canon':'📦 Commit to Canon';
-  html+=`<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center">
+  const removeBtn=inCanon?'<button class="btn" onclick="removeFromCanon()" style="color:var(--red);border-color:var(--red)" title="Remove this character from canonical data">🗑 Remove from Canon</button>':'';
+  html+=`<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-wrap:wrap">
     <button class="btn primary" onclick="openCommitModal()" title="${inCanon?'Update canonical data':'Commit current state to canon repository'}">${commitLabel}</button>
+    ${removeBtn}
     <span style="font-size:12px;color:var(--text-dim)">${legal?'✅ Build legal — ready to commit':'❌ Build has issues — commit with caution'}</span>
   </div>`;
   document.getElementById('panelContent').innerHTML=html;
@@ -773,6 +775,39 @@ async function executeCommit(){
   }catch(err){
     statusEl.innerHTML=`<span style="color:var(--red)">❌ Network error: ${esc(err.message)}</span>`;
     document.getElementById('commitBtn').disabled=false;
+  }
+}
+
+// ── REMOVE FROM CANON ──
+async function removeFromCanon(){
+  if(!currentNPC||!canonCommitted.has(currentNPC.name))return;
+  if(!confirm(`Remove ${currentNPC.name} from canon?\n\nThis will delete them from the canonical JSON and log the removal in the changelog.`))return;
+  const summary=prompt('Removal reason:','Character removed from canon');
+  if(!summary)return;
+  try{
+    const res=await fetch(CANON_API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        action:'remove_character',
+        secret:'diceforge2026',
+        characterName:currentNPC.name,
+        filePath:canonFilePath(currentNPC),
+        region:currentNPC.region||'Ammaria',
+        summary:summary,
+        author:'NPC Database'
+      })
+    });
+    const data=await res.json();
+    if(data.success){
+      canonCommitted.delete(currentNPC.name);
+      filterNPCs();updateHeaderStats();renderDetail();
+      alert(`${currentNPC.name} removed from canon (${data.changeId})`);
+    } else {
+      alert('Remove failed: '+(data.error||'Unknown error'));
+    }
+  }catch(err){
+    alert('Network error: '+err.message);
   }
 }
 
