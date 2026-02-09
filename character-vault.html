@@ -493,7 +493,7 @@ const DIE_STEPS=[4,6,8,10,12];
 function dieStepUp(v,capped){if(v<4)return 4;if(v<12){const i=DIE_STEPS.indexOf(v);return i>=0&&i<4?DIE_STEPS[i+1]:12;}if(capped)return 12;return v+1;}
 function dieStepDown(v){if(v>12)return v-1;const i=DIE_STEPS.indexOf(v);return i>0?DIE_STEPS[i-1]:4;}
 function isPregen(){return currentNPC&&currentNPC.category==='Pre-gen';}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function csvToList(s){return s?s.split(',').map(x=>x.trim()).filter(x=>x):[];}
 
 function getCatalogueEdges(){
