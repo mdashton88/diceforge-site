@@ -248,6 +248,7 @@ window.CharacterForge = (function(){
 <script src="ammaria.js"></script>
 <script>
 let allNPCs=[], currentNPC=null, activePanel=null;
+let canonCommitted=new Set();
 const LS_KEY='tl_npc_db';
 
 function loadData(){
@@ -349,8 +350,9 @@ function renderNPCList(npcs){
     const audit=runBuildAudit(n);
     const legal=audit.every(r=>r.pass);
     const legalIcon=n.agility>0?(legal?'<span style="font-size:12px;margin-left:4px" title="Build Legal">✅</span>':'<span style="font-size:12px;margin-left:4px" title="Build Issues">❌</span>'):'<span style="font-size:12px;margin-left:4px;opacity:0.4" title="No stats">⬜</span>';
+    const canonIcon=canonCommitted.has(n.name)?'<span style="font-size:11px;margin-left:3px" title="Committed to Canon">📦</span>':'';
     return `<div class="npc-item ${act}" onclick="selectNPC('${esc(n.name).replace(/'/g,"\\'")}')">
-      <div class="npc-name">${esc(n.name)}<span class="tier-tag ${tc}">${tl}</span>${legalIcon}
+      <div class="npc-name">${esc(n.name)}<span class="tier-tag ${tc}">${tl}</span>${legalIcon}${canonIcon}
         <span class="status-dots" title="Stats / Narrative / FG">
           <span class="status-dot ${n.statComplete?'on':'off'}"></span>
           <span class="status-dot ${n.narrativeComplete?'on':'off'}"></span>
@@ -362,7 +364,8 @@ function renderNPCList(npcs){
 
 function updateHeaderStats(){
   const t=allNPCs.length,c=allNPCs.filter(n=>n.statComplete&&n.narrativeComplete).length,f=allNPCs.filter(n=>n.fgReady).length;
-  document.getElementById('headerStats').innerHTML=`<span><span class="stat-num">${t}</span> NPCs</span><span><span class="stat-num">${c}</span> Complete</span><span><span class="stat-num">${f}</span> FG Ready</span>`;
+  const cn=allNPCs.filter(n=>canonCommitted.has(n.name)).length;
+  document.getElementById("headerStats").innerHTML=`<span><span class="stat-num">${t}</span> NPCs</span><span><span class="stat-num">${cn}</span> 📦 Canon</span><span><span class="stat-num">${c}</span> Complete</span><span><span class="stat-num">${f}</span> FG Ready</span>`;
 }
 
 function selectNPC(name){currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;activePanel='audit';renderDetail();filterNPCs();}
@@ -372,7 +375,8 @@ function renderDetail(){
   const el=document.getElementById('mainContent');
   el.classList.remove('empty-state');
   const titleLine=n.concept?`<div class="npc-title-line">${esc(n.concept)}</div>`:'';
-  el.innerHTML=`<div class="npc-header"><h2>${esc(n.name)}</h2>${titleLine}</div><div class="detail-columns"><div class="col-stats" id="colStats"></div><div class="col-middle" id="colMiddle"></div><div class="col-narrative" id="colNarrative"></div></div>`;
+  const canonBadge=canonCommitted.has(n.name)?'<span style="font-size:13px;margin-left:10px;color:var(--green)" title="Committed to Canon">📦 In Canon</span>':'<span style="font-size:13px;margin-left:10px;color:var(--text-dim)" title="Not yet committed">📦 Not in Canon</span>';
+  el.innerHTML=`<div class="npc-header"><h2>${esc(n.name)}${canonBadge}</h2>${titleLine}</div><div class="detail-columns"><div class="col-stats" id="colStats"></div><div class="col-middle" id="colMiddle"></div><div class="col-narrative" id="colNarrative"></div></div>`;
   renderStatColumn(n);renderMiddleColumn(n);renderNarrativeColumn(n);
 }
 
@@ -679,9 +683,10 @@ function showStatusView(){
   const el=document.getElementById('mainContent');el.classList.remove('empty-state');
   const rows=allNPCs.map(n=>{
     const audit=runBuildAudit(n);const legal=audit.every(r=>r.pass);
-    return `<tr><td>${esc(n.name)}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td>${legal?'✅':'❌'}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">&#${n.statComplete?'10003':'8212'};</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">&#${n.narrativeComplete?'10003':'8212'};</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">&#${n.fgReady?'10003':'8212'};</td></tr>`;
+    const inCanon=canonCommitted.has(n.name);
+    return `<tr><td>${esc(n.name)}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td>${legal?'✅':'❌'}</td><td>${inCanon?'📦':'—'}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">&#${n.statComplete?'10003':'8212'};</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">&#${n.narrativeComplete?'10003':'8212'};</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">&#${n.fgReady?'10003':'8212'};</td></tr>`;
   }).join('');
-  el.innerHTML=`<h2 style="color:var(--accent);margin-bottom:14px">Production Status</h2><table class="data-table"><tr><th>Name</th><th>Region</th><th>Tier</th><th>Build</th><th>Stats</th><th>Narrative</th><th>FG Ready</th></tr>${rows}</table>`;
+  el.innerHTML=`<h2 style="color:var(--accent);margin-bottom:14px">Production Status</h2><table class="data-table"><tr><th>Name</th><th>Region</th><th>Tier</th><th>Build</th><th>Canon</th><th>Stats</th><th>Narrative</th><th>FG Ready</th></tr>${rows}</table>`;
 }
 
 // ── CANON COMMIT SYSTEM ──
@@ -752,6 +757,8 @@ async function executeCommit(){
       const products=Object.keys(data.affectedProducts||{});
       statusEl.innerHTML=`<span style="color:var(--green)">✅ Committed as <strong>${esc(data.changeId)}</strong></span>
         <div style="margin-top:6px;font-size:12px;color:var(--text-dim)">Pending updates: ${products.filter(p=>p!==canonFilePath(currentNPC)).join(', ')||'None'}</div>`;
+      canonCommitted.add(currentNPC.name);
+      filterNPCs();updateHeaderStats();renderDetail();
       const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
       if(s.overrides&&s.overrides[currentNPC.name]){delete s.overrides[currentNPC.name];localStorage.setItem(LS_KEY,JSON.stringify(s));}
     } else {
@@ -821,11 +828,25 @@ function checkPin(){
   }
 }
 
+async function loadCanonStatus(){
+  try{
+    const res=await fetch(CANON_API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'get_changelog',secret:'diceforge2026'})
+    });
+    const data=await res.json();
+    const log=data.changelog||[];
+    canonCommitted=new Set(log.map(e=>e.target));
+    filterNPCs(); // refresh sidebar icons
+  }catch(e){/* silent fail — just means no canon icons */}
+}
+
 function unlockApp(){
   document.getElementById('mainContent').innerHTML='<span style="color:var(--text-dim)">Select an NPC or create a new one</span>';
   document.getElementById('mainContent').classList.add('empty-state');
   document.getElementById('sidebarInner').style.display='';
-  loadData();filterNPCs();updateHeaderStats();
+  loadData();filterNPCs();updateHeaderStats();loadCanonStatus();
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
