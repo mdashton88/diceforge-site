@@ -292,7 +292,7 @@ function promptForToken(){
 
 let syncStatus='idle'; // idle | loading | saving | error | offline
 let saveTimer=null;
-const SAVE_DEBOUNCE_MS=2000; // batch rapid edits into one save
+const SAVE_DEBOUNCE_MS=500; // batch rapid edits into one save
 
 function setSyncStatus(s,msg){
   syncStatus=s;
@@ -646,7 +646,7 @@ function updateHeaderStats(){
   document.getElementById("headerStats").innerHTML=`<span><span class="stat-num">${pg}</span> Pre-gens</span><span><span class="stat-num">${np}</span> NPCs</span><span><span class="stat-num">${cn}</span> 📦 Canon</span><span><span class="stat-num">${c}</span> Complete</span><span><span class="stat-num">${f}</span> FG Ready</span>`;
 }
 
-function selectNPC(name){currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;activePanel='audit';renderDetail();filterNPCs();}
+function selectNPC(name){flushSave();currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;activePanel='audit';renderDetail();filterNPCs();}
 
 function renderDetail(){
   const n=currentNPC;if(!n)return;
@@ -1115,7 +1115,8 @@ function canonFilePath(n){
   return `${region}/${region}-npcs.json`;
 }
 
-function openCommitModal(){
+async function flushSave(){if(saveTimer){clearTimeout(saveTimer);saveTimer=null;await pushToGist();}}
+async function openCommitModal(){await flushSave();
   if(!currentNPC)return;
   const inCanon=canonCommitted.has(currentNPC.name);
   const canon=buildCanonCharacter(currentNPC);
@@ -1291,6 +1292,7 @@ async function unlockApp(){
   document.getElementById('mainContent').innerHTML='<span style="color:var(--text-dim)">Select an NPC or create a new one</span>';
 }
 
+window.addEventListener('beforeunload',(e)=>{if(saveTimer){clearTimeout(saveTimer);saveTimer=null;pushToGist();e.returnValue='Save in progress...';}});
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('sidebarInner').style.display=DICEFORGE_AUTH?'':'none';
   if(DICEFORGE_AUTH){
