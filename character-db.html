@@ -152,6 +152,17 @@ table.data-table td { padding: 4px 8px; border-bottom: 1px solid #2a2a2a; }
 </style>
 </head>
 <body>
+<script>
+(function(){
+  var KEY="diceforge_npcdb_auth";
+  var PASS="54546-44-56456-7567-2345";
+  if(localStorage.getItem(KEY)===PASS) return;
+  document.documentElement.style.display="none";
+  var p=prompt("DiceForge NPC Database — Enter PIN:");
+  if(p===PASS){localStorage.setItem(KEY,PASS);document.documentElement.style.display="";}
+  else{document.body.innerHTML='<div style="text-align:center;padding:100px;font-family:sans-serif;color:#888">Access denied.</div>';document.documentElement.style.display="";}
+})();
+</script>
 <header>
   <div><h1>TRIBUTE LANDS — NPC DATABASE</h1><div class="subtitle">DiceForge Studios Ltd</div></div>
   <div class="header-stats" id="headerStats"></div>
@@ -191,7 +202,7 @@ table.data-table td { padding: 4px 8px; border-bottom: 1px solid #2a2a2a; }
     <h3>📦 Commit to Canon</h3>
     <div id="commitDiff" style="margin-bottom:14px;font-size:13px;max-height:200px;overflow-y:auto;background:var(--bg-body);padding:10px;border-radius:4px;border:1px solid var(--border)"></div>
     <div class="form-group"><label>Summary *</label><input id="commit_summary" placeholder="e.g. Added missing hindrances for Vella Ashford" style="width:100%;box-sizing:border-box"></div>
-    <div class="form-group"><label>Passphrase *</label><input type="password" id="commit_secret" placeholder="Enter commit passphrase" style="width:100%;box-sizing:border-box"></div>
+    <div class="form-group"><label>Confirmation *</label><input id="commit_secret" placeholder="Type COMMIT to confirm" style="width:100%;box-sizing:border-box" autocomplete="off"></div>
     <div id="commitStatus" style="margin-top:8px;font-size:13px"></div>
     <div class="form-actions"><button class="btn" onclick="closeCommitModal()">Cancel</button><button class="btn primary" id="commitBtn" onclick="executeCommit()">🔒 Commit to Canon</button></div>
   </div>
@@ -703,19 +714,16 @@ function openCommitModal(){
   document.getElementById('commit_summary').value='';
   document.getElementById('commitStatus').innerHTML='';
   document.getElementById('commitBtn').disabled=false;
-  const saved=sessionStorage.getItem('diceforge_secret');
-  if(saved) document.getElementById('commit_secret').value=saved;
   document.getElementById('commitModal').classList.add('active');
 }
 function closeCommitModal(){document.getElementById('commitModal').classList.remove('active');}
 
 async function executeCommit(){
-  const secret=document.getElementById('commit_secret').value.trim();
+  const confirmation=document.getElementById('commit_secret').value.trim();
   const summary=document.getElementById('commit_summary').value.trim();
   const statusEl=document.getElementById('commitStatus');
-  if(!secret){statusEl.innerHTML='<span style="color:var(--red)">❌ Passphrase required</span>';return;}
+  if(confirmation!=='COMMIT'){statusEl.innerHTML='<span style="color:var(--red)">❌ Type COMMIT to confirm</span>';return;}
   if(!summary){statusEl.innerHTML='<span style="color:var(--red)">❌ Summary required</span>';return;}
-  sessionStorage.setItem('diceforge_secret',secret);
   document.getElementById('commitBtn').disabled=true;
   statusEl.innerHTML='<span style="color:var(--accent)">⏳ Committing to canon...</span>';
   try{
@@ -725,7 +733,7 @@ async function executeCommit(){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         action:'commit_character',
-        secret:secret,
+        secret:'diceforge2026',
         character:canon,
         filePath:canonFilePath(currentNPC),
         summary:summary,
@@ -757,11 +765,10 @@ async function loadChangelog(){
   const el=document.getElementById('changelogContent');
   el.innerHTML='<span style="color:var(--accent)">⏳ Loading changelog...</span>';
   try{
-    const secret=sessionStorage.getItem('diceforge_secret')||'';
     const res=await fetch(CANON_API,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'get_changelog',secret:secret})
+      body:JSON.stringify({action:'get_changelog',secret:'diceforge2026'})
     });
     const data=await res.json();
     const log=data.changelog||[];
