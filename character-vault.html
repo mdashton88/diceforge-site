@@ -22,7 +22,6 @@
   --tag-wc: #c49a4a;
   --tag-extra: #5a8a5a;
   --tag-walkon: #7a7a8a;
-  --tag-walkon: #666;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
@@ -277,7 +276,7 @@ function loadData(){
   seeded.forEach(s=>{
     if(usedNames.has(s.name)) return;
     const ov=stored.overrides?stored.overrides[s.name]:null;
-    merged.push(ov?{...s,...ov}:s);
+    merged.push(ov?{...s,...ov,category:s.category}:s);
   });
   allNPCs=merged;
   if(stored.deleted) allNPCs=allNPCs.filter(n=>!stored.deleted.includes(n.name));
@@ -488,7 +487,8 @@ function renderDetail(){
   const ancestryTag=n.ancestry&&n.ancestry!=='Human'?` · ${esc(n.ancestry)}`:'';
   const titleLine=n.concept?`<div class="npc-title-line">${esc(n.concept)}${ancestryTag}</div>`:(n.ancestry?`<div class="npc-title-line">${esc(n.ancestry)}</div>`:'');
   const canonBadge=canonCommitted.has(n.name)?'<span style="font-size:13px;margin-left:10px;color:var(--green)" title="Committed to Canon">📦 In Canon</span>':'<span style="font-size:13px;margin-left:10px;color:var(--text-dim)" title="Not yet committed">📦 Not in Canon</span>';
-  el.innerHTML=`<div class="npc-header"><h2>${esc(n.name)}${canonBadge}</h2>${titleLine}</div><div class="detail-columns"><div class="col-stats" id="colStats"></div><div class="col-middle" id="colMiddle"></div><div class="col-narrative" id="colNarrative"></div></div>`;
+  const catBadge=(n.category||'NPC')==='Pre-gen'?'<span class="tier-tag pregen" style="margin-left:10px;font-size:11px;padding:2px 8px">PRE-GEN</span>':'';
+  el.innerHTML=`<div class="npc-header"><h2>${esc(n.name)}${catBadge}${canonBadge}</h2>${titleLine}</div><div class="detail-columns"><div class="col-stats" id="colStats"></div><div class="col-middle" id="colMiddle"></div><div class="col-narrative" id="colNarrative"></div></div>`;
   renderStatColumn(n);renderMiddleColumn(n);renderNarrativeColumn(n);
 }
 
