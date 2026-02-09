@@ -70,7 +70,7 @@ async function handleCharacterCommit(body, token, repo, headers) {
     return new Response(JSON.stringify({ error: 'Cannot read canon file: ' + filePath }), { status: 500, headers });
   }
   const fileData = await fileRes.json();
-  const currentContent = JSON.parse(atob(fileData.content.replace(/\n/g, '')));
+  const currentContent = JSON.parse(b64decode(fileData.content.replace(/\n/g, '')));
   const fileSha = fileData.sha;
 
   // 2. Find and record the before state
@@ -109,7 +109,7 @@ async function handleCharacterCommit(body, token, repo, headers) {
   const clRes = await ghGet(`/repos/${repo}/contents/canon-changelog.json`, token);
   if (clRes.ok) {
     const clData = await clRes.json();
-    changelog = JSON.parse(atob(clData.content.replace(/\n/g, '')));
+    changelog = JSON.parse(b64decode(clData.content.replace(/\n/g, '')));
     changelogSha = clData.sha;
   }
   changelog.push(changeEntry);
@@ -123,7 +123,7 @@ async function handleCharacterCommit(body, token, repo, headers) {
     token,
     {
       message: commitMsg,
-      content: btoa(JSON.stringify(currentContent, null, 2)),
+      content: b64encode(JSON.stringify(currentContent, null, 2)),
       sha: fileSha
     }
   );
@@ -135,7 +135,7 @@ async function handleCharacterCommit(body, token, repo, headers) {
   // Commit changelog
   const clBody = {
     message: commitMsg + ' [changelog]',
-    content: btoa(JSON.stringify(changelog, null, 2))
+    content: b64encode(JSON.stringify(changelog, null, 2))
   };
   if (changelogSha) clBody.sha = changelogSha;
   const clCommit = await ghPut(`/repos/${repo}/contents/canon-changelog.json`, token, clBody);
@@ -159,7 +159,7 @@ async function handleGetChangelog(token, repo, headers) {
     return new Response(JSON.stringify({ changelog: [] }), { status: 200, headers });
   }
   const data = await res.json();
-  const changelog = JSON.parse(atob(data.content.replace(/\n/g, '')));
+  const changelog = JSON.parse(b64decode(data.content.replace(/\n/g, '')));
   return new Response(JSON.stringify({ changelog }), { status: 200, headers });
 }
 
@@ -174,11 +174,19 @@ async function handleGetCanon(body, token, repo, headers) {
     return new Response(JSON.stringify({ error: 'File not found' }), { status: 404, headers });
   }
   const data = await res.json();
-  const content = JSON.parse(atob(data.content.replace(/\n/g, '')));
+  const content = JSON.parse(b64decode(data.content.replace(/\n/g, '')));
   return new Response(JSON.stringify({ data: content }), { status: 200, headers });
 }
 
-// ── HELPERS ──
+// Unicode-safe base64 encode
+function b64encode(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+// Unicode-safe base64 decode
+function b64decode(str) {
+  return decodeURIComponent(escape(atob(str)));
+}
 async function ghGet(path, token) {
   return fetch(`https://api.github.com${path}`, {
     headers: { 'Authorization': `Bearer ${token}`, 'User-Agent': 'DiceForge-Canon-API', 'Accept': 'application/vnd.github.v3+json' }
@@ -197,7 +205,7 @@ async function getNextChangeId(token, repo) {
   const res = await ghGet(`/repos/${repo}/contents/canon-changelog.json`, token);
   if (!res.ok) return 'CHG-001';
   const data = await res.json();
-  const changelog = JSON.parse(atob(data.content.replace(/\n/g, '')));
+  const changelog = JSON.parse(b64decode(data.content.replace(/\n/g, '')));
   const num = changelog.length + 1;
   return 'CHG-' + String(num).padStart(3, '0');
 }
