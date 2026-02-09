@@ -490,7 +490,11 @@ function calcDerived(n){
 
 function saveCharacter(npc){const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(!s.overrides)s.overrides={};s.overrides[npc.name]=npc;localStorage.setItem(LS_KEY,JSON.stringify(s));}
 function saveCharacter(npc){const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(!s.custom)s.custom=[];const i=s.custom.findIndex(c=>c.name===npc.name);if(i>=0)s.custom[i]=npc;else s.custom.push(npc);localStorage.setItem(LS_KEY,JSON.stringify(s));}
-function d(v){return v>0?'d'+v:'—';}
+function d(v){return v<=0?'—':v<=12?'d'+v:'d12+'+(v-12);}
+const DIE_STEPS=[4,6,8,10,12];
+function dieStepUp(v,capped){if(v<4)return 4;if(v<12){const i=DIE_STEPS.indexOf(v);return i>=0&&i<4?DIE_STEPS[i+1]:12;}if(capped)return 12;return v+1;}
+function dieStepDown(v){if(v>12)return v-1;const i=DIE_STEPS.indexOf(v);return i>0?DIE_STEPS[i-1]:4;}
+function isPregen(){return currentNPC&&currentNPC.category==='Pre-gen';}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function csvToList(s){return s?s.split(',').map(x=>x.trim()).filter(x=>x):[];}
 
@@ -752,7 +756,7 @@ function renderNarrativeColumn(n){
 // ═══ EDITOR PANELS ═══
 function renderEditPanel(n){
   const el=document.getElementById('panelContent');
-  const dieSel=(id,val)=>{const opts=[0,4,6,8,10,12].map(v=>`<option value="${v}" ${val===v?'selected':''}>${v?'d'+v:'—'}</option>`).join('');return `<select id="${id}">${opts}</select>`;};
+  const dieSel=(id,val)=>{return `<div style="display:flex;align-items:center;gap:4px"><button class="btn sm" onclick="stepAttr('${id}',-1)" style="padding:1px 6px;font-size:13px;min-width:22px">−</button><span id="${id}" data-val="${val}" style="display:inline-block;min-width:36px;text-align:center;font-weight:bold;font-size:14px">${d(val)}</span><button class="btn sm" onclick="stepAttr('${id}',1)" style="padding:1px 6px;font-size:13px;min-width:22px">+</button></div>`;};
   el.innerHTML=`
     <div class="form-row"><div class="form-group" style="max-width:140px"><label>Ref Code</label><input id="ed_refCode" value="${esc(n.refCode||'')}" placeholder="AM-C001" style="font-family:monospace;font-size:13px;letter-spacing:0.5px"></div><div class="form-group"><label>Name *</label><input id="ed_name" value="${esc(n.name)}"></div><div class="form-group"><label>Title / Role</label><input id="ed_concept" value="${esc(n.concept)}"></div></div>
     <div class="form-row">
@@ -777,7 +781,7 @@ function renderEditPanel(n){
 function saveEdit(){
   const n=currentNPC;
   n.name=document.getElementById('ed_name').value.trim();n.refCode=document.getElementById('ed_refCode').value.trim();n.concept=document.getElementById('ed_concept').value.trim();n.region=document.getElementById('ed_region').value;n.tier=document.getElementById('ed_tier').value;n.category=document.getElementById('ed_category').value;n.ancestry=document.getElementById('ed_ancestry').value;n.quote=document.getElementById('ed_quote').value.trim();n.description=document.getElementById('ed_description').value.trim();n.background=document.getElementById('ed_background').value.trim();
-  n.agility=parseInt(document.getElementById('ed_agility').value);n.smarts=parseInt(document.getElementById('ed_smarts').value);n.spirit=parseInt(document.getElementById('ed_spirit').value);n.strength=parseInt(document.getElementById('ed_strength').value);n.vigor=parseInt(document.getElementById('ed_vigor').value);
+  n.agility=parseInt(document.getElementById('ed_agility').dataset.val);n.smarts=parseInt(document.getElementById('ed_smarts').dataset.val);n.spirit=parseInt(document.getElementById('ed_spirit').dataset.val);n.strength=parseInt(document.getElementById('ed_strength').dataset.val);n.vigor=parseInt(document.getElementById('ed_vigor').dataset.val);
   n.pace=parseInt(document.getElementById('ed_pace').value);n.parry=parseInt(document.getElementById('ed_parry').value);n.toughness=parseInt(document.getElementById('ed_toughness').value);n.toughnessArmor=parseInt(document.getElementById('ed_tougharmor').value);n.bennies=parseInt(document.getElementById('ed_bennies').value);
   n.edges=csvToList(document.getElementById('ed_edges').value);n.hindrances=csvToList(document.getElementById('ed_hindrances').value);n.gearText=document.getElementById('ed_gear').value.trim();
   saveCharacter(n);closePanel();updateHeaderStats();
@@ -836,7 +840,7 @@ function removeEdge(btn){const val=btn.dataset.val;currentNPC.edges=currentNPC.e
 
 function renderSkillsPanel(n){
   const el=document.getElementById('panelContent');
-  const rows=Object.entries(n.skills).sort((a,b)=>a[0].localeCompare(b[0])).map(([name,die])=>`<tr><td>${esc(name)}</td><td>${d(die)}</td><td><button class="btn sm danger" onclick="removeSkill('${esc(name)}')">×</button></td></tr>`).join('');
+  const rows=Object.entries(n.skills).sort((a,b)=>a[0].localeCompare(b[0])).map(([name,die])=>`<tr><td>${esc(name)}</td><td style="text-align:center"><button class="btn sm" onclick="stepSkill('${esc(name)}',-1)" style="padding:1px 6px;font-size:13px;min-width:22px">−</button> <span style="display:inline-block;min-width:42px;text-align:center;font-weight:bold">${d(die)}</span> <button class="btn sm" onclick="stepSkill('${esc(name)}',1)" style="padding:1px 6px;font-size:13px;min-width:22px">+</button></td><td><button class="btn sm danger" onclick="removeSkill('${esc(name)}')" title="Remove skill">×</button></td></tr>`).join('');
   el.innerHTML=`<table class="data-table"><tr><th>Skill</th><th>Die</th><th></th></tr>${rows||'<tr><td colspan="3" style="color:var(--text-dim)">No skills</td></tr>'}</table>
     <div class="catalogue-section"><h4>Add Skill</h4>
     <div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
@@ -857,6 +861,8 @@ function filterSkillCatalogue(s){
 }
 function selectCatalogueSkill(name){document.getElementById('skill_name').value=name;}
 function addSkill(){const name=document.getElementById('skill_name').value.trim(),die=parseInt(document.getElementById('skill_die').value);if(!name)return;currentNPC.skills[name]=die;calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
+function stepAttr(id,dir){const el=document.getElementById(id);if(!el)return;let v=parseInt(el.dataset.val)||0;const cap=isPregen();v=dir>0?dieStepUp(v,cap):dieStepDown(v);if(v<0)v=0;el.dataset.val=v;el.textContent=d(v);}
+function stepSkill(name,dir){if(!currentNPC||!currentNPC.skills[name])return;const v=currentNPC.skills[name];const cap=isPregen();currentNPC.skills[name]=dir>0?dieStepUp(v,cap):dieStepDown(v);calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
 function removeSkill(name){delete currentNPC.skills[name];calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
 
 function renderWeaponsPanel(n){
