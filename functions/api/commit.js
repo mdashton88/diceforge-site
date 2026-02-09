@@ -34,6 +34,8 @@ export async function onRequestPost(context) {
     const { action } = body;
     if (action === 'commit_character') {
       return await handleCharacterCommit(body, GITHUB_TOKEN, CANON_REPO, headers);
+    } else if (action === 'remove_character') {
+      return await handleCharacterRemove(body, GITHUB_TOKEN, CANON_REPO, headers);
     } else if (action === 'get_changelog') {
       return await handleGetChangelog(GITHUB_TOKEN, CANON_REPO, headers);
     } else if (action === 'get_canon') {
@@ -148,6 +150,92 @@ async function handleCharacterCommit(body, token, repo, headers) {
     success: true,
     changeId: changeId,
     diff: diff,
+    affectedProducts: affectedProducts
+  }), { status: 200, headers });
+}
+
+// ── REMOVE CHARACTER FROM CANON ──
+async function handleCharacterRemove(body, token, repo, headers) {
+  const { characterName, filePath, region, summary, author } = body;
+  if (!characterName || !filePath) {
+    return new Response(JSON.stringify({ error: 'Missing characterName or filePath' }), { status: 400, headers });
+  }
+
+  // 1. Read current canon file
+  const fileRes = await ghGet(`/repos/${repo}/contents/${filePath}`, token);
+  if (!fileRes.ok) {
+    return new Response(JSON.stringify({ error: 'Cannot read canon file: ' + filePath }), { status: 500, headers });
+  }
+  const fileData = await fileRes.json();
+  const currentContent = JSON.parse(b64decode(fileData.content.replace(/\n/g, '')));
+  const fileSha = fileData.sha;
+
+  // 2. Find and remove
+  const idx = currentContent.findIndex(c => c.name === characterName);
+  if (idx < 0) {
+    return new Response(JSON.stringify({ error: 'Character not found in canon: ' + characterName }), { status: 404, headers });
+  }
+  const removed = currentContent.splice(idx, 1)[0];
+
+  // 3. Build changelog entry
+  const changeId = await getNextChangeId(token, repo);
+  const affectedProducts = inferAffectedProducts(filePath, region);
+
+  const changeEntry = {
+    id: changeId,
+    timestamp: new Date().toISOString(),
+    author: author || 'NPC Database',
+    target: characterName,
+    region: region || 'Unknown',
+    summary: summary || 'Character removed from canon',
+    diff: { removed: true, character: removed },
+    affectedProducts: affectedProducts,
+    status: {}
+  };
+  changeEntry.status[filePath] = new Date().toISOString();
+
+  // 4. Read/update changelog
+  let changelog = [];
+  let changelogSha = null;
+  const clRes = await ghGet(`/repos/${repo}/contents/canon-changelog.json`, token);
+  if (clRes.ok) {
+    const clData = await clRes.json();
+    changelog = JSON.parse(b64decode(clData.content.replace(/\n/g, '')));
+    changelogSha = clData.sha;
+  }
+  changelog.push(changeEntry);
+
+  // 5. Commit both files
+  const commitMsg = `${changeId}: Remove ${characterName}`;
+
+  const canonCommit = await ghPut(
+    `/repos/${repo}/contents/${filePath}`,
+    token,
+    {
+      message: commitMsg,
+      content: b64encode(JSON.stringify(currentContent, null, 2)),
+      sha: fileSha
+    }
+  );
+  if (!canonCommit.ok) {
+    const err = await canonCommit.json();
+    return new Response(JSON.stringify({ error: 'Canon commit failed: ' + (err.message || 'unknown') }), { status: 500, headers });
+  }
+
+  const clBody = {
+    message: commitMsg + ' [changelog]',
+    content: b64encode(JSON.stringify(changelog, null, 2))
+  };
+  if (changelogSha) clBody.sha = changelogSha;
+  const clCommit = await ghPut(`/repos/${repo}/contents/canon-changelog.json`, token, clBody);
+  if (!clCommit.ok) {
+    const err = await clCommit.json();
+    return new Response(JSON.stringify({ error: 'Changelog commit failed: ' + (err.message || 'unknown') }), { status: 500, headers });
+  }
+
+  return new Response(JSON.stringify({
+    success: true,
+    changeId: changeId,
     affectedProducts: affectedProducts
   }), { status: 200, headers });
 }
