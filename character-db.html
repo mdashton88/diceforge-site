@@ -38,7 +38,11 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .sidebar-controls input, .sidebar-controls select { background: var(--bg-input); border: 1px solid var(--border); color: var(--text); padding: 6px 8px; border-radius: 3px; font-size: 13px; }
 .sidebar-controls input { flex: 1; }
 .sidebar-controls select { min-width: 100px; }
-.npc-list { flex: 1; overflow-y: scroll; padding: 4px; }
+.npc-list { flex: 1; overflow-y: scroll; padding: 4px; scrollbar-width: thin; scrollbar-color: var(--accent-dim) var(--bg-dark); }
+.npc-list::-webkit-scrollbar { width: 10px; }
+.npc-list::-webkit-scrollbar-track { background: var(--bg-dark); }
+.npc-list::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 5px; border: 2px solid var(--bg-dark); }
+.npc-list::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 .npc-item { padding: 8px 10px; border-radius: 4px; cursor: pointer; border: 1px solid transparent; margin-bottom: 2px; }
 .npc-item:hover { background: var(--bg-hover); }
 .npc-item.active { background: var(--bg-hover); border-color: var(--accent-dim); }
