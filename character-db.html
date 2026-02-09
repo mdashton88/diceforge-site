@@ -153,14 +153,9 @@ table.data-table td { padding: 4px 8px; border-bottom: 1px solid #2a2a2a; }
 </head>
 <body>
 <script>
+var DICEFORGE_AUTH=false;
 (function(){
-  var KEY="diceforge_npcdb_auth";
-  var PASS="54546-44-56456-7567-2345";
-  if(localStorage.getItem(KEY)===PASS) return;
-  document.documentElement.style.display="none";
-  var p=prompt("DiceForge NPC Database — Enter PIN:");
-  if(p===PASS){localStorage.setItem(KEY,PASS);document.documentElement.style.display="";}
-  else{document.body.innerHTML='<div style="text-align:center;padding:100px;font-family:sans-serif;color:#888">Access denied.</div>';document.documentElement.style.display="";}
+  if(localStorage.getItem('diceforge_npcdb_auth')==='54546-44-56456-7567-2345') DICEFORGE_AUTH=true;
 })();
 </script>
 <header>
@@ -169,6 +164,7 @@ table.data-table td { padding: 4px 8px; border-bottom: 1px solid #2a2a2a; }
 </header>
 <div class="container">
   <div class="sidebar">
+    <div id="sidebarInner">
     <div class="sidebar-controls">
       <input type="text" id="searchInput" placeholder="Search NPCs..." oninput="filterNPCs()">
       <div class="filter-row">
@@ -182,8 +178,19 @@ table.data-table td { padding: 4px 8px; border-bottom: 1px solid #2a2a2a; }
       <button class="btn" onclick="showStatusView()">Status</button>
       <button class="btn" onclick="showChangelog()">Changes</button>
     </div>
+    </div>
   </div>
-  <div class="main empty-state" id="mainContent">Select an NPC or create a new one</div>
+  <div class="main empty-state" id="mainContent">
+    <div id="welcomeGate" style="text-align:center;max-width:400px">
+      <h2 style="color:var(--accent);margin-bottom:6px;font-size:22px">TRIBUTE LANDS</h2>
+      <div style="color:var(--text-dim);font-size:13px;margin-bottom:24px;letter-spacing:1px">NPC DATABASE — DICEFORGE STUDIOS</div>
+      <div id="pinForm">
+        <input id="pinInput" type="password" placeholder="Enter PIN" style="width:200px;text-align:center;padding:10px 14px;font-size:16px;letter-spacing:4px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--text);margin-bottom:12px" onkeydown="if(event.key==='Enter')checkPin()">
+        <br><button class="btn primary" onclick="checkPin()" style="padding:8px 28px">Enter</button>
+        <div id="pinError" style="color:var(--red);font-size:12px;margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="modal-overlay" id="newNpcModal">
   <div class="modal">
@@ -801,8 +808,33 @@ async function loadChangelog(){
   }
 }
 
+function checkPin(){
+  var pin=document.getElementById('pinInput').value;
+  if(pin==='54546-44-56456-7567-2345'){
+    localStorage.setItem('diceforge_npcdb_auth',pin);
+    DICEFORGE_AUTH=true;
+    unlockApp();
+  } else {
+    document.getElementById('pinError').textContent='Invalid PIN';
+    document.getElementById('pinInput').value='';
+    document.getElementById('pinInput').focus();
+  }
+}
+
+function unlockApp(){
+  document.getElementById('mainContent').innerHTML='<span style="color:var(--text-dim)">Select an NPC or create a new one</span>';
+  document.getElementById('mainContent').classList.add('empty-state');
+  document.getElementById('sidebarInner').style.display='';
+  loadData();filterNPCs();updateHeaderStats();
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
-  const check=setInterval(()=>{if(window.CharacterForge){clearInterval(check);loadData();filterNPCs();updateHeaderStats();}},50);
+  document.getElementById('sidebarInner').style.display=DICEFORGE_AUTH?'':'none';
+  if(DICEFORGE_AUTH){
+    const check=setInterval(()=>{if(window.CharacterForge){clearInterval(check);unlockApp();}},50);
+  } else {
+    document.getElementById('pinInput').focus();
+  }
 });
 </script>
 </body>
