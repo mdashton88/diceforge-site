@@ -424,7 +424,7 @@ async function pushToGist(){console.log("☁️ pushToGist firing...");
         gearText:n.gearText||'',quote:n.quote||'',notes:n.notes||'',
         description:n.description||'',background:n.background||'',motivation:n.motivation||'',
         secret:n.secret||'',services:n.services||'',adventureHook:n.adventureHook||'',tactics:n.tactics||'',
-        abName:n.abName||'',abSkill:n.abSkill||'',pp:n.pp||0,
+        abName:n.abName||'',abSkill:n.abSkill||'',pp:n.pp||0,startingFunds:n.startingFunds||500,gearCost:n.gearCost||0,
         statComplete:n.statComplete||false,narrativeComplete:n.narrativeComplete||false,fgReady:n.fgReady||false
       }))
     };
@@ -447,7 +447,7 @@ async function pushToGist(){console.log("☁️ pushToGist firing...");
 }
 
 function normaliseChar(c,moduleId){
-  const n={name:c.name,refCode:c.refCode||'',concept:c.concept||'',ancestry:c.ancestry||'Human',region:c.region||'Ammaria',tier:c.tier||'Wild Card',rank:c.rank||'Novice',category:c.category||'NPC',product:c.product||'',source:moduleId,agility:c.attrs?.agility||c.agility||0,smarts:c.attrs?.smarts||c.smarts||0,spirit:c.attrs?.spirit||c.spirit||0,strength:c.attrs?.strength||c.strength||0,vigor:c.attrs?.vigor||c.vigor||0,skills:c.skills||{},edges:c.edges||[],hindrances:c.hindrances||[],powers:c.powers||[],armour:c.armour||[],weapons:c.weapons||[],gearText:c.gearText||'',quote:c.quote||'',description:c.description||'',background:c.background||'',motivation:c.motivation||'',secret:c.secret||'',services:c.services||'',adventureHook:c.adventureHook||'',tactics:c.tactics||'',abName:c.abName||'',abSkill:c.abSkill||'',pp:c.pp||0,statComplete:c.statComplete||false,narrativeComplete:c.narrativeComplete||false,fgReady:c.fgReady||false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
+  const n={name:c.name,refCode:c.refCode||'',concept:c.concept||'',ancestry:c.ancestry||'Human',region:c.region||'Ammaria',tier:c.tier||'Wild Card',rank:c.rank||'Novice',category:c.category||'NPC',product:c.product||'',source:moduleId,agility:c.attrs?.agility||c.agility||0,smarts:c.attrs?.smarts||c.smarts||0,spirit:c.attrs?.spirit||c.spirit||0,strength:c.attrs?.strength||c.strength||0,vigor:c.attrs?.vigor||c.vigor||0,skills:c.skills||{},edges:c.edges||[],hindrances:c.hindrances||[],powers:c.powers||[],armour:c.armour||[],weapons:c.weapons||[],gearText:c.gearText||'',quote:c.quote||'',description:c.description||'',background:c.background||'',motivation:c.motivation||'',secret:c.secret||'',services:c.services||'',adventureHook:c.adventureHook||'',tactics:c.tactics||'',abName:c.abName||'',abSkill:c.abSkill||'',pp:c.pp||0,startingFunds:c.startingFunds||500,gearCost:c.gearCost||0,statComplete:c.statComplete||false,narrativeComplete:c.narrativeComplete||false,fgReady:c.fgReady||false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
   // Parse gear text into structured armour/weapons if not already populated
   if(!n.armour.length&&!n.weapons.length&&n.gearText) parseGearInto(n);
   n.toughnessArmor=n.armour.reduce((best,a)=>Math.max(best,a.armor||0),0);
@@ -772,6 +772,7 @@ function renderEditPanel(n){
     <div class="form-group"><label>Background</label><textarea id="ed_background" rows="3">${esc(n.background)}</textarea></div>
     <div class="form-row"><div class="form-group"><label>Agility</label>${dieSel('ed_agility',n.agility)}</div><div class="form-group"><label>Smarts</label>${dieSel('ed_smarts',n.smarts)}</div><div class="form-group"><label>Spirit</label>${dieSel('ed_spirit',n.spirit)}</div><div class="form-group"><label>Strength</label>${dieSel('ed_strength',n.strength)}</div><div class="form-group"><label>Vigor</label>${dieSel('ed_vigor',n.vigor)}</div></div>
     <div class="form-row"><div class="form-group"><label>Pace</label><input id="ed_pace" type="number" value="${n.pace}"></div><div class="form-group"><label>Parry</label><input id="ed_parry" type="number" value="${n.parry}"></div><div class="form-group"><label>Toughness</label><input id="ed_toughness" type="number" value="${n.toughness}"></div><div class="form-group"><label>Tough (Armor)</label><input id="ed_tougharmor" type="number" value="${n.toughnessArmor}"></div><div class="form-group"><label>Bennies</label><input id="ed_bennies" type="number" value="${n.bennies}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Starting Funds (₡)</label><input id="ed_startFunds" type="number" value="${n.startingFunds}"></div><div class="form-group"><label>Gear Cost (₡)</label><input id="ed_gearCost" type="number" value="${n.gearCost}"></div><div class="form-group"><label>Remaining</label><span style="font-weight:bold;color:${n.startingFunds-n.gearCost>=0?'var(--green)':'var(--red)'}">${n.startingFunds-n.gearCost}₡</span></div></div>
     <div class="form-group"><label>Edges (legacy, comma-separated)</label><input id="ed_edges" value="${esc(n.edges.join(', '))}"></div>
     <div class="form-group"><label>Hindrances (legacy, comma-separated)</label><input id="ed_hindrances" value="${esc(n.hindrances.join(', '))}"></div>
     <div class="form-group"><label>Gear</label><input id="ed_gear" value="${esc(n.gearText)}"></div>
@@ -781,7 +782,7 @@ function saveEdit(){
   const n=currentNPC;
   n.name=document.getElementById('ed_name').value.trim();n.refCode=document.getElementById('ed_refCode').value.trim();n.concept=document.getElementById('ed_concept').value.trim();n.region=document.getElementById('ed_region').value;n.tier=document.getElementById('ed_tier').value;n.category=document.getElementById('ed_category').value;n.ancestry=document.getElementById('ed_ancestry').value;n.quote=document.getElementById('ed_quote').value.trim();n.description=document.getElementById('ed_description').value.trim();n.background=document.getElementById('ed_background').value.trim();
   n.agility=parseInt(document.getElementById('ed_agility').dataset.val);n.smarts=parseInt(document.getElementById('ed_smarts').dataset.val);n.spirit=parseInt(document.getElementById('ed_spirit').dataset.val);n.strength=parseInt(document.getElementById('ed_strength').dataset.val);n.vigor=parseInt(document.getElementById('ed_vigor').dataset.val);
-  n.pace=parseInt(document.getElementById('ed_pace').value);n.parry=parseInt(document.getElementById('ed_parry').value);n.toughness=parseInt(document.getElementById('ed_toughness').value);n.toughnessArmor=parseInt(document.getElementById('ed_tougharmor').value);n.bennies=parseInt(document.getElementById('ed_bennies').value);
+  n.pace=parseInt(document.getElementById('ed_pace').value);n.parry=parseInt(document.getElementById('ed_parry').value);n.toughness=parseInt(document.getElementById('ed_toughness').value);n.toughnessArmor=parseInt(document.getElementById('ed_tougharmor').value);n.bennies=parseInt(document.getElementById('ed_bennies').value);n.startingFunds=parseInt(document.getElementById('ed_startFunds').value)||500;n.gearCost=parseInt(document.getElementById('ed_gearCost').value)||0;
   n.edges=csvToList(document.getElementById('ed_edges').value);n.hindrances=csvToList(document.getElementById('ed_hindrances').value);n.gearText=document.getElementById('ed_gear').value.trim();
   saveCharacter(n);closePanel();updateHeaderStats();
 }
@@ -1055,6 +1056,19 @@ function renderAuditPanel(n){
     html+=`<div class="audit-line ${cls}">${icon} ${esc(r.label)} ${esc(r.detail)}</div>`;
   });
   html+='</div></div>';
+  // Funds audit
+  let baseFunds=500,fundsNote='';
+  if(n.edges.some(e=>e.toLowerCase().includes('filthy rich'))){baseFunds=2500;fundsNote=' (Filthy Rich x5)';}
+  else if(n.edges.some(e=>e.toLowerCase()==='rich')){baseFunds=1500;fundsNote=' (Rich x3)';}
+  if(n.hindrances.some(h=>h.toLowerCase().includes('poverty'))){baseFunds=Math.floor(baseFunds/2);fundsNote+=' (Poverty half)';}
+  const funds=n.startingFunds||baseFunds, spent=n.gearCost||0, remaining=funds-spent;
+  const fundsPass=remaining>=0;
+  const fundsWarn=remaining>50&&n.category==='Pre-gen';
+  html+='<div class="audit-block"><div class="audit-section"><h4>Equipment Funds</h4>';
+  html+=`<div class="audit-line ${fundsPass?'audit-pass':'audit-fail'}">${fundsPass?'✓':'✗'} Starting funds: ${funds}${fundsNote}₡</div>`;
+  html+=`<div class="audit-line ${fundsPass?'audit-pass':'audit-fail'}">${fundsPass?'✓':'✗'} Gear cost: ${spent}₡ — Remaining: ${remaining}₡ ${fundsPass?'✓':'OVER BUDGET'}</div>`;
+  if(fundsWarn) html+='<div class="audit-line audit-warn">⚠ '+remaining+'₡ unspent — consider additional gear</div>';
+  html+='</div></div>';
   const inCanon=canonCommitted.has(n.name);
   const commitLabel=inCanon?'🔄 Update Canon':'📦 Commit to Canon';
   const removeBtn=inCanon?'<button class="btn" onclick="removeFromCanon()" style="color:var(--red);border-color:var(--red)" title="Remove this character from canonical data">🗑 Remove from Canon</button>':'';
@@ -1079,7 +1093,7 @@ function openNewNPCModal(){document.getElementById('newNpcModal').classList.add(
 function closeNewNPCModal(){document.getElementById('newNpcModal').classList.remove('active');}
 function createNPC(){
   const name=document.getElementById('new_name').value.trim();if(!name){alert('Name is required');return;}
-  const npc={name,refCode:'',concept:document.getElementById('new_concept')?.value?.trim()||'',ancestry:document.getElementById('new_ancestry').value,region:document.getElementById('new_region').value,tier:document.getElementById('new_tier').value,rank:'Novice',category:document.getElementById('new_category').value,product:'',source:'custom',agility:0,smarts:0,spirit:0,strength:0,vigor:0,skills:{},edges:[],hindrances:[],powers:[],gearText:'',quote:'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:'',abSkill:'',pp:0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
+  const npc={name,refCode:'',concept:document.getElementById('new_concept')?.value?.trim()||'',ancestry:document.getElementById('new_ancestry').value,region:document.getElementById('new_region').value,tier:document.getElementById('new_tier').value,rank:'Novice',category:document.getElementById('new_category').value,product:'',source:'custom',agility:0,smarts:0,spirit:0,strength:0,vigor:0,skills:{},edges:[],hindrances:[],powers:[],gearText:'',quote:'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:'',abSkill:'',pp:0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0,startingFunds:500,gearCost:0};
   calcDerived(npc);allNPCs.push(npc);saveCharacter(npc);closeNewNPCModal();filterNPCs();updateHeaderStats();selectNPC(name);
 }
 function showStatusView(){
