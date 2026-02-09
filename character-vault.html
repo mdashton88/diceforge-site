@@ -303,17 +303,10 @@ function setSyncStatus(s,msg){
   el.style.color=col;
   el.textContent=`${icon} ${msg||label}`;
   el.title=msg||label;
-  // Show/hide save overlay
+  // Overlay only on errors — normal saves are silent
   if(overlay){
-    if(s==='saving'){
+    if(s==='error'){
       overlay.style.display='flex';
-      overlay.querySelector('.save-msg').textContent='⏳ SAVING TO CLOUD — DO NOT RELOAD';
-      overlay.style.background='rgba(0,0,0,0.7)';
-    } else if(s==='idle' && overlay.style.display==='flex'){
-      overlay.querySelector('.save-msg').textContent='✅ SAVED';
-      overlay.style.background='rgba(0,60,0,0.7)';
-      setTimeout(()=>{overlay.style.display='none';},800);
-    } else if(s==='error' && overlay.style.display==='flex'){
       overlay.querySelector('.save-msg').textContent='❌ SAVE FAILED — RETRYING...';
       overlay.style.background='rgba(80,0,0,0.7)';
     } else {
