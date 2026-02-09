@@ -169,6 +169,7 @@ table.data-table td { padding: 4px 8px; border-bottom: 1px solid #2a2a2a; }
     <div class="sidebar-footer">
       <button class="btn primary" onclick="openNewNPCModal()" style="flex:1">+ New NPC</button>
       <button class="btn" onclick="showStatusView()">Status</button>
+      <button class="btn" onclick="showChangelog()">Changes</button>
     </div>
   </div>
   <div class="main empty-state" id="mainContent">Select an NPC or create a new one</div>
@@ -183,6 +184,23 @@ table.data-table td { padding: 4px 8px; border-bottom: 1px solid #2a2a2a; }
       <div class="form-group"><label>Ancestry</label><select id="new_ancestry"><option>Human</option><option>Dwarf</option><option>Elf</option><option>Half-Folk</option><option>Other</option></select></div>
     </div>
     <div class="form-actions"><button class="btn" onclick="closeNewNPCModal()">Cancel</button><button class="btn primary" onclick="createNPC()">Create NPC</button></div>
+  </div>
+</div>
+<div class="modal-overlay" id="commitModal">
+  <div class="modal">
+    <h3>📦 Commit to Canon</h3>
+    <div id="commitDiff" style="margin-bottom:14px;font-size:13px;max-height:200px;overflow-y:auto;background:var(--bg-body);padding:10px;border-radius:4px;border:1px solid var(--border)"></div>
+    <div class="form-group"><label>Summary *</label><input id="commit_summary" placeholder="e.g. Added missing hindrances for Vella Ashford" style="width:100%;box-sizing:border-box"></div>
+    <div class="form-group"><label>Passphrase *</label><input type="password" id="commit_secret" placeholder="Enter commit passphrase" style="width:100%;box-sizing:border-box"></div>
+    <div id="commitStatus" style="margin-top:8px;font-size:13px"></div>
+    <div class="form-actions"><button class="btn" onclick="closeCommitModal()">Cancel</button><button class="btn primary" id="commitBtn" onclick="executeCommit()">🔒 Commit to Canon</button></div>
+  </div>
+</div>
+<div class="modal-overlay" id="changelogModal">
+  <div class="modal" style="width:800px">
+    <h3>📋 Canon Changelog</h3>
+    <div id="changelogContent" style="font-size:13px">Loading...</div>
+    <div class="form-actions" style="margin-top:14px"><button class="btn" onclick="closeChangelogModal()">Close</button></div>
   </div>
 </div>
 <script>
@@ -605,6 +623,7 @@ function runBuildAudit(n){
 
 function renderAuditPanel(n){
   const results=runBuildAudit(n);
+  const legal=results.every(r=>r.pass);
   let html=`<div class="audit-block"><h4 style="color:var(--accent);margin-bottom:8px;font-size:14px">${esc(n.name)} — Build Audit</h4>`,curSec='';
   results.forEach(r=>{
     if(r.section!==curSec){curSec=r.section;html+=`<div class="audit-section"><h4>${esc(curSec)}</h4>`;}
@@ -612,6 +631,10 @@ function renderAuditPanel(n){
     html+=`<div class="audit-line ${cls}">${r.pass?'✓':'✗'} ${esc(r.label)} ${esc(r.detail)}</div>`;
   });
   html+='</div></div>';
+  html+=`<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center">
+    <button class="btn primary" onclick="openCommitModal()" title="Commit current state to canon repository">📦 Commit to Canon</button>
+    <span style="font-size:12px;color:var(--text-dim)">${legal?'✅ Build legal — ready to commit':'❌ Build has issues — commit with caution'}</span>
+  </div>`;
   document.getElementById('panelContent').innerHTML=html;
 }
 
@@ -636,8 +659,139 @@ function createNPC(){
 }
 function showStatusView(){
   const el=document.getElementById('mainContent');el.classList.remove('empty-state');
-  const rows=allNPCs.map(n=>`<tr><td>${esc(n.name)}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">${n.statComplete?'✓':'—'}</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">${n.narrativeComplete?'✓':'—'}</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">${n.fgReady?'✓':'—'}</td></tr>`).join('');
-  el.innerHTML=`<h2 style="color:var(--accent);margin-bottom:14px">Production Status</h2><table class="data-table"><tr><th>Name</th><th>Region</th><th>Tier</th><th>Stats</th><th>Narrative</th><th>FG Ready</th></tr>${rows}</table>`;
+  const rows=allNPCs.map(n=>{
+    const audit=runBuildAudit(n);const legal=audit.every(r=>r.pass);
+    return `<tr><td>${esc(n.name)}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td>${legal?'✅':'❌'}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">&#${n.statComplete?'10003':'8212'};</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">&#${n.narrativeComplete?'10003':'8212'};</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">&#${n.fgReady?'10003':'8212'};</td></tr>`;
+  }).join('');
+  el.innerHTML=`<h2 style="color:var(--accent);margin-bottom:14px">Production Status</h2><table class="data-table"><tr><th>Name</th><th>Region</th><th>Tier</th><th>Build</th><th>Stats</th><th>Narrative</th><th>FG Ready</th></tr>${rows}</table>`;
+}
+
+// ── CANON COMMIT SYSTEM ──
+const CANON_API='/api/commit';
+
+function buildCanonCharacter(n){
+  return {
+    name:n.name, concept:n.concept||'', ancestry:n.ancestry||'Human', region:n.region||'Ammaria',
+    tier:n.tier||'Wild Card', rank:n.rank||'Novice', category:n.category||'NPC', product:n.product||n.region||'Ammaria',
+    attrs:{agility:n.agility||4,smarts:n.smarts||4,spirit:n.spirit||4,strength:n.strength||4,vigor:n.vigor||4},
+    skills:Object.assign({},n.skills), edges:[...(n.edges||[])], hindrances:[...(n.hindrances||[])],
+    powers:[...(n.powers||[])], gear:[...(n.gear||[])],
+    gearText:n.gearText||'', abName:n.abName||'', abSkill:n.abSkill||'', pp:n.pp||0,
+    notes:n.notes||'', tactics:n.tactics||'', quote:n.quote||''
+  };
+}
+
+function canonFilePath(n){
+  const region=(n.region||'ammaria').toLowerCase();
+  const cat=(n.category||'NPC').toLowerCase();
+  if(cat==='pregen'||cat==='pre-gen') return `${region}/${region}-pregens.json`;
+  return `${region}/${region}-npcs.json`;
+}
+
+function openCommitModal(){
+  if(!currentNPC)return;
+  const canon=buildCanonCharacter(currentNPC);
+  const path=canonFilePath(currentNPC);
+  const diffHtml=`<div><strong style="color:var(--accent)">${esc(currentNPC.name)}</strong> → <code style="color:var(--text-dim)">${esc(path)}</code></div>
+    <div style="margin-top:8px"><strong>Attributes:</strong> Agi d${canon.attrs.agility}, Sma d${canon.attrs.smarts}, Spi d${canon.attrs.spirit}, Str d${canon.attrs.strength}, Vig d${canon.attrs.vigor}</div>
+    <div><strong>Skills:</strong> ${Object.entries(canon.skills).map(([k,v])=>k+' d'+v).join(', ')}</div>
+    <div><strong>Edges:</strong> ${canon.edges.join(', ')||'None'}</div>
+    <div><strong>Hindrances:</strong> ${canon.hindrances.join(', ')||'None'}</div>
+    <div><strong>Powers:</strong> ${canon.powers.join(', ')||'None'}</div>
+    <div><strong>Gear:</strong> ${canon.gearText||canon.gear.map(g=>typeof g==='string'?g:g.name).join(', ')||'None'}</div>`;
+  document.getElementById('commitDiff').innerHTML=diffHtml;
+  document.getElementById('commit_summary').value='';
+  document.getElementById('commitStatus').innerHTML='';
+  document.getElementById('commitBtn').disabled=false;
+  const saved=sessionStorage.getItem('diceforge_secret');
+  if(saved) document.getElementById('commit_secret').value=saved;
+  document.getElementById('commitModal').classList.add('active');
+}
+function closeCommitModal(){document.getElementById('commitModal').classList.remove('active');}
+
+async function executeCommit(){
+  const secret=document.getElementById('commit_secret').value.trim();
+  const summary=document.getElementById('commit_summary').value.trim();
+  const statusEl=document.getElementById('commitStatus');
+  if(!secret){statusEl.innerHTML='<span style="color:var(--red)">❌ Passphrase required</span>';return;}
+  if(!summary){statusEl.innerHTML='<span style="color:var(--red)">❌ Summary required</span>';return;}
+  sessionStorage.setItem('diceforge_secret',secret);
+  document.getElementById('commitBtn').disabled=true;
+  statusEl.innerHTML='<span style="color:var(--accent)">⏳ Committing to canon...</span>';
+  try{
+    const canon=buildCanonCharacter(currentNPC);
+    const res=await fetch(CANON_API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        action:'commit_character',
+        secret:secret,
+        character:canon,
+        filePath:canonFilePath(currentNPC),
+        summary:summary,
+        author:'NPC Database'
+      })
+    });
+    const data=await res.json();
+    if(data.success){
+      const products=Object.keys(data.affectedProducts||{});
+      statusEl.innerHTML=`<span style="color:var(--green)">✅ Committed as <strong>${esc(data.changeId)}</strong></span>
+        <div style="margin-top:6px;font-size:12px;color:var(--text-dim)">Pending updates: ${products.filter(p=>p!==canonFilePath(currentNPC)).join(', ')||'None'}</div>`;
+      const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
+      if(s.overrides&&s.overrides[currentNPC.name]){delete s.overrides[currentNPC.name];localStorage.setItem(LS_KEY,JSON.stringify(s));}
+    } else {
+      statusEl.innerHTML=`<span style="color:var(--red)">❌ ${esc(data.error||'Commit failed')}</span>`;
+      document.getElementById('commitBtn').disabled=false;
+    }
+  }catch(err){
+    statusEl.innerHTML=`<span style="color:var(--red)">❌ Network error: ${esc(err.message)}</span>`;
+    document.getElementById('commitBtn').disabled=false;
+  }
+}
+
+// ── CHANGELOG VIEW ──
+function showChangelog(){document.getElementById('changelogModal').classList.add('active');loadChangelog();}
+function closeChangelogModal(){document.getElementById('changelogModal').classList.remove('active');}
+
+async function loadChangelog(){
+  const el=document.getElementById('changelogContent');
+  el.innerHTML='<span style="color:var(--accent)">⏳ Loading changelog...</span>';
+  try{
+    const secret=sessionStorage.getItem('diceforge_secret')||'';
+    const res=await fetch(CANON_API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'get_changelog',secret:secret})
+    });
+    const data=await res.json();
+    const log=data.changelog||[];
+    if(!log.length){el.innerHTML='<div style="color:var(--text-dim);padding:20px;text-align:center">No changes recorded yet. Commit a character correction to start the audit trail.</div>';return;}
+    let html=`<div style="margin-bottom:10px;color:var(--text-dim);font-size:12px">${log.length} change${log.length===1?'':'s'} recorded</div>`;
+    html+='<table class="data-table" style="font-size:13px"><tr><th>ID</th><th>Date</th><th>Character</th><th>Region</th><th>Summary</th><th>Products</th></tr>';
+    log.slice().reverse().forEach(entry=>{
+      const date=new Date(entry.timestamp).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+      const time=new Date(entry.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      const products=Object.entries(entry.affectedProducts||{}).map(([p,applied])=>{
+        const icon=applied?'✅':'⏳';
+        const label=p.replace(/\.js$/,' (module)').replace(/\.json$/,' (canon)');
+        return `<span title="${applied?'Applied: '+new Date(applied).toLocaleDateString('en-GB'):'Pending update'}">${icon} ${esc(label)}</span>`;
+      }).join('<br>');
+      const diffKeys=Object.keys(entry.diff||{}).filter(k=>k!=='added');
+      const diffSummary=diffKeys.length?`<div style="font-size:11px;color:var(--text-dim);margin-top:4px">Changed: ${diffKeys.join(', ')}</div>`:'';
+      html+=`<tr>
+        <td style="color:var(--accent);white-space:nowrap;font-weight:bold">${esc(entry.id)}</td>
+        <td style="white-space:nowrap">${date}<br><span style="color:var(--text-dim);font-size:11px">${time}</span></td>
+        <td>${esc(entry.target)}</td>
+        <td>${esc(entry.region)}</td>
+        <td>${esc(entry.summary)}${diffSummary}</td>
+        <td style="font-size:11px;line-height:1.8">${products}</td>
+      </tr>`;
+    });
+    html+='</table>';
+    el.innerHTML=html;
+  }catch(err){
+    el.innerHTML=`<span style="color:var(--red)">❌ Could not load changelog: ${esc(err.message)}</span>`;
+  }
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
