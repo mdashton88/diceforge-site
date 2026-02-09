@@ -165,6 +165,9 @@ table.data-table td { padding: 4px 8px; border-bottom: 1px solid #2a2a2a; }
 </style>
 </head>
 <body>
+<div id="saveOverlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;align-items:center;justify-content:center;transition:background 0.3s">
+  <div class="save-msg" style="font-family:'Cinzel',serif;font-size:22px;color:#fff;letter-spacing:2px;text-shadow:0 0 20px rgba(255,180,0,0.5);padding:30px 50px;border:2px solid var(--accent);border-radius:8px;background:rgba(0,0,0,0.8)">⏳ SAVING...</div>
+</div>
 <script>
 var DICEFORGE_AUTH=false;
 (function(){
@@ -294,12 +297,30 @@ const SAVE_DEBOUNCE_MS=2000; // batch rapid edits into one save
 function setSyncStatus(s,msg){
   syncStatus=s;
   const el=document.getElementById('syncLabel');
+  const overlay=document.getElementById('saveOverlay');
   if(!el)return;
   const map={idle:['●','var(--green)','Synced'],loading:['↻','var(--accent)','Loading...'],saving:['↑','var(--accent)','Saving...'],error:['✖','#c44','Sync error'],offline:['○','var(--text-dim)','Offline (cached)']};
   const[icon,col,label]=map[s]||map.idle;
   el.style.color=col;
   el.textContent=`${icon} ${msg||label}`;
   el.title=msg||label;
+  // Show/hide save overlay
+  if(overlay){
+    if(s==='saving'){
+      overlay.style.display='flex';
+      overlay.querySelector('.save-msg').textContent='⏳ SAVING TO CLOUD — DO NOT RELOAD';
+      overlay.style.background='rgba(0,0,0,0.7)';
+    } else if(s==='idle' && overlay.style.display==='flex'){
+      overlay.querySelector('.save-msg').textContent='✅ SAVED';
+      overlay.style.background='rgba(0,60,0,0.7)';
+      setTimeout(()=>{overlay.style.display='none';},800);
+    } else if(s==='error' && overlay.style.display==='flex'){
+      overlay.querySelector('.save-msg').textContent='❌ SAVE FAILED — RETRYING...';
+      overlay.style.background='rgba(80,0,0,0.7)';
+    } else {
+      overlay.style.display='none';
+    }
+  }
 }
 
 async function forceRefresh(){
