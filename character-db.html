@@ -278,7 +278,10 @@ function loadData(){
 }
 
 function normaliseChar(c,moduleId){
-  const n={name:c.name,concept:c.concept||'',ancestry:c.ancestry||'Human',region:c.region||'Ammaria',tier:c.tier||'Wild Card',rank:c.rank||'Novice',category:c.category||'NPC',product:c.product||'',source:moduleId,agility:c.attrs?.agility||0,smarts:c.attrs?.smarts||0,spirit:c.attrs?.spirit||0,strength:c.attrs?.strength||0,vigor:c.attrs?.vigor||0,skills:c.skills||{},edges:c.edges||[],hindrances:c.hindrances||[],powers:c.powers||[],gearText:c.gearText||'',quote:c.quote||'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:c.abName||'',abSkill:c.abSkill||'',pp:c.pp||0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
+  const n={name:c.name,concept:c.concept||'',ancestry:c.ancestry||'Human',region:c.region||'Ammaria',tier:c.tier||'Wild Card',rank:c.rank||'Novice',category:c.category||'NPC',product:c.product||'',source:moduleId,agility:c.attrs?.agility||0,smarts:c.attrs?.smarts||0,spirit:c.attrs?.spirit||0,strength:c.attrs?.strength||0,vigor:c.attrs?.vigor||0,skills:c.skills||{},edges:c.edges||[],hindrances:c.hindrances||[],powers:c.powers||[],armour:c.armour||[],weapons:c.weapons||[],gearText:c.gearText||'',quote:c.quote||'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:c.abName||'',abSkill:c.abSkill||'',pp:c.pp||0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
+  // Parse gear text into structured armour/weapons if not already populated
+  if(!n.armour.length&&!n.weapons.length&&n.gearText) parseGearInto(n);
+  n.toughnessArmor=n.armour.reduce((best,a)=>Math.max(best,a.armor||0),0);
   if(c.notes){
     const notes=c.notes;
     const motM=notes.match(/What (?:They|He|She) Want[s]?:\s*(.+?)(?:\n|$)/i);
@@ -333,6 +336,41 @@ function getCatalogueHindrances(){
   if(CF.data?.hindrances) CF.data.hindrances.forEach(h=>all.push({...h,source:'Core'}));
   (CF.getModules?CF.getModules():[]).forEach(m=>{if(m.hindrances)m.hindrances.forEach(h=>all.push({...h,source:m.name||m.id}));});
   return all;
+}
+function getCatalogueWeapons(){
+  const CF=window.CharacterForge,all=[];
+  if(CF.data?.gear?.melee) CF.data.gear.melee.forEach(w=>all.push({...w,type:'Melee',source:'Core'}));
+  if(CF.data?.gear?.ranged) CF.data.gear.ranged.forEach(w=>all.push({...w,type:'Ranged',source:'Core'}));
+  (CF.getModules?CF.getModules():[]).forEach(m=>{
+    if(m.gear?.melee) m.gear.melee.forEach(w=>all.push({...w,type:'Melee',source:m.name||m.id}));
+    if(m.gear?.ranged) m.gear.ranged.forEach(w=>all.push({...w,type:'Ranged',source:m.name||m.id}));
+  });
+  return all;
+}
+function getCatalogueArmour(){
+  const CF=window.CharacterForge,all=[];
+  if(CF.data?.gear?.armor) CF.data.gear.armor.forEach(a=>all.push({...a,type:'Armour',source:'Core'}));
+  if(CF.data?.gear?.shields) CF.data.gear.shields.forEach(s=>all.push({...s,type:'Shield',source:'Core'}));
+  (CF.getModules?CF.getModules():[]).forEach(m=>{
+    if(m.gear?.armor) m.gear.armor.forEach(a=>all.push({...a,type:'Armour',source:m.name||m.id}));
+    if(m.gear?.shields) m.gear.shields.forEach(s=>all.push({...s,type:'Shield',source:m.name||m.id}));
+  });
+  return all;
+}
+function parseGearInto(n){
+  if(!n.gearText) return;
+  const items=n.gearText.split(',').map(g=>g.trim()).filter(g=>g);
+  const catW=getCatalogueWeapons(), catA=getCatalogueArmour();
+  const remaining=[];
+  items.forEach(item=>{
+    const normItem=item.toLowerCase().replace(/\s*\([^)]*\)/g,'').trim();
+    const wMatch=catW.find(w=>normItem.includes(w.name.toLowerCase().split('(')[0].trim()));
+    if(wMatch){n.weapons.push({name:wMatch.name,damage:wMatch.dmg,ap:wMatch.ap||0,range:wMatch.range||'',rof:wMatch.rof||0,notes:wMatch.notes||'',source:wMatch.source});return;}
+    const aMatch=catA.find(a=>normItem.includes(a.name.toLowerCase().split('(')[0].trim()));
+    if(aMatch){n.armour.push({name:aMatch.name,armor:aMatch.armor||aMatch.parry||0,parry:aMatch.parry||0,notes:aMatch.notes||'',source:aMatch.source});return;}
+    remaining.push(item);
+  });
+  n.gearText=remaining.join(', ');
 }
 
 function getFilteredNPCs(){
@@ -448,8 +486,8 @@ function renderStatColumn(n){
   }
   const hindBox=buildSectionBox('Hindrances','hindrances',n.hindrances,h=>`<div class="item-entry">${esc(h)}</div>`);
   const edgeBox=buildSectionBox('Edges','edges',n.edges,e=>{const leg=isLegacyEdge(e)?' <span class="legacy-tag">(legacy)</span>':'';return `<div class="item-entry">${esc(e)}${leg}</div>`;});
-  const armourBox=buildSectionBox('Armour','armour',[],()=>'');
-  const weaponBox=buildSectionBox('Weapons','weapons',[],()=>'');
+  const armourBox=buildSectionBox('Armour','armour',n.armour,a=>`<div class="item-entry">${esc(a.name)} <span style="color:var(--accent)">(+${a.armor})</span></div>`);
+  const weaponBox=buildSectionBox('Weapons','weapons',n.weapons,w=>`<div class="item-entry">${esc(w.name)} <span style="color:var(--text-dim)">${esc(w.damage)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''}</span></div>`);
   const powersBox=buildSectionBox('Powers','powers',n.powers,p=>`<div class="item-entry">${esc(p)}</div>`);
   const gearItems=n.gearText?n.gearText.split(',').map(g=>g.trim()).filter(g=>g):[];
   const gearBox=buildSectionBox('Gear','gear',gearItems,g=>`<div class="item-entry">${esc(g)}</div>`,true);
@@ -595,11 +633,79 @@ function renderSkillsPanel(n){
 function addSkill(){const name=document.getElementById('skill_name').value.trim(),die=parseInt(document.getElementById('skill_die').value);if(!name)return;currentNPC.skills[name]=die;calcDerived(currentNPC);saveOverride(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
 function removeSkill(name){delete currentNPC.skills[name];calcDerived(currentNPC);saveOverride(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
 
-function renderWeaponsPanel(n){document.getElementById('panelContent').innerHTML=`<div style="color:var(--text-dim);margin-bottom:12px">Add weapons to gear list.</div><div class="form-row"><div class="form-group"><label>Name</label><input id="wep_name" placeholder="Longsword"></div><div class="form-group"><label>Damage</label><input id="wep_damage" placeholder="Str+d8"></div></div><div class="form-row"><div class="form-group" style="max-width:80px"><label>AP</label><input id="wep_ap" type="number" value="0"></div><div class="form-group"><label>Range</label><input id="wep_range" placeholder="15/30/60"></div><div class="form-group"><label>Notes</label><input id="wep_notes" placeholder="Two hands"></div></div><button class="btn primary" onclick="addWeaponToGear()">Add Weapon</button>`;}
-function addWeaponToGear(){const name=document.getElementById('wep_name').value.trim(),dmg=document.getElementById('wep_damage').value.trim();if(!name||!dmg)return;const ap=parseInt(document.getElementById('wep_ap').value)||0,rng=document.getElementById('wep_range').value.trim(),notes=document.getElementById('wep_notes').value.trim();let e=`${name} (${dmg}`;if(ap)e+=`, AP ${ap}`;if(rng)e+=`, Range ${rng}`;if(notes)e+=`, ${notes}`;e+=')';currentNPC.gearText=currentNPC.gearText?currentNPC.gearText+', '+e:e;saveOverride(currentNPC);renderStatColumn(currentNPC);}
+function renderWeaponsPanel(n){
+  const current=n.weapons.map((w,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${esc(w.name)} <span style="color:var(--text-dim)">${esc(w.damage)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''}</span></span><button class="btn sm danger" onclick="removeWeapon(${i})">×</button></div>`).join('');
+  document.getElementById('panelContent').innerHTML=`<div>${current||'<div style="color:var(--text-dim)">No weapons</div>'}</div>
+    <div class="catalogue-section"><h4>Add Weapon</h4>
+    <div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
+    <input placeholder="Search weapons..." oninput="filterWeaponCatalogue(this.value)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
+    <div class="catalogue-list" id="wepCatList"></div>
+    <div style="margin:10px 0 4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Or Enter Custom</div>
+    <div class="form-row"><div class="form-group"><label>Name</label><input id="wep_name"></div><div class="form-group"><label>Damage</label><input id="wep_damage" placeholder="Str+d8"></div></div>
+    <div class="form-row"><div class="form-group" style="max-width:80px"><label>AP</label><input id="wep_ap" type="number" value="0"></div><div class="form-group"><label>Range</label><input id="wep_range" placeholder=""></div><div class="form-group"><label>Notes</label><input id="wep_notes"></div></div>
+    <button class="btn primary" onclick="addWeapon()">Add Weapon</button></div>`;
+  filterWeaponCatalogue('');
+}
+function filterWeaponCatalogue(s){
+  s=s.toLowerCase();
+  const cat=getCatalogueWeapons().filter(w=>!s||w.name.toLowerCase().includes(s));
+  const el=document.getElementById('wepCatList');if(!el)return;
+  el.innerHTML=cat.slice(0,30).map(w=>`<div class="catalogue-item" onclick="selectCatalogueWeapon('${esc(w.name)}')"><span class="cat-name">${esc(w.name)}</span> <span class="cat-detail">${esc(w.dmg)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''} — ${esc(w.source)}</span></div>`).join('');
+}
+function selectCatalogueWeapon(name){
+  const w=getCatalogueWeapons().find(x=>x.name===name);if(!w)return;
+  document.getElementById('wep_name').value=w.name;
+  document.getElementById('wep_damage').value=w.dmg;
+  document.getElementById('wep_ap').value=w.ap||0;
+  document.getElementById('wep_range').value=w.range||'';
+  document.getElementById('wep_notes').value=w.notes||'';
+}
+function addWeapon(){
+  const name=document.getElementById('wep_name').value.trim(),dmg=document.getElementById('wep_damage').value.trim();
+  if(!name||!dmg)return;
+  currentNPC.weapons.push({name,damage:dmg,ap:parseInt(document.getElementById('wep_ap').value)||0,range:document.getElementById('wep_range').value.trim(),notes:document.getElementById('wep_notes').value.trim(),source:'Manual'});
+  saveOverride(currentNPC);renderWeaponsPanel(currentNPC);renderStatColumn(currentNPC);
+}
+function removeWeapon(idx){currentNPC.weapons.splice(idx,1);saveOverride(currentNPC);renderWeaponsPanel(currentNPC);renderStatColumn(currentNPC);}
+function addWeaponToGear(){addWeapon();}
 
-function renderArmourPanel(n){document.getElementById('panelContent').innerHTML=`<div style="color:var(--text-dim);margin-bottom:12px">Add armour to gear list.</div><div class="form-row"><div class="form-group"><label>Name</label><input id="arm_name" placeholder="Chain Mail"></div><div class="form-group" style="max-width:100px"><label>Protection</label><input id="arm_prot" type="number" value="2"></div></div><div class="form-row"><div class="form-group"><label>Areas</label><input id="arm_area" placeholder="Torso, arms, legs"></div><div class="form-group"><label>Notes</label><input id="arm_notes"></div></div><button class="btn primary" onclick="addArmourToGear()">Add Armour</button>`;}
-function addArmourToGear(){const name=document.getElementById('arm_name').value.trim();if(!name)return;const e=`${name} (+${document.getElementById('arm_prot').value})`;currentNPC.gearText=currentNPC.gearText?currentNPC.gearText+', '+e:e;saveOverride(currentNPC);renderStatColumn(currentNPC);}
+function renderArmourPanel(n){
+  const current=n.armour.map((a,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${esc(a.name)} <span style="color:var(--accent)">(+${a.armor})</span>${a.notes?' <span style="color:var(--text-dim)">'+esc(a.notes)+'</span>':''}</span><button class="btn sm danger" onclick="removeArmour(${i})">×</button></div>`).join('');
+  document.getElementById('panelContent').innerHTML=`<div>${current||'<div style="color:var(--text-dim)">No armour</div>'}</div>
+    <div class="catalogue-section"><h4>Add Armour</h4>
+    <div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
+    <input placeholder="Search armour & shields..." oninput="filterArmourCatalogue(this.value)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
+    <div class="catalogue-list" id="armCatList"></div>
+    <div style="margin:10px 0 4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Or Enter Custom</div>
+    <div class="form-row"><div class="form-group"><label>Name</label><input id="arm_name"></div><div class="form-group" style="max-width:100px"><label>Protection</label><input id="arm_prot" type="number" value="2"></div></div>
+    <div class="form-row"><div class="form-group"><label>Notes</label><input id="arm_notes"></div></div>
+    <button class="btn primary" onclick="addArmour()">Add Armour</button></div>`;
+  filterArmourCatalogue('');
+}
+function filterArmourCatalogue(s){
+  s=s.toLowerCase();
+  const cat=getCatalogueArmour().filter(a=>!s||a.name.toLowerCase().includes(s));
+  const el=document.getElementById('armCatList');if(!el)return;
+  el.innerHTML=cat.slice(0,30).map(a=>{
+    const val=a.armor?'+'+a.armor:(a.parry?'Parry +'+a.parry:'');
+    return `<div class="catalogue-item" onclick="selectCatalogueArmour('${esc(a.name)}')"><span class="cat-name">${esc(a.name)}</span> <span class="cat-detail">(${val}) — ${esc(a.source)}</span></div>`;
+  }).join('');
+}
+function selectCatalogueArmour(name){
+  const a=getCatalogueArmour().find(x=>x.name===name);if(!a)return;
+  document.getElementById('arm_name').value=a.name;
+  document.getElementById('arm_prot').value=a.armor||a.parry||0;
+  document.getElementById('arm_notes').value=a.notes||'';
+}
+function addArmour(){
+  const name=document.getElementById('arm_name').value.trim();if(!name)return;
+  const armor=parseInt(document.getElementById('arm_prot').value)||0;
+  currentNPC.armour.push({name,armor,notes:document.getElementById('arm_notes').value.trim(),source:'Manual'});
+  recalcArmour();saveOverride(currentNPC);renderArmourPanel(currentNPC);renderStatColumn(currentNPC);
+}
+function removeArmour(idx){currentNPC.armour.splice(idx,1);recalcArmour();saveOverride(currentNPC);renderArmourPanel(currentNPC);renderStatColumn(currentNPC);}
+function addArmourToGear(){addArmour();}
+function recalcArmour(){currentNPC.toughnessArmor=currentNPC.armour.reduce((best,a)=>Math.max(best,a.armor||0),0);calcDerived(currentNPC);}
 
 function renderGearPanel(n){
   const items=n.gearText?n.gearText.split(',').map(g=>g.trim()).filter(g=>g):[];
