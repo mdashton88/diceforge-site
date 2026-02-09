@@ -139,6 +139,7 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .audit-section h4 { font-size: 12px; font-weight: 700; color: var(--text-bright); text-transform: uppercase; margin-bottom: 4px; }
 .audit-pass { color: var(--green); }
 .audit-fail { color: var(--red); }
+.audit-warn { color: #e6a117; }
 .audit-line { padding: 2px 0; }
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
 .modal-overlay.active { display: flex; }
@@ -351,7 +352,8 @@ function renderNPCList(npcs){
     const title=n.concept?` — ${n.concept}`:'';
     const audit=runBuildAudit(n);
     const legal=audit.every(r=>r.pass);
-    const legalIcon=n.agility>0?(legal?'<span style="font-size:12px;margin-left:4px" title="Build Legal">✅</span>':'<span style="font-size:12px;margin-left:4px" title="Build Issues">❌</span>'):'<span style="font-size:12px;margin-left:4px;opacity:0.4" title="No stats">⬜</span>';
+    const hasWarns=audit.some(r=>r.warn);
+    const legalIcon=n.agility>0?(legal?(hasWarns?'<span style="font-size:12px;margin-left:4px" title="Build Legal — optimisation warnings">⚠️</span>':'<span style="font-size:12px;margin-left:4px" title="Build Legal">✅</span>'):'<span style="font-size:12px;margin-left:4px" title="Build Issues">❌</span>'):'<span style="font-size:12px;margin-left:4px;opacity:0.4" title="No stats">⬜</span>';
     const canonIcon=canonCommitted.has(n.name)?'<span style="font-size:11px;margin-left:3px" title="Committed to Canon">📦</span>':'';
     return `<div class="npc-item ${act}" onclick="selectNPC('${esc(n.name).replace(/'/g,"\\'")}')">
       <div class="npc-name">${esc(n.name)}<span class="tier-tag ${tc}">${tl}</span>${legalIcon}${canonIcon}
@@ -376,7 +378,8 @@ function renderDetail(){
   const n=currentNPC;if(!n)return;
   const el=document.getElementById('mainContent');
   el.classList.remove('empty-state');
-  const titleLine=n.concept?`<div class="npc-title-line">${esc(n.concept)}</div>`:'';
+  const ancestryTag=n.ancestry&&n.ancestry!=='Human'?` · ${esc(n.ancestry)}`:'';
+  const titleLine=n.concept?`<div class="npc-title-line">${esc(n.concept)}${ancestryTag}</div>`:(n.ancestry?`<div class="npc-title-line">${esc(n.ancestry)}</div>`:'');
   const canonBadge=canonCommitted.has(n.name)?'<span style="font-size:13px;margin-left:10px;color:var(--green)" title="Committed to Canon">📦 In Canon</span>':'<span style="font-size:13px;margin-left:10px;color:var(--text-dim)" title="Not yet committed">📦 Not in Canon</span>';
   el.innerHTML=`<div class="npc-header"><h2>${esc(n.name)}${canonBadge}</h2>${titleLine}</div><div class="detail-columns"><div class="col-stats" id="colStats"></div><div class="col-middle" id="colMiddle"></div><div class="col-narrative" id="colNarrative"></div></div>`;
   renderStatColumn(n);renderMiddleColumn(n);renderNarrativeColumn(n);
@@ -386,8 +389,11 @@ function renderStatColumn(n){
   const el=document.getElementById('colStats');
   const wcStar=n.tier==='Wild Card'?' ★':'';
   const tierText=n.tier==='Wild Card'?'WILD CARD':n.tier.toUpperCase();
-  const isLegal=runBuildAudit(n).every(r=>r.pass);
-  const legalBadge=`<span class="build-legal-badge ${isLegal?'':'invalid'}" onclick="showPanel('audit')">${isLegal?'✓ Build Legal':'✗ Issues'}</span>`;
+  const auditResults=runBuildAudit(n);
+  const isLegal=auditResults.every(r=>r.pass);
+  const warnCount=auditResults.filter(r=>r.warn).length;
+  const warnTag=isLegal&&warnCount>0?` <span style="color:#e6a117">· ${warnCount} ⚠</span>`:'';
+  const legalBadge=`<span class="build-legal-badge ${isLegal?'':'invalid'}" onclick="showPanel('audit')">${isLegal?'✓ Build Legal':'✗ Issues'}${warnTag}</span>`;
   const attrStr=`Agility ${d(n.agility)}, Smarts ${d(n.smarts)}, Spirit ${d(n.spirit)}, Strength ${d(n.strength)}, Vigor ${d(n.vigor)}`;
   const skillStr=Object.entries(n.skills).map(([k,v])=>`${k} ${d(v)}`).join(', ')||'<span style="color:var(--text-dim)">None</span>';
   const fDie=n.skills['Fighting']||0;
@@ -402,7 +408,7 @@ function renderStatColumn(n){
   const edgeStr=n.edges.length?n.edges.map(e=>esc(e)).join(', '):'None';
   let statsHTML='';
   if(n.agility>0){
-    statsHTML=`<div class="stat-block-panel"><div class="panel-header"><span class="tier-label">${tierText}${wcStar}</span>${legalBadge}</div>
+    statsHTML=`<div class="stat-block-panel"><div class="panel-header"><span class="tier-label">${tierText}${wcStar} · ${esc(n.ancestry||'?')}</span>${legalBadge}</div>
     <div class="stat-section"><div class="stat-section-label" onclick="showPanel('edit')">Attributes <span class="edit-icon">✎</span></div><div class="stat-val">${attrStr}</div></div>
     <div class="stat-section"><div class="stat-section-label" onclick="showPanel('skills')">Skills <span class="edit-icon">✎</span></div><div class="stat-val">${skillStr}</div></div>
     <div class="derived-row">
@@ -413,7 +419,7 @@ function renderStatColumn(n){
     <div class="stat-section" style="font-size:12px"><span style="color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;font-size:10px">Hindrances</span><div class="stat-val">${hindStr}</div></div>
     <div class="stat-section" style="font-size:12px"><span style="color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;font-size:10px">Edges</span><div class="stat-val">${edgeStr}</div></div></div>`;
   } else {
-    statsHTML=`<div class="stat-block-panel"><div class="panel-header"><span class="tier-label">${tierText}</span></div><div style="color:var(--text-dim);font-size:13px">No attributes set. <button class="btn sm" onclick="showPanel('edit')">Edit NPC</button></div></div>`;
+    statsHTML=`<div class="stat-block-panel"><div class="panel-header"><span class="tier-label">${tierText} · ${esc(n.ancestry||'?')}</span></div><div style="color:var(--text-dim);font-size:13px">No attributes set. <button class="btn sm" onclick="showPanel('edit')">Edit NPC</button></div></div>`;
   }
   const hindBox=buildSectionBox('Hindrances','hindrances',n.hindrances,h=>`<div class="item-entry">${esc(h)}</div>`);
   const edgeBox=buildSectionBox('Edges','edges',n.edges,e=>{const leg=isLegacyEdge(e)?' <span class="legacy-tag">(legacy)</span>':'';return `<div class="item-entry">${esc(e)}${leg}</div>`;});
@@ -639,7 +645,7 @@ function runBuildAudit(n){
   return window.SWADERules.runBuildAudit({
     attrs:{agility:n.agility,smarts:n.smarts,spirit:n.spirit,strength:n.strength,vigor:n.vigor},
     skills:n.skills, edges:n.edges, hindrances:n.hindrances,
-    tier:n.tier, ancestryData:ancestryData,
+    tier:n.tier, ancestryData:ancestryData, ancestry:n.ancestry||'',
     skillLinks:skillLinks, coreSkills:coreSkills,
     pace:n.pace, parry:n.parry, toughness:n.toughness, toughnessArmor:n.toughnessArmor||0
   });
@@ -651,8 +657,9 @@ function renderAuditPanel(n){
   let html=`<div class="audit-block"><h4 style="color:var(--accent);margin-bottom:8px;font-size:14px">${esc(n.name)} — Build Audit</h4>`,curSec='';
   results.forEach(r=>{
     if(r.section!==curSec){curSec=r.section;html+=`<div class="audit-section"><h4>${esc(curSec)}</h4>`;}
-    const cls=r.pass?'audit-pass':'audit-fail';
-    html+=`<div class="audit-line ${cls}">${r.pass?'✓':'✗'} ${esc(r.label)} ${esc(r.detail)}</div>`;
+    const cls=r.warn?'audit-warn':r.pass?'audit-pass':'audit-fail';
+    const icon=r.warn?'⚠':r.pass?'✓':'✗';
+    html+=`<div class="audit-line ${cls}">${icon} ${esc(r.label)} ${esc(r.detail)}</div>`;
   });
   html+='</div></div>';
   const inCanon=canonCommitted.has(n.name);
