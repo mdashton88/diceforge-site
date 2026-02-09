@@ -269,6 +269,59 @@
       detail: edgeBudget.spent <= edgeBudget.total ? '✓' : 'Check budget'
     });
 
+    // ── Optimisation Warnings ──
+    var ancestry = opts.ancestry || '';
+    if (!ancestry || ancestry === '' || ancestry === '?') {
+      results.push({
+        section: 'Optimisation',
+        label: 'Ancestry not set',
+        pass: true, warn: true,
+        detail: 'Set ancestry — affects attribute budget and free edges'
+      });
+    }
+
+    // Unspent attribute points
+    var attrUnspent = attrBudget.total - attrBudget.spent;
+    if (attrUnspent > 0) {
+      results.push({
+        section: 'Optimisation',
+        label: attrUnspent + ' attribute point' + (attrUnspent > 1 ? 's' : '') + ' unspent',
+        pass: true, warn: true,
+        detail: attrBudget.spent + '/' + attrBudget.total + ' used'
+      });
+    }
+
+    // Unspent skill points
+    var skillUnspent = skillBudget.total - skillBudget.spent;
+    if (skillUnspent > 0) {
+      results.push({
+        section: 'Optimisation',
+        label: skillUnspent + ' skill point' + (skillUnspent > 1 ? 's' : '') + ' unspent',
+        pass: true, warn: true,
+        detail: skillBudget.spent + '/' + skillBudget.total + ' used'
+      });
+    }
+
+    // Unspent hindrance points
+    if (!hindAlloc) {
+      var hindTotal = hindPtsResult.effective;
+      var inferAttr2 = Math.max(0, attrBudget.total - 5 - (ancestryData.attrBonus || 0));
+      var inferSkill2 = Math.max(0, skillBudget.total - 12);
+      var inferEdge2 = Math.max(0, edges.length - 1 - (ancestryData.freeEdges || 0));
+      var hindSpent = inferAttr2 * 2 + inferSkill2 + inferEdge2 * 2;
+      var hindUnspent = hindTotal - hindSpent;
+      if (hindUnspent > 0) {
+        results.push({
+          section: 'Optimisation',
+          label: hindUnspent + ' hindrance point' + (hindUnspent > 1 ? 's' : '') + ' unallocated',
+          pass: true, warn: true,
+          detail: hindSpent + '/' + hindTotal + ' used — could buy ' +
+            (hindUnspent >= 2 ? Math.floor(hindUnspent / 2) + ' attr or ' + Math.floor(hindUnspent / 2) + ' edges, or ' : '') +
+            hindUnspent + ' skill pts'
+        });
+      }
+    }
+
     return results;
   }
 
