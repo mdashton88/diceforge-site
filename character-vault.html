@@ -385,7 +385,7 @@ function loadDataLegacy(CF){
   if(stored.deleted) allNPCs=allNPCs.filter(n=>!stored.deleted.includes(n.name));
 }
 
-function saveCharacter(npc){
+function saveCharacter(npc){console.log("💾 saveCharacter called:",npc.name);
   // Update in allNPCs array
   const idx=allNPCs.findIndex(n=>n.name===npc.name);
   if(idx>=0) allNPCs[idx]=npc; else allNPCs.push(npc);
@@ -393,12 +393,12 @@ function saveCharacter(npc){
   scheduleSave();
 }
 
-function scheduleSave(){
+function scheduleSave(){console.log("⏱ scheduleSave: will push in",SAVE_DEBOUNCE_MS,"ms");
   if(saveTimer) clearTimeout(saveTimer);
   saveTimer=setTimeout(()=>pushToGist(),SAVE_DEBOUNCE_MS);
 }
 
-async function pushToGist(){
+async function pushToGist(){console.log("☁️ pushToGist firing...");
   if(!GIST_ID||!GIST_TOKEN){
     // Legacy fallback: save to localStorage
     const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
@@ -437,9 +437,9 @@ async function pushToGist(){
     if(!resp.ok) throw new Error(`GitHub ${resp.status}: ${resp.statusText}`);
     // Update cache
     localStorage.setItem(CACHE_KEY,raw);
-    setSyncStatus('idle',`Saved — ${allNPCs.length} characters`);
+    console.log('✅ Gist save success:',allNPCs.length,'characters');setSyncStatus('idle',`Saved — ${allNPCs.length} characters`);
   }catch(err){
-    console.error('Gist save failed:',err);
+    console.error('❌ Gist save FAILED:',err);
     setSyncStatus('error','Save failed — will retry');
     // Retry once after 5 seconds
     setTimeout(()=>{if(syncStatus==='error')pushToGist();},5000);
@@ -488,8 +488,8 @@ function calcDerived(n){
   n.bennies=n.tier==='Wild Card'?3:0;
 }
 
-function saveCharacter(npc){const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(!s.overrides)s.overrides={};s.overrides[npc.name]=npc;localStorage.setItem(LS_KEY,JSON.stringify(s));}
-function saveCharacter(npc){const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(!s.custom)s.custom=[];const i=s.custom.findIndex(c=>c.name===npc.name);if(i>=0)s.custom[i]=npc;else s.custom.push(npc);localStorage.setItem(LS_KEY,JSON.stringify(s));}
+function saveCharacter(npc){console.log("💾 saveCharacter called:",npc.name);const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(!s.overrides)s.overrides={};s.overrides[npc.name]=npc;localStorage.setItem(LS_KEY,JSON.stringify(s));}
+function saveCharacter(npc){console.log("💾 saveCharacter called:",npc.name);const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(!s.custom)s.custom=[];const i=s.custom.findIndex(c=>c.name===npc.name);if(i>=0)s.custom[i]=npc;else s.custom.push(npc);localStorage.setItem(LS_KEY,JSON.stringify(s));}
 function d(v){return v<=0?'—':v<=12?'d'+v:'d12+'+(v-12);}
 const DIE_STEPS=[4,6,8,10,12];
 function dieStepUp(v,capped){if(v<4)return 4;if(v<12){const i=DIE_STEPS.indexOf(v);return i>=0&&i<4?DIE_STEPS[i+1]:12;}if(capped)return 12;return v+1;}
@@ -862,7 +862,7 @@ function filterSkillCatalogue(s){
 function selectCatalogueSkill(name){document.getElementById('skill_name').value=name;}
 function addSkill(){const name=document.getElementById('skill_name').value.trim(),die=parseInt(document.getElementById('skill_die').value);if(!name)return;currentNPC.skills[name]=die;calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
 function stepAttr(id,dir){const el=document.getElementById(id);if(!el)return;let v=parseInt(el.dataset.val)||0;const cap=isPregen();v=dir>0?dieStepUp(v,cap):dieStepDown(v);if(v<0)v=0;el.dataset.val=v;el.textContent=d(v);}
-function stepSkill(name,dir){if(!currentNPC||!currentNPC.skills[name])return;const v=currentNPC.skills[name];const cap=isPregen();currentNPC.skills[name]=dir>0?dieStepUp(v,cap):dieStepDown(v);calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
+function stepSkill(name,dir){console.log("🎯 stepSkill:",name,dir>0?"+":"-");if(!currentNPC||!currentNPC.skills[name])return;const v=currentNPC.skills[name];const cap=isPregen();currentNPC.skills[name]=dir>0?dieStepUp(v,cap):dieStepDown(v);calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
 function removeSkill(name){delete currentNPC.skills[name];calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
 
 function renderWeaponsPanel(n){
