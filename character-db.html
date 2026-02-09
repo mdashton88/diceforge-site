@@ -838,7 +838,8 @@ async function loadCanonStatus(){
     const data=await res.json();
     const log=data.changelog||[];
     canonCommitted=new Set(log.map(e=>e.target));
-    filterNPCs(); // refresh sidebar icons
+    filterNPCs();updateHeaderStats();
+    if(currentNPC)renderDetail();
   }catch(e){/* silent fail — just means no canon icons */}
 }
 
