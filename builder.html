@@ -12,7 +12,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:#0A0908; color:#D4C9B8; font-family:'Crimson Pro','Georgia',serif; }
+  body { background:#0A0908; color:#D4C9B8; font-family:'Crimson Pro','Georgia',serif; font-size:15px; line-height:1.5; }
   ::-webkit-scrollbar { width:6px; }
   ::-webkit-scrollbar-track { background:#0A0908; }
   ::-webkit-scrollbar-thumb { background:#2A2520; border-radius:3px; }
@@ -275,22 +275,22 @@ function CharacterForgeApp() {
   // ── STYLES ──
   var card = {background:C.bgCard,border:'1px solid '+C.border,padding:'20px',marginBottom:'16px'};
   var cTitle = {fontFamily:"'Cinzel',serif",fontSize:'16px',fontWeight:700,color:C.goldBright,marginBottom:'12px',letterSpacing:'1px'};
-  var lbl = {fontSize:'12px',color:C.goldDim,textTransform:'uppercase',letterSpacing:'1px',marginBottom:'6px',display:'block',fontFamily:"'Cinzel',serif"};
+  var lbl = {fontSize:'13px',color:C.goldDim,textTransform:'uppercase',letterSpacing:'1px',marginBottom:'6px',display:'block',fontFamily:"'Cinzel',serif"};
 
   function SourceTag(props) {
     if (!props.source || props.source === 'swade-core') return null;
     var mod = allModules.find(function(m){return m.id===props.source});
     var colour = mod ? mod.colour : C.gold;
     var name = mod ? mod.name.replace('Savage Worlds ','').replace(' Supplement','') : props.source;
-    return <span style={{display:'inline-block',padding:'2px 8px',fontSize:'9px',fontWeight:700,letterSpacing:'1px',textTransform:'uppercase',color:C.bg,background:colour,marginLeft:'6px',fontFamily:"'Cinzel',serif"}}>{name}</span>;
+    return <span style={{display:'inline-block',padding:'2px 8px',fontSize:'10px',fontWeight:700,letterSpacing:'1px',textTransform:'uppercase',color:C.bg,background:colour,marginLeft:'6px',fontFamily:"'Cinzel',serif"}}>{name}</span>;
   }
 
   function BudgetBar(props) {
     var over=props.spent>props.total,pct=props.total>0?(props.spent/props.total)*100:0,color=props.color||C.gold;
     return (<div style={{marginBottom:'12px'}}>
       <div style={{display:'flex',justifyContent:'space-between'}}>
-        <span style={{fontSize:'12px',color:C.goldDim,textTransform:'uppercase',letterSpacing:'1px',fontFamily:"'Cinzel',serif"}}>{props.label}</span>
-        <span style={{fontSize:'14px',color:over?C.redBright:C.text,fontWeight:600}}>{props.spent} / {props.total}</span>
+        <span style={{fontSize:'13px',color:C.goldDim,textTransform:'uppercase',letterSpacing:'1px',fontFamily:"'Cinzel',serif"}}>{props.label}</span>
+        <span style={{fontSize:'15px',color:over?C.redBright:C.text,fontWeight:600}}>{props.spent} / {props.total}</span>
       </div>
       <div style={{height:'6px',background:C.bg,borderRadius:'3px',marginTop:'6px'}}>
         <div style={{height:'100%',width:Math.min(100,pct)+'%',background:over?C.redBright:color,transition:'width .3s',borderRadius:'3px'}} />
@@ -322,25 +322,25 @@ function CharacterForgeApp() {
     return (<div>
       <div style={card}>
         <div style={cTitle}>Character Concept</div>
-        <p style={{fontSize:'14px',color:C.textDim,lineHeight:'1.6',marginBottom:'16px'}}>Start with a name and a concept. A sentence that captures who this person is and what drives them.</p>
+        <p style={{fontSize:'15px',color:C.textDim,lineHeight:'1.6',marginBottom:'16px'}}>Start with a name and a concept. A sentence that captures who this person is and what drives them.</p>
         <div style={{marginBottom:'16px'}}>
           <label style={lbl}>Name</label>
-          <input style={{background:C.bg,border:'1px solid '+C.border,color:C.text,padding:'10px 14px',fontSize:'15px',fontFamily:"'Crimson Pro',serif",width:'100%',boxSizing:'border-box',outline:'none'}}
+          <input style={{background:C.bg,border:'1px solid '+C.border,color:C.text,padding:'10px 14px',fontSize:'16px',fontFamily:"'Crimson Pro',serif",width:'100%',boxSizing:'border-box',outline:'none'}}
             value={charName} onChange={function(e){setCharName(e.target.value)}} placeholder="What do they call you?" />
         </div>
         <div>
           <label style={lbl}>Concept</label>
-          <textarea style={{background:C.bg,border:'1px solid '+C.border,color:C.text,padding:'10px 14px',fontSize:'15px',fontFamily:"'Crimson Pro',serif",width:'100%',minHeight:'60px',boxSizing:'border-box',outline:'none',resize:'vertical'}}
+          <textarea style={{background:C.bg,border:'1px solid '+C.border,color:C.text,padding:'10px 14px',fontSize:'16px',fontFamily:"'Crimson Pro',serif",width:'100%',minHeight:'60px',boxSizing:'border-box',outline:'none',resize:'vertical'}}
             value={charConcept} onChange={function(e){setCharConcept(e.target.value)}} placeholder="Who are you, and what drives you?" />
         </div>
         <div style={{marginTop:'16px'}}>
           <label style={lbl}>Portrait</label>
           <div style={{display:'flex',alignItems:'center',gap:'16px'}}>
             <div style={{width:'100px',height:'120px',border:'1px solid '+C.border,background:C.bg,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden',flexShrink:0}}>
-              {portrait ? <img src={portrait} style={{width:'100%',height:'100%',objectFit:'cover'}} /> : <span style={{fontSize:'11px',color:C.textDim,textAlign:'center',padding:'8px'}}>No portrait</span>}
+              {portrait ? <img src={portrait} style={{width:'100%',height:'100%',objectFit:'cover'}} /> : <span style={{fontSize:'12px',color:C.textDim,textAlign:'center',padding:'8px'}}>No portrait</span>}
             </div>
             <div>
-              <label style={{display:'inline-block',padding:'8px 16px',border:'1px solid '+C.border,background:'transparent',color:C.gold,fontSize:'12px',fontWeight:600,letterSpacing:'1px',textTransform:'uppercase',cursor:'pointer',fontFamily:"'Cinzel',serif"}}>
+              <label style={{display:'inline-block',padding:'8px 16px',border:'1px solid '+C.border,background:'transparent',color:C.gold,fontSize:'13px',fontWeight:600,letterSpacing:'1px',textTransform:'uppercase',cursor:'pointer',fontFamily:"'Cinzel',serif"}}>
                 Upload Image
                 <input type="file" accept="image/*" style={{display:'none'}} onChange={function(e){
                   var file=e.target.files[0]; if(!file) return;
@@ -349,8 +349,8 @@ function CharacterForgeApp() {
                   reader.readAsDataURL(file);
                 }} />
               </label>
-              {portrait && <button onClick={function(){setPortrait(null)}} style={{marginLeft:'8px',padding:'8px 12px',border:'1px solid '+C.border,background:'transparent',color:C.redBright,fontSize:'11px',cursor:'pointer'}}>Remove</button>}
-              <div style={{fontSize:'11px',color:C.textDim,marginTop:'6px'}}>JPG or PNG. Used in exports.</div>
+              {portrait && <button onClick={function(){setPortrait(null)}} style={{marginLeft:'8px',padding:'8px 12px',border:'1px solid '+C.border,background:'transparent',color:C.redBright,fontSize:'12px',cursor:'pointer'}}>Remove</button>}
+              <div style={{fontSize:'12px',color:C.textDim,marginTop:'6px'}}>JPG or PNG. Used in exports.</div>
             </div>
           </div>
         </div>
@@ -358,7 +358,7 @@ function CharacterForgeApp() {
 
       {toggleableModules.length > 0 && <div style={card}>
         <div style={cTitle}>Setting Modules</div>
-        <p style={{fontSize:'13px',color:C.textDim,lineHeight:'1.6',marginBottom:'16px'}}>Enable supplements to add their character options. Core rules are always active.</p>
+        <p style={{fontSize:'14px',color:C.textDim,lineHeight:'1.6',marginBottom:'16px'}}>Enable supplements to add their character options. Core rules are always active.</p>
         {toggleableModules.map(function(mod) {
           var active = activeSupplements.indexOf(mod.id) >= 0;
           return (<div key={mod.id} style={{display:'flex',alignItems:'center',gap:'14px',marginBottom:'12px'}}>
@@ -366,15 +366,15 @@ function CharacterForgeApp() {
               <div style={{width:'20px',height:'20px',borderRadius:'10px',background:active?C.bg:C.textDim,position:'absolute',top:'2px',left:active?'22px':'2px',transition:'left .2s'}} />
             </div>
             <div>
-              <div style={{fontSize:'14px',fontWeight:600,color:active?(mod.colour||C.gold):C.textDim}}>{active?'\u2694 '+mod.name+' Active':mod.name}</div>
-              {mod.description && <div style={{fontSize:'12px',color:C.textDim,marginTop:'2px'}}>{mod.description}</div>}
+              <div style={{fontSize:'15px',fontWeight:600,color:active?(mod.colour||C.gold):C.textDim}}>{active?'\u2694 '+mod.name+' Active':mod.name}</div>
+              {mod.description && <div style={{fontSize:'13px',color:C.textDim,marginTop:'2px'}}>{mod.description}</div>}
             </div>
           </div>);
         })}
       </div>}
 
       <div style={Object.assign({},card,{background:'transparent',border:'1px solid '+C.border,padding:'14px 20px'})}>
-        <div style={{fontSize:'12px',color:C.textDim,lineHeight:'1.6'}}>
+        <div style={{fontSize:'13px',color:C.textDim,lineHeight:'1.6'}}>
           <strong style={{color:C.goldDim}}>Active content:</strong> {allModules.filter(function(m){return m.alwaysOn || activeSupplements.indexOf(m.id)>=0}).map(function(m){return m.name}).join(', ')}
           <span style={{marginLeft:'12px',color:C.textDim}}>({Object.keys(data.ancestries).length} ancestries, {data.edges.length} edges, {data.hindrances.length} hindrances, {data.powers.length} powers)</span>
         </div>
@@ -385,17 +385,17 @@ function CharacterForgeApp() {
   // STEP 1: ANCESTRY
   function renderAncestry() {
     return (<div>
-      <div style={Object.assign({},card,{paddingBottom:'10px'})}><div style={cTitle}>Choose Your Ancestry</div><p style={{fontSize:'13px',color:C.textDim,margin:0}}>Select one. Each ancestry provides unique abilities.</p></div>
+      <div style={Object.assign({},card,{paddingBottom:'10px'})}><div style={cTitle}>Choose Your Ancestry</div><p style={{fontSize:'14px',color:C.textDim,margin:0}}>Select one. Each ancestry provides unique abilities.</p></div>
       <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',gap:'8px'}}>
         {Object.entries(data.ancestries).map(function(pair) {
           var name=pair[0],a=pair[1],sel=ancestry===name;
           return (<div key={name} onClick={function(){setAncestry(name)}} style={Object.assign({},card,{marginBottom:0,cursor:'pointer',transition:'all .2s',borderColor:sel?C.gold:C.border,background:sel?C.gold+'10':C.bgCard})}>
             <div style={{display:'flex',justifyContent:'space-between',marginBottom:'8px'}}>
-              <span style={{fontFamily:"'Cinzel',serif",fontSize:'15px',fontWeight:700,color:sel?C.gold:C.textBright}}>{name}</span>
+              <span style={{fontFamily:"'Cinzel',serif",fontSize:'16px',fontWeight:700,color:sel?C.gold:C.textBright}}>{name}</span>
               {sel && <span style={{color:C.gold}}>{'\u2713'}</span>}
             </div>
-            <p style={{fontSize:'13px',color:C.textDim,lineHeight:'1.4',margin:'0 0 8px'}}>{a.summary}</p>
-            <div style={{marginTop:'8px',fontSize:'11px',color:C.textDim}}>{'Pace '+a.pace+' | Size '+(a.size>=0?'+':'')+a.size+' | Tough mod '+(a.toughMod>=0?'+':'')+a.toughMod+(a.freeEdges>0?' | +'+a.freeEdges+' free Edge':'')+(a.attrBonus>0?' | +'+a.attrBonus+' attr pt':'')}</div>
+            <p style={{fontSize:'14px',color:C.textDim,lineHeight:'1.4',margin:'0 0 8px'}}>{a.summary}</p>
+            <div style={{marginTop:'8px',fontSize:'12px',color:C.textDim}}>{'Pace '+a.pace+' | Size '+(a.size>=0?'+':'')+a.size+' | Tough mod '+(a.toughMod>=0?'+':'')+a.toughMod+(a.freeEdges>0?' | +'+a.freeEdges+' free Edge':'')+(a.attrBonus>0?' | +'+a.attrBonus+' attr pt':'')}</div>
           </div>);
         })}
       </div>
@@ -407,7 +407,7 @@ function CharacterForgeApp() {
     var starts = (ancestry && data.ancestries[ancestry] && data.ancestries[ancestry].startAttrs) || {};
     return (<div style={card}>
       <div style={cTitle}>Attributes</div>
-      <p style={{fontSize:'13px',color:C.textDim,lineHeight:'1.6',marginBottom:'16px'}}>All begin at d4. You have <strong style={{color:C.gold}}>{attrPoints.total} points</strong> to raise them. Each die step costs one point.</p>
+      <p style={{fontSize:'14px',color:C.textDim,lineHeight:'1.6',marginBottom:'16px'}}>All begin at d4. You have <strong style={{color:C.gold}}>{attrPoints.total} points</strong> to raise them. Each die step costs one point.</p>
       <BudgetBar label="Attribute Points" spent={attrPoints.spent} total={attrPoints.total} />
       <div style={{display:'flex',flexDirection:'column',gap:'12px',marginTop:'16px'}}>
         {['agility','smarts','spirit','strength','vigor'].map(function(a) {
@@ -415,7 +415,7 @@ function CharacterForgeApp() {
           var maxD=starts[a]?13:12;
           var steps=DICE.concat(maxD>12?[13]:[]);
           return (<div key={a} style={{display:'flex',alignItems:'center',gap:'8px'}}>
-            <span style={{fontSize:'14px',color:C.text,minWidth:'100px',textTransform:'capitalize'}}>{a}</span>
+            <span style={{fontSize:'15px',color:C.text,minWidth:'100px',textTransform:'capitalize'}}>{a}</span>
             <div style={{display:'flex',gap:'4px'}}>{steps.map(function(d){
               return <button key={d} disabled={d<minD||d>maxD} onClick={function(){setAttrs(function(p){var n=Object.assign({},p);n[a]=d;return n;})}} style={{width:'42px',height:'32px',border:'1px solid '+(d===attrs[a]?C.gold:C.border),background:d===attrs[a]?C.gold:'transparent',color:d===attrs[a]?C.bg:d<minD?C.border:C.textDim,fontSize:d>12?'11px':'13px',fontWeight:d===attrs[a]?700:400,cursor:d<minD||d>maxD?'default':'pointer',fontFamily:"'Crimson Pro',serif",opacity:d<minD?0.3:1}}>{dieLabel(d)}</button>;
             })}</div>
@@ -431,27 +431,27 @@ function CharacterForgeApp() {
     Object.entries(data.skillLinks).forEach(function(p){if(!grouped[p[1]])grouped[p[1]]=[];grouped[p[1]].push(p[0]);});
     return (<div style={card}>
       <div style={cTitle}>Skills</div>
-      <p style={{fontSize:'13px',color:C.textDim,lineHeight:'1.6',marginBottom:'12px'}}><strong style={{color:C.gold}}>{skillPoints.total} points</strong>. Core skills start at d4 free. Each step costs 1 up to linked attribute, 2 above.</p>
+      <p style={{fontSize:'14px',color:C.textDim,lineHeight:'1.6',marginBottom:'12px'}}><strong style={{color:C.gold}}>{skillPoints.total} points</strong>. Core skills start at d4 free. Each step costs 1 up to linked attribute, 2 above.</p>
       <BudgetBar label="Skill Points" spent={skillPoints.spent} total={skillPoints.total} />
-      {hasAB&&abData?<div style={{padding:'10px 14px',background:C.blue+'15',border:'1px solid '+C.blue+'40',marginBottom:'12px',fontSize:'13px',color:C.text,lineHeight:'1.5'}}>{'\u26A0'} Your Arcane Background ({abData.name}) requires <strong style={{color:C.blue}}>{abData.skill}</strong> (linked to {abData.linked.charAt(0).toUpperCase()+abData.linked.slice(1)}). Remember to purchase it here.</div>:null}
+      {hasAB&&abData?<div style={{padding:'10px 14px',background:C.blue+'15',border:'1px solid '+C.blue+'40',marginBottom:'12px',fontSize:'14px',color:C.text,lineHeight:'1.5'}}>{'\u26A0'} Your Arcane Background ({abData.name}) requires <strong style={{color:C.blue}}>{abData.skill}</strong> (linked to {abData.linked.charAt(0).toUpperCase()+abData.linked.slice(1)}). Remember to purchase it here.</div>:null}
       <div style={{marginTop:'12px'}}>
         {['agility','smarts','spirit'].map(function(attr) {
           var list=(grouped[attr]||[]).sort();
           return (<div key={attr} style={{marginBottom:'16px'}}>
-            <div style={{fontSize:'12px',color:C.goldDim,textTransform:'uppercase',letterSpacing:'1px',fontFamily:"'Cinzel',serif",borderBottom:'1px solid '+C.border,paddingBottom:'4px',marginBottom:'8px'}}>{attr.charAt(0).toUpperCase()+attr.slice(1)+' ('+dieLabel(attrs[attr])+')'}</div>
+            <div style={{fontSize:'13px',color:C.goldDim,textTransform:'uppercase',letterSpacing:'1px',fontFamily:"'Cinzel',serif",borderBottom:'1px solid '+C.border,paddingBottom:'4px',marginBottom:'8px'}}>{attr.charAt(0).toUpperCase()+attr.slice(1)+' ('+dieLabel(attrs[attr])+')'}</div>
             {list.map(function(sk) {
               var isCore=data.coreSkills.includes(sk),cur=skills[sk]||(isCore?4:0),linked=attrs[attr];
               var minVal=isCore?4:0, maxVal=12;
               var canDown=cur>minVal, canUp=cur<maxVal;
-              var stepBtn=function(label,enabled,fn){return <button onClick={enabled?fn:undefined} style={{width:'26px',height:'26px',border:'1px solid '+(enabled?C.border:C.border+'40'),background:'transparent',color:enabled?(label==='+'?C.greenBright:C.red):C.border+'40',fontSize:'14px',cursor:enabled?'pointer':'default',lineHeight:'24px',textAlign:'center',fontWeight:700,opacity:enabled?1:0.3}}>{label}</button>;};
+              var stepBtn=function(label,enabled,fn){return <button onClick={enabled?fn:undefined} style={{width:'26px',height:'26px',border:'1px solid '+(enabled?C.border:C.border+'40'),background:'transparent',color:enabled?(label==='+'?C.greenBright:C.red):C.border+'40',fontSize:'15px',cursor:enabled?'pointer':'default',lineHeight:'24px',textAlign:'center',fontWeight:700,opacity:enabled?1:0.3}}>{label}</button>;};
               return (<div key={sk} style={{display:'flex',alignItems:'center',marginBottom:'3px'}}>
-                <span style={{fontSize:'13px',color:cur>minVal?C.text:C.textDim,minWidth:'140px',flexShrink:0}}>{sk}{isCore?<span style={{fontSize:'10px',color:C.goldDim}}> (core)</span>:null}</span>
+                <span style={{fontSize:'14px',color:cur>minVal?C.text:C.textDim,minWidth:'140px',flexShrink:0}}>{sk}{isCore?<span style={{fontSize:'11px',color:C.goldDim}}> (core)</span>:null}</span>
                 <div style={{display:'flex',alignItems:'center',gap:'4px',minWidth:'110px',justifyContent:'center'}}>
                   {stepBtn('\u2212',canDown,function(){if(!isCore&&cur<=4)setSkills(function(p){var n=Object.assign({},p);delete n[sk];return n;});else setSkills(function(p){var n=Object.assign({},p);n[sk]=DICE[DICE.indexOf(cur)-1];return n;});})}
-                  <span style={{width:'36px',textAlign:'center',fontSize:'13px',fontWeight:600,color:cur>0?C.text:C.textDim}}>{cur>0?dieLabel(cur):'\u2014'}</span>
+                  <span style={{width:'36px',textAlign:'center',fontSize:'14px',fontWeight:600,color:cur>0?C.text:C.textDim}}>{cur>0?dieLabel(cur):'\u2014'}</span>
                   {stepBtn('+',canUp,function(){if(cur===0)setSkills(function(p){var n=Object.assign({},p);n[sk]=4;return n;});else{var i=DICE.indexOf(cur);if(i<DICE.length-1)setSkills(function(p){var n=Object.assign({},p);n[sk]=DICE[i+1];return n;});}})}
                 </div>
-                <span style={{fontSize:'10px',color:C.red,marginLeft:'4px',width:'20px'}}>{cur>linked?'\u00d72':''}</span>
+                <span style={{fontSize:'11px',color:C.red,marginLeft:'4px',width:'20px'}}>{cur>linked?'\u00d72':''}</span>
               </div>);
             })}
           </div>);
@@ -465,20 +465,20 @@ function CharacterForgeApp() {
     return (<div>
       <div style={card}>
         <div style={cTitle}>Hindrances</div>
-        <p style={{fontSize:'13px',color:C.textDim,lineHeight:'1.6',marginBottom:'12px'}}>Up to <strong style={{color:C.gold}}>4 points</strong>. Minor = 1, Major = 2.</p>
+        <p style={{fontSize:'14px',color:C.textDim,lineHeight:'1.6',marginBottom:'12px'}}>Up to <strong style={{color:C.gold}}>4 points</strong>. Minor = 1, Major = 2.</p>
         <BudgetBar label="Hindrance Points" spent={hindPts} total={4} color={C.redBright} />
         <div style={{maxHeight:'300px',overflowY:'auto',marginTop:'8px'}}>
           {data.hindrances.map(function(h) {
             var sel=selectedHindrances.includes(h.name),isSupplement=h.source!=='swade-core',multi=h.sev.includes('/'),sev=hindranceSeverities[h.name]||(multi?'Minor':h.sev);
             return (<div key={h.name+h.source} onClick={function(){setSelectedHindrances(function(p){return p.includes(h.name)?p.filter(function(x){return x!==h.name}):[].concat(p,[h.name])});setHindranceSeverities(function(p){var n=Object.assign({},p);n[h.name]=multi?sev:h.sev;return n;});}} style={{padding:'8px 12px',marginBottom:'2px',cursor:'pointer',background:sel?C.redBright+'15':'transparent',borderLeft:sel?'3px solid '+C.redBright:'3px solid transparent'}}>
               <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                <div><span style={{fontSize:'14px',fontWeight:600,color:sel?C.textBright:C.text}}>{h.name}</span><SourceTag source={h.source} /></div>
+                <div><span style={{fontSize:'15px',fontWeight:600,color:sel?C.textBright:C.text}}>{h.name}</span><SourceTag source={h.source} /></div>
                 {multi&&sel?(<div style={{display:'flex',gap:'3px'}} onClick={function(e){e.stopPropagation()}}>
-                  {['Minor','Major'].map(function(s){return <button key={s} onClick={function(){setHindranceSeverities(function(p){var n=Object.assign({},p);n[h.name]=s;return n;})}} style={{padding:'2px 6px',fontSize:'10px',border:'1px solid '+(sev===s?(s==='Major'?C.redBright:C.gold):C.border),background:sev===s?(s==='Major'?C.redBright:C.gold):'transparent',color:sev===s?C.bg:C.textDim,cursor:'pointer'}}>{s}</button>;})}
-                </div>):(<span style={{fontSize:'11px',color:h.sev==='Major'?C.redBright:C.goldDim,fontWeight:600}}>{h.sev}</span>)}
+                  {['Minor','Major'].map(function(s){return <button key={s} onClick={function(){setHindranceSeverities(function(p){var n=Object.assign({},p);n[h.name]=s;return n;})}} style={{padding:'2px 6px',fontSize:'11px',border:'1px solid '+(sev===s?(s==='Major'?C.redBright:C.gold):C.border),background:sev===s?(s==='Major'?C.redBright:C.gold):'transparent',color:sev===s?C.bg:C.textDim,cursor:'pointer'}}>{s}</button>;})}
+                </div>):(<span style={{fontSize:'12px',color:h.sev==='Major'?C.redBright:C.goldDim,fontWeight:600}}>{h.sev}</span>)}
               </div>
-              {sel&&h.summary?<div style={{fontSize:'12px',color:C.textDim,marginTop:'4px',lineHeight:'1.5',fontStyle:'italic'}}>{h.summary}</div>:null}
-              {sel&&!h.summary?<div style={{fontSize:'12px',color:C.textDim,marginTop:'4px',lineHeight:'1.5',fontStyle:'italic'}}>See Savage Worlds core rules for full description.</div>:null}
+              {sel&&h.summary?<div style={{fontSize:'13px',color:C.textDim,marginTop:'4px',lineHeight:'1.5',fontStyle:'italic'}}>{h.summary}</div>:null}
+              {sel&&!h.summary?<div style={{fontSize:'13px',color:C.textDim,marginTop:'4px',lineHeight:'1.5',fontStyle:'italic'}}>See Savage Worlds core rules for full description.</div>:null}
             </div>);
           })}
         </div>
@@ -487,14 +487,14 @@ function CharacterForgeApp() {
       {hindPts>0?(function(){
         var used=hindAlloc.edges*2+hindAlloc.attrs*2+hindAlloc.skills+hindAlloc.funds,remaining=hindPts-used;
         function adj(key,cost,delta){return function(e){e.stopPropagation();setHindAlloc(function(p){var n=Object.assign({},p),nv=n[key]+delta;if(nv<0)return p;var nu=(key==='edges'?nv:n.edges)*2+(key==='attrs'?nv:n.attrs)*2+(key==='skills'?nv:n.skills)+(key==='funds'?nv:n.funds);if(nu>hindPts)return p;n[key]=nv;return n;});};}
-        var bs=function(a){return{width:'28px',height:'28px',border:'1px solid '+(a?C.gold:C.border),background:'transparent',color:a?C.gold:C.textDim,fontSize:'14px',cursor:a?'pointer':'default',opacity:a?1:0.3,lineHeight:'26px',textAlign:'center'};};
+        var bs=function(a){return{width:'28px',height:'28px',border:'1px solid '+(a?C.gold:C.border),background:'transparent',color:a?C.gold:C.textDim,fontSize:'15px',cursor:a?'pointer':'default',opacity:a?1:0.3,lineHeight:'26px',textAlign:'center'};};
         return (<div style={card}>
           <div style={cTitle}>Spend Hindrance Points</div>
-          <p style={{fontSize:'13px',color:C.textDim,lineHeight:'1.6',marginBottom:'8px'}}>You have <strong style={{color:C.gold}}>{hindPts} point{hindPts!==1?'s':''}</strong> to spend{hindPtsRaw>4?<span style={{color:C.goldDim}}> (benefit capped at 4)</span>:null}. Each Edge or attribute step costs 2. Each skill point or funds boost costs 1.</p>
-          <div style={{display:'flex',justifyContent:'center',marginBottom:'16px'}}><span style={{fontSize:'14px',color:remaining>0?C.gold:remaining===0?C.greenBright:C.redBright,fontWeight:600}}>{remaining} remaining</span></div>
+          <p style={{fontSize:'14px',color:C.textDim,lineHeight:'1.6',marginBottom:'8px'}}>You have <strong style={{color:C.gold}}>{hindPts} point{hindPts!==1?'s':''}</strong> to spend{hindPtsRaw>4?<span style={{color:C.goldDim}}> (benefit capped at 4)</span>:null}. Each Edge or attribute step costs 2. Each skill point or funds boost costs 1.</p>
+          <div style={{display:'flex',justifyContent:'center',marginBottom:'16px'}}><span style={{fontSize:'15px',color:remaining>0?C.gold:remaining===0?C.greenBright:C.redBright,fontWeight:600}}>{remaining} remaining</span></div>
           {[['Edges','edges',2,hindAlloc.edges],['Attribute Steps','attrs',2,hindAlloc.attrs],['Skill Points','skills',1,hindAlloc.skills],['Starting Funds (+'+START_FUNDS_BASE*2+')','funds',1,hindAlloc.funds]].map(function(r){
             return (<div key={r[1]} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid '+C.border}}>
-              <div><span style={{fontSize:'14px',color:C.text}}>{r[0]}</span><span style={{fontSize:'11px',color:C.textDim,marginLeft:'8px'}}>({r[2]} pt{r[2]!==1?'s':''} each)</span></div>
+              <div><span style={{fontSize:'15px',color:C.text}}>{r[0]}</span><span style={{fontSize:'12px',color:C.textDim,marginLeft:'8px'}}>({r[2]} pt{r[2]!==1?'s':''} each)</span></div>
               <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
                 <button onClick={adj(r[1],r[2],-1)} style={bs(r[3]>0)}>{'\u2212'}</button>
                 <span style={{width:'24px',textAlign:'center',fontSize:'16px',fontWeight:700,color:r[3]>0?C.gold:C.textDim}}>{r[3]}</span>
@@ -507,10 +507,10 @@ function CharacterForgeApp() {
 
       <div style={card}>
         <div style={cTitle}>Edges</div>
-        <p style={{fontSize:'13px',color:C.textDim,lineHeight:'1.6',marginBottom:'12px'}}><strong style={{color:C.gold}}>{edgeBudget.total} Edge{edgeBudget.total!==1?'s':''}</strong> available. All requirements must be met.</p>
+        <p style={{fontSize:'14px',color:C.textDim,lineHeight:'1.6',marginBottom:'12px'}}><strong style={{color:C.gold}}>{edgeBudget.total} Edge{edgeBudget.total!==1?'s':''}</strong> available. All requirements must be met.</p>
         <BudgetBar label="Edges" spent={edgeBudget.spent} total={edgeBudget.total} color={C.greenBright} />
         <div style={{display:'flex',gap:'4px',marginBottom:'12px',flexWrap:'wrap'}}>
-          {edgeCats.map(function(cat){return <button key={cat} onClick={function(){setEdgeCatFilter(cat)}} style={{padding:'4px 10px',fontSize:'10px',fontWeight:600,letterSpacing:'1px',textTransform:'uppercase',border:'1px solid '+(edgeCatFilter===cat?C.gold:C.border),background:edgeCatFilter===cat?C.gold:'transparent',color:edgeCatFilter===cat?C.bg:C.textDim,cursor:'pointer',fontFamily:"'Cinzel',serif"}}>{cat}</button>;})}
+          {edgeCats.map(function(cat){return <button key={cat} onClick={function(){setEdgeCatFilter(cat)}} style={{padding:'4px 10px',fontSize:'11px',fontWeight:600,letterSpacing:'1px',textTransform:'uppercase',border:'1px solid '+(edgeCatFilter===cat?C.gold:C.border),background:edgeCatFilter===cat?C.gold:'transparent',color:edgeCatFilter===cat?C.bg:C.textDim,cursor:'pointer',fontFamily:"'Cinzel',serif"}}>{cat}</button>;})}
         </div>
         <div style={{maxHeight:'400px',overflowY:'auto'}}>
           {data.edges.filter(function(e){return edgeCatFilter==='All'||e.cat===edgeCatFilter}).map(function(e) {
@@ -520,11 +520,11 @@ function CharacterForgeApp() {
               else { setSelectedEdges(function(p){return p.includes(e.name)?p.filter(function(x){return x!==e.name}):[].concat(p,[e.name])}); }
             }} style={{padding:'8px 12px',marginBottom:'2px',cursor:'pointer',background:sel?C.greenBright+'15':'transparent',borderLeft:sel?'3px solid '+C.greenBright:'3px solid transparent'}}>
               <div style={{display:'flex',justifyContent:'space-between',alignItems:'baseline'}}>
-                <div><span style={{fontSize:'14px',fontWeight:600,color:sel?C.textBright:C.text}}>{e.name}</span><SourceTag source={e.source} /><span style={{fontSize:'10px',color:C.textDim,marginLeft:'6px'}}>{e.cat}</span></div>
-                <span style={{fontSize:'11px',color:C.goldDim}}>{RANK_LABELS[e.rank]||e.rank}</span>
+                <div><span style={{fontSize:'15px',fontWeight:600,color:sel?C.textBright:C.text}}>{e.name}</span><SourceTag source={e.source} /><span style={{fontSize:'11px',color:C.textDim,marginLeft:'6px'}}>{e.cat}</span></div>
+                <span style={{fontSize:'12px',color:C.goldDim}}>{RANK_LABELS[e.rank]||e.rank}</span>
               </div>
-              <div style={{fontSize:'11px',color:C.textDim,marginTop:'2px'}}>{'Requires: '+e.reqs}</div>
-              {sel&&e.summary?<div style={{fontSize:'11px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>{e.summary}</div>:null}
+              <div style={{fontSize:'12px',color:C.textDim,marginTop:'2px'}}>{'Requires: '+e.reqs}</div>
+              {sel&&e.summary?<div style={{fontSize:'12px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>{e.summary}</div>:null}
             </div>);
           })}
         </div>
@@ -536,18 +536,18 @@ function CharacterForgeApp() {
   function renderPowers() {
     if (!hasAB) return (<div style={card}>
       <div style={cTitle}>Powers</div>
-      <p style={{fontSize:'14px',color:C.textDim,lineHeight:'1.6'}}>You have not taken the Arcane Background Edge. Select it on the Hindrances & Edges step to unlock powers.</p>
+      <p style={{fontSize:'15px',color:C.textDim,lineHeight:'1.6'}}>You have not taken the Arcane Background Edge. Select it on the Hindrances & Edges step to unlock powers.</p>
     </div>);
     return (<div>
       <div style={card}>
         <div style={cTitle}>Arcane Background</div>
-        <p style={{fontSize:'13px',color:C.textDim,lineHeight:'1.6',marginBottom:'16px'}}>Choose your tradition. This determines your arcane skill, starting powers, and Power Points.</p>
+        <p style={{fontSize:'14px',color:C.textDim,lineHeight:'1.6',marginBottom:'16px'}}>Choose your tradition. This determines your arcane skill, starting powers, and Power Points.</p>
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(200px,1fr))',gap:'8px'}}>
           {data.arcaneBGs.map(function(ab) {
             var sel=arcaneBg===ab.name;
             return (<div key={ab.name} onClick={function(){setArcaneBg(ab.name);setSelectedPowers([]);}} style={Object.assign({},card,{marginBottom:0,cursor:'pointer',borderColor:sel?C.gold:C.border,background:sel?C.gold+'10':C.bgCard})}>
-              <div style={{fontFamily:"'Cinzel',serif",fontSize:'14px',fontWeight:700,color:sel?C.gold:C.textBright,marginBottom:'6px'}}>{ab.name}</div>
-              <div style={{fontSize:'12px',color:C.text,lineHeight:'1.6'}}>
+              <div style={{fontFamily:"'Cinzel',serif",fontSize:'15px',fontWeight:700,color:sel?C.gold:C.textBright,marginBottom:'6px'}}>{ab.name}</div>
+              <div style={{fontSize:'13px',color:C.text,lineHeight:'1.6'}}>
                 <div>Skill: {ab.skill} ({ab.linked})</div>
                 <div>Starting Powers: {ab.startPowers}</div>
                 <div>Power Points: {ab.startPP}</div>
@@ -559,18 +559,18 @@ function CharacterForgeApp() {
       </div>
       {abData && <div style={card}>
         <div style={cTitle}>Select Powers</div>
-        <p style={{fontSize:'13px',color:C.textDim,lineHeight:'1.6',marginBottom:'12px'}}>Choose up to <strong style={{color:C.gold}}>{maxPowers}</strong> powers. You have <strong style={{color:C.gold}}>{totalPP} PP</strong>. Powers must meet Rank requirements.</p>
+        <p style={{fontSize:'14px',color:C.textDim,lineHeight:'1.6',marginBottom:'12px'}}>Choose up to <strong style={{color:C.gold}}>{maxPowers}</strong> powers. You have <strong style={{color:C.gold}}>{totalPP} PP</strong>. Powers must meet Rank requirements.</p>
         <BudgetBar label="Powers" spent={selectedPowers.length} total={maxPowers} color={C.blue} />
         <div style={{maxHeight:'400px',overflowY:'auto'}}>
           {data.powers.map(function(pw) {
             var sel=selectedPowers.includes(pw.name);
             return (<div key={pw.name} onClick={function(){setSelectedPowers(function(p){return p.includes(pw.name)?p.filter(function(x){return x!==pw.name}):[].concat(p,[pw.name])})}} style={{padding:'8px 12px',marginBottom:'2px',cursor:'pointer',background:sel?C.blue+'20':'transparent',borderLeft:sel?'3px solid '+C.blue:'3px solid transparent'}}>
               <div style={{display:'flex',justifyContent:'space-between',alignItems:'baseline'}}>
-                <span style={{fontSize:'14px',fontWeight:600,color:sel?C.textBright:C.text}}>{pw.name}</span>
-                <span style={{fontSize:'11px',color:C.goldDim}}>{RANK_LABELS[pw.rank]}</span>
+                <span style={{fontSize:'15px',fontWeight:600,color:sel?C.textBright:C.text}}>{pw.name}</span>
+                <span style={{fontSize:'12px',color:C.goldDim}}>{RANK_LABELS[pw.rank]}</span>
               </div>
-              <div style={{fontSize:'11px',color:C.textDim,marginTop:'2px'}}>{'PP: '+pw.pp+' | Range: '+pw.range+' | Duration: '+pw.dur}</div>
-              {sel&&pw.summary?<div style={{fontSize:'11px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>{pw.summary}</div>:null}
+              <div style={{fontSize:'12px',color:C.textDim,marginTop:'2px'}}>{'PP: '+pw.pp+' | Range: '+pw.range+' | Duration: '+pw.dur}</div>
+              {sel&&pw.summary?<div style={{fontSize:'12px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>{pw.summary}</div>:null}
             </div>);
           })}
         </div>
@@ -585,18 +585,18 @@ function CharacterForgeApp() {
     return (<div>
       <div style={card}>
         <div style={cTitle}>Equipment</div>
-        <p style={{fontSize:'13px',color:C.textDim,lineHeight:'1.6',marginBottom:'12px'}}>Starting funds: <strong style={{color:C.gold}}>{startFunds}</strong>. Spent: <strong style={{color:gearCost>startFunds?C.redBright:C.text}}>{gearCost}</strong>. Remaining: <strong style={{color:gearCost>startFunds?C.redBright:C.greenBright}}>{startFunds-gearCost}</strong>.</p>
+        <p style={{fontSize:'14px',color:C.textDim,lineHeight:'1.6',marginBottom:'12px'}}>Starting funds: <strong style={{color:C.gold}}>{startFunds}</strong>. Spent: <strong style={{color:gearCost>startFunds?C.redBright:C.text}}>{gearCost}</strong>. Remaining: <strong style={{color:gearCost>startFunds?C.redBright:C.greenBright}}>{startFunds-gearCost}</strong>.</p>
         <BudgetBar label="Funds" spent={gearCost} total={startFunds} />
         <div style={{display:'flex',gap:'4px',marginBottom:'12px',flexWrap:'wrap'}}>
-          {tabs.map(function(t){return <button key={t[0]} onClick={function(){setGearTab(t[0])}} style={{padding:'4px 10px',fontSize:'10px',fontWeight:600,letterSpacing:'1px',textTransform:'uppercase',border:'1px solid '+(gearTab===t[0]?C.gold:C.border),background:gearTab===t[0]?C.gold:'transparent',color:gearTab===t[0]?C.bg:C.textDim,cursor:'pointer',fontFamily:"'Cinzel',serif"}}>{t[1]}</button>;})}
+          {tabs.map(function(t){return <button key={t[0]} onClick={function(){setGearTab(t[0])}} style={{padding:'4px 10px',fontSize:'11px',fontWeight:600,letterSpacing:'1px',textTransform:'uppercase',border:'1px solid '+(gearTab===t[0]?C.gold:C.border),background:gearTab===t[0]?C.gold:'transparent',color:gearTab===t[0]?C.bg:C.textDim,cursor:'pointer',fontFamily:"'Cinzel',serif"}}>{t[1]}</button>;})}
         </div>
         <div style={{maxHeight:'350px',overflowY:'auto'}}>
           {tableData.map(function(item, idx) {
             var owned=gear.find(function(g){return g.name===item.name && g.armor===item.armor && g.dmg===item.dmg;});
             return (<div key={gearTab+'-'+idx} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'8px 12px',borderBottom:'1px solid '+C.border}}>
               <div style={{flex:1}}>
-                <div style={{fontSize:'13px',fontWeight:600,color:C.text}}>{item.name}{owned?<span style={{color:C.gold,marginLeft:'6px'}}>{'(\u00d7'+(owned.qty||1)+')'}</span>:null}<span style={{fontSize:'11px',color:C.textDim,fontWeight:400,marginLeft:'8px'}}>{'Cost: '+item.cost}</span></div>
-                {owned?<div style={{fontSize:'11px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>
+                <div style={{fontSize:'14px',fontWeight:600,color:C.text}}>{item.name}{owned?<span style={{color:C.gold,marginLeft:'6px'}}>{'(\u00d7'+(owned.qty||1)+')'}</span>:null}<span style={{fontSize:'12px',color:C.textDim,fontWeight:400,marginLeft:'8px'}}>{'Cost: '+item.cost}</span></div>
+                {owned?<div style={{fontSize:'12px',color:C.textDim,marginTop:'2px',fontStyle:'italic'}}>
                   {item.dmg?'Dmg: '+item.dmg+' | ':''}
                   {item.range?'Range: '+item.range+' | ':''}
                   {item.ap?'AP '+item.ap+' | ':''}
@@ -609,8 +609,8 @@ function CharacterForgeApp() {
                 </div>:null}
               </div>
               <div style={{display:'flex',gap:'4px',flexShrink:0}}>
-                {owned?<button onClick={function(e){e.stopPropagation();removeGear(item.name)}} style={{width:'28px',height:'28px',border:'1px solid '+C.border,background:'transparent',color:C.redBright,fontSize:'14px',cursor:'pointer',lineHeight:'26px',textAlign:'center'}}>{'\u2212'}</button>:null}
-                <button onClick={function(e){e.stopPropagation();addGear(item)}} style={{width:'28px',height:'28px',border:'1px solid '+C.border,background:'transparent',color:C.greenBright,fontSize:'14px',cursor:'pointer',lineHeight:'26px',textAlign:'center'}}>+</button>
+                {owned?<button onClick={function(e){e.stopPropagation();removeGear(item.name)}} style={{width:'28px',height:'28px',border:'1px solid '+C.border,background:'transparent',color:C.redBright,fontSize:'15px',cursor:'pointer',lineHeight:'26px',textAlign:'center'}}>{'\u2212'}</button>:null}
+                <button onClick={function(e){e.stopPropagation();addGear(item)}} style={{width:'28px',height:'28px',border:'1px solid '+C.border,background:'transparent',color:C.greenBright,fontSize:'15px',cursor:'pointer',lineHeight:'26px',textAlign:'center'}}>+</button>
               </div>
             </div>);
           })}
@@ -620,8 +620,8 @@ function CharacterForgeApp() {
         <div style={cTitle}>Inventory ({gear.reduce(function(t,g){return t+(g.qty||1)},0)} items, {gearWeight.toFixed(1)} lbs)</div>
         {gear.map(function(g) {
           return <div key={g.name} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'4px 0',borderBottom:'1px solid '+C.border}}>
-            <span style={{fontSize:'13px',color:C.text}}>{g.name}{(g.qty||1)>1?' \u00d7'+g.qty:''}</span>
-            <span style={{fontSize:'12px',color:C.goldDim}}>{g.cost*(g.qty||1)}</span>
+            <span style={{fontSize:'14px',color:C.text}}>{g.name}{(g.qty||1)>1?' \u00d7'+g.qty:''}</span>
+            <span style={{fontSize:'13px',color:C.goldDim}}>{g.cost*(g.qty||1)}</span>
           </div>;
         })}
       </div>}
@@ -635,11 +635,11 @@ function CharacterForgeApp() {
       <div style={{textAlign:'center',marginBottom:'16px'}}>
         {portrait && <div style={{marginBottom:'12px'}}><img src={portrait} style={{width:'120px',height:'150px',objectFit:'cover',border:'2px solid '+C.gold}} /></div>}
         <div style={{fontFamily:"'Cinzel',serif",fontSize:'24px',fontWeight:700,color:C.gold,letterSpacing:'2px'}}>{charName||'Unnamed Hero'}</div>
-        {charConcept?<div style={{fontSize:'14px',color:C.textDim,fontStyle:'italic',marginTop:'4px'}}>{charConcept}</div>:null}
-        {ancestry?<div style={{fontSize:'13px',color:C.text,marginTop:'6px'}}>{ancestry}</div>:null}
+        {charConcept?<div style={{fontSize:'15px',color:C.textDim,fontStyle:'italic',marginTop:'4px'}}>{charConcept}</div>:null}
+        {ancestry?<div style={{fontSize:'14px',color:C.text,marginTop:'6px'}}>{ancestry}</div>:null}
       </div>
       {/* SWADE Canonical Stat Block */}
-      <div style={{fontSize:'14px',color:C.text,lineHeight:'2'}}>
+      <div style={{fontSize:'15px',color:C.text,lineHeight:'2'}}>
         <div><strong style={{color:C.gold}}>Attributes:</strong> {['agility','smarts','spirit','strength','vigor'].map(function(a){return a.charAt(0).toUpperCase()+a.slice(1)+' '+dieLabel(attrs[a])}).join(', ')}</div>
         <div><strong style={{color:C.gold}}>Skills:</strong> {(function(){var all=data.coreSkills.filter(function(s){return !skills[s]}).map(function(s){return{name:s,die:4}}).concat(Object.entries(skills).filter(function(p){return p[1]>0}).map(function(p){return{name:p[0],die:p[1]}})).sort(function(a,b){return a.name.localeCompare(b.name)});return all.map(function(s){return s.name+' '+dieLabel(s.die)}).join(', ')})()}</div>
         <div><strong style={{color:C.gold}}>Pace:</strong> {derived.pace}; <strong style={{color:C.gold}}>Parry:</strong> {derived.parry}; <strong style={{color:C.gold}}>Toughness:</strong> {derived.toughness}{derived.armor>0?' ('+derived.armor+')':''}</div>
@@ -649,7 +649,7 @@ function CharacterForgeApp() {
         {hasAB&&abData&&selectedPowers.length>0?<div><strong style={{color:C.blue}}>Powers</strong> <span style={{color:C.textDim}}>({totalPP} PP, {abData.name})</span><strong style={{color:C.blue}}>:</strong> {selectedPowers.map(function(n){var pw=data.powers.find(function(x){return x.name===n});return n+(pw?' ('+pw.pp+' PP)':'')}).join(', ')}</div>:null}
         {ancestry&&data.ancestries[ancestry]?<div><strong style={{color:C.gold}}>Special Abilities:</strong> {data.ancestries[ancestry].summary||Object.keys(data.ancestries[ancestry].abilities||{}).join(', ')}</div>:null}
       </div>
-      <div style={{fontSize:'12px',color:C.textDim,marginTop:'16px',paddingTop:'8px',borderTop:'1px solid '+C.border}}>
+      <div style={{fontSize:'13px',color:C.textDim,marginTop:'16px',paddingTop:'8px',borderTop:'1px solid '+C.border}}>
         <strong style={{color:C.goldDim}}>Modules:</strong> {allModules.filter(function(m){return m.alwaysOn || activeSupplements.indexOf(m.id)>=0}).map(function(m){return m.name}).join(', ')}
       </div>
     </div>);
@@ -1004,10 +1004,10 @@ function CharacterForgeApp() {
     return (<div>
       <div style={card}>
         <div style={cTitle}>Export Character</div>
-        <p style={{fontSize:'14px',color:C.textDim,lineHeight:'1.6',marginBottom:'4px'}}>
+        <p style={{fontSize:'15px',color:C.textDim,lineHeight:'1.6',marginBottom:'4px'}}>
           Export <strong style={{color:C.gold}}>{ch.name}</strong> in any format below. All exports follow the canonical Pinnacle Entertainment character sheet layout.
         </p>
-        {portrait && <p style={{fontSize:'12px',color:C.greenBright,marginTop:'4px'}}>{'\u2713'} Portrait included in exports.</p>}
+        {portrait && <p style={{fontSize:'13px',color:C.greenBright,marginTop:'4px'}}>{'\u2713'} Portrait included in exports.</p>}
       </div>
       <div style={{display:'flex',flexDirection:'column',gap:'8px'}}>
         {formats.map(function(f) {
@@ -1017,15 +1017,15 @@ function CharacterForgeApp() {
             style={btnStyle(f.colour)}>
             <div style={{fontSize:'28px',width:'40px',textAlign:'center',flexShrink:0}}>{f.icon}</div>
             <div style={{flex:1}}>
-              <div style={{fontFamily:"'Cinzel',serif",fontSize:'15px',fontWeight:700,color:C.textBright,letterSpacing:'1px'}}>{f.label}</div>
-              <div style={{fontSize:'13px',color:C.textDim,marginTop:'4px',lineHeight:'1.5'}}>{f.desc}</div>
+              <div style={{fontFamily:"'Cinzel',serif",fontSize:'16px',fontWeight:700,color:C.textBright,letterSpacing:'1px'}}>{f.label}</div>
+              <div style={{fontSize:'14px',color:C.textDim,marginTop:'4px',lineHeight:'1.5'}}>{f.desc}</div>
             </div>
             <div style={{fontSize:'20px',color:C.goldDim,flexShrink:0}}>{'\u2913'}</div>
           </div>);
         })}
       </div>
       <div style={Object.assign({},card,{marginTop:'16px',background:'transparent',border:'1px solid '+C.border,padding:'14px 20px'})}>
-        <div style={{fontSize:'12px',color:C.textDim,lineHeight:'1.8'}}>
+        <div style={{fontSize:'13px',color:C.textDim,lineHeight:'1.8'}}>
           <strong style={{color:C.goldDim}}>Export notes</strong><br/>
           FG XML imports into Fantasy Grounds Unity via the charsheet node. PDF is A4, print-ready. HTML is self-contained with embedded fonts. RTF opens in any word processor. All formats include the Pinnacle Fan License attribution.
         </div>
@@ -1062,7 +1062,7 @@ function CharacterForgeApp() {
     <div style={{background:C.bg,color:C.text,minHeight:'100vh',fontFamily:"'Crimson Pro','Georgia',serif",padding:0}}>
       <div style={{background:'linear-gradient(180deg,'+C.bgCard+','+C.bg+')',borderBottom:'1px solid '+C.border,padding:'24px 20px 16px',textAlign:'center'}}>
         <h1 style={{fontFamily:"'Cinzel',serif",fontSize:'28px',fontWeight:700,color:C.gold,letterSpacing:'3px',margin:0,textTransform:'uppercase'}}>Character Forge</h1>
-        <div style={{fontSize:'13px',color:C.textDim,letterSpacing:'2px',marginTop:'4px',textTransform:'uppercase'}}>For Savage Worlds</div>
+        <div style={{fontSize:'14px',color:C.textDim,letterSpacing:'2px',marginTop:'4px',textTransform:'uppercase'}}>For Savage Worlds</div>
       </div>
       <div style={{maxWidth:'860px',margin:'0 auto',padding:'0 16px 40px'}}>
         <div style={{display:'flex',gap:'2px',margin:'20px 0',overflow:'auto'}}>
@@ -1070,19 +1070,19 @@ function CharacterForgeApp() {
             var active=i===step,status=stepStatus[i];
             var tc=active?STATUS_COLORS[status]:(status==='red'?C.redBright:status==='green'?C.green:C.textDim);
             var bc=active?STATUS_COLORS[status]:(status==='red'?C.redBright:status==='green'?C.green:C.border);
-            return <div key={i} onClick={function(){setStep(i)}} style={{flex:1,padding:'10px 4px',textAlign:'center',fontSize:'10px',fontWeight:600,letterSpacing:'1px',textTransform:'uppercase',cursor:'pointer',fontFamily:"'Cinzel',serif",color:tc,borderBottom:'2px solid '+bc,whiteSpace:'nowrap'}}>{s}</div>;
+            return <div key={i} onClick={function(){setStep(i)}} style={{flex:1,padding:'10px 4px',textAlign:'center',fontSize:'11px',fontWeight:600,letterSpacing:'1px',textTransform:'uppercase',cursor:'pointer',fontFamily:"'Cinzel',serif",color:tc,borderBottom:'2px solid '+bc,whiteSpace:'nowrap'}}>{s}</div>;
           })}
         </div>
         {step>=2&&ancestry?(<div style={{display:'flex',justifyContent:'center',gap:'16px',padding:'8px 0',marginBottom:'8px',borderBottom:'1px solid '+C.border,flexWrap:'wrap'}}>
-          {[['Pace',derived.pace+(derived.runDie!==6?' (d'+derived.runDie+')':'')],['Parry',derived.parry],['Tough',derived.toughness+(derived.armor>0?' ('+derived.armor+')':'')],['Bennies',derived.bennies]].map(function(p){return <span key={p[0]} style={{fontSize:'12px',color:C.textDim}}>{p[0]+' '}<strong style={{color:C.gold}}>{p[1]}</strong></span>;})}
-          {hasAB&&abData?<span style={{fontSize:'12px',color:C.textDim}}>{'PP '}<strong style={{color:C.blue}}>{totalPP}</strong></span>:null}
+          {[['Pace',derived.pace+(derived.runDie!==6?' (d'+derived.runDie+')':'')],['Parry',derived.parry],['Tough',derived.toughness+(derived.armor>0?' ('+derived.armor+')':'')],['Bennies',derived.bennies]].map(function(p){return <span key={p[0]} style={{fontSize:'13px',color:C.textDim}}>{p[0]+' '}<strong style={{color:C.gold}}>{p[1]}</strong></span>;})}
+          {hasAB&&abData?<span style={{fontSize:'13px',color:C.textDim}}>{'PP '}<strong style={{color:C.blue}}>{totalPP}</strong></span>:null}
         </div>):null}
         {renderers[step]()}
         <div style={{display:'flex',justifyContent:'space-between',marginTop:'20px'}}>
-          {step>0?<button onClick={function(){setStep(step-1)}} style={{padding:'12px 28px',border:'1px solid '+C.border,background:'transparent',color:C.text,fontSize:'13px',fontWeight:700,letterSpacing:'2px',textTransform:'uppercase',cursor:'pointer',fontFamily:"'Cinzel',serif"}}>{'\u2190 Back'}</button>:<div/>}
-          {step<STEPS.length-1?<button onClick={function(){setStep(step+1)}} style={{padding:'12px 28px',border:'none',background:C.gold,color:C.bg,fontSize:'13px',fontWeight:700,letterSpacing:'2px',textTransform:'uppercase',cursor:'pointer',fontFamily:"'Cinzel',serif"}}>{step===0?'Begin \u2192':'Continue \u2192'}</button>:null}
+          {step>0?<button onClick={function(){setStep(step-1)}} style={{padding:'12px 28px',border:'1px solid '+C.border,background:'transparent',color:C.text,fontSize:'14px',fontWeight:700,letterSpacing:'2px',textTransform:'uppercase',cursor:'pointer',fontFamily:"'Cinzel',serif"}}>{'\u2190 Back'}</button>:<div/>}
+          {step<STEPS.length-1?<button onClick={function(){setStep(step+1)}} style={{padding:'12px 28px',border:'none',background:C.gold,color:C.bg,fontSize:'14px',fontWeight:700,letterSpacing:'2px',textTransform:'uppercase',cursor:'pointer',fontFamily:"'Cinzel',serif"}}>{step===0?'Begin \u2192':'Continue \u2192'}</button>:null}
         </div>
-        <div style={{fontSize:'10px',color:C.textDim,textAlign:'center',marginTop:'32px',lineHeight:'1.5',padding:'12px',borderTop:'1px solid '+C.border}}>
+        <div style={{fontSize:'11px',color:C.textDim,textAlign:'center',marginTop:'32px',lineHeight:'1.5',padding:'12px',borderTop:'1px solid '+C.border}}>
           This tool references Savage Worlds, property of Pinnacle Entertainment Group, under the Fan License. Not for resale. You will need the Savage Worlds core rules to play.
           {activeSupplements.length > 0 ? ' Supplement content \u00A9 DiceForge Studios.' : ''}
         </div>
