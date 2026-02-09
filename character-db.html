@@ -206,7 +206,7 @@ var DICEFORGE_AUTH=false;
 </div>
 <div class="modal-overlay" id="commitModal">
   <div class="modal">
-    <h3>📦 Commit to Canon</h3>
+    <h3 id="commitModalTitle">📦 Commit to Canon</h3>
     <div id="commitDiff" style="margin-bottom:14px;font-size:13px;max-height:200px;overflow-y:auto;background:var(--bg-body);padding:10px;border-radius:4px;border:1px solid var(--border)"></div>
     <div class="form-group"><label>Summary *</label><input id="commit_summary" placeholder="e.g. Added missing hindrances for Vella Ashford" style="width:100%;box-sizing:border-box"></div>
     <div class="form-group"><label>Confirmation *</label><input id="commit_secret" placeholder="Type COMMIT to confirm" style="width:100%;box-sizing:border-box" autocomplete="off"></div>
@@ -653,8 +653,10 @@ function renderAuditPanel(n){
     html+=`<div class="audit-line ${cls}">${r.pass?'✓':'✗'} ${esc(r.label)} ${esc(r.detail)}</div>`;
   });
   html+='</div></div>';
+  const inCanon=canonCommitted.has(n.name);
+  const commitLabel=inCanon?'🔄 Update Canon':'📦 Commit to Canon';
   html+=`<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center">
-    <button class="btn primary" onclick="openCommitModal()" title="Commit current state to canon repository">📦 Commit to Canon</button>
+    <button class="btn primary" onclick="openCommitModal()" title="${inCanon?'Update canonical data':'Commit current state to canon repository'}">${commitLabel}</button>
     <span style="font-size:12px;color:var(--text-dim)">${legal?'✅ Build legal — ready to commit':'❌ Build has issues — commit with caution'}</span>
   </div>`;
   document.getElementById('panelContent').innerHTML=html;
@@ -713,6 +715,7 @@ function canonFilePath(n){
 
 function openCommitModal(){
   if(!currentNPC)return;
+  const inCanon=canonCommitted.has(currentNPC.name);
   const canon=buildCanonCharacter(currentNPC);
   const path=canonFilePath(currentNPC);
   const diffHtml=`<div><strong style="color:var(--accent)">${esc(currentNPC.name)}</strong> → <code style="color:var(--text-dim)">${esc(path)}</code></div>
@@ -726,6 +729,8 @@ function openCommitModal(){
   document.getElementById('commit_summary').value='';
   document.getElementById('commitStatus').innerHTML='';
   document.getElementById('commitBtn').disabled=false;
+  document.getElementById('commitModalTitle').textContent=inCanon?'🔄 Update Canon':'📦 Commit to Canon';
+  document.getElementById('commitBtn').textContent=inCanon?'🔄 Update Canon':'🔒 Commit to Canon';
   document.getElementById('commitModal').classList.add('active');
 }
 function closeCommitModal(){document.getElementById('commitModal').classList.remove('active');}
