@@ -21,6 +21,7 @@
   --blue: #4a7a9a;
   --tag-wc: #c49a4a;
   --tag-extra: #5a8a5a;
+  --tag-walkon: #7a7a8a;
   --tag-walkon: #666;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -52,6 +53,9 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .tier-tag { display: inline-block; padding: 0 6px; border-radius: 2px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; vertical-align: middle; margin-left: 4px; }
 .tier-tag.wc { background: var(--tag-wc); color: #1a1a1a; }
 .tier-tag.extra { background: var(--tag-extra); color: #fff; }
+.tier-tag.walkon { background: var(--tag-walkon); color: #fff; }
+.tier-tag.pregen { background: #6a5aaa; color: #fff; }
+.list-section-header { padding: 8px 16px 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); border-bottom: 1px solid var(--border); margin-top: 4px; }
 .status-dots { display: inline-flex; gap: 3px; margin-left: 6px; vertical-align: middle; }
 .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .status-dot.on { background: var(--green); }
@@ -175,15 +179,16 @@ var DICEFORGE_AUTH=false;
   <div class="sidebar">
     <div id="sidebarInner">
     <div class="sidebar-controls">
-      <input type="text" id="searchInput" placeholder="Search NPCs..." oninput="filterNPCs()">
+      <input type="text" id="searchInput" placeholder="Search characters..." oninput="filterNPCs()">
       <div class="filter-row">
+        <select id="categoryFilter" onchange="filterNPCs()"><option value="">All Types</option><option>Pre-gen</option><option>NPC</option></select>
         <select id="regionFilter" onchange="filterNPCs()"><option value="">All Regions</option><option>Ammaria</option><option>Saltlands</option><option>Vinlands</option><option>Concordium</option><option>Glasrya</option><option>Global</option></select>
-        <select id="tierFilter" onchange="filterNPCs()"><option value="">All Tiers</option><option>Wild Card</option><option>Extra</option></select>
+        <select id="tierFilter" onchange="filterNPCs()"><option value="">All Tiers</option><option>Wild Card</option><option>Extra</option><option>Walk-on</option></select>
       </div>
     </div>
     <div class="npc-list" id="npcList"></div>
     <div class="sidebar-footer">
-      <button class="btn primary" onclick="openNewNPCModal()" style="flex:1">+ New NPC</button>
+      <button class="btn primary" onclick="openNewNPCModal()" style="flex:1">+ New Character</button>
       <button class="btn" onclick="showStatusView()">Status</button>
       <button class="btn" onclick="showChangelog()">Changes</button>
     </div>
@@ -203,11 +208,12 @@ var DICEFORGE_AUTH=false;
 </div>
 <div class="modal-overlay" id="newNpcModal">
   <div class="modal">
-    <h3>New NPC</h3>
+    <h3>New Character</h3>
     <div class="form-row"><div class="form-group"><label>Name *</label><input id="new_name"></div><div class="form-group"><label>Title / Role</label><input id="new_concept" placeholder="e.g. Professional Fixer"></div></div>
     <div class="form-row">
+      <div class="form-group"><label>Category *</label><select id="new_category"><option>NPC</option><option>Pre-gen</option></select></div>
       <div class="form-group"><label>Region *</label><select id="new_region"><option>Ammaria</option><option>Saltlands</option><option>Vinlands</option><option>Concordium</option><option>Glasrya</option><option>Global</option></select></div>
-      <div class="form-group"><label>Tier *</label><select id="new_tier"><option>Wild Card</option><option>Extra</option></select></div>
+      <div class="form-group"><label>Tier *</label><select id="new_tier"><option>Wild Card</option><option>Extra</option><option>Walk-on</option></select></div>
       <div class="form-group"><label>Ancestry</label><select id="new_ancestry"><option>Human</option><option>Dwarf</option><option>Elf</option><option>Half-Folk</option><option>Other</option></select></div>
     </div>
     <div class="form-actions"><button class="btn" onclick="closeNewNPCModal()">Cancel</button><button class="btn primary" onclick="createNPC()">Create NPC</button></div>
@@ -401,7 +407,9 @@ function getFilteredNPCs(){
   const search=document.getElementById('searchInput').value.toLowerCase();
   const region=document.getElementById('regionFilter').value;
   const tier=document.getElementById('tierFilter').value;
+  const cat=document.getElementById('categoryFilter').value;
   return allNPCs.filter(n=>{
+    if(cat&&(n.category||'NPC')!==cat)return false;
     if(region&&n.region!==region)return false;
     if(tier&&n.tier!==tier)return false;
     if(search&&!n.name.toLowerCase().includes(search)&&!(n.concept||'').toLowerCase().includes(search))return false;
@@ -431,10 +439,15 @@ document.addEventListener('keydown',function(e){
 
 function renderNPCList(npcs){
   const el=document.getElementById('npcList');
-  if(!npcs.length){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--text-dim)">No NPCs found</div>';return;}
-  el.innerHTML=npcs.map(n=>{
-    const tc=n.tier==='Wild Card'?'wc':'extra';
-    const tl=n.tier==='Wild Card'?'WC':'EXT';
+  if(!npcs.length){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--text-dim)">No characters found</div>';return;}
+  const pregens=npcs.filter(n=>(n.category||'NPC')==='Pre-gen');
+  const npcWC=npcs.filter(n=>(n.category||'NPC')!=='Pre-gen'&&n.tier==='Wild Card');
+  const npcExt=npcs.filter(n=>(n.category||'NPC')!=='Pre-gen'&&n.tier==='Extra');
+  const npcWalk=npcs.filter(n=>(n.category||'NPC')!=='Pre-gen'&&n.tier==='Walk-on');
+  function renderItem(n){
+    const tc=n.tier==='Wild Card'?'wc':n.tier==='Walk-on'?'walkon':'extra';
+    const tl=n.tier==='Wild Card'?'WC':n.tier==='Walk-on'?'W-O':'EXT';
+    const catTag=(n.category||'NPC')==='Pre-gen'?'<span class="tier-tag pregen">PG</span>':'';
     const act=currentNPC&&currentNPC.name===n.name?'active':'';
     const title=n.concept?` — ${n.concept}`:'';
     const audit=runBuildAudit(n);
@@ -443,20 +456,27 @@ function renderNPCList(npcs){
     const legalIcon=n.agility>0?(legal?(hasWarns?'<span style="font-size:12px;margin-left:4px" title="Build Legal — optimisation warnings">⚠️</span>':'<span style="font-size:12px;margin-left:4px" title="Build Legal">✅</span>'):'<span style="font-size:12px;margin-left:4px" title="Build Issues">❌</span>'):'<span style="font-size:12px;margin-left:4px;opacity:0.4" title="No stats">⬜</span>';
     const canonIcon=canonCommitted.has(n.name)?'<span style="font-size:11px;margin-left:3px" title="Committed to Canon">📦</span>':'';
     return `<div class="npc-item ${act}" onclick="selectNPC('${esc(n.name).replace(/'/g,"\\'")}')">
-      <div class="npc-name">${esc(n.name)}<span class="tier-tag ${tc}">${tl}</span>${legalIcon}${canonIcon}
+      <div class="npc-name">${esc(n.name)}${catTag}<span class="tier-tag ${tc}">${tl}</span>${legalIcon}${canonIcon}
         <span class="status-dots" title="Stats / Narrative / FG">
           <span class="status-dot ${n.statComplete?'on':'off'}"></span>
           <span class="status-dot ${n.narrativeComplete?'on':'off'}"></span>
           <span class="status-dot ${n.fgReady?'on':'off'}"></span>
         </span></div>
       <div class="npc-meta">${esc(n.region)}${esc(title)}</div></div>`;
-  }).join('');
+  }
+  let html='';
+  if(pregens.length){html+=`<div class="list-section-header">Pre-gens (${pregens.length})</div>`;html+=pregens.map(renderItem).join('');}
+  if(npcWC.length){html+=`<div class="list-section-header">NPCs — Wild Cards (${npcWC.length})</div>`;html+=npcWC.map(renderItem).join('');}
+  if(npcExt.length){html+=`<div class="list-section-header">NPCs — Extras (${npcExt.length})</div>`;html+=npcExt.map(renderItem).join('');}
+  if(npcWalk.length){html+=`<div class="list-section-header">NPCs — Walk-ons (${npcWalk.length})</div>`;html+=npcWalk.map(renderItem).join('');}
+  el.innerHTML=html;
 }
 
 function updateHeaderStats(){
-  const t=allNPCs.length,c=allNPCs.filter(n=>n.statComplete&&n.narrativeComplete).length,f=allNPCs.filter(n=>n.fgReady).length;
+  const t=allNPCs.length,pg=allNPCs.filter(n=>(n.category||'NPC')==='Pre-gen').length,np=t-pg;
+  const c=allNPCs.filter(n=>n.statComplete&&n.narrativeComplete).length,f=allNPCs.filter(n=>n.fgReady).length;
   const cn=allNPCs.filter(n=>canonCommitted.has(n.name)).length;
-  document.getElementById("headerStats").innerHTML=`<span><span class="stat-num">${t}</span> NPCs</span><span><span class="stat-num">${cn}</span> 📦 Canon</span><span><span class="stat-num">${c}</span> Complete</span><span><span class="stat-num">${f}</span> FG Ready</span>`;
+  document.getElementById("headerStats").innerHTML=`<span><span class="stat-num">${pg}</span> Pre-gens</span><span><span class="stat-num">${np}</span> NPCs</span><span><span class="stat-num">${cn}</span> 📦 Canon</span><span><span class="stat-num">${c}</span> Complete</span><span><span class="stat-num">${f}</span> FG Ready</span>`;
 }
 
 function selectNPC(name){currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;activePanel='audit';renderDetail();filterNPCs();}
@@ -569,8 +589,8 @@ function renderEditPanel(n){
     <div class="form-row"><div class="form-group"><label>Name *</label><input id="ed_name" value="${esc(n.name)}"></div><div class="form-group"><label>Title / Role</label><input id="ed_concept" value="${esc(n.concept)}"></div></div>
     <div class="form-row">
       <div class="form-group"><label>Region *</label><select id="ed_region">${['Ammaria','Saltlands','Vinlands','Concordium','Glasrya','Global'].map(r=>`<option ${n.region===r?'selected':''}>${r}</option>`).join('')}</select></div>
-      <div class="form-group"><label>Tier *</label><select id="ed_tier">${['Wild Card','Extra'].map(t=>`<option ${n.tier===t?'selected':''}>${t}</option>`).join('')}</select></div>
-      <div class="form-group"><label>Category</label><select id="ed_category">${['Pre-gen','NPC'].map(c=>`<option ${n.category===c?'selected':''}>${c}</option>`).join('')}</select></div>
+      <div class="form-group"><label>Tier *</label><select id="ed_tier">${['Wild Card','Extra','Walk-on'].map(t=>`<option ${n.tier===t?'selected':''}>${t}</option>`).join('')}</select></div>
+      <div class="form-group"><label>Category</label><select id="ed_category">${['Pre-gen','NPC'].map(c=>`<option ${(n.category||'NPC')===c?'selected':''}>${c}</option>`).join('')}</select></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label>Gender</label><select id="ed_gender">${['Unspecified','Male','Female','Other'].map(g=>`<option>${g}</option>`).join('')}</select></div>
@@ -889,7 +909,7 @@ function openNewNPCModal(){document.getElementById('newNpcModal').classList.add(
 function closeNewNPCModal(){document.getElementById('newNpcModal').classList.remove('active');}
 function createNPC(){
   const name=document.getElementById('new_name').value.trim();if(!name){alert('Name is required');return;}
-  const npc={name,concept:document.getElementById('new_concept')?.value?.trim()||'',ancestry:document.getElementById('new_ancestry').value,region:document.getElementById('new_region').value,tier:document.getElementById('new_tier').value,rank:'Novice',category:'NPC',product:'',source:'custom',agility:0,smarts:0,spirit:0,strength:0,vigor:0,skills:{},edges:[],hindrances:[],powers:[],gearText:'',quote:'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:'',abSkill:'',pp:0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
+  const npc={name,concept:document.getElementById('new_concept')?.value?.trim()||'',ancestry:document.getElementById('new_ancestry').value,region:document.getElementById('new_region').value,tier:document.getElementById('new_tier').value,rank:'Novice',category:document.getElementById('new_category').value,product:'',source:'custom',agility:0,smarts:0,spirit:0,strength:0,vigor:0,skills:{},edges:[],hindrances:[],powers:[],gearText:'',quote:'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:'',abSkill:'',pp:0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
   calcDerived(npc);allNPCs.push(npc);saveCustomNPC(npc);closeNewNPCModal();filterNPCs();updateHeaderStats();selectNPC(name);
 }
 function showStatusView(){
@@ -897,9 +917,9 @@ function showStatusView(){
   const rows=allNPCs.map(n=>{
     const audit=runBuildAudit(n);const legal=audit.every(r=>r.pass);
     const inCanon=canonCommitted.has(n.name);
-    return `<tr><td>${esc(n.name)}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td>${legal?'✅':'❌'}</td><td>${inCanon?'📦':'—'}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">&#${n.statComplete?'10003':'8212'};</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">&#${n.narrativeComplete?'10003':'8212'};</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">&#${n.fgReady?'10003':'8212'};</td></tr>`;
+    return `<tr><td>${esc(n.name)}</td><td>${esc(n.category||'NPC')}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td>${legal?'✅':'❌'}</td><td>${inCanon?'📦':'—'}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">&#${n.statComplete?'10003':'8212'};</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">&#${n.narrativeComplete?'10003':'8212'};</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">&#${n.fgReady?'10003':'8212'};</td></tr>`;
   }).join('');
-  el.innerHTML=`<h2 style="color:var(--accent);margin-bottom:14px">Production Status</h2><table class="data-table"><tr><th>Name</th><th>Region</th><th>Tier</th><th>Build</th><th>Canon</th><th>Stats</th><th>Narrative</th><th>FG Ready</th></tr>${rows}</table>`;
+  el.innerHTML=`<h2 style="color:var(--accent);margin-bottom:14px">Production Status</h2><table class="data-table"><tr><th>Name</th><th>Type</th><th>Region</th><th>Tier</th><th>Build</th><th>Canon</th><th>Stats</th><th>Narrative</th><th>FG Ready</th></tr>${rows}</table>`;
 }
 
 // ── CANON COMMIT SYSTEM ──
@@ -1110,5 +1130,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 </body>
 </html>
+
 
 
