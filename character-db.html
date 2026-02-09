@@ -328,20 +328,20 @@ function csvToList(s){return s?s.split(',').map(x=>x.trim()).filter(x=>x):[];}
 function getCatalogueEdges(){
   const CF=window.CharacterForge,all=[];
   if(CF.data?.edges) CF.data.edges.forEach(e=>all.push({...e,source:'Core'}));
-  (CF.getModules?CF.getModules():[]).forEach(m=>{if(m.edges)m.edges.forEach(e=>all.push({...e,source:m.name||m.id}));});
+  (CF.getModules?CF.getModules():[]).filter(m=>!m.alwaysOn).forEach(m=>{if(m.edges)m.edges.forEach(e=>all.push({...e,source:m.name||m.id}));});
   return all;
 }
 function getCatalogueHindrances(){
   const CF=window.CharacterForge,all=[];
   if(CF.data?.hindrances) CF.data.hindrances.forEach(h=>all.push({...h,source:'Core'}));
-  (CF.getModules?CF.getModules():[]).forEach(m=>{if(m.hindrances)m.hindrances.forEach(h=>all.push({...h,source:m.name||m.id}));});
+  (CF.getModules?CF.getModules():[]).filter(m=>!m.alwaysOn).forEach(m=>{if(m.hindrances)m.hindrances.forEach(h=>all.push({...h,source:m.name||m.id}));});
   return all;
 }
 function getCatalogueWeapons(){
   const CF=window.CharacterForge,all=[];
   if(CF.data?.gear?.melee) CF.data.gear.melee.forEach(w=>all.push({...w,type:'Melee',source:'Core'}));
   if(CF.data?.gear?.ranged) CF.data.gear.ranged.forEach(w=>all.push({...w,type:'Ranged',source:'Core'}));
-  (CF.getModules?CF.getModules():[]).forEach(m=>{
+  (CF.getModules?CF.getModules():[]).filter(m=>!m.alwaysOn).forEach(m=>{
     if(m.gear?.melee) m.gear.melee.forEach(w=>all.push({...w,type:'Melee',source:m.name||m.id}));
     if(m.gear?.ranged) m.gear.ranged.forEach(w=>all.push({...w,type:'Ranged',source:m.name||m.id}));
   });
@@ -351,7 +351,7 @@ function getCatalogueArmour(){
   const CF=window.CharacterForge,all=[];
   if(CF.data?.gear?.armor) CF.data.gear.armor.forEach(a=>all.push({...a,type:'Armour',source:'Core'}));
   if(CF.data?.gear?.shields) CF.data.gear.shields.forEach(s=>all.push({...s,type:'Shield',source:'Core'}));
-  (CF.getModules?CF.getModules():[]).forEach(m=>{
+  (CF.getModules?CF.getModules():[]).filter(m=>!m.alwaysOn).forEach(m=>{
     if(m.gear?.armor) m.gear.armor.forEach(a=>all.push({...a,type:'Armour',source:m.name||m.id}));
     if(m.gear?.shields) m.gear.shields.forEach(s=>all.push({...s,type:'Shield',source:m.name||m.id}));
   });
