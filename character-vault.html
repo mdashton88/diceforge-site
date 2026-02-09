@@ -488,8 +488,7 @@ function calcDerived(n){
   n.bennies=n.tier==='Wild Card'?3:0;
 }
 
-function saveCharacter(npc){console.log("💾 saveCharacter called:",npc.name);const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(!s.overrides)s.overrides={};s.overrides[npc.name]=npc;localStorage.setItem(LS_KEY,JSON.stringify(s));}
-function saveCharacter(npc){console.log("💾 saveCharacter called:",npc.name);const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');if(!s.custom)s.custom=[];const i=s.custom.findIndex(c=>c.name===npc.name);if(i>=0)s.custom[i]=npc;else s.custom.push(npc);localStorage.setItem(LS_KEY,JSON.stringify(s));}
+// saveOverride and saveCustomNPC removed — replaced by saveCharacter with Gist sync
 function d(v){return v<=0?'—':v<=12?'d'+v:'d12+'+(v-12);}
 const DIE_STEPS=[4,6,8,10,12];
 function dieStepUp(v,capped){if(v<4)return 4;if(v<12){const i=DIE_STEPS.indexOf(v);return i>=0&&i<4?DIE_STEPS[i+1]:12;}if(capped)return 12;return v+1;}
