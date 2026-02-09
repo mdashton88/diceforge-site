@@ -488,7 +488,10 @@ function renderDetail(){
   const titleLine=n.concept?`<div class="npc-title-line">${esc(n.concept)}${ancestryTag}</div>`:(n.ancestry?`<div class="npc-title-line">${esc(n.ancestry)}</div>`:'');
   const canonBadge=canonCommitted.has(n.name)?'<span style="font-size:13px;margin-left:10px;color:var(--green)" title="Committed to Canon">📦 In Canon</span>':'<span style="font-size:13px;margin-left:10px;color:var(--text-dim)" title="Not yet committed">📦 Not in Canon</span>';
   const catBadge=(n.category||'NPC')==='Pre-gen'?'<span class="tier-tag pregen" style="margin-left:10px;font-size:11px;padding:2px 8px">PRE-GEN</span>':'';
-  el.innerHTML=`<div class="npc-header"><h2>${esc(n.name)}${catBadge}${canonBadge}</h2>${titleLine}</div><div class="detail-columns"><div class="col-stats" id="colStats"></div><div class="col-middle" id="colMiddle"></div><div class="col-narrative" id="colNarrative"></div></div>`;
+  const tierBadgeClass=n.tier==='Wild Card'?'wc':n.tier==='Walk-on'?'walkon':'extra';
+  const tierBadgeText=n.tier==='Wild Card'?'WILD CARD':n.tier==='Walk-on'?'WALK-ON':'EXTRA';
+  const tierBadge='<span class="tier-tag '+tierBadgeClass+'" style="margin-left:6px;font-size:11px;padding:2px 8px">'+tierBadgeText+'</span>';
+  el.innerHTML=`<div class="npc-header"><h2>${esc(n.name)}${catBadge}${tierBadge}${canonBadge}</h2>${titleLine}</div><div class="detail-columns"><div class="col-stats" id="colStats"></div><div class="col-middle" id="colMiddle"></div><div class="col-narrative" id="colNarrative"></div></div>`;
   renderStatColumn(n);renderMiddleColumn(n);renderNarrativeColumn(n);
 }
 
