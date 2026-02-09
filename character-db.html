@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tribute Lands — NPC Database</title>
+<title>Tribute Lands — Character Vault</title>
 <style>
 :root {
   --bg-dark: #1a1a1a;
@@ -168,7 +168,7 @@ var DICEFORGE_AUTH=false;
 })();
 </script>
 <header>
-  <div><h1>TRIBUTE LANDS — NPC DATABASE</h1><div class="subtitle">DiceForge Studios Ltd</div></div>
+  <div><h1>TRIBUTE LANDS — CHARACTER VAULT</h1><div class="subtitle">DiceForge Studios Ltd</div></div>
   <div class="header-stats" id="headerStats"></div>
 </header>
 <div class="container">
@@ -192,7 +192,7 @@ var DICEFORGE_AUTH=false;
   <div class="main empty-state" id="mainContent">
     <div id="welcomeGate" style="text-align:center;max-width:400px">
       <h2 style="color:var(--accent);margin-bottom:6px;font-size:22px">TRIBUTE LANDS</h2>
-      <div style="color:var(--text-dim);font-size:13px;margin-bottom:24px;letter-spacing:1px">NPC DATABASE — DICEFORGE STUDIOS</div>
+      <div style="color:var(--text-dim);font-size:13px;margin-bottom:24px;letter-spacing:1px">CHARACTER VAULT — DICEFORGE STUDIOS</div>
       <div id="pinForm">
         <input id="pinInput" type="password" placeholder="Enter PIN" style="width:200px;text-align:center;padding:10px 14px;font-size:16px;letter-spacing:4px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--text);margin-bottom:12px" onkeydown="if(event.key==='Enter')checkPin()">
         <br><button class="btn primary" onclick="checkPin()" style="padding:8px 28px">Enter</button>
@@ -965,7 +965,7 @@ async function executeCommit(){
         character:canon,
         filePath:canonFilePath(currentNPC),
         summary:summary,
-        author:'NPC Database'
+        author:'Character Vault'
       })
     });
     const data=await res.json();
@@ -1004,7 +1004,7 @@ async function removeFromCanon(){
         filePath:canonFilePath(currentNPC),
         region:currentNPC.region||'Ammaria',
         summary:summary,
-        author:'NPC Database'
+        author:'Character Vault'
       })
     });
     const data=await res.json();
