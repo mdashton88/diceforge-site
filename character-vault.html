@@ -413,6 +413,8 @@ async function pushToGist(){console.log("☁️ pushToGist firing...");
         category:n.category||'NPC',product:n.product||n.region||'Ammaria',
         attrs:{agility:n.agility||0,smarts:n.smarts||0,spirit:n.spirit||0,strength:n.strength||0,vigor:n.vigor||0},
         skills:n.skills||{},edges:n.edges||[],hindrances:n.hindrances||[],powers:n.powers||[],
+        weapons:n.weapons||[],armour:n.armour||[],
+        pace:n.pace||6,parry:n.parry||2,toughness:n.toughness||5,toughnessArmor:n.toughnessArmor||0,bennies:n.bennies||0,
         gearText:n.gearText||'',quote:n.quote||'',notes:n.notes||'',
         description:n.description||'',background:n.background||'',motivation:n.motivation||'',
         secret:n.secret||'',services:n.services||'',adventureHook:n.adventureHook||'',tactics:n.tactics||'',
@@ -439,7 +441,7 @@ async function pushToGist(){console.log("☁️ pushToGist firing...");
 }
 
 function normaliseChar(c,moduleId){
-  const n={name:c.name,refCode:c.refCode||'',concept:c.concept||'',ancestry:c.ancestry||'Human',region:c.region||'Ammaria',tier:c.tier||'Wild Card',rank:c.rank||'Novice',category:c.category||'NPC',product:c.product||'',source:moduleId,agility:c.attrs?.agility||c.agility||0,smarts:c.attrs?.smarts||c.smarts||0,spirit:c.attrs?.spirit||c.spirit||0,strength:c.attrs?.strength||c.strength||0,vigor:c.attrs?.vigor||c.vigor||0,skills:c.skills||{},edges:c.edges||[],hindrances:c.hindrances||[],powers:c.powers||[],armour:c.armour||[],weapons:c.weapons||[],gearText:c.gearText||'',quote:c.quote||'',description:c.description||'',background:c.background||'',motivation:c.motivation||'',secret:c.secret||'',services:c.services||'',adventureHook:c.adventureHook||'',tactics:c.tactics||'',abName:c.abName||'',abSkill:c.abSkill||'',pp:c.pp||0,startingFunds:c.startingFunds||500,gearCost:c.gearCost||0,statComplete:c.statComplete||false,narrativeComplete:c.narrativeComplete||false,fgReady:c.fgReady||false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0};
+  const n={name:c.name,refCode:c.refCode||'',concept:c.concept||'',ancestry:c.ancestry||'Human',region:c.region||'Ammaria',tier:c.tier||'Wild Card',rank:c.rank||'Novice',category:c.category||'NPC',product:c.product||'',source:moduleId,agility:c.attrs?.agility||c.agility||0,smarts:c.attrs?.smarts||c.smarts||0,spirit:c.attrs?.spirit||c.spirit||0,strength:c.attrs?.strength||c.strength||0,vigor:c.attrs?.vigor||c.vigor||0,skills:c.skills||{},edges:c.edges||[],hindrances:c.hindrances||[],powers:c.powers||[],armour:c.armour||[],weapons:c.weapons||[],gearText:c.gearText||'',quote:c.quote||'',description:c.description||'',background:c.background||'',motivation:c.motivation||'',secret:c.secret||'',services:c.services||'',adventureHook:c.adventureHook||'',tactics:c.tactics||'',abName:c.abName||'',abSkill:c.abSkill||'',pp:c.pp||0,startingFunds:c.startingFunds||500,gearCost:c.gearCost||0,statComplete:c.statComplete||false,narrativeComplete:c.narrativeComplete||false,fgReady:c.fgReady||false,pace:c.pace||6,parry:c.parry||2,toughness:c.toughness||5,toughnessArmor:c.toughnessArmor||0,bennies:c.bennies||0};
   // Parse gear text into structured armour/weapons if not already populated
   if(!n.armour.length&&!n.weapons.length&&n.gearText) parseGearInto(n);
   n.toughnessArmor=n.armour.reduce((best,a)=>Math.max(best,a.armor||0),0);
