@@ -67,19 +67,28 @@
       ],
       melee: [
         {name:'Guild Knife',dmg:'Str+d4',cost:25,wt:1,notes:'+1 Stealth to conceal'},
-        {name:'Slaver\'s Club',dmg:'Str+d4',cost:15,wt:3,notes:'Non-lethal'},
-        {name:'Sap',dmg:'Str+d4',cost:10,wt:1,notes:'Non-lethal, +2 Stealth to conceal'},
+        {name:"Merchant's Cane",dmg:'Str+d4',cost:40,wt:2,notes:'Conceals 18" blade (Str+d4+1)'},
+        {name:'War Boar Lance',dmg:'Str+d8',cost:150,wt:6,notes:'Reach 2, AP 2 when charging, mounted only'},
+        {name:'Boarding Axe',dmg:'Str+d6',cost:75,wt:3,notes:'+1 to break doors/hatches'},
+        {name:"Docker's Hook",dmg:'Str+d4',cost:10,wt:2,notes:'Can grapple at Reach 1'},
+        {name:'Weighted Net',dmg:'-',cost:50,wt:4,notes:'Opposed Athletics vs. target Agility to Entangle'},
+        {name:"Slaver's Club",dmg:'Str+d4',cost:5,wt:3,notes:'No penalty for nonlethal attacks'},
+        {name:'Sap',dmg:'Str+d4',cost:10,wt:0.5,notes:'+2 damage when target unaware, no nonlethal penalty'},
         {name:'Boat Hook',dmg:'Str+d6',cost:20,wt:4,notes:'Reach 1'}
       ],
       armor: [
         {name:'Padded Jacket',armor:1,cost:25,wt:4,notes:'Worn under clothing'},
         {name:'Guild Leathers',armor:2,cost:100,wt:8,notes:'Standard militia issue'},
-        {name:'Sailor\'s Coat',armor:1,cost:75,wt:5,notes:'Water-resistant, -1 swimming penalty (not -2)'},
-        {name:'Ammarian Breastplate',armor:4,cost:900,wt:15,notes:'-1 run penalty (not -2), +1 Intimidation'},
-        {name:'Guild Champion Plate',armor:5,cost:2500,wt:25,notes:'Full plate, guild elite only'}
+        {name:"Sailor's Coat",armor:1,cost:75,wt:5,notes:'Water-resistant, reduce swimming penalty by -1'},
+        {name:'Ammarian Breastplate',armor:4,cost:900,wt:15,notes:'-1 run penalty (not -2)'},
+        {name:'Ammarian Breastplate (Masterwork)',armor:4,cost:1500,wt:12,notes:'No run penalty'},
+        {name:'Guild Champion Plate',armor:5,cost:2500,wt:25,notes:'Full plate, guild elite only'},
+        {name:'War Boar Barding',armor:3,cost:400,wt:30,notes:'For war boar mounts'},
+        {name:'Steel Helm',armor:3,cost:75,wt:4,notes:'Head only'},
+        {name:'Open Helm',armor:2,cost:50,wt:3,notes:'Head only, no vision penalty'}
       ],
       shields: [
-        {name:'Boarding Shield',parry:1,cost:50,wt:6,notes:'Can be used to shove (opposed Strength)'}
+        {name:'Boarding Shield',parry:1,cost:75,wt:6,notes:'Spiked (Str+d4), +1 vs. entanglement'}
       ],
       general: [
         {name:'Ammarian Lockpicks',cost:100,wt:1,notes:'+1 Thievery'},
