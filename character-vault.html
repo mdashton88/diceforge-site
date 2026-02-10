@@ -1083,7 +1083,7 @@ function filterWeaponCatalogue(s){
   s=s.toLowerCase();
   const cat=getCatalogueWeapons().filter(w=>!s||w.name.toLowerCase().includes(s));
   const el=document.getElementById('wepCatList');if(!el)return;
-  el.innerHTML=cat.map(w=>`<div class="catalogue-item" onclick="selectCatalogueWeapon('${esc(w.name)}')"><span class="cat-name">${esc(w.name)}</span> <span class="cat-detail">${esc(w.dmg)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''} — ${esc(w.source)}</span></div>`).join('');
+  el.innerHTML=cat.map(w=>`<div class="catalogue-item" onclick="selectCatalogueWeapon('${esc(w.name).replace(/'/g,"\\'")}')">`+`<span class="cat-name">${esc(w.name)}</span> <span class="cat-detail">${esc(w.dmg)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''} — ${esc(w.source)}</span></div>`).join('');
 }
 function selectCatalogueWeapon(name){
   const w=getCatalogueWeapons().find(x=>x.name===name);if(!w)return;
@@ -1121,7 +1121,7 @@ function filterArmourCatalogue(s){
   const el=document.getElementById('armCatList');if(!el)return;
   el.innerHTML=cat.map(a=>{
     const val=a.armor?'+'+a.armor:(a.parry?'Parry +'+a.parry:'');
-    return `<div class="catalogue-item" onclick="selectCatalogueArmour('${esc(a.name)}')"><span class="cat-name">${esc(a.name)}</span> <span class="cat-detail">(${val}) — ${esc(a.source)}</span></div>`;
+    return `<div class="catalogue-item" onclick="selectCatalogueArmour('${esc(a.name).replace(/'/g,"\\'")}')">`+`<span class="cat-name">${esc(a.name)}</span> <span class="cat-detail">(${val}) — ${esc(a.source)}</span></div>`;
   }).join('');
 }
 function selectCatalogueArmour(name){
