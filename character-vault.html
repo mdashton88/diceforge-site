@@ -238,20 +238,28 @@ var DICEFORGE_AUTH=false;
   </div>
 </div>
 <div class="modal-overlay" id="importModal">
-  <div class="modal" style="max-width:600px">
+  <div class="modal" style="max-width:620px">
     <h3>⇄ Import Character</h3>
     <div style="margin-bottom:10px;font-size:12px;color:var(--text-dim)">
-      <strong style="color:var(--green)">JSON (recommended)</strong> — lossless transfer from Character Forge or another Vault. Paste the full JSON object.<br>
-      <strong style="color:#e6a117">Stat Block (experimental)</strong> — best-effort parse from formatted text. Check results carefully — attributes, skills and edges will import but weapons, armour and gear may not.
+      <strong style="color:var(--green)">JSON</strong> — lossless, recommended.
+      <strong style="color:#e6a117">Text / HTML / RTF</strong> — best-effort parse, review carefully.
     </div>
-    <div style="margin-bottom:6px">
-      <label style="font-size:11px;text-transform:uppercase;color:var(--text-dim)">Format</label>
-      <select id="import_format" style="margin-left:8px;padding:3px 6px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);border-radius:3px">
-        <option value="json">JSON (recommended)</option>
-        <option value="statblock">Stat Block Text (experimental)</option>
-      </select>
+    <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
+      <label style="font-size:11px;text-transform:uppercase;color:var(--text-dim)">Source</label>
+      <button class="btn sm" id="impSrcPaste" onclick="setImportSource('paste')" style="border-color:var(--accent);color:var(--accent)">Paste Text</button>
+      <button class="btn sm" id="impSrcFile" onclick="setImportSource('file')">Upload File</button>
     </div>
-    <textarea id="import_data" rows="12" placeholder="Paste character data here..." style="width:100%;box-sizing:border-box;font-family:monospace;font-size:11px;background:var(--bg-input);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;resize:vertical"></textarea>
+    <div id="importPasteArea">
+      <textarea id="import_data" rows="10" placeholder="Paste character JSON, stat block text, or HTML here..." style="width:100%;box-sizing:border-box;font-family:monospace;font-size:11px;background:var(--bg-input);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;resize:vertical"></textarea>
+    </div>
+    <div id="importFileArea" style="display:none">
+      <div style="border:2px dashed var(--border);border-radius:6px;padding:20px;text-align:center;margin-bottom:8px">
+        <div style="font-size:13px;color:var(--text-dim);margin-bottom:8px">Drop a file here or click to browse</div>
+        <input type="file" id="import_file" accept=".json,.txt,.html,.htm,.rtf" onchange="handleImportFile(this)" style="display:block;margin:0 auto">
+        <div style="font-size:11px;color:var(--text-dim);margin-top:6px">Accepts: .json, .txt, .html, .rtf</div>
+      </div>
+      <div id="importFileName" style="font-size:12px;color:var(--accent)"></div>
+    </div>
     <div id="importPreview" style="margin-top:8px;font-size:12px;max-height:150px;overflow-y:auto"></div>
     <div id="importStatus" style="margin-top:6px;font-size:13px"></div>
     <div class="form-actions">
@@ -1160,53 +1168,165 @@ function buildStatBlockText(n){
 
 function renderTransferPanel(n){
   document.getElementById('panelContent').innerHTML=`
-    <div style="margin-bottom:14px">
-      <h4 style="color:var(--accent);margin-bottom:6px">Export ${esc(n.name)}</h4>
-      <div style="display:flex;gap:6px;margin-bottom:10px">
-        <button class="btn primary" onclick="copyExportJSON()">📋 Copy JSON</button>
-        <button class="btn" onclick="copyExportStatBlock()">📋 Copy Stat Block</button>
+    <div style="margin-bottom:16px">
+      <h4 style="color:var(--accent);margin-bottom:8px">Export: ${esc(n.name)}</h4>
+      <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap">
+        <button class="btn sm" onclick="setExportFmt('json')" id="expFmtJSON" style="border-color:var(--accent);color:var(--accent)">JSON</button>
+        <button class="btn sm" onclick="setExportFmt('text')" id="expFmtText">Text</button>
+        <button class="btn sm" onclick="setExportFmt('html')" id="expFmtHTML">HTML</button>
+        <button class="btn sm" onclick="setExportFmt('rtf')" id="expFmtRTF">RTF</button>
       </div>
-      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px">
-        <strong style="color:var(--green)">JSON</strong> — lossless, use for Character Forge import or sharing with other Vault users.<br>
-        <strong>Stat Block</strong> — formatted text for documents, PDFs, or sharing with players. Not re-importable.
+      <div id="exportFormatNote" style="font-size:11px;color:var(--text-dim);margin-bottom:6px"></div>
+      <textarea id="exportPreview" readonly rows="12" style="width:100%;box-sizing:border-box;font-family:monospace;font-size:11px;background:var(--bg-body);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;resize:vertical"></textarea>
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <button class="btn primary" onclick="copyExport()">📋 Copy to Clipboard</button>
+        <button class="btn" onclick="downloadExport()">💾 Download File</button>
       </div>
-      <div style="display:flex;gap:6px;margin-bottom:4px">
-        <button class="btn sm" onclick="showExportPreview('json')" id="expTabJSON" style="border-color:var(--accent);color:var(--accent)">JSON</button>
-        <button class="btn sm" onclick="showExportPreview('stat')" id="expTabStat">Stat Block</button>
-      </div>
-      <textarea id="exportPreview" readonly rows="14" style="width:100%;box-sizing:border-box;font-family:monospace;font-size:11px;background:var(--bg-body);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;resize:vertical"></textarea>
     </div>
     <hr style="border-color:var(--border);margin:16px 0">
     <div>
       <h4 style="color:var(--accent);margin-bottom:6px">Import</h4>
-      <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Use the <strong>⇄ Import</strong> button in the sidebar to import a new character from JSON or stat block text.</p>
+      <p style="font-size:12px;color:var(--text-dim);margin-bottom:4px">Use the <strong>⇄ Import</strong> button in the sidebar to import from clipboard or file.</p>
     </div>`;
-  showExportPreview('json');
+  setExportFmt('json');
 }
 
-function showExportPreview(mode){
+var currentExportFmt='json';
+function setExportFmt(fmt){
+  currentExportFmt=fmt;
   const ta=document.getElementById('exportPreview');
-  const jTab=document.getElementById('expTabJSON'),sTab=document.getElementById('expTabStat');
+  const note=document.getElementById('exportFormatNote');
   if(!ta||!currentNPC) return;
-  if(mode==='json'){
-    ta.value=JSON.stringify(buildExportJSON(currentNPC),null,2);
-    jTab.style.borderColor='var(--accent)';jTab.style.color='var(--accent)';
-    sTab.style.borderColor='var(--border)';sTab.style.color='var(--text-dim)';
-  } else {
-    ta.value=buildStatBlockText(currentNPC);
-    sTab.style.borderColor='var(--accent)';sTab.style.color='var(--accent)';
-    jTab.style.borderColor='var(--border)';jTab.style.color='var(--text-dim)';
-  }
+  ['json','text','html','rtf'].forEach(f=>{
+    const btn=document.getElementById('expFmt'+f.toUpperCase());
+    if(btn){btn.style.borderColor=f===fmt?'var(--accent)':'var(--border)';btn.style.color=f===fmt?'var(--accent)':'var(--text-dim)';}
+  });
+  const notes={
+    json:'Lossless — full character data. Use for Forge/Vault transfer.',
+    text:'Plain text stat block — for documents, sharing with players. Not reliably re-importable.',
+    html:'Formatted HTML — opens in any browser. Import is experimental.',
+    rtf:'Rich Text Format — opens in Word, LibreOffice. Import is experimental.'
+  };
+  note.textContent=notes[fmt]||'';
+  if(fmt==='json') ta.value=JSON.stringify(buildExportJSON(currentNPC),null,2);
+  else if(fmt==='text') ta.value=buildStatBlockText(currentNPC);
+  else if(fmt==='html') ta.value=buildExportHTML(currentNPC);
+  else if(fmt==='rtf') ta.value=buildExportRTF(currentNPC);
 }
 
-function copyExportJSON(){
-  const json=JSON.stringify(buildExportJSON(currentNPC),null,2);
-  navigator.clipboard.writeText(json).then(()=>showCopyToast('JSON copied to clipboard'));
+function copyExport(){
+  const ta=document.getElementById('exportPreview');
+  if(!ta) return;
+  navigator.clipboard.writeText(ta.value).then(()=>showCopyToast(currentExportFmt.toUpperCase()+' copied to clipboard'));
 }
-function copyExportStatBlock(){
-  const text=buildStatBlockText(currentNPC);
-  navigator.clipboard.writeText(text).then(()=>showCopyToast('Stat block copied to clipboard'));
+
+function downloadExport(){
+  if(!currentNPC) return;
+  const ta=document.getElementById('exportPreview');
+  const safeName=currentNPC.name.replace(/[^a-zA-Z0-9_-]/g,'_');
+  const exts={json:'.json',text:'.txt',html:'.html',rtf:'.rtf'};
+  const mimes={json:'application/json',text:'text/plain',html:'text/html',rtf:'application/rtf'};
+  const ext=exts[currentExportFmt]||'.txt';
+  const mime=mimes[currentExportFmt]||'text/plain';
+  const blob=new Blob([ta.value],{type:mime});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=safeName+ext;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showCopyToast('Downloaded '+safeName+ext);
 }
+
+function buildExportJSON(n){
+  return {
+    _format:'diceforge-character-v1',
+    name:n.name,refCode:n.refCode||'',concept:n.concept||'',ancestry:n.ancestry||'Human',
+    region:n.region||'Ammaria',tier:n.tier||'Wild Card',rank:n.rank||'Novice',
+    category:n.category||'NPC',product:n.product||'',
+    attributes:{agility:n.agility||4,smarts:n.smarts||4,spirit:n.spirit||4,strength:n.strength||4,vigor:n.vigor||4},
+    skills:Object.assign({},n.skills),edges:[...(n.edges||[])],hindrances:[...(n.hindrances||[])],
+    powers:[...(n.powers||[])],weapons:[...(n.weapons||[])],armour:[...(n.armour||[])],
+    gearText:n.gearText||'',
+    abName:n.abName||'',abSkill:n.abSkill||'',pp:n.pp||0,
+    pace:n.pace||6,parry:n.parry||2,toughness:n.toughness||5,toughnessArmor:n.toughnessArmor||0,
+    bennies:n.bennies||0,startingFunds:n.startingFunds||500,gearCost:n.gearCost||0,
+    quote:n.quote||'',description:n.description||'',background:n.background||'',
+    motivation:n.motivation||'',secret:n.secret||'',services:n.services||'',
+    adventureHook:n.adventureHook||'',tactics:n.tactics||''
+  };
+}
+
+function buildStatBlockText(n){
+  const lines=[];
+  lines.push(n.name+(n.concept?' — '+n.concept:''));
+  lines.push('');
+  if(n.quote) lines.push('"'+n.quote+'"','');
+  if(n.description) lines.push(n.description,'');
+  lines.push('Attributes: Agility d'+n.agility+', Smarts d'+n.smarts+', Spirit d'+n.spirit+', Strength d'+n.strength+', Vigor d'+n.vigor);
+  lines.push('Skills: '+Object.entries(n.skills).sort((a,b)=>a[0].localeCompare(b[0])).map(([k,v])=>k+' d'+v).join(', '));
+  const tDisp=n.toughnessArmor>0?n.toughness+' ('+n.toughnessArmor+')':''+n.toughness;
+  lines.push('Pace: '+n.pace+'; Parry: '+n.parry+'; Toughness: '+tDisp);
+  if(n.edges.length) lines.push('Edges: '+n.edges.join(', '));
+  if(n.hindrances.length) lines.push('Hindrances: '+n.hindrances.join(', '));
+  if(n.powers.length) lines.push('Powers: '+n.powers.join(', ')+(n.pp?' ('+n.pp+' Power Points)':''));
+  if(n.weapons.length) lines.push('Weapons: '+n.weapons.map(w=>w.name+' ('+w.damage+(w.ap?', AP '+w.ap:'')+(w.range?', '+w.range:'')+')').join(', '));
+  if(n.armour.length) lines.push('Armour: '+n.armour.map(a=>a.name+' (+'+a.armor+')').join(', '));
+  if(n.gearText) lines.push('Gear: '+n.gearText);
+  if(n.abName) lines.push('Arcane Background: '+n.abName+(n.abSkill?' ('+n.abSkill+')':''));
+  return lines.join('\n');
+}
+
+function buildExportHTML(n){
+  const tDisp=n.toughnessArmor>0?n.toughness+' ('+n.toughnessArmor+')':''+n.toughness;
+  const wcStar=n.tier==='Wild Card'?' ★':'';
+  let h='<!DOCTYPE html>\n<html><head><meta charset="utf-8"><title>'+esc(n.name)+'</title>\n';
+  h+='<style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;padding:20px;color:#222;line-height:1.6}';
+  h+='h1{font-size:22px;margin-bottom:2px;color:#8b0000}h2{font-size:14px;color:#666;font-weight:normal;margin-top:0}';
+  h+='.quote{font-style:italic;color:#555;margin:12px 0;border-left:3px solid #8b0000;padding-left:12px}';
+  h+='.desc{margin:12px 0}.stat-label{font-weight:bold;color:#8b0000}.stat-line{margin:4px 0}';
+  h+='.section{margin:8px 0}.footer{margin-top:20px;padding-top:10px;border-top:1px solid #ccc;font-size:11px;color:#999}</style></head><body>\n';
+  h+='<h1>'+esc(n.name)+wcStar+'</h1>\n';
+  if(n.concept) h+='<h2>'+esc(n.concept)+'</h2>\n';
+  if(n.quote) h+='<div class="quote">"'+esc(n.quote)+'"</div>\n';
+  if(n.description) h+='<div class="desc">'+esc(n.description)+'</div>\n';
+  h+='<div class="stat-line"><span class="stat-label">Attributes:</span> Agility d'+n.agility+', Smarts d'+n.smarts+', Spirit d'+n.spirit+', Strength d'+n.strength+', Vigor d'+n.vigor+'</div>\n';
+  h+='<div class="stat-line"><span class="stat-label">Skills:</span> '+Object.entries(n.skills).sort((a,b)=>a[0].localeCompare(b[0])).map(([k,v])=>k+' d'+v).join(', ')+'</div>\n';
+  h+='<div class="stat-line"><span class="stat-label">Pace:</span> '+n.pace+'; <span class="stat-label">Parry:</span> '+n.parry+'; <span class="stat-label">Toughness:</span> '+tDisp+'</div>\n';
+  if(n.edges.length) h+='<div class="stat-line"><span class="stat-label">Edges:</span> '+n.edges.map(e=>esc(e)).join(', ')+'</div>\n';
+  if(n.hindrances.length) h+='<div class="stat-line"><span class="stat-label">Hindrances:</span> '+n.hindrances.map(x=>esc(x)).join(', ')+'</div>\n';
+  if(n.powers.length) h+='<div class="stat-line"><span class="stat-label">Powers:</span> '+n.powers.map(p=>esc(p)).join(', ')+(n.pp?' ('+n.pp+' PP)':'')+'</div>\n';
+  if(n.weapons.length) h+='<div class="stat-line"><span class="stat-label">Weapons:</span> '+n.weapons.map(w=>esc(w.name)+' ('+esc(w.damage)+(w.ap?', AP '+w.ap:'')+(w.range?', '+esc(w.range):'')+')').join(', ')+'</div>\n';
+  if(n.armour.length) h+='<div class="stat-line"><span class="stat-label">Armour:</span> '+n.armour.map(a=>esc(a.name)+' (+'+a.armor+')').join(', ')+'</div>\n';
+  if(n.gearText) h+='<div class="stat-line"><span class="stat-label">Gear:</span> '+esc(n.gearText)+'</div>\n';
+  if(n.abName) h+='<div class="stat-line"><span class="stat-label">Arcane Background:</span> '+esc(n.abName)+(n.abSkill?' ('+esc(n.abSkill)+')':'')+'</div>\n';
+  h+='<div class="footer">Exported from DiceForge Character Vault — diceforge-character-v1</div>\n';
+  h+='</body></html>';
+  return h;
+}
+
+function buildExportRTF(n){
+  const tDisp=n.toughnessArmor>0?n.toughness+' ('+n.toughnessArmor+')':''+n.toughness;
+  const wcStar=n.tier==='Wild Card'?' *':'';
+  const re=s=>(s||'').replace(/\\/g,'\\\\').replace(/\{/g,'\\{').replace(/\}/g,'\\}');
+  let r='{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0 Georgia;}{\\f1 Arial;}}{\\colortbl;\\red139\\green0\\blue0;\\red100\\green100\\blue100;}\n';
+  r+='\\f0\\fs24\\b '+re(n.name)+wcStar+'\\b0\\par\n';
+  if(n.concept) r+='{\\f1\\fs20\\cf2 '+re(n.concept)+'}\\par\n';
+  if(n.quote) r+='\\par{\\i "'+re(n.quote)+'"}\\par\n';
+  if(n.description) r+='\\par '+re(n.description)+'\\par\n';
+  r+='\\par{\\b\\cf1 Attributes:} Agility d'+n.agility+', Smarts d'+n.smarts+', Spirit d'+n.spirit+', Strength d'+n.strength+', Vigor d'+n.vigor+'\\par\n';
+  r+='{\\b\\cf1 Skills:} '+Object.entries(n.skills).sort((a,b)=>a[0].localeCompare(b[0])).map(([k,v])=>re(k)+' d'+v).join(', ')+'\\par\n';
+  r+='{\\b\\cf1 Pace:} '+n.pace+'; {\\b\\cf1 Parry:} '+n.parry+'; {\\b\\cf1 Toughness:} '+tDisp+'\\par\n';
+  if(n.edges.length) r+='{\\b\\cf1 Edges:} '+n.edges.map(e=>re(e)).join(', ')+'\\par\n';
+  if(n.hindrances.length) r+='{\\b\\cf1 Hindrances:} '+n.hindrances.map(x=>re(x)).join(', ')+'\\par\n';
+  if(n.powers.length) r+='{\\b\\cf1 Powers:} '+n.powers.map(p=>re(p)).join(', ')+(n.pp?' ('+n.pp+' PP)':'')+'\\par\n';
+  if(n.weapons.length) r+='{\\b\\cf1 Weapons:} '+n.weapons.map(w=>re(w.name)+' ('+re(w.damage)+(w.ap?', AP '+w.ap:'')+(w.range?', '+re(w.range):'')+')').join(', ')+'\\par\n';
+  if(n.armour.length) r+='{\\b\\cf1 Armour:} '+n.armour.map(a=>re(a.name)+' (+'+a.armor+')').join(', ')+'\\par\n';
+  if(n.gearText) r+='{\\b\\cf1 Gear:} '+re(n.gearText)+'\\par\n';
+  if(n.abName) r+='{\\b\\cf1 Arcane Background:} '+re(n.abName)+(n.abSkill?' ('+re(n.abSkill)+')':'')+'\\par\n';
+  r+='\\par{\\f1\\fs16\\cf2 Exported from DiceForge Character Vault}\\par\n}';
+  return r;
+}
+
 function showCopyToast(msg){
   const t=document.createElement('div');
   t.textContent=msg;
@@ -1215,34 +1335,56 @@ function showCopyToast(msg){
   setTimeout(()=>t.remove(),2000);
 }
 
-// Import modal
-function openImportModal(){document.getElementById('importModal').classList.add('active');document.getElementById('import_data').value='';document.getElementById('importPreview').innerHTML='';document.getElementById('importStatus').innerHTML='';}
+// === IMPORT ===
+function openImportModal(){document.getElementById('importModal').classList.add('active');document.getElementById('import_data').value='';document.getElementById('importPreview').innerHTML='';document.getElementById('importStatus').innerHTML='';document.getElementById('importFileName').textContent='';setImportSource('paste');}
 function closeImportModal(){document.getElementById('importModal').classList.remove('active');}
 
+function setImportSource(mode){
+  document.getElementById('importPasteArea').style.display=mode==='paste'?'block':'none';
+  document.getElementById('importFileArea').style.display=mode==='file'?'block':'none';
+  document.getElementById('impSrcPaste').style.borderColor=mode==='paste'?'var(--accent)':'var(--border)';
+  document.getElementById('impSrcPaste').style.color=mode==='paste'?'var(--accent)':'var(--text-dim)';
+  document.getElementById('impSrcFile').style.borderColor=mode==='file'?'var(--accent)':'var(--border)';
+  document.getElementById('impSrcFile').style.color=mode==='file'?'var(--accent)':'var(--text-dim)';
+}
+
+function handleImportFile(input){
+  const file=input.files[0];if(!file) return;
+  document.getElementById('importFileName').textContent='📄 '+file.name+' ('+Math.round(file.size/1024)+'KB)';
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const text=e.target.result;
+    document.getElementById('import_data').value=text;
+    // Auto-detect format
+    const ext=file.name.split('.').pop().toLowerCase();
+    document.getElementById('importStatus').innerHTML='<span style="color:var(--accent)">File loaded — '+ext.toUpperCase()+' detected. Click Preview to validate.</span>';
+  };
+  reader.readAsText(file);
+}
+
 function previewImport(){
-  const raw=document.getElementById('import_data').value.trim();
-  const fmt=document.getElementById('import_format').value;
+  let raw=document.getElementById('import_data').value.trim();
   const prev=document.getElementById('importPreview');
   const stat=document.getElementById('importStatus');
-  if(!raw){stat.innerHTML='<span style="color:var(--red)">Nothing to preview — paste data first</span>';return;}
+  if(!raw){stat.innerHTML='<span style="color:var(--red)">Nothing to preview — paste data or upload a file first</span>';return;}
   try{
-    const npc=fmt==='json'?parseImportJSON(raw):parseImportStatBlock(raw);
+    const npc=autoParseImport(raw);
     prev.innerHTML=`<div style="padding:8px;background:var(--bg-body);border:1px solid var(--border);border-radius:4px">
       <strong style="color:var(--accent)">${esc(npc.name)}</strong> ${esc(npc.concept||'')}
       <div style="margin-top:4px;font-size:11px">
       <div><strong>Ancestry:</strong> ${esc(npc.ancestry)} | <strong>Tier:</strong> ${esc(npc.tier)} | <strong>Category:</strong> ${esc(npc.category)}</div>
       <div><strong>Attributes:</strong> Agi d${npc.agility}, Sma d${npc.smarts}, Spi d${npc.spirit}, Str d${npc.strength}, Vig d${npc.vigor}</div>
       <div><strong>Skills:</strong> ${Object.entries(npc.skills).map(([k,v])=>k+' d'+v).join(', ')||'None'}</div>
-      <div><strong>Edges:</strong> ${npc.edges.join(', ')||'None'}</div>
-      <div><strong>Hindrances:</strong> ${npc.hindrances.join(', ')||'None'}</div>
-      <div><strong>Weapons:</strong> ${npc.weapons.map(w=>w.name).join(', ')||'None'}</div>
-      <div><strong>Armour:</strong> ${npc.armour.map(a=>a.name).join(', ')||'None'}</div>
-      ${fmt==='statblock'?'<div style="color:#e6a117;margin-top:4px">⚠ Stat block import is best-effort — review all fields before committing</div>':''}
+      <div><strong>Edges:</strong> ${(npc.edges||[]).join(', ')||'None'}</div>
+      <div><strong>Hindrances:</strong> ${(npc.hindrances||[]).join(', ')||'None'}</div>
+      <div><strong>Weapons:</strong> ${(npc.weapons||[]).map(w=>w.name).join(', ')||'None'}</div>
+      <div><strong>Armour:</strong> ${(npc.armour||[]).map(a=>a.name).join(', ')||'None'}</div>
+      ${npc._importWarning?'<div style="color:#e6a117;margin-top:4px">'+npc._importWarning+'</div>':''}
       </div></div>`;
     prev._parsedNPC=npc;
     stat.innerHTML='<span style="color:var(--green)">✓ Parsed successfully — click Import to add</span>';
     const exists=allNPCs.find(n=>n.name===npc.name);
-    if(exists) stat.innerHTML+='<br><span style="color:#e6a117">⚠ Character "'+esc(npc.name)+'" already exists — importing will create a duplicate</span>';
+    if(exists) stat.innerHTML+='<br><span style="color:#e6a117">⚠ "'+esc(npc.name)+'" already exists — importing will create a duplicate</span>';
   }catch(e){
     prev.innerHTML='';prev._parsedNPC=null;
     stat.innerHTML='<span style="color:var(--red)">❌ Parse error: '+esc(e.message)+'</span>';
@@ -1254,6 +1396,7 @@ function executeImport(){
   const stat=document.getElementById('importStatus');
   if(!prev._parsedNPC){stat.innerHTML='<span style="color:var(--red)">Preview first to validate the data</span>';return;}
   const npc=prev._parsedNPC;
+  delete npc._importWarning;
   npc.weapons=npc.weapons||[];npc.armour=npc.armour||[];
   calcDerived(npc);
   allNPCs.push(npc);
@@ -1262,11 +1405,57 @@ function executeImport(){
   filterNPCs();updateHeaderStats();selectNPC(npc.name);
 }
 
+function autoParseImport(raw){
+  // Try JSON first
+  const trimmed=raw.trim();
+  if(trimmed.startsWith('{')){
+    try{return parseImportJSON(trimmed);}catch(e){}
+  }
+  // Strip HTML tags if present
+  if(trimmed.includes('<html')||trimmed.includes('<div')||trimmed.includes('<span')||trimmed.includes('<p')){
+    const stripped=stripHTML(trimmed);
+    const npc=parseImportStatBlock(stripped);
+    npc._importWarning='⚠ Imported from HTML — weapons, armour and gear require manual entry. Review all fields.';
+    return npc;
+  }
+  // Strip RTF codes if present
+  if(trimmed.startsWith('{\\rtf')){
+    const stripped=stripRTF(trimmed);
+    const npc=parseImportStatBlock(stripped);
+    npc._importWarning='⚠ Imported from RTF — weapons, armour and gear require manual entry. Review all fields.';
+    return npc;
+  }
+  // Plain text stat block
+  const npc=parseImportStatBlock(trimmed);
+  npc._importWarning='⚠ Imported from text — weapons, armour and gear require manual entry. Review all fields.';
+  return npc;
+}
+
+function stripHTML(html){
+  const tmp=document.createElement('div');
+  tmp.innerHTML=html;
+  return tmp.textContent||tmp.innerText||'';
+}
+
+function stripRTF(rtf){
+  // Remove RTF header, control words, groups
+  let text=rtf;
+  text=text.replace(/\{\\fonttbl[^}]*\}/g,'');
+  text=text.replace(/\{\\colortbl[^}]*\}/g,'');
+  text=text.replace(/\\par\b/g,'\n');
+  text=text.replace(/\\tab\b/g,' ');
+  text=text.replace(/\\line\b/g,'\n');
+  text=text.replace(/\\'([0-9a-fA-F]{2})/g,(m,hex)=>String.fromCharCode(parseInt(hex,16)));
+  text=text.replace(/\\[a-z]+\d*\s?/gi,'');
+  text=text.replace(/[{}]/g,'');
+  text=text.replace(/\n{3,}/g,'\n\n');
+  return text.trim();
+}
+
 function parseImportJSON(raw){
   let obj;
   try{obj=JSON.parse(raw);}catch(e){throw new Error('Invalid JSON — check formatting');}
   if(!obj.name) throw new Error('Missing required field: name');
-  // Accept both Vault format (attrs as flat) and export format (attrs as object)
   const a=obj.attributes||obj.attrs||{};
   return {
     name:obj.name,refCode:obj.refCode||'',concept:obj.concept||'',ancestry:obj.ancestry||'Human',
@@ -1295,9 +1484,7 @@ function parseImportStatBlock(raw){
     background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',
     abName:'',abSkill:'',pp:0,startingFunds:500,gearCost:0,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0,
     statComplete:false,narrativeComplete:false,fgReady:false};
-  // First non-label line is the name
   if(lines.length) npc.name=lines[0].replace(/\*+/g,'').replace(/—.*/,'').replace(/--.*/,'').trim();
-  const dieRe=/d(\d+)/;
   for(const line of lines){
     const lo=line.toLowerCase();
     if(lo.startsWith('attributes:')){
@@ -1328,10 +1515,9 @@ function parseImportStatBlock(raw){
   }
   if(!npc.name) throw new Error('Could not find character name — expected it on the first line');
   if(npc.agility===4&&npc.smarts===4&&npc.spirit===4&&npc.strength===4&&npc.vigor===4&&Object.keys(npc.skills).length===0)
-    throw new Error('No attributes or skills found — check the format matches: "Attributes: Agility d6, Smarts d8..."');
+    throw new Error('No attributes or skills found — check format: "Attributes: Agility d6, Smarts d8..."');
   return npc;
 }
-
 function showStatusView(){
   const el=document.getElementById('mainContent');el.classList.remove('empty-state');el.style.overflowY='auto';
   const rows=allNPCs.map(n=>{
