@@ -1067,32 +1067,70 @@ function removeSkill(name){
 }
 
 function renderWeaponsPanel(n){
-  const current=n.weapons.map((w,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${esc(w.name)} <span style="color:var(--text-dim)">${esc(w.damage)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''}</span></span><button class="btn sm danger" onclick="removeWeapon(${i})">×</button></div>`).join('');
+  const current=n.weapons.map((w,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span style="cursor:pointer" onclick="showExistingWeaponInfo('${esc(w.name).replace(/'/g,"\\'")}')">${esc(w.name)} <span style="color:var(--text-dim)">${esc(w.damage)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''}</span></span><button class="btn sm danger" onclick="removeWeapon(${i})">×</button></div>`).join('');
   document.getElementById('panelContent').innerHTML=`<div>${current||'<div style="color:var(--text-dim)">No weapons</div>'}</div>
     <div class="catalogue-section"><h4>Add Weapon</h4>
     <div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
-    <input placeholder="Search weapons..." oninput="filterWeaponCatalogue(this.value)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
-    <div class="catalogue-list" id="wepCatList"></div>
+    <input placeholder="Search weapons... (↑↓ to browse)" id="wepSearch" oninput="filterWeaponCatalogue()" onkeydown="wepCatKeyNav(event)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
+    <div style="display:flex;gap:8px;align-items:flex-start">
+      <div class="catalogue-list" id="wepCatList" style="flex:1;min-width:0"></div>
+      <div id="wepInfo" style="flex:1;min-width:0"></div>
+    </div>
     <div style="margin:10px 0 4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Or Enter Custom</div>
     <div class="form-row"><div class="form-group"><label>Name</label><input id="wep_name"></div><div class="form-group"><label>Damage</label><input id="wep_damage" placeholder="Str+d8"></div></div>
     <div class="form-row"><div class="form-group" style="max-width:80px"><label>AP</label><input id="wep_ap" type="number" value="0"></div><div class="form-group"><label>Range</label><input id="wep_range" placeholder=""></div><div class="form-group"><label>Notes</label><input id="wep_notes"></div></div>
     <button class="btn primary" onclick="addWeapon()">Add Weapon</button></div>`;
-  filterWeaponCatalogue('');
+  filterWeaponCatalogue();
 }
-function filterWeaponCatalogue(s){
-  s=s.toLowerCase();
-  var wepCatList=getCatalogueWeapons().filter(w=>!s||w.name.toLowerCase().includes(s));
+var wepCatIdx=-1;
+var wepCatFiltered=[];
+function hasWeapon(name,n){return(n.weapons||[]).some(w=>w.name.toLowerCase()===name.toLowerCase());}
+function filterWeaponCatalogue(){
+  wepCatIdx=-1;
+  const s=(document.getElementById('wepSearch')?.value||'').toLowerCase();
+  wepCatFiltered=getCatalogueWeapons().filter(w=>!s||w.name.toLowerCase().includes(s));
   const el=document.getElementById('wepCatList');if(!el)return;
-  el.innerHTML=wepCatList.map((w,i)=>`<div class="catalogue-item" onclick="selectCatalogueWeapon(${i})"><span class="cat-name">${esc(w.name)}</span> <span class="cat-detail">${esc(w.dmg)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''} — ${esc(w.source)}</span></div>`).join('');
-  window._wepCatList=wepCatList;
+  el.innerHTML=wepCatFiltered.map((w,i)=>{const owned=hasWeapon(w.name,currentNPC);return `<div class="catalogue-item" onclick="selectWepInfo(${i})" style="color:${owned?'var(--text-dim)':'var(--green)'}"><span class="cat-name">${esc(w.name)}</span> <span class="cat-detail">${esc(w.dmg)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''} — ${esc(w.source)}</span></div>`;}).join('');
 }
-function selectCatalogueWeapon(idx){
-  const w=window._wepCatList?.[idx];if(!w)return;
+function wepCatKeyNav(e){
+  const list=document.getElementById('wepCatList');if(!list)return;
+  const items=list.querySelectorAll('.catalogue-item');if(!items.length)return;
+  if(e.key==='ArrowDown'){e.preventDefault();wepCatIdx=Math.min(wepCatIdx+1,items.length-1);highlightWepCat(items);}
+  else if(e.key==='ArrowUp'){e.preventDefault();wepCatIdx=Math.max(wepCatIdx-1,0);highlightWepCat(items);}
+  else if(e.key==='Enter'&&wepCatIdx>=0){e.preventDefault();selectWepInfo(wepCatIdx);}
+}
+function highlightWepCat(items){
+  items.forEach((it,i)=>{it.style.background=i===wepCatIdx?'var(--accent)22':'';});
+  if(items[wepCatIdx]){items[wepCatIdx].scrollIntoView({block:'nearest'});selectWepInfo(wepCatIdx);}
+}
+function selectWepInfo(idx){
+  const w=wepCatFiltered[idx];if(!w)return;
+  wepCatIdx=idx;
   document.getElementById('wep_name').value=w.name;
   document.getElementById('wep_damage').value=w.dmg;
   document.getElementById('wep_ap').value=w.ap||0;
   document.getElementById('wep_range').value=w.range||'';
   document.getElementById('wep_notes').value=w.notes||'';
+  const info=document.getElementById('wepInfo');if(!info)return;
+  const owned=hasWeapon(w.name,currentNPC);
+  const tagStyle=owned?'color:var(--text-dim)':'color:var(--green)';
+  const tagText=owned?'Already equipped':'Available';
+  const rangeStr=w.range?`<div class="ci-meta">Range: ${esc(w.range)}</div>`:'';
+  info.innerHTML=`<div class="cat-info" style="cursor:pointer" onclick="scrollToWepCatItem(${idx})"><div class="ci-name">${esc(w.name)} <span style="font-size:11px;${tagStyle}">${tagText}</span></div><div class="ci-meta">${esc(w.dmg)}${w.ap?' · AP '+w.ap:''}${w.cost?' · '+w.cost+'₡':''}${w.wt?' · '+w.wt+' lbs':''} · ${esc(w.source)}</div>${rangeStr}<div class="ci-desc">${esc(w.notes||'No additional notes.')}</div></div>`;
+  const items=document.getElementById('wepCatList')?.querySelectorAll('.catalogue-item');
+  if(items)items.forEach((it,i)=>{it.style.background=i===idx?'var(--accent)22':'';});
+  setTimeout(()=>document.getElementById('wepSearch')?.focus(),0);
+}
+function scrollToWepCatItem(idx){
+  const list=document.getElementById('wepCatList');if(!list)return;
+  const items=list.querySelectorAll('.catalogue-item');
+  if(items[idx])items[idx].scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+function showExistingWeaponInfo(name){
+  document.getElementById('wepSearch').value='';
+  filterWeaponCatalogue();
+  const idx=wepCatFiltered.findIndex(w=>w.name.toLowerCase()===name.toLowerCase());
+  if(idx>=0){selectWepInfo(idx);scrollToWepCatItem(idx);}
 }
 function addWeapon(){
   const name=document.getElementById('wep_name').value.trim(),dmg=document.getElementById('wep_damage').value.trim();
@@ -1104,33 +1142,72 @@ function removeWeapon(idx){currentNPC.weapons.splice(idx,1);saveCharacter(curren
 function addWeaponToGear(){addWeapon();}
 
 function renderArmourPanel(n){
-  const current=n.armour.map((a,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${esc(a.name)} <span style="color:var(--accent)">(+${a.armor})</span>${a.notes?' <span style="color:var(--text-dim)">'+esc(a.notes)+'</span>':''}</span><button class="btn sm danger" onclick="removeArmour(${i})">×</button></div>`).join('');
+  const current=n.armour.map((a,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span style="cursor:pointer" onclick="showExistingArmourInfo('${esc(a.name).replace(/'/g,"\\'")}')">${esc(a.name)} <span style="color:var(--accent)">(+${a.armor})</span>${a.notes?' <span style="color:var(--text-dim)">'+esc(a.notes)+'</span>':''}</span><button class="btn sm danger" onclick="removeArmour(${i})">×</button></div>`).join('');
   document.getElementById('panelContent').innerHTML=`<div>${current||'<div style="color:var(--text-dim)">No armour</div>'}</div>
     <div class="catalogue-section"><h4>Add Armour</h4>
     <div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
-    <input placeholder="Search armour & shields..." oninput="filterArmourCatalogue(this.value)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
-    <div class="catalogue-list" id="armCatList"></div>
+    <input placeholder="Search armour & shields... (↑↓ to browse)" id="armSearch" oninput="filterArmourCatalogue()" onkeydown="armCatKeyNav(event)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
+    <div style="display:flex;gap:8px;align-items:flex-start">
+      <div class="catalogue-list" id="armCatList" style="flex:1;min-width:0"></div>
+      <div id="armInfo" style="flex:1;min-width:0"></div>
+    </div>
     <div style="margin:10px 0 4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Or Enter Custom</div>
     <div class="form-row"><div class="form-group"><label>Name</label><input id="arm_name"></div><div class="form-group" style="max-width:100px"><label>Protection</label><input id="arm_prot" type="number" value="2"></div></div>
     <div class="form-row"><div class="form-group"><label>Notes</label><input id="arm_notes"></div></div>
     <button class="btn primary" onclick="addArmour()">Add Armour</button></div>`;
-  filterArmourCatalogue('');
+  filterArmourCatalogue();
 }
-function filterArmourCatalogue(s){
-  s=s.toLowerCase();
-  var armCatArr=getCatalogueArmour().filter(a=>!s||a.name.toLowerCase().includes(s));
+var armCatIdx=-1;
+var armCatFiltered=[];
+function hasArmour(name,n){return(n.armour||[]).some(a=>a.name.toLowerCase()===name.toLowerCase());}
+function filterArmourCatalogue(){
+  armCatIdx=-1;
+  const s=(document.getElementById('armSearch')?.value||'').toLowerCase();
+  armCatFiltered=getCatalogueArmour().filter(a=>!s||a.name.toLowerCase().includes(s));
   const el=document.getElementById('armCatList');if(!el)return;
-  el.innerHTML=armCatArr.map((a,i)=>{
+  el.innerHTML=armCatFiltered.map((a,i)=>{
     const val=a.armor?'+'+a.armor:(a.parry?'Parry +'+a.parry:'');
-    return `<div class="catalogue-item" onclick="selectCatalogueArmour(${i})"><span class="cat-name">${esc(a.name)}</span> <span class="cat-detail">(${val}) — ${esc(a.source)}</span></div>`;
+    const owned=hasArmour(a.name,currentNPC);
+    return `<div class="catalogue-item" onclick="selectArmInfo(${i})" style="color:${owned?'var(--text-dim)':'var(--green)'}"><span class="cat-name">${esc(a.name)}</span> <span class="cat-detail">(${val}) — ${esc(a.source)}</span></div>`;
   }).join('');
-  window._armCatList=armCatArr;
 }
-function selectCatalogueArmour(idx){
-  const a=window._armCatList?.[idx];if(!a)return;
+function armCatKeyNav(e){
+  const list=document.getElementById('armCatList');if(!list)return;
+  const items=list.querySelectorAll('.catalogue-item');if(!items.length)return;
+  if(e.key==='ArrowDown'){e.preventDefault();armCatIdx=Math.min(armCatIdx+1,items.length-1);highlightArmCat(items);}
+  else if(e.key==='ArrowUp'){e.preventDefault();armCatIdx=Math.max(armCatIdx-1,0);highlightArmCat(items);}
+  else if(e.key==='Enter'&&armCatIdx>=0){e.preventDefault();selectArmInfo(armCatIdx);}
+}
+function highlightArmCat(items){
+  items.forEach((it,i)=>{it.style.background=i===armCatIdx?'var(--accent)22':'';});
+  if(items[armCatIdx]){items[armCatIdx].scrollIntoView({block:'nearest'});selectArmInfo(armCatIdx);}
+}
+function selectArmInfo(idx){
+  const a=armCatFiltered[idx];if(!a)return;
+  armCatIdx=idx;
   document.getElementById('arm_name').value=a.name;
   document.getElementById('arm_prot').value=a.armor||a.parry||0;
   document.getElementById('arm_notes').value=a.notes||'';
+  const info=document.getElementById('armInfo');if(!info)return;
+  const owned=hasArmour(a.name,currentNPC);
+  const tagStyle=owned?'color:var(--text-dim)':'color:var(--green)';
+  const tagText=owned?'Already equipped':'Available';
+  const val=a.armor?'Armour +'+a.armor:(a.parry?'Parry +'+a.parry:'');
+  info.innerHTML=`<div class="cat-info" style="cursor:pointer" onclick="scrollToArmCatItem(${idx})"><div class="ci-name">${esc(a.name)} <span style="font-size:11px;${tagStyle}">${tagText}</span></div><div class="ci-meta">${val}${a.cost?' · '+a.cost+'₡':''}${a.wt?' · '+a.wt+' lbs':''} · ${esc(a.source)}</div><div class="ci-desc">${esc(a.notes||'No additional notes.')}</div></div>`;
+  const items=document.getElementById('armCatList')?.querySelectorAll('.catalogue-item');
+  if(items)items.forEach((it,i)=>{it.style.background=i===idx?'var(--accent)22':'';});
+  setTimeout(()=>document.getElementById('armSearch')?.focus(),0);
+}
+function scrollToArmCatItem(idx){
+  const list=document.getElementById('armCatList');if(!list)return;
+  const items=list.querySelectorAll('.catalogue-item');
+  if(items[idx])items[idx].scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+function showExistingArmourInfo(name){
+  document.getElementById('armSearch').value='';
+  filterArmourCatalogue();
+  const idx=armCatFiltered.findIndex(a=>a.name.toLowerCase()===name.toLowerCase());
+  if(idx>=0){selectArmInfo(idx);scrollToArmCatItem(idx);}
 }
 function addArmour(){
   const name=document.getElementById('arm_name').value.trim();if(!name)return;
@@ -1144,25 +1221,68 @@ function recalcArmour(){currentNPC.toughnessArmor=currentNPC.armour.reduce((best
 
 function renderGearPanel(n){
   const items=n.gearText?n.gearText.split(',').map(g=>g.trim()).filter(g=>g):[];
-  const rows=items.map((g,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;padding:4px 0">${esc(g)} <button class="btn sm danger" onclick="removeGearItem(${i})">×</button></div>`).join('');
+  const rows=items.map((g,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;padding:4px 0"><span style="cursor:pointer" onclick="showExistingGearInfo('${esc(g).replace(/'/g,"\\'")}')">${esc(g)}</span> <button class="btn sm danger" onclick="removeGearItem(${i})">×</button></div>`).join('');
   document.getElementById('panelContent').innerHTML=`<div>${rows||'<div style="color:var(--text-dim)">No gear yet</div>'}</div>
     <div class="catalogue-section"><h4>Add Item</h4>
     <div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
-    <input placeholder="Search gear..." oninput="filterGearCatalogue(this.value)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
-    <div class="catalogue-list" id="gearCatList"></div>
+    <input placeholder="Search gear... (↑↓ to browse)" id="gearSearch" oninput="filterGearCatalogue()" onkeydown="gearCatKeyNav(event)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
+    <div style="display:flex;gap:8px;align-items:flex-start">
+      <div class="catalogue-list" id="gearCatList" style="flex:1;min-width:0"></div>
+      <div id="gearInfo" style="flex:1;min-width:0"></div>
+    </div>
     <div style="margin:10px 0 4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Or Enter Custom</div>
     <div class="form-group"><label>Item</label><input id="gear_name"></div>
     <button class="btn primary" onclick="addGearItem()">Add Item</button></div>`;
-  filterGearCatalogue('');
+  filterGearCatalogue();
 }
-function filterGearCatalogue(s){
-  s=s.toLowerCase();
-  const cat=getCatalogueGear().filter(g=>!s||g.name.toLowerCase().includes(s));
+var gearCatIdx=-1;
+var gearCatFiltered=[];
+function hasGear(name,n){const items=(n.gearText||'').toLowerCase();return items.includes(name.toLowerCase());}
+function filterGearCatalogue(){
+  gearCatIdx=-1;
+  const s=(document.getElementById('gearSearch')?.value||'').toLowerCase();
+  gearCatFiltered=getCatalogueGear().filter(g=>!s||g.name.toLowerCase().includes(s));
   const el=document.getElementById('gearCatList');if(!el)return;
-  el.innerHTML=cat.map(g=>{
-    const detail=g.notes?` — ${g.notes}`:'';
-    return `<div class="catalogue-item" onclick="document.getElementById('gear_name').value='${esc(g.name)}'"><span class="cat-name">${esc(g.name)}</span> <span class="cat-detail">${g.cost?g.cost+'₡':''}${detail} — ${esc(g.source)}</span></div>`;
+  el.innerHTML=gearCatFiltered.map((g,i)=>{
+    const owned=hasGear(g.name,currentNPC);
+    const detail=g.notes?' — '+g.notes:'';
+    return `<div class="catalogue-item" onclick="selectGearInfo(${i})" style="color:${owned?'var(--text-dim)':'var(--green)'}"><span class="cat-name">${esc(g.name)}</span> <span class="cat-detail">${g.cost?g.cost+'₡':''}${detail} — ${esc(g.source)}</span></div>`;
   }).join('');
+}
+function gearCatKeyNav(e){
+  const list=document.getElementById('gearCatList');if(!list)return;
+  const items=list.querySelectorAll('.catalogue-item');if(!items.length)return;
+  if(e.key==='ArrowDown'){e.preventDefault();gearCatIdx=Math.min(gearCatIdx+1,items.length-1);highlightGearCat(items);}
+  else if(e.key==='ArrowUp'){e.preventDefault();gearCatIdx=Math.max(gearCatIdx-1,0);highlightGearCat(items);}
+  else if(e.key==='Enter'&&gearCatIdx>=0){e.preventDefault();selectGearInfo(gearCatIdx);}
+}
+function highlightGearCat(items){
+  items.forEach((it,i)=>{it.style.background=i===gearCatIdx?'var(--accent)22':'';});
+  if(items[gearCatIdx]){items[gearCatIdx].scrollIntoView({block:'nearest'});selectGearInfo(gearCatIdx);}
+}
+function selectGearInfo(idx){
+  const g=gearCatFiltered[idx];if(!g)return;
+  gearCatIdx=idx;
+  document.getElementById('gear_name').value=g.name;
+  const info=document.getElementById('gearInfo');if(!info)return;
+  const owned=hasGear(g.name,currentNPC);
+  const tagStyle=owned?'color:var(--text-dim)':'color:var(--green)';
+  const tagText=owned?'Already carried':'Available';
+  info.innerHTML=`<div class="cat-info" style="cursor:pointer" onclick="scrollToGearCatItem(${idx})"><div class="ci-name">${esc(g.name)} <span style="font-size:11px;${tagStyle}">${tagText}</span></div><div class="ci-meta">${g.cost?g.cost+'₡':'Free'}${g.wt?' · '+g.wt+' lbs':''} · ${esc(g.source)}</div><div class="ci-desc">${esc(g.notes||'No additional notes.')}</div></div>`;
+  const items=document.getElementById('gearCatList')?.querySelectorAll('.catalogue-item');
+  if(items)items.forEach((it,i)=>{it.style.background=i===idx?'var(--accent)22':'';});
+  setTimeout(()=>document.getElementById('gearSearch')?.focus(),0);
+}
+function scrollToGearCatItem(idx){
+  const list=document.getElementById('gearCatList');if(!list)return;
+  const items=list.querySelectorAll('.catalogue-item');
+  if(items[idx])items[idx].scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+function showExistingGearInfo(name){
+  document.getElementById('gearSearch').value='';
+  filterGearCatalogue();
+  const idx=gearCatFiltered.findIndex(g=>g.name.toLowerCase()===name.toLowerCase());
+  if(idx>=0){selectGearInfo(idx);scrollToGearCatItem(idx);}
 }
 function addGearItem(){const item=document.getElementById('gear_name').value.trim();if(!item)return;currentNPC.gearText=currentNPC.gearText?currentNPC.gearText+', '+item:item;saveCharacter(currentNPC);renderGearPanel(currentNPC);renderStatColumn(currentNPC);}
 function removeGearItem(idx){const items=currentNPC.gearText.split(',').map(g=>g.trim()).filter(g=>g);items.splice(idx,1);currentNPC.gearText=items.join(', ');saveCharacter(currentNPC);renderGearPanel(currentNPC);renderStatColumn(currentNPC);}
