@@ -103,7 +103,7 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <nav class="sidebar">
   <div class="sidebar-header">
     <h1>Character Vault</h1>
-    <div class="subtitle">User Manual · v1.0</div>
+    <div class="subtitle">User Manual · v2.0</div>
   </div>
   <div class="sidebar-search">
     <input type="text" id="searchInput" placeholder="Search docs..." autocomplete="off">
@@ -150,6 +150,7 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
   </div>
   <div class="nav-section">
     <div class="nav-section-title">Reference</div>
+    <a class="nav-link" data-page="keyboard">Keyboard Shortcuts</a>
     <a class="nav-link" data-page="catalogues">Equipment Catalogues</a>
     <a class="nav-link" data-page="troubleshooting">Troubleshooting</a>
     <a class="nav-link" data-page="about">About &amp; Licence</a>
@@ -255,7 +256,9 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <div class="page" id="page-roster">
 <h2>Character Roster</h2>
 
-<p>The left column displays your complete character roster. Each entry shows the character's name, ancestry, region, and tier. Status indicators appear as coloured dots or checkmarks for completion milestones.</p>
+<p>The left column displays your complete character roster, grouped by category (Pre-gens, NPCs — Wild Cards, Extras, Walk-ons). Each entry shows the character's name, ancestry, region, and tier. Status indicators appear as coloured dots or checkmarks for completion milestones.</p>
+
+<p>Within each group, characters are sorted by <strong>reference code</strong> (AM-C001, AM-C002, etc.), keeping them in production order. Characters without a refCode fall to the end of their group, sorted alphabetically.</p>
 
 <p>Click a character to select it and load their data into the right column and editing panels.</p>
 
@@ -300,6 +303,12 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <p>All edits save automatically. There is no save button — the moment you change a value, it's written to memory and queued for cloud sync. You can edit freely without worrying about losing work.</p>
 
 <div class="note">The ✎ icon next to section headings indicates that section is clickable and will open an editor panel.</div>
+
+<h3>Undo / Redo</h3>
+
+<p>Every edit is recorded on an undo stack (up to 40 steps). Press <strong>Ctrl+Z</strong> (or <strong>⌘Z</strong> on Mac) to undo the last change, <strong>Ctrl+Y</strong> or <strong>Ctrl+Shift+Z</strong> to redo. This covers all edits: attributes, skills, edges, hindrances, weapons, armour, gear, powers, and narrative text.</p>
+
+<p>The undo stack resets when you switch to a different character — each character maintains its own history for the current session.</p>
 
 <div class="page-nav">
   <a onclick="goPage('create')">← Creating Characters</a>
@@ -360,11 +369,11 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <div class="page" id="page-panel-skills">
 <h2>Panel — Skills</h2>
 
-<p>Lists all assigned skills with die stepper buttons. Click <strong>+</strong> to add a new skill from the dropdown, or type a custom skill name. Skills are sorted alphabetically.</p>
+<p>Lists all assigned skills with die stepper buttons. The skill catalogue uses the same side-by-side pattern as edges: search, ↑↓ keyboard navigation, and an info panel showing the linked attribute, description, and source. Skills already assigned are dimmed; available ones show in green.</p>
 
 <p>Each skill shows its current die value. Use the − and + buttons to step through the die chain: d4 → d6 → d8 → d10 → d12. Pre-gen characters are capped at d12.</p>
 
-<p>Click the ✕ button next to a skill to remove it entirely.</p>
+<p>Click the ✕ button next to a skill to remove it. <strong>Core skills</strong> (marked with a ★ star) will prompt for confirmation before removal, since they're expected on most player characters.</p>
 
 <div class="tip">Core skills (Athletics, Common Knowledge, Notice, Persuasion, Stealth) typically start at d4 for player characters. For NPCs, only assign the skills that character would actually use — there's no point budget for NPCs.</div>
 
@@ -378,9 +387,17 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <div class="page" id="page-panel-hindrances">
 <h2>Panel — Hindrances</h2>
 
-<p>Select hindrances from the catalogue dropdown or type a custom hindrance name. Each hindrance is added to the character's list and displayed in the stat summary.</p>
+<p>The hindrance catalogue shows all available hindrances in a searchable, scrollable list with a side-by-side <strong>info panel</strong>. Use the search box to filter, or press <strong>↑↓ arrows</strong> to browse and <strong>Enter</strong> to select. Hindrances already taken are dimmed; available ones show in green.</p>
 
-<p>Include the severity in the name for clarity — e.g. "Loyal (Minor)" or "Vengeful (Major)". The Build Audit checks hindrance count against Savage Worlds limits.</p>
+<p>When you select a hindrance, the info panel displays its description, severity, and source. A severity picker lets you choose Major or Minor before adding — the hindrance is stored as e.g. "Vengeful (Major)".</p>
+
+<h3>Inline Notes</h3>
+
+<p><strong>Click any existing hindrance</strong> to open an inline notes editor. This lets you add narrative context — who is the character Wanted by? What is their Obligation? What does their Code of Honor actually require?</p>
+
+<p>Notes are baked into the hindrance string for clean export: <code>Wanted (Minor — Steel Brotherhood, dishonourable discharge from Aschenfeld)</code>. They appear everywhere the hindrance is displayed — stat blocks, exports, and the Vault itself.</p>
+
+<div class="tip">Good hindrance notes make characters playable at the table. "Loyal (Minor)" tells you the rule; "Loyal (Minor — to Kira Ironjaw and the Ashmen)" tells you the story.</div>
 
 <div class="page-nav">
   <a onclick="goPage('panel-skills')">← Skills</a>
@@ -392,9 +409,17 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <div class="page" id="page-panel-edges">
 <h2>Panel — Edges</h2>
 
-<p>Select edges from the catalogue or type a custom edge name. The catalogue contains all core Savage Worlds edges plus any setting-specific edges.</p>
+<p>The edge catalogue shows all available edges in a searchable list with a side-by-side <strong>info panel</strong>. Use the search box to filter, or press <strong>↑↓ arrows</strong> to browse and <strong>Enter</strong> to select. Edges are colour-coded: <span style="color:#4a4">green</span> if the character meets all requirements, <span style="color:#888">dimmed</span> if not. The info panel shows rank, category, requirements, source, and full description.</p>
+
+<p><strong>Click any existing edge</strong> to scroll the catalogue to its entry and display its info — handy for reviewing what an edge does without leaving the panel.</p>
 
 <p>Edges not found in the catalogue are tagged as <strong>(legacy)</strong> in the stat summary. This flags them for review but doesn't prevent their use — it's common when importing characters built under older rulesets or custom content.</p>
+
+<h3>Inline Notes</h3>
+
+<p><strong>Click any existing edge</strong> to open an inline notes editor alongside the info panel. This is particularly useful for edges like <strong>Connections</strong> (who are the connections to?) or <strong>Arcane Background</strong> (what tradition?).</p>
+
+<p>Edge notes are stored separately from the edge name, keeping the edge string clean for audit and eligibility checks. Notes appear in exports as: <code>Connections — Moonstar Consortium, Council of Guilds contacts</code>.</p>
 
 <div class="page-nav">
   <a onclick="goPage('panel-hindrances')">← Hindrances</a>
@@ -406,21 +431,27 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <div class="page" id="page-panel-equipment">
 <h2>Weapons, Armour &amp; Gear</h2>
 
+<p>All three equipment panels now use the full catalogue system: searchable lists with side-by-side info panels, keyboard navigation, and colour coding. The pattern is identical to edges and skills — search, browse with ↑↓, select with Enter or click.</p>
+
 <h3>Weapons</h3>
 
-<p>Add weapons from the equipment catalogue. Each weapon entry includes name, damage, AP value, and range (if applicable). The catalogue covers all Savage Worlds core weapons.</p>
+<p>The weapon catalogue lists all Savage Worlds core weapons plus setting-specific weapons from loaded modules (Ammarian steel, guild weapons, etc.). Each entry shows damage, AP, range, ROF, cost, weight, and special notes in the info panel.</p>
 
-<p>Weapons appear in the stat summary with full stats and are included in all exports.</p>
+<p>Weapons already equipped are <strong>dimmed</strong>; available ones show in <strong>green</strong>. Click any existing weapon in your loadout to scroll the catalogue to its entry and display its full stats.</p>
+
+<p>Select a catalogue weapon to populate the custom fields automatically, then click <strong>Add Weapon</strong>. Or fill in the fields manually for items not in the catalogue.</p>
 
 <h3>Armour</h3>
 
-<p>Add armour from the catalogue. Each piece shows name, protection value, and coverage area. When armour is added or removed, the character's <strong>Toughness armour bonus</strong> is recalculated automatically and the "X (Y)" Toughness display updates in real time.</p>
+<p>Same catalogue pattern for armour and shields. The info panel shows protection value (or Parry bonus for shields), cost, weight, and notes. When armour is added or removed, the character's <strong>Toughness armour bonus</strong> is recalculated automatically and the Toughness display updates in real time.</p>
 
 <h3>Gear</h3>
 
-<p>General equipment — rope, lanterns, trade goods, etc. Enter items as a comma-separated text list. This is a <strong>legacy field</strong>; characters imported from older data may have weapons and armour listed here as text. If so, add them properly via the structured panels above and clear the gear text.</p>
+<p>General equipment — rope, lanterns, trade goods, lockpicks, etc. The gear catalogue lists items from core rules and loaded modules with cost, weight, and special properties in the info panel. Items already carried are dimmed.</p>
 
-<div class="note">Items with apostrophes (Sailor's Coat, Knight's Shield) are handled correctly throughout the tool.</div>
+<p>Gear is stored as a comma-separated text list. Characters imported from older data may have weapons and armour listed here as text — if so, add them properly via the structured panels above and clear the gear text.</p>
+
+<div class="note">Items with apostrophes (Sailor's Coat, Merchant's Cane, Docker's Hook) are handled correctly throughout the tool — search, selection, and display all work without escaping issues.</div>
 
 <div class="page-nav">
   <a onclick="goPage('panel-edges')">← Edges</a>
@@ -656,6 +687,39 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <div class="page-nav">
   <a onclick="goPage('import')">← Import</a>
+  <a onclick="goPage('keyboard')">Keyboard Shortcuts →</a>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<div class="page" id="page-keyboard">
+<h2>Keyboard Shortcuts</h2>
+
+<p>The Vault supports keyboard navigation throughout the catalogue panels and a global undo/redo system.</p>
+
+<h3>Global</h3>
+
+<div class="field-ref"><span class="field-name">Ctrl+Z / ⌘Z</span><span class="field-desc">Undo the last edit (up to 40 steps per character)</span></div>
+<div class="field-ref"><span class="field-name">Ctrl+Y / Ctrl+Shift+Z</span><span class="field-desc">Redo the last undone edit</span></div>
+<div class="field-ref"><span class="field-name">⌘K</span><span class="field-desc">Focus the help manual search box (when in this manual)</span></div>
+
+<h3>Catalogue Panels</h3>
+
+<p>All catalogue panels — edges, hindrances, skills, powers, weapons, armour, and gear — share the same keyboard pattern:</p>
+
+<div class="field-ref"><span class="field-name">↑ / ↓</span><span class="field-desc">Browse through catalogue items</span></div>
+<div class="field-ref"><span class="field-name">Enter</span><span class="field-desc">Select the highlighted item (populates the form fields)</span></div>
+<div class="field-ref"><span class="field-name">Type to search</span><span class="field-desc">Filter the catalogue in real time</span></div>
+
+<h3>Inline Notes</h3>
+
+<div class="field-ref"><span class="field-name">Click existing hindrance</span><span class="field-desc">Opens inline notes editor for narrative context</span></div>
+<div class="field-ref"><span class="field-name">Click existing edge</span><span class="field-desc">Opens inline notes editor and scrolls catalogue to info</span></div>
+<div class="field-ref"><span class="field-name">Click existing weapon / armour / gear</span><span class="field-desc">Scrolls catalogue to item and shows full stats in info panel</span></div>
+<div class="field-ref"><span class="field-name">Enter (in notes field)</span><span class="field-desc">Save the note</span></div>
+
+<div class="page-nav">
+  <a onclick="goPage('json-transfer')">← JSON Transfer</a>
   <a onclick="goPage('catalogues')">Equipment Catalogues →</a>
 </div>
 </div>
@@ -664,12 +728,16 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <div class="page" id="page-catalogues">
 <h2>Equipment Catalogues</h2>
 
-<p>The Vault ships with equipment catalogues for Weapons, Armour, and Gear drawn from the Savage Worlds core rules. Catalogue items include correct damage values, armour ratings, costs, weights, and AP values.</p>
+<p>The Vault ships with equipment catalogues for Weapons, Armour, Shields, and General Gear drawn from the Savage Worlds core rules. When regional modules are loaded (e.g. Ammaria), their setting-specific equipment is merged into the catalogues automatically — guild weapons, regional armour, specialist tools, and trade goods all appear alongside core items.</p>
+
+<p>All catalogue panels share a consistent interface: a search box with <strong>↑↓ keyboard navigation</strong>, a scrollable item list with colour coding (<span style="color:#4a4">green</span> = available, <span style="color:#888">dimmed</span> = already owned), and a side-by-side <strong>info panel</strong> showing full item details — damage, AP, range, cost, weight, and special notes.</p>
+
+<p>Click any item already on the character to scroll the catalogue to its entry and display its stats. This works across all panels: weapons, armour, gear, edges, hindrances, skills, and powers.</p>
 
 <p>You can also type custom item names not in the catalogue. Custom items are stored as-is — you'll need to enter damage, armour, and other values manually.</p>
 
 <div class="page-nav">
-  <a onclick="goPage('json-transfer')">← JSON Transfer</a>
+  <a onclick="goPage('keyboard')">← Keyboard Shortcuts</a>
   <a onclick="goPage('troubleshooting')">Troubleshooting →</a>
 </div>
 </div>
