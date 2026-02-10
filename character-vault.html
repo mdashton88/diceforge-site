@@ -247,7 +247,7 @@ window.CharacterForge = (function(){
     registerModule: function(mod) {
       modules.push(mod);
       if (mod.alwaysOn) {
-        ['edges','hindrances','skills','ancestries','powers','gear','skillLinks','coreSkills'].forEach(function(k){
+        ['edges','hindrances','skills','ancestries','powers','gear','skillLinks','coreSkills','skillDescs'].forEach(function(k){
           if (mod[k]) {
             if (Array.isArray(mod[k])) { if (!this.data[k]) this.data[k] = []; this.data[k] = this.data[k].concat(mod[k]); }
             else if (typeof mod[k] === 'object') { if (!this.data[k]) this.data[k] = {}; Object.assign(this.data[k], mod[k]); }
