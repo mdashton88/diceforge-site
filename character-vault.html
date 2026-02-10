@@ -662,7 +662,8 @@ function renderStatColumn(n){
   const warnTag=isLegal&&warnCount>0?` <span style="color:#e6a117">· ${warnCount} ⚠</span>`:'';
   const legalBadge=`<span class="build-legal-badge ${isLegal?'':'invalid'}" onclick="showPanel('audit')">${isLegal?'✓ Build Legal':'✗ Issues'}${warnTag}</span>`;
   const attrStr=`Agility ${d(n.agility)}, Smarts ${d(n.smarts)}, Spirit ${d(n.spirit)}, Strength ${d(n.strength)}, Vigor ${d(n.vigor)}`;
-  const skillStr=Object.entries(n.skills).map(([k,v])=>`${k} ${d(v)}`).join(', ')||'<span style="color:var(--text-dim)">None</span>';
+  const _coreSkills=(window.CharacterForge?.data?.coreSkills||[]).map(s=>s.toLowerCase());
+  const skillStr=Object.entries(n.skills).map(([k,v])=>`${k}${_coreSkills.includes(k.toLowerCase())?'<span style="color:var(--accent)"> ★</span>':''} ${d(v)}`).join(', ')||'<span style="color:var(--text-dim)">None</span>';
   const fDie=n.skills['Fighting']||0;
   const expParry=fDie>0?2+Math.floor(fDie/2):2;
   const expTough=2+(n.vigor>0?Math.floor(n.vigor/2):0)+(n.toughnessArmor||0);
