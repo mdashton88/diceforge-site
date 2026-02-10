@@ -197,6 +197,7 @@ var DICEFORGE_AUTH=false;
     <div class="npc-list" id="npcList"></div>
     <div class="sidebar-footer">
       <button class="btn primary" onclick="openNewNPCModal()" style="flex:1">+ New Character</button>
+      <button class="btn" onclick="openImportModal()" style="flex:1;color:var(--accent)">⇄ Import</button>
       <button class="btn" onclick="showStatusView()">Status</button>
       <button class="btn" onclick="showChangelog()">Changes</button>
     </div>
@@ -234,6 +235,30 @@ var DICEFORGE_AUTH=false;
 
     <div id="commitStatus" style="margin-top:8px;font-size:13px"></div>
     <div class="form-actions"><button class="btn" onclick="closeCommitModal()">Cancel</button><button class="btn primary" id="commitBtn" onclick="executeCommit()">🔒 Commit to Canon</button></div>
+  </div>
+</div>
+<div class="modal-overlay" id="importModal">
+  <div class="modal" style="max-width:600px">
+    <h3>⇄ Import Character</h3>
+    <div style="margin-bottom:10px;font-size:12px;color:var(--text-dim)">
+      <strong style="color:var(--green)">JSON (recommended)</strong> — lossless transfer from Character Forge or another Vault. Paste the full JSON object.<br>
+      <strong style="color:#e6a117">Stat Block (experimental)</strong> — best-effort parse from formatted text. Check results carefully — attributes, skills and edges will import but weapons, armour and gear may not.
+    </div>
+    <div style="margin-bottom:6px">
+      <label style="font-size:11px;text-transform:uppercase;color:var(--text-dim)">Format</label>
+      <select id="import_format" style="margin-left:8px;padding:3px 6px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);border-radius:3px">
+        <option value="json">JSON (recommended)</option>
+        <option value="statblock">Stat Block Text (experimental)</option>
+      </select>
+    </div>
+    <textarea id="import_data" rows="12" placeholder="Paste character data here..." style="width:100%;box-sizing:border-box;font-family:monospace;font-size:11px;background:var(--bg-input);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;resize:vertical"></textarea>
+    <div id="importPreview" style="margin-top:8px;font-size:12px;max-height:150px;overflow-y:auto"></div>
+    <div id="importStatus" style="margin-top:6px;font-size:13px"></div>
+    <div class="form-actions">
+      <button class="btn" onclick="closeImportModal()">Cancel</button>
+      <button class="btn" onclick="previewImport()">👁 Preview</button>
+      <button class="btn primary" id="importBtn" onclick="executeImport()">⇄ Import Character</button>
+    </div>
   </div>
 </div>
 <div class="modal-overlay" id="changelogModal">
@@ -704,7 +729,7 @@ function renderStatColumn(n){
     <label><input type="checkbox" ${n.statComplete?'checked':''} onchange="toggleStatus('statComplete',this.checked)"> Stats</label>
     <label><input type="checkbox" ${n.narrativeComplete?'checked':''} onchange="toggleStatus('narrativeComplete',this.checked)"> Narrative</label>
     <label><input type="checkbox" ${n.fgReady?'checked':''} onchange="toggleStatus('fgReady',this.checked)"> FG Ready</label></div>
-    <div class="action-btns"><button class="btn sm" onclick="showPanel('edit')">Edit</button><button class="btn sm" onclick="showPanel('statblock')">Stat Block</button><button class="btn sm" onclick="showPanel('audit')">Audit</button><button class="btn sm danger" onclick="deleteNPC()" style="margin-left:auto">Delete</button></div></div>`;
+    <div class="action-btns"><button class="btn sm" onclick="showPanel('edit')">Edit</button><button class="btn sm" onclick="showPanel('statblock')">Stat Block</button><button class="btn sm" onclick="showPanel('audit')">Audit</button><button class="btn sm" onclick="showPanel('transfer')" style="color:var(--accent)">⇄ Transfer</button><button class="btn sm danger" onclick="deleteNPC()" style="margin-left:auto">Delete</button></div></div>`;
   el.innerHTML=`<div class="col-stats-scroll">${statsHTML}<div class="section-box-pair">${hindBox}${edgeBox}</div><div class="section-box-pair">${armourBox}${weaponBox}</div><div class="section-box-pair">${powersBox}${gearBox}</div></div><div class="col-stats-footer">${statusHTML}</div>`;
 }
 
@@ -722,10 +747,12 @@ function renderMiddleColumn(n){
       <a onclick="showPanel('hindrances')">Hindrances ✎</a><a onclick="showPanel('edges')">Edges ✎</a><a onclick="showPanel('powers')">Powers ✎</a></div></div></div>`;
     return;
   }
-  const panelNames={edit:'Edit',hindrances:'Hindrances',edges:'Edges',skills:'Skills',weapons:'Weapons',armour:'Armour',gear:'Gear',powers:'Powers',narrative:'Narrative',statblock:'Stat Block',audit:'Build Audit'};
+  const panelNames={edit:'Edit',hindrances:'Hindrances',edges:'Edges',skills:'Skills',weapons:'Weapons',armour:'Armour',gear:'Gear',powers:'Powers',narrative:'Narrative',statblock:'Stat Block',audit:'Build Audit',transfer:'Import / Export'};
   el.innerHTML=`<div class="middle-panel"><div class="panel-title"><h3>${panelNames[activePanel]||activePanel}</h3><button class="btn" onclick="closePanel()">✕ Done</button></div><div id="panelContent"></div></div>`;
   const panels={edit:renderEditPanel,hindrances:renderHindrancesPanel,edges:renderEdgesPanel,skills:renderSkillsPanel,weapons:renderWeaponsPanel,armour:renderArmourPanel,gear:renderGearPanel,powers:renderPowersPanel,narrative:renderNarrativePanel,statblock:renderStatBlockPanel,audit:renderAuditPanel};
-  if(panels[activePanel]) panels[activePanel](n);
+  const panels2={transfer:renderTransferPanel};
+if(panels[activePanel]) panels[activePanel](n);
+else if(panels2[activePanel]) panels2[activePanel](n);
 }
 
 function showPanel(name){activePanel=name;if(currentNPC){renderMiddleColumn(currentNPC);renderStatColumn(currentNPC);}}
@@ -1090,6 +1117,221 @@ function createNPC(){
   const npc={name,refCode:'',concept:document.getElementById('new_concept')?.value?.trim()||'',ancestry:document.getElementById('new_ancestry').value,region:document.getElementById('new_region').value,tier:document.getElementById('new_tier').value,rank:'Novice',category:document.getElementById('new_category').value,product:'',source:'custom',agility:0,smarts:0,spirit:0,strength:0,vigor:0,skills:{},edges:[],hindrances:[],powers:[],gearText:'',quote:'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:'',abSkill:'',pp:0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0,startingFunds:500,gearCost:0};
   calcDerived(npc);allNPCs.push(npc);saveCharacter(npc);closeNewNPCModal();filterNPCs();updateHeaderStats();selectNPC(name);
 }
+
+// === TRANSFER (IMPORT / EXPORT) ===
+function buildExportJSON(n){
+  return {
+    _format:'diceforge-character-v1',
+    name:n.name,refCode:n.refCode||'',concept:n.concept||'',ancestry:n.ancestry||'Human',
+    region:n.region||'Ammaria',tier:n.tier||'Wild Card',rank:n.rank||'Novice',
+    category:n.category||'NPC',product:n.product||'',
+    attributes:{agility:n.agility||4,smarts:n.smarts||4,spirit:n.spirit||4,strength:n.strength||4,vigor:n.vigor||4},
+    skills:Object.assign({},n.skills),edges:[...(n.edges||[])],hindrances:[...(n.hindrances||[])],
+    powers:[...(n.powers||[])],weapons:[...(n.weapons||[])],armour:[...(n.armour||[])],
+    gearText:n.gearText||'',
+    abName:n.abName||'',abSkill:n.abSkill||'',pp:n.pp||0,
+    pace:n.pace||6,parry:n.parry||2,toughness:n.toughness||5,toughnessArmor:n.toughnessArmor||0,
+    bennies:n.bennies||0,startingFunds:n.startingFunds||500,gearCost:n.gearCost||0,
+    quote:n.quote||'',description:n.description||'',background:n.background||'',
+    motivation:n.motivation||'',secret:n.secret||'',services:n.services||'',
+    adventureHook:n.adventureHook||'',tactics:n.tactics||''
+  };
+}
+
+function buildStatBlockText(n){
+  const lines=[];
+  lines.push(n.name+(n.concept?' — '+n.concept:''));
+  lines.push('');
+  if(n.quote) lines.push('"'+n.quote+'"','');
+  if(n.description) lines.push(n.description,'');
+  lines.push('Attributes: Agility d'+n.agility+', Smarts d'+n.smarts+', Spirit d'+n.spirit+', Strength d'+n.strength+', Vigor d'+n.vigor);
+  lines.push('Skills: '+Object.entries(n.skills).sort((a,b)=>a[0].localeCompare(b[0])).map(([k,v])=>k+' d'+v).join(', '));
+  const tDisp=n.toughnessArmor>0?n.toughness+' ('+n.toughnessArmor+')':''+n.toughness;
+  lines.push('Pace: '+n.pace+'; Parry: '+n.parry+'; Toughness: '+tDisp);
+  if(n.edges.length) lines.push('Edges: '+n.edges.join(', '));
+  if(n.hindrances.length) lines.push('Hindrances: '+n.hindrances.join(', '));
+  if(n.powers.length) lines.push('Powers: '+n.powers.join(', ')+(n.pp?' ('+n.pp+' Power Points)':''));
+  if(n.weapons.length) lines.push('Weapons: '+n.weapons.map(w=>w.name+' ('+w.damage+(w.ap?', AP '+w.ap:'')+(w.range?', '+w.range:'')+')').join(', '));
+  if(n.armour.length) lines.push('Armour: '+n.armour.map(a=>a.name+' (+'+a.armor+')').join(', '));
+  if(n.gearText) lines.push('Gear: '+n.gearText);
+  if(n.abName) lines.push('Arcane Background: '+n.abName+(n.abSkill?' ('+n.abSkill+')':''));
+  return lines.join('\n');
+}
+
+function renderTransferPanel(n){
+  document.getElementById('panelContent').innerHTML=`
+    <div style="margin-bottom:14px">
+      <h4 style="color:var(--accent);margin-bottom:6px">Export ${esc(n.name)}</h4>
+      <div style="display:flex;gap:6px;margin-bottom:10px">
+        <button class="btn primary" onclick="copyExportJSON()">📋 Copy JSON</button>
+        <button class="btn" onclick="copyExportStatBlock()">📋 Copy Stat Block</button>
+      </div>
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px">
+        <strong style="color:var(--green)">JSON</strong> — lossless, use for Character Forge import or sharing with other Vault users.<br>
+        <strong>Stat Block</strong> — formatted text for documents, PDFs, or sharing with players. Not re-importable.
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:4px">
+        <button class="btn sm" onclick="showExportPreview('json')" id="expTabJSON" style="border-color:var(--accent);color:var(--accent)">JSON</button>
+        <button class="btn sm" onclick="showExportPreview('stat')" id="expTabStat">Stat Block</button>
+      </div>
+      <textarea id="exportPreview" readonly rows="14" style="width:100%;box-sizing:border-box;font-family:monospace;font-size:11px;background:var(--bg-body);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;resize:vertical"></textarea>
+    </div>
+    <hr style="border-color:var(--border);margin:16px 0">
+    <div>
+      <h4 style="color:var(--accent);margin-bottom:6px">Import</h4>
+      <p style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Use the <strong>⇄ Import</strong> button in the sidebar to import a new character from JSON or stat block text.</p>
+    </div>`;
+  showExportPreview('json');
+}
+
+function showExportPreview(mode){
+  const ta=document.getElementById('exportPreview');
+  const jTab=document.getElementById('expTabJSON'),sTab=document.getElementById('expTabStat');
+  if(!ta||!currentNPC) return;
+  if(mode==='json'){
+    ta.value=JSON.stringify(buildExportJSON(currentNPC),null,2);
+    jTab.style.borderColor='var(--accent)';jTab.style.color='var(--accent)';
+    sTab.style.borderColor='var(--border)';sTab.style.color='var(--text-dim)';
+  } else {
+    ta.value=buildStatBlockText(currentNPC);
+    sTab.style.borderColor='var(--accent)';sTab.style.color='var(--accent)';
+    jTab.style.borderColor='var(--border)';jTab.style.color='var(--text-dim)';
+  }
+}
+
+function copyExportJSON(){
+  const json=JSON.stringify(buildExportJSON(currentNPC),null,2);
+  navigator.clipboard.writeText(json).then(()=>showCopyToast('JSON copied to clipboard'));
+}
+function copyExportStatBlock(){
+  const text=buildStatBlockText(currentNPC);
+  navigator.clipboard.writeText(text).then(()=>showCopyToast('Stat block copied to clipboard'));
+}
+function showCopyToast(msg){
+  const t=document.createElement('div');
+  t.textContent=msg;
+  t.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--green);color:#000;padding:8px 16px;border-radius:4px;font-size:13px;z-index:9999;font-weight:600';
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2000);
+}
+
+// Import modal
+function openImportModal(){document.getElementById('importModal').classList.add('active');document.getElementById('import_data').value='';document.getElementById('importPreview').innerHTML='';document.getElementById('importStatus').innerHTML='';}
+function closeImportModal(){document.getElementById('importModal').classList.remove('active');}
+
+function previewImport(){
+  const raw=document.getElementById('import_data').value.trim();
+  const fmt=document.getElementById('import_format').value;
+  const prev=document.getElementById('importPreview');
+  const stat=document.getElementById('importStatus');
+  if(!raw){stat.innerHTML='<span style="color:var(--red)">Nothing to preview — paste data first</span>';return;}
+  try{
+    const npc=fmt==='json'?parseImportJSON(raw):parseImportStatBlock(raw);
+    prev.innerHTML=`<div style="padding:8px;background:var(--bg-body);border:1px solid var(--border);border-radius:4px">
+      <strong style="color:var(--accent)">${esc(npc.name)}</strong> ${esc(npc.concept||'')}
+      <div style="margin-top:4px;font-size:11px">
+      <div><strong>Ancestry:</strong> ${esc(npc.ancestry)} | <strong>Tier:</strong> ${esc(npc.tier)} | <strong>Category:</strong> ${esc(npc.category)}</div>
+      <div><strong>Attributes:</strong> Agi d${npc.agility}, Sma d${npc.smarts}, Spi d${npc.spirit}, Str d${npc.strength}, Vig d${npc.vigor}</div>
+      <div><strong>Skills:</strong> ${Object.entries(npc.skills).map(([k,v])=>k+' d'+v).join(', ')||'None'}</div>
+      <div><strong>Edges:</strong> ${npc.edges.join(', ')||'None'}</div>
+      <div><strong>Hindrances:</strong> ${npc.hindrances.join(', ')||'None'}</div>
+      <div><strong>Weapons:</strong> ${npc.weapons.map(w=>w.name).join(', ')||'None'}</div>
+      <div><strong>Armour:</strong> ${npc.armour.map(a=>a.name).join(', ')||'None'}</div>
+      ${fmt==='statblock'?'<div style="color:#e6a117;margin-top:4px">⚠ Stat block import is best-effort — review all fields before committing</div>':''}
+      </div></div>`;
+    prev._parsedNPC=npc;
+    stat.innerHTML='<span style="color:var(--green)">✓ Parsed successfully — click Import to add</span>';
+    const exists=allNPCs.find(n=>n.name===npc.name);
+    if(exists) stat.innerHTML+='<br><span style="color:#e6a117">⚠ Character "'+esc(npc.name)+'" already exists — importing will create a duplicate</span>';
+  }catch(e){
+    prev.innerHTML='';prev._parsedNPC=null;
+    stat.innerHTML='<span style="color:var(--red)">❌ Parse error: '+esc(e.message)+'</span>';
+  }
+}
+
+function executeImport(){
+  const prev=document.getElementById('importPreview');
+  const stat=document.getElementById('importStatus');
+  if(!prev._parsedNPC){stat.innerHTML='<span style="color:var(--red)">Preview first to validate the data</span>';return;}
+  const npc=prev._parsedNPC;
+  npc.weapons=npc.weapons||[];npc.armour=npc.armour||[];
+  calcDerived(npc);
+  allNPCs.push(npc);
+  saveCharacter(npc);
+  closeImportModal();
+  filterNPCs();updateHeaderStats();selectNPC(npc.name);
+}
+
+function parseImportJSON(raw){
+  let obj;
+  try{obj=JSON.parse(raw);}catch(e){throw new Error('Invalid JSON — check formatting');}
+  if(!obj.name) throw new Error('Missing required field: name');
+  // Accept both Vault format (attrs as flat) and export format (attrs as object)
+  const a=obj.attributes||obj.attrs||{};
+  return {
+    name:obj.name,refCode:obj.refCode||'',concept:obj.concept||'',ancestry:obj.ancestry||'Human',
+    region:obj.region||'Ammaria',tier:obj.tier||'Wild Card',rank:obj.rank||'Novice',
+    category:obj.category||'NPC',product:obj.product||'',source:'import',
+    agility:a.agility||obj.agility||4,smarts:a.smarts||obj.smarts||4,spirit:a.spirit||obj.spirit||4,
+    strength:a.strength||obj.strength||4,vigor:a.vigor||obj.vigor||4,
+    skills:obj.skills||{},edges:obj.edges||[],hindrances:obj.hindrances||[],
+    powers:obj.powers||[],weapons:obj.weapons||[],armour:obj.armour||[],
+    gearText:obj.gearText||'',quote:obj.quote||'',description:obj.description||'',
+    background:obj.background||'',motivation:obj.motivation||'',secret:obj.secret||'',
+    services:obj.services||'',adventureHook:obj.adventureHook||'',tactics:obj.tactics||'',
+    abName:obj.abName||'',abSkill:obj.abSkill||'',pp:obj.pp||0,
+    startingFunds:obj.startingFunds||500,gearCost:obj.gearCost||0,
+    pace:obj.pace||6,parry:obj.parry||2,toughness:obj.toughness||5,
+    toughnessArmor:obj.toughnessArmor||0,bennies:obj.bennies||0,
+    statComplete:false,narrativeComplete:false,fgReady:false
+  };
+}
+
+function parseImportStatBlock(raw){
+  const lines=raw.split('\n').map(l=>l.trim()).filter(l=>l);
+  const npc={name:'',refCode:'',concept:'',ancestry:'Human',region:'Ammaria',tier:'Wild Card',rank:'Novice',
+    category:'NPC',product:'',source:'import-statblock',agility:4,smarts:4,spirit:4,strength:4,vigor:4,
+    skills:{},edges:[],hindrances:[],powers:[],weapons:[],armour:[],gearText:'',quote:'',description:'',
+    background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',
+    abName:'',abSkill:'',pp:0,startingFunds:500,gearCost:0,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0,
+    statComplete:false,narrativeComplete:false,fgReady:false};
+  // First non-label line is the name
+  if(lines.length) npc.name=lines[0].replace(/\*+/g,'').replace(/—.*/,'').replace(/--.*/,'').trim();
+  const dieRe=/d(\d+)/;
+  for(const line of lines){
+    const lo=line.toLowerCase();
+    if(lo.startsWith('attributes:')){
+      const m=line.match(/agility\s*d(\d+)/i);if(m) npc.agility=parseInt(m[1]);
+      const m2=line.match(/smarts\s*d(\d+)/i);if(m2) npc.smarts=parseInt(m2[1]);
+      const m3=line.match(/spirit\s*d(\d+)/i);if(m3) npc.spirit=parseInt(m3[1]);
+      const m4=line.match(/strength\s*d(\d+)/i);if(m4) npc.strength=parseInt(m4[1]);
+      const m5=line.match(/vigor\s*d(\d+)/i);if(m5) npc.vigor=parseInt(m5[1]);
+    }
+    else if(lo.startsWith('skills:')){
+      const parts=line.substring(7).split(',');
+      parts.forEach(p=>{const m=p.trim().match(/^(.+?)\s+d(\d+)/);if(m) npc.skills[m[1].trim()]=parseInt(m[2]);});
+    }
+    else if(lo.startsWith('edges:')) npc.edges=line.substring(6).split(',').map(s=>s.trim()).filter(s=>s);
+    else if(lo.startsWith('hindrances:')) npc.hindrances=line.substring(11).split(',').map(s=>s.trim()).filter(s=>s);
+    else if(lo.startsWith('powers:')) npc.powers=line.substring(7).replace(/\(.*?\)/g,'').split(',').map(s=>s.trim()).filter(s=>s);
+    else if(lo.startsWith('pace:')){
+      const pm=line.match(/pace[:\s]*(\d+)/i);if(pm) npc.pace=parseInt(pm[1]);
+      const prm=line.match(/parry[:\s]*(\d+)/i);if(prm) npc.parry=parseInt(prm[1]);
+      const tm=line.match(/toughness[:\s]*(\d+)/i);if(tm) npc.toughness=parseInt(tm[1]);
+      const tam=line.match(/toughness[:\s]*\d+\s*\((\d+)\)/i);if(tam) npc.toughnessArmor=parseInt(tam[1]);
+    }
+    else if(lo.startsWith('gear:')) npc.gearText=line.substring(5).trim();
+    else if(lo.startsWith('arcane background')){
+      const abm=line.match(/arcane background[:\s]*(.+?)(?:\s*\((.+?)\))?$/i);
+      if(abm){npc.abName=abm[1].trim();if(abm[2]) npc.abSkill=abm[2].trim();}
+    }
+  }
+  if(!npc.name) throw new Error('Could not find character name — expected it on the first line');
+  if(npc.agility===4&&npc.smarts===4&&npc.spirit===4&&npc.strength===4&&npc.vigor===4&&Object.keys(npc.skills).length===0)
+    throw new Error('No attributes or skills found — check the format matches: "Attributes: Agility d6, Smarts d8..."');
+  return npc;
+}
+
 function showStatusView(){
   const el=document.getElementById('mainContent');el.classList.remove('empty-state');el.style.overflowY='auto';
   const rows=allNPCs.map(n=>{
