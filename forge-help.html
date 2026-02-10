@@ -6,99 +6,61 @@
 <title>Character Forge — User Manual</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0F0F0F;--bg-sidebar:#141414;--bg-card:#1A1A1A;--bg-search:#222;--border:#2A2A2A;--text:#D4C5A0;--text-dim:#8A7A5A;--text-bright:#E8DCC0;--gold:#C4A44A;--gold-dim:#8A7A3A;--green:#5A9A5A;--red:#B04040;--blue:#5A8ABF;--accent:#C4A44A;--link:#7AB0D4;--code-bg:#1E1E1E}
+:root{--bg:#0F0F0F;--bg-sidebar:#131313;--bg-card:#1C1C1C;--bg-search:#1E1E1E;--border:#333;--text:#E8E2D6;--text-dim:#B0A890;--text-bright:#F8F4EC;--gold:#C4A44A;--gold-dim:#9A8A3A;--green:#6AB06A;--red:#C05050;--blue:#6AAAD0;--link:#90C8E8;--code-bg:#1A1A1A}
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:24px}
-body{font-family:'Crimson Text',Georgia,serif;background:var(--bg);color:var(--text);line-height:1.75;font-size:16px}
-
-/* Layout */
-.help-layout{display:flex;min-height:100vh}
-.sidebar{width:280px;background:var(--bg-sidebar);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;padding-bottom:40px}
-.main{margin-left:280px;flex:1;max-width:800px;padding:40px 48px 80px}
-
-/* Sidebar */
-.sidebar-header{padding:20px 20px 12px;border-bottom:1px solid var(--border)}
+body{font-family:'Crimson Text',Georgia,serif;background:var(--bg);color:var(--text);line-height:1.8;font-size:17px;overflow:hidden;height:100vh}
+.help-layout{display:flex;height:100vh}
+.sidebar{width:280px;background:var(--bg-sidebar);border-right:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;height:100vh}
+.sidebar-scroll{flex:1;overflow-y:auto;padding-bottom:40px}
+.main{flex:1;overflow-y:auto;padding:48px 56px 80px;max-width:860px}
+.sidebar-header{padding:20px 20px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
 .sidebar-header h1{font-family:'Cinzel',serif;font-size:16px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:700}
 .sidebar-header .subtitle{font-size:12px;color:var(--text-dim);letter-spacing:1px;margin-top:2px}
-.sidebar-search{padding:10px 16px}
-.sidebar-search input{width:100%;padding:7px 10px 7px 30px;background:var(--bg-search);border:1px solid var(--border);color:var(--text);font-size:13px;font-family:inherit;border-radius:4px;outline:none}
+.sidebar-search{padding:10px 16px;position:relative;flex-shrink:0}
+.sidebar-search input{width:100%;padding:8px 10px 8px 30px;background:var(--bg-search);border:1px solid var(--border);color:var(--text-bright);font-size:13px;font-family:inherit;border-radius:4px;outline:none}
 .sidebar-search input:focus{border-color:var(--gold)}
-.sidebar-search{position:relative}
 .sidebar-search::before{content:'⌕';position:absolute;left:24px;top:50%;transform:translateY(-50%);color:var(--text-dim);font-size:14px;pointer-events:none}
 .sidebar-search .shortcut{position:absolute;right:24px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--text-dim);background:var(--bg);padding:2px 6px;border-radius:3px;border:1px solid var(--border);pointer-events:none}
-.nav-section{padding:8px 0}
-.nav-section-title{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);padding:6px 20px;font-weight:600}
-.nav-link{display:block;padding:6px 20px 6px 28px;font-size:14px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;transition:all .15s;cursor:pointer;font-family:'Crimson Text',serif}
-.nav-link:hover{color:var(--text);background:var(--bg-card)}
-.nav-link.active{color:var(--gold);border-left-color:var(--gold);background:var(--gold)08}
+.nav-section{padding:6px 0}
+.nav-section-title{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);padding:8px 20px 4px;font-weight:600}
+.nav-link{display:block;padding:7px 20px 7px 28px;font-size:14px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;transition:all .15s;cursor:pointer;font-family:'Crimson Text',serif}
+.nav-link:hover{color:var(--text-bright);background:var(--bg-card)}
+.nav-link.active{color:var(--gold);border-left-color:var(--gold);background:#C4A44A08;font-weight:600}
 .nav-link.hidden{display:none}
-
-/* Main content */
-h2{font-family:'Cinzel',serif;font-size:22px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin:48px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
-h2:first-of-type{margin-top:0}
-h3{font-family:'Cinzel',serif;font-size:16px;color:var(--text-bright);letter-spacing:1px;margin:28px 0 10px;text-transform:uppercase}
-p{margin-bottom:14px}
-a{color:var(--link);text-decoration:none}
-a:hover{text-decoration:underline}
+.page{display:none}.page.active{display:block}
+h2{font-family:'Cinzel',serif;font-size:24px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin:0 0 20px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+h3{font-family:'Cinzel',serif;font-size:17px;color:var(--text-bright);letter-spacing:1px;margin:32px 0 12px;text-transform:uppercase}
+p{margin-bottom:16px;color:var(--text)}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
 strong{color:var(--text-bright);font-weight:600}
-em{color:var(--gold-dim)}
-
-/* Info boxes */
-.tip,.warning,.note{padding:14px 18px;border-radius:4px;margin:16px 0;font-size:15px;line-height:1.6}
-.tip{background:#5A9A5A15;border-left:3px solid var(--green);color:var(--text)}
-.warning{background:#B0404015;border-left:3px solid var(--red);color:var(--text)}
-.note{background:#C4A44A10;border-left:3px solid var(--gold-dim);color:var(--text)}
-.tip::before{content:'💡 ';font-size:14px}
-.warning::before{content:'⚠ ';font-size:14px}
-.note::before{content:'📌 ';font-size:14px}
-
-/* Code */
-code{font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--code-bg);padding:2px 6px;border-radius:3px;color:var(--gold)}
-pre{background:var(--code-bg);padding:16px;border-radius:4px;overflow-x:auto;margin:14px 0;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;border:1px solid var(--border)}
-
-/* Tables */
-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:15px}
-th{font-family:'Cinzel',serif;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);text-align:left;padding:8px 12px;border-bottom:2px solid var(--border)}
-td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+em{color:var(--gold)}
+.tip,.warning,.note{padding:16px 20px;border-radius:5px;margin:18px 0;font-size:16px;line-height:1.7;color:var(--text-bright)}
+.tip{background:#6AB06A12;border-left:3px solid var(--green)}
+.warning{background:#C0505012;border-left:3px solid var(--red)}
+.note{background:#C4A44A0D;border-left:3px solid var(--gold-dim)}
+.tip::before{content:'💡 ';font-size:14px}.warning::before{content:'⚠ ';font-size:14px}.note::before{content:'📌 ';font-size:14px}
+code{font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--code-bg);padding:2px 7px;border-radius:3px;color:var(--gold)}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:16px}
+th{font-family:'Cinzel',serif;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);text-align:left;padding:10px 14px;border-bottom:2px solid var(--border)}
+td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--text)}
 tr:hover td{background:var(--bg-card)}
-
-/* Keyboard shortcuts */
-kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 7px;background:var(--bg-card);border:1px solid var(--border);border-radius:3px;color:var(--text-dim);min-width:20px;text-align:center;box-shadow:0 1px 0 var(--border)}
-
-/* Step indicators */
-.step-badge{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--gold);color:var(--bg);font-family:'Cinzel',serif;font-size:12px;font-weight:700;border-radius:50%;margin-right:8px;vertical-align:middle}
-
-/* Field reference */
-.field-ref{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
-.field-ref:last-child{border-bottom:none}
-.field-name{font-weight:600;color:var(--text-bright);min-width:140px;flex-shrink:0}
-.field-desc{color:var(--text)}
-
-/* Format comparison */
-.format-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
-.format-card{padding:14px;border:1px solid var(--border);border-radius:4px;background:var(--bg-card)}
-.format-card h4{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:6px;letter-spacing:1px}
-.format-card p{font-size:14px;margin:0;color:var(--text-dim)}
-
-/* Back to top */
-.back-top{position:fixed;bottom:20px;right:20px;padding:8px 14px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-dim);font-size:12px;cursor:pointer;border-radius:4px;display:none;z-index:200}
-.back-top:hover{color:var(--gold);border-color:var(--gold)}
-
-/* Search highlight */
-.search-hit{background:var(--gold)30;border-radius:2px;padding:0 2px}
-
-/* Responsive */
-@media(max-width:900px){
-  .sidebar{width:240px}
-  .main{margin-left:240px;padding:24px 24px 60px}
-}
+.field-ref{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}.field-ref:last-child{border-bottom:none}
+.field-name{font-weight:600;color:var(--text-bright);min-width:160px;flex-shrink:0}.field-desc{color:var(--text)}
+.format-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+.format-card{padding:16px;border:1px solid var(--border);border-radius:5px;background:var(--bg-card)}
+.format-card h4{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:8px;letter-spacing:1px}
+.format-card p{font-size:15px;margin:0;color:var(--text)}
+.step-badge{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:var(--gold);color:var(--bg);font-family:'Cinzel',serif;font-size:13px;font-weight:700;border-radius:50%;margin-right:8px;vertical-align:middle}
+.page-nav{display:flex;justify-content:space-between;margin-top:48px;padding-top:20px;border-top:1px solid var(--border)}
+.page-nav a{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);text-decoration:none;letter-spacing:1px;text-transform:uppercase;padding:8px 16px;border:1px solid var(--border);border-radius:4px;transition:all .15s;cursor:pointer}
+.page-nav a:hover{border-color:var(--gold);background:#C4A44A10}
+@media(max-width:900px){.sidebar{width:240px}.main{padding:32px 28px 60px}}
 @media(max-width:680px){
-  .sidebar{transform:translateX(-100%);transition:transform .2s;width:280px}
-  .sidebar.open{transform:translateX(0)}
-  .main{margin-left:0;padding:20px 16px 60px}
-  .mobile-toggle{display:block!important}
+  body{overflow-y:auto;height:auto}.help-layout{height:auto;display:block}
+  .sidebar{position:fixed;top:0;left:0;z-index:200;transform:translateX(-100%);transition:transform .2s;width:280px;height:100vh}
+  .sidebar.open{transform:translateX(0)}.main{padding:24px 18px 60px}.mobile-toggle{display:block!important}
 }
-.mobile-toggle{display:none;position:fixed;top:12px;left:12px;z-index:200;padding:6px 10px;background:var(--bg-card);border:1px solid var(--border);color:var(--gold);font-size:16px;cursor:pointer;border-radius:4px}
+.mobile-toggle{display:none;position:fixed;top:12px;left:12px;z-index:300;padding:6px 10px;background:var(--bg-card);border:1px solid var(--border);color:var(--gold);font-size:16px;cursor:pointer;border-radius:4px}
 </style>
 </head>
 <body>
@@ -106,7 +68,7 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
 
 <div class="help-layout">
-<nav class="sidebar" id="sidebar">
+<nav class="sidebar">
   <div class="sidebar-header">
     <h1>Character Forge</h1>
     <div class="subtitle">User Manual · v1.0</div>
@@ -115,42 +77,44 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
     <input type="text" id="searchInput" placeholder="Search docs..." autocomplete="off">
     <span class="shortcut">⌘K</span>
   </div>
+  <div class="sidebar-scroll">
   <div class="nav-section">
     <div class="nav-section-title">Getting Started</div>
-    <a class="nav-link" href="#overview">Overview</a>
-    <a class="nav-link" href="#quick-start">Quick Start</a>
-    <a class="nav-link" href="#interface">Interface Layout</a>
+    <a class="nav-link active" data-page="overview">Overview</a>
+    <a class="nav-link" data-page="quick-start">Quick Start</a>
+    <a class="nav-link" data-page="interface">Interface Layout</a>
   </div>
   <div class="nav-section">
     <div class="nav-section-title">Build Steps</div>
-    <a class="nav-link" href="#step-concept">① Concept &amp; Modules</a>
-    <a class="nav-link" href="#step-ancestry">② Ancestry</a>
-    <a class="nav-link" href="#step-attributes">③ Attributes</a>
-    <a class="nav-link" href="#step-skills">④ Skills</a>
-    <a class="nav-link" href="#step-hindrances">⑤ Hindrances &amp; Edges</a>
-    <a class="nav-link" href="#step-powers">⑥ Powers</a>
-    <a class="nav-link" href="#step-gear">⑦ Gear</a>
-    <a class="nav-link" href="#step-summary">⑧ Summary</a>
+    <a class="nav-link" data-page="step-concept">① Concept &amp; Modules</a>
+    <a class="nav-link" data-page="step-ancestry">② Ancestry</a>
+    <a class="nav-link" data-page="step-attributes">③ Attributes</a>
+    <a class="nav-link" data-page="step-skills">④ Skills</a>
+    <a class="nav-link" data-page="step-hindrances">⑤ Hindrances &amp; Edges</a>
+    <a class="nav-link" data-page="step-powers">⑥ Powers</a>
+    <a class="nav-link" data-page="step-gear">⑦ Gear</a>
+    <a class="nav-link" data-page="step-summary">⑧ Summary</a>
   </div>
   <div class="nav-section">
     <div class="nav-section-title">Output</div>
-    <a class="nav-link" href="#export">Export Formats</a>
-    <a class="nav-link" href="#json-transfer">JSON Transfer</a>
+    <a class="nav-link" data-page="export">Export Formats</a>
+    <a class="nav-link" data-page="json-transfer">JSON Transfer</a>
   </div>
   <div class="nav-section">
     <div class="nav-section-title">Reference</div>
-    <a class="nav-link" href="#modules">Setting Modules</a>
-    <a class="nav-link" href="#validation">Build Validation</a>
-    <a class="nav-link" href="#shortcuts">Keyboard Shortcuts</a>
-    <a class="nav-link" href="#troubleshooting">Troubleshooting</a>
-    <a class="nav-link" href="#about">About &amp; Licence</a>
+    <a class="nav-link" data-page="modules">Setting Modules</a>
+    <a class="nav-link" data-page="validation">Build Validation</a>
+    <a class="nav-link" data-page="troubleshooting">Troubleshooting</a>
+    <a class="nav-link" data-page="about">About &amp; Licence</a>
+  </div>
   </div>
 </nav>
 
 <main class="main" id="main">
 
 <!-- ═══════════════════════════════════════════════ -->
-<h2 id="overview">Overview</h2>
+<div class="page active" id="page-overview">
+<h2>Overview</h2>
 
 <p>The <strong>Character Forge</strong> is a step-by-step character builder for Savage Worlds. It walks you through creation from concept to completed character sheet, with live validation at every stage to ensure your build is rules-legal.</p>
 
@@ -160,23 +124,36 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <div class="warning">The Forge does not auto-save. Always export your character before closing the browser. Use <strong>JSON export</strong> if you plan to continue editing later.</div>
 
-<!-- ═══════════════════════════════════════════════ -->
-<h2 id="quick-start">Quick Start</h2>
+<div class="page-nav">
+  <span></span>
+  <a onclick="goPage('quick-start')">Quick Start →</a>
+</div>
+</div>
 
-<p>If you just want to get building:</p>
+<!-- ═══════════════════════════════════════════════ -->
+<div class="page" id="page-quick-start">
+<h2>Quick Start</h2>
 
 <p><span class="step-badge">1</span> Enter a name and concept. Enable any setting modules you want (Ammaria, Saltlands, etc.).</p>
-<p><span class="step-badge">2</span> Pick an ancestry. Each one comes with different racial abilities and starting modifiers.</p>
+<p><span class="step-badge">2</span> Pick an ancestry. Each comes with different racial abilities and starting modifiers.</p>
 <p><span class="step-badge">3</span> Assign attributes — you have 5 points. Each die step above d4 costs one point.</p>
 <p><span class="step-badge">4</span> Assign skills — you have 12 points. Skills linked to higher attributes are cheaper.</p>
 <p><span class="step-badge">5</span> Choose hindrances to earn extra edges, attribute points, skill points, or starting funds. Then pick your edges.</p>
 <p><span class="step-badge">6</span> If you took Arcane Background, select your trapping and powers.</p>
 <p><span class="step-badge">7</span> Buy gear with your starting funds ($500 base, modified by hindrances).</p>
 <p><span class="step-badge">8</span> Review the summary — green indicators mean legal, red means something needs fixing.</p>
+
 <p>Hit <strong>Export</strong> and pick your format. Done.</p>
 
+<div class="page-nav">
+  <a onclick="goPage('overview')">← Overview</a>
+  <a onclick="goPage('interface')">Interface Layout →</a>
+</div>
+</div>
+
 <!-- ═══════════════════════════════════════════════ -->
-<h2 id="interface">Interface Layout</h2>
+<div class="page" id="page-interface">
+<h2>Interface Layout</h2>
 
 <p>The Forge uses a single-column layout with a <strong>step bar</strong> at the top. Each step is a tab you can click at any time — you're not locked into a linear flow. The step bar shows colour-coded status indicators:</p>
 
@@ -189,55 +166,81 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <p>Below the step bar, a <strong>derived stats bar</strong> appears once you've selected an ancestry, showing your current Pace, Parry, Toughness, and Bennies. These update live as you make changes.</p>
 
+<div class="page-nav">
+  <a onclick="goPage('quick-start')">← Quick Start</a>
+  <a onclick="goPage('step-concept')">Step 1: Concept →</a>
+</div>
+</div>
+
 <!-- ═══════════════════════════════════════════════ -->
-<h2 id="step-concept">Step 1 — Concept &amp; Modules</h2>
+<div class="page" id="page-step-concept">
+<h2>Step 1 — Concept &amp; Modules</h2>
 
 <h3>Character Identity</h3>
 
 <div class="field-ref"><span class="field-name">Name</span><span class="field-desc">Your character's name. Required for export.</span></div>
-<div class="field-ref"><span class="field-name">Concept</span><span class="field-desc">A sentence describing who this person is. Optional but recommended — it appears on all exported sheets.</span></div>
-<div class="field-ref"><span class="field-name">Portrait</span><span class="field-desc">Upload a JPG or PNG. The image is embedded in PDF, HTML, and RTF exports. It is stored as base64 in memory — large images will increase export file sizes.</span></div>
+<div class="field-ref"><span class="field-name">Concept</span><span class="field-desc">A sentence describing who this person is. Optional but recommended.</span></div>
+<div class="field-ref"><span class="field-name">Portrait</span><span class="field-desc">Upload a JPG or PNG. Embedded in PDF, HTML, and RTF exports. Stored as base64.</span></div>
 
 <h3>Setting Modules</h3>
 
-<p>The Forge ships with Savage Worlds core rules active by default. Setting modules add ancestries, edges, hindrances, and other options specific to a region or supplement. Toggle them on or off as needed — the module's content is merged into all relevant steps immediately.</p>
+<p>Core Savage Worlds rules are active by default. Setting modules add ancestries, edges, hindrances, and other options specific to a region or supplement. Toggle them on or off — module content merges into all relevant steps immediately.</p>
 
-<p>The <strong>Active Content</strong> bar at the bottom shows you exactly how many ancestries, edges, hindrances, and powers are currently available from your enabled modules.</p>
+<p>The <strong>Active Content</strong> bar at the bottom shows exactly how many ancestries, edges, hindrances, and powers are currently available.</p>
 
 <h3>JSON Import</h3>
 
-<p>This step also contains the <strong>Import Character</strong> panel. You can load a previously exported JSON file (from the Forge or the Character Vault) to continue editing or adapt an existing build. See <a href="#json-transfer">JSON Transfer</a> for full details.</p>
+<p>This step also contains the <strong>Import Character</strong> panel. Load a previously exported JSON file (from the Forge or the Character Vault) to continue editing or adapt an existing build. See <a onclick="goPage('json-transfer')" style="cursor:pointer">JSON Transfer</a> for details.</p>
 
 <div class="note">Importing replaces your entire current build. If you have unsaved work, export it first.</div>
 
+<div class="page-nav">
+  <a onclick="goPage('interface')">← Interface Layout</a>
+  <a onclick="goPage('step-ancestry')">Step 2: Ancestry →</a>
+</div>
+</div>
+
 <!-- ═══════════════════════════════════════════════ -->
-<h2 id="step-ancestry">Step 2 — Ancestry</h2>
+<div class="page" id="page-step-ancestry">
+<h2>Step 2 — Ancestry</h2>
 
-<p>Select your character's ancestry. Each ancestry card shows its racial abilities, attribute modifiers, and any special rules. Ancestries from enabled setting modules appear alongside core Savage Worlds options.</p>
+<p>Select your character's ancestry. Each ancestry card shows its racial abilities, attribute modifiers, and special rules. Ancestries from enabled setting modules appear alongside core options.</p>
 
-<p>When you select an ancestry, any <strong>starting attribute modifiers</strong> are applied immediately. Some ancestries (like Half-Folk) begin with certain attributes at d6 instead of d4 — this is reflected in the Attributes step automatically.</p>
+<p>When you select an ancestry, any <strong>starting attribute modifiers</strong> are applied immediately. Some ancestries begin with certain attributes at d6 instead of d4 — this is reflected in the Attributes step automatically.</p>
 
 <div class="tip">Some ancestries grant free edges, bonus bennies, or special abilities that don't count against your edge budget. These are noted on the ancestry card.</div>
 
+<div class="page-nav">
+  <a onclick="goPage('step-concept')">← Step 1: Concept</a>
+  <a onclick="goPage('step-attributes')">Step 3: Attributes →</a>
+</div>
+</div>
+
 <!-- ═══════════════════════════════════════════════ -->
-<h2 id="step-attributes">Step 3 — Attributes</h2>
+<div class="page" id="page-step-attributes">
+<h2>Step 3 — Attributes</h2>
 
-<p>Every character has five attributes: <strong>Agility, Smarts, Spirit, Strength, and Vigor</strong>. All start at d4. You have <strong>5 attribute points</strong> to spend (plus any bonus points from hindrances). Each die step costs one point: d4→d6 costs 1, d6→d8 costs 1, and so on up to d12.</p>
+<p>Every character has five attributes: <strong>Agility, Smarts, Spirit, Strength, and Vigor</strong>. All start at d4. You have <strong>5 attribute points</strong> to spend (plus any bonus from hindrances). Each die step costs one point: d4→d6 costs 1, d6→d8 costs 1, and so on up to d12.</p>
 
-<p>Click the die buttons to set each attribute. The budget counter shows points spent versus available. If you exceed your budget, the step turns red.</p>
+<p>Click the die buttons to set each attribute. The budget counter shows points spent versus available. Exceeding your budget turns the step red.</p>
 
-<p>Attributes above d12 are shown as <strong>d12+1, d12+2</strong>, etc. These are rare and typically come from ancestry bonuses or specific edges rather than point buy.</p>
+<p>Attributes above d12 appear as <strong>d12+1, d12+2</strong>, etc. These typically come from ancestry bonuses or specific edges rather than point buy.</p>
 
 <div class="note">Attributes determine the base cost of linked skills and feed into derived stats. Vigor affects Toughness, Fighting affects Parry, and Agility-linked skills are cheaper when Agility is high.</div>
 
+<div class="page-nav">
+  <a onclick="goPage('step-ancestry')">← Step 2: Ancestry</a>
+  <a onclick="goPage('step-skills')">Step 4: Skills →</a>
+</div>
+</div>
+
 <!-- ═══════════════════════════════════════════════ -->
-<h2 id="step-skills">Step 4 — Skills</h2>
+<div class="page" id="page-step-skills">
+<h2>Step 4 — Skills</h2>
 
 <p>You have <strong>12 skill points</strong> to spend (plus any bonus from hindrances). Each skill is linked to an attribute. Raising a skill costs 1 point per die step up to the linked attribute's die. Beyond that, each step costs 2 points.</p>
 
 <p><strong>Core skills</strong> (Athletics, Common Knowledge, Notice, Persuasion, Stealth) start at d4 for free. All other skills start at d0 — you must invest at least 1 point to acquire them.</p>
-
-<p>Use the <strong>+</strong> and <strong>−</strong> buttons to step skills up or down. The die size is shown alongside the linked attribute for easy reference. The budget tracker shows your total spend in real time.</p>
 
 <table>
 <tr><th>Cost</th><th>When</th></tr>
@@ -245,16 +248,21 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <tr><td>2 points</td><td>Each step above the linked attribute die</td></tr>
 </table>
 
-<div class="tip">Core skills cost 1 point to raise from d4→d6 if the linked attribute is d4 or higher. You can leave them at d4 for free, but they'll default to d4−2 if you remove them.</div>
+<div class="page-nav">
+  <a onclick="goPage('step-attributes')">← Step 3: Attributes</a>
+  <a onclick="goPage('step-hindrances')">Step 5: Hindrances →</a>
+</div>
+</div>
 
 <!-- ═══════════════════════════════════════════════ -->
-<h2 id="step-hindrances">Step 5 — Hindrances &amp; Edges</h2>
+<div class="page" id="page-step-hindrances">
+<h2>Step 5 — Hindrances &amp; Edges</h2>
 
 <h3>Hindrances</h3>
 
-<p>Hindrances are character flaws that earn you points to spend on benefits. Click a hindrance to toggle it. Some hindrances can be taken as Minor or Major — a severity selector appears when applicable.</p>
+<p>Hindrances are character flaws that earn you points to spend on benefits. Click a hindrance to toggle it. Some can be taken as Minor or Major — a severity selector appears when applicable.</p>
 
-<p>Hindrance points are spent in the <strong>allocation panel</strong> that appears once you've selected at least one hindrance. You can allocate points to:</p>
+<p>Hindrance points are spent in the <strong>allocation panel</strong>:</p>
 
 <table>
 <tr><th>Allocation</th><th>Cost</th><th>Effect</th></tr>
@@ -266,249 +274,263 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <h3>Edges</h3>
 
-<p>Edges are advantages and special abilities. Your base budget is 1 edge (from character creation) plus any ancestry bonus edges and hindrance-allocated edges.</p>
+<p>Your base budget is 1 edge (from character creation) plus ancestry bonus edges and hindrance-allocated edges. Edges are filtered by category — Combat, Social, Professional, etc. Each card shows requirements, and edges whose prerequisites aren't met are dimmed.</p>
 
-<p>Edges are filtered by category — Combat, Social, Professional, etc. Click the category tabs to browse. Each edge card shows its requirements, so you can see at a glance whether your character qualifies. Edges whose requirements aren't met are dimmed.</p>
+<p>Some edges are <strong>stackable</strong> (like Power Points) — clicking adds another instance.</p>
 
-<p>Some edges are <strong>stackable</strong> (like Power Points) — you can take these multiple times. Clicking a stackable edge adds another instance.</p>
-
-<!-- ═══════════════════════════════════════════════ -->
-<h2 id="step-powers">Step 6 — Powers</h2>
-
-<p>This step only activates if you've taken the <strong>Arcane Background</strong> edge. Select your arcane background type (Gifted, Magic, Miracles, etc.), then choose your powers from the available list.</p>
-
-<p>The number of starting powers and Power Points depends on your chosen background. Taking the <strong>New Powers</strong> edge adds 2 more power picks; <strong>Power Points</strong> adds 5 PP per instance.</p>
-
-<p>Each power card shows its PP cost, range, duration, and effect summary. Your power budget and PP total are tracked at the top of the panel.</p>
-
-<div class="note">Power trappings are a narrative choice rather than a mechanical one in Savage Worlds. The Forge tracks the mechanical framework — you describe the flavour at the table.</div>
+<div class="page-nav">
+  <a onclick="goPage('step-skills')">← Step 4: Skills</a>
+  <a onclick="goPage('step-powers')">Step 6: Powers →</a>
+</div>
+</div>
 
 <!-- ═══════════════════════════════════════════════ -->
-<h2 id="step-gear">Step 7 — Gear</h2>
+<div class="page" id="page-step-powers">
+<h2>Step 6 — Powers</h2>
 
-<p>Buy equipment from the gear catalogue. Items are sorted into tabs: <strong>Melee, Ranged, Armor, Shields, and General</strong>. Click an item to add it, click again to remove. The cost tracker shows your budget in real time.</p>
+<p>This step only activates if you've taken the <strong>Arcane Background</strong> edge. Select your arcane background type (Gifted, Magic, Miracles, etc.), then choose powers from the available list.</p>
 
-<p>Your starting funds default to <strong>$500</strong> (or 500₡ in Ammaria). If you allocated hindrance points to extra funds, this is doubled. If you took the <strong>Rich</strong> edge, you start with three times the base; <strong>Filthy Rich</strong> gives five times.</p>
+<p>Starting power count and Power Points depend on your chosen background. <strong>New Powers</strong> adds 2 more picks; <strong>Power Points</strong> adds 5 PP per instance.</p>
 
-<p>The <strong>Poverty</strong> hindrance halves your starting funds.</p>
+<p>Each power card shows PP cost, range, duration, and effect summary. Your power budget and PP total are tracked at the top of the panel.</p>
+
+<div class="note">Power trappings are narrative choices rather than mechanical ones in Savage Worlds. The Forge tracks the framework — you describe the flavour at the table.</div>
+
+<div class="page-nav">
+  <a onclick="goPage('step-hindrances')">← Step 5: Hindrances</a>
+  <a onclick="goPage('step-gear')">Step 7: Gear →</a>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<div class="page" id="page-step-gear">
+<h2>Step 7 — Gear</h2>
+
+<p>Buy equipment from the gear catalogue. Items are sorted into tabs: <strong>Melee, Ranged, Armor, Shields, and General</strong>. Click to add, click again to remove. The cost tracker shows your budget in real time.</p>
+
+<p>Starting funds default to <strong>$500</strong> (or 500₡ in Ammaria). If you allocated hindrance points to extra funds, this is doubled. <strong>Rich</strong> gives three times; <strong>Filthy Rich</strong> gives five times. <strong>Poverty</strong> halves starting funds.</p>
 
 <p>Gear added here is included in all exports — Fantasy Grounds XML, PDF sheets, and stat blocks all reflect your selections with correct damage, armour, weight, and cost values.</p>
 
-<!-- ═══════════════════════════════════════════════ -->
-<h2 id="step-summary">Step 8 — Summary</h2>
-
-<p>The summary step presents your completed character in a read-only stat block format. All attributes, skills, derived stats, edges, hindrances, powers, and gear are displayed. This is the "proofread before you print" step.</p>
-
-<p>Check for:</p>
-<p>• Red indicators on any step tab (click to jump directly to the problem)<br>
-• Derived stats that look wrong (Parry should be 2 + half your Fighting die)<br>
-• Missing gear or powers you intended to take<br>
-• Overall concept coherence — does the build match the character you imagined?</p>
+<div class="page-nav">
+  <a onclick="goPage('step-powers')">← Step 6: Powers</a>
+  <a onclick="goPage('step-summary')">Step 8: Summary →</a>
+</div>
+</div>
 
 <!-- ═══════════════════════════════════════════════ -->
-<h2 id="export">Export Formats</h2>
+<div class="page" id="page-step-summary">
+<h2>Step 8 — Summary</h2>
 
-<p>The final step offers five export formats. Each produces a complete, standalone file ready for use:</p>
+<p>The summary presents your completed character in a read-only stat block format. All attributes, skills, derived stats, edges, hindrances, powers, and gear are displayed. This is the "proofread before you print" step.</p>
+
+<p>Check for red indicators on any step tab (click to jump directly to the problem), derived stats that look wrong (Parry should be 2 + half Fighting die), missing gear or powers, and overall concept coherence.</p>
+
+<div class="page-nav">
+  <a onclick="goPage('step-gear')">← Step 7: Gear</a>
+  <a onclick="goPage('export')">Export Formats →</a>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<div class="page" id="page-export">
+<h2>Export Formats</h2>
+
+<p>The final step offers five export formats, each producing a complete standalone file:</p>
 
 <div class="format-grid">
-  <div class="format-card">
+  <div class="format-card" style="border-color:var(--gold)">
     <h4>⇄ JSON (Vault Transfer)</h4>
-    <p>Lossless <code>diceforge-character-v1</code> format. Imports directly into the Character Vault or back into another Forge session. Use this for workflow transfer, archiving, or collaboration.</p>
+    <p>Lossless <code>diceforge-character-v1</code> format. Imports into Character Vault or back into another Forge session. Copy to clipboard or download.</p>
   </div>
   <div class="format-card">
     <h4>⚔ Fantasy Grounds XML</h4>
-    <p>Imports directly into Fantasy Grounds Unity as a character sheet node. Includes attributes, skills, edges, hindrances, weapons, powers, and inventory.</p>
+    <p>Imports directly into Fantasy Grounds Unity as a character sheet node.</p>
   </div>
   <div class="format-card">
     <h4>📄 PDF Character Sheet</h4>
-    <p>Print-ready A4 sheet styled to Pinnacle convention. Portrait image, derived stats bar, all sections formatted for table use.</p>
+    <p>Print-ready A4 sheet styled to Pinnacle convention. Portrait, derived stats bar, all sections formatted.</p>
   </div>
   <div class="format-card">
-    <h4>🌐 HTML Character Sheet</h4>
-    <p>Standalone web page. Self-contained with embedded fonts and styling. Print-friendly, works in any browser.</p>
-  </div>
-</div>
-
-<div class="format-grid">
-  <div class="format-card">
-    <h4>📝 RTF Document</h4>
-    <p>Rich Text Format compatible with Word, LibreOffice, and Google Docs. Bold labels, section headers, comma-separated lists.</p>
-  </div>
-  <div class="format-card" style="border-color:var(--gold-dim)">
-    <h4>📋 Copy to Clipboard</h4>
-    <p>The JSON export card includes a clipboard icon — click it to copy the full JSON to your clipboard without downloading a file.</p>
+    <h4>🌐 HTML &amp; 📝 RTF</h4>
+    <p>HTML: self-contained web page. RTF: opens in Word, LibreOffice. Both follow canonical stat block format.</p>
   </div>
 </div>
 
 <div class="tip">All exports include the Pinnacle Fan Licence attribution automatically. Portrait images are embedded in PDF, HTML, and RTF outputs.</div>
 
+<div class="page-nav">
+  <a onclick="goPage('step-summary')">← Summary</a>
+  <a onclick="goPage('json-transfer')">JSON Transfer →</a>
+</div>
+</div>
+
 <!-- ═══════════════════════════════════════════════ -->
-<h2 id="json-transfer">JSON Transfer</h2>
+<div class="page" id="page-json-transfer">
+<h2>JSON Transfer</h2>
 
 <h3>The diceforge-character-v1 Format</h3>
 
-<p>Both the Character Forge and the Character Vault speak the same JSON schema, tagged <code>_format: "diceforge-character-v1"</code>. This allows <strong>lossless, bidirectional transfer</strong> between the two tools:</p>
+<p>Both the Character Forge and the Character Vault speak the same JSON schema, tagged <code>_format: "diceforge-character-v1"</code>. This allows <strong>lossless bidirectional transfer</strong>.</p>
 
-<p><strong>Forge → Vault:</strong> Export JSON from the Forge's Export step, then import it into the Vault via the sidebar Import button or a character's Transfer panel.</p>
+<p><strong>Forge → Vault:</strong> Export JSON from the Forge's Export step, then import into the Vault via the sidebar Import button or a character's Transfer panel.</p>
 
-<p><strong>Vault → Forge:</strong> Export JSON from a Vault character's Transfer panel, then import it on the Forge's Concept step (Upload JSON or Paste JSON).</p>
+<p><strong>Vault → Forge:</strong> Export JSON from a Vault character's Transfer panel, then import on the Forge's Concept step (Upload JSON or Paste JSON).</p>
 
 <h3>What Transfers</h3>
 
 <table>
-<tr><th>Field</th><th>Transfers?</th><th>Notes</th></tr>
+<tr><th>Field</th><th>Status</th><th>Notes</th></tr>
 <tr><td>Name, concept, ancestry</td><td>✓ Lossless</td><td></td></tr>
-<tr><td>Attributes</td><td>✓ Lossless</td><td></td></tr>
-<tr><td>Skills</td><td>✓ Lossless</td><td>Forge uses array, Vault uses object — auto-converted</td></tr>
-<tr><td>Edges</td><td>✓ Names only</td><td>Forge adds summaries/sources from catalogue on import</td></tr>
-<tr><td>Hindrances</td><td>✓ With severity</td><td>Severity encoded as "(Major)" or "(Minor)" suffix</td></tr>
-<tr><td>Powers</td><td>✓ Names only</td><td>Forge adds PP/range/duration from catalogue on import</td></tr>
-<tr><td>Weapons, armour</td><td>✓ Structure differs</td><td>Forge uses unified gear array; Vault uses separate arrays</td></tr>
-<tr><td>Gear costs</td><td>⚠ Partial</td><td>Vault stores total gear cost; Forge tracks per-item. Costs may need manual re-entry</td></tr>
-<tr><td>Narrative fields</td><td>✓ Vault→Forge</td><td>Quote, background, motivation, etc. — stored but not displayed in Forge</td></tr>
-<tr><td>Portrait</td><td>✗</td><td>Portraits are not included in JSON (too large). Re-upload in destination tool</td></tr>
+<tr><td>Attributes, Skills</td><td>✓ Lossless</td><td>Format auto-converted</td></tr>
+<tr><td>Edges, Hindrances</td><td>✓ With severity</td><td>Forge adds summaries from catalogue</td></tr>
+<tr><td>Powers</td><td>✓ Names</td><td>Forge adds PP/range/duration</td></tr>
+<tr><td>Weapons, armour</td><td>✓ Mapped</td><td>Unified gear ↔ separate arrays</td></tr>
+<tr><td>Gear costs</td><td>⚠ Partial</td><td>May need manual re-entry</td></tr>
+<tr><td>Narrative fields</td><td>✓ Preserved</td><td>Survive round-trip</td></tr>
+<tr><td>Portrait</td><td>✗ Excluded</td><td>Re-upload in destination tool</td></tr>
 </table>
 
 <h3>Import on the Concept Step</h3>
 
-<p>Two import options appear at the bottom of the Concept step:</p>
+<p><strong>Upload JSON</strong> — select a <code>.json</code> file. The Forge validates, loads all fields, and lands on the Summary step for review.</p>
 
-<p><strong>Upload JSON</strong> — click to select a <code>.json</code> file from your filesystem. The Forge reads it, validates the format, and loads all fields into the builder. You'll land on the Summary step so you can review the imported build.</p>
+<p><strong>Paste JSON</strong> — opens a prompt for pasting raw JSON (useful from clipboard copy).</p>
 
-<p><strong>Paste JSON</strong> — opens a text prompt where you can paste raw JSON (useful if you copied from the Vault's clipboard export). Same validation and loading process.</p>
+<div class="warning">Importing replaces your entire current build. The Forge asks for confirmation if you already have a character name entered.</div>
 
-<div class="warning">Importing replaces your entire current build. If you have unsaved work, export it first. The Forge will ask for confirmation if you already have a character name entered.</div>
-
-<!-- ═══════════════════════════════════════════════ -->
-<h2 id="modules">Setting Modules</h2>
-
-<p>Setting modules extend the Forge with content from specific supplements. Each module can add ancestries, edges, hindrances, skills, gear, and arcane backgrounds to the builder.</p>
-
-<p>Modules are toggled on the Concept step. Core Savage Worlds content is always active. Supplement content is identified by source throughout the builder — you'll see tags like <em>(Ammaria)</em> or <em>(Saltlands)</em> next to module-specific options.</p>
-
-<p>When a module is disabled, any selections from that module are preserved in your build data but may cause validation warnings. Re-enable the module to clear these.</p>
-
-<div class="note">Module data is loaded from the companion JavaScript files (<code>swade-core.js</code>, <code>ammaria.js</code>, etc.). These are cached by your browser and don't require a network connection after first load.</div>
+<div class="page-nav">
+  <a onclick="goPage('export')">← Export Formats</a>
+  <a onclick="goPage('modules')">Setting Modules →</a>
+</div>
+</div>
 
 <!-- ═══════════════════════════════════════════════ -->
-<h2 id="validation">Build Validation</h2>
+<div class="page" id="page-modules">
+<h2>Setting Modules</h2>
 
-<p>The Forge validates your character at every step. The step bar colour-codes each tab, and the Summary step shows an aggregate status. Here's what's checked:</p>
+<p>Setting modules extend the Forge with content from specific supplements. Each module can add ancestries, edges, hindrances, skills, gear, and arcane backgrounds.</p>
+
+<p>Modules are toggled on the Concept step. Core content is always active. Supplement content is identified by source throughout the builder — you'll see tags like <em>(Ammaria)</em> or <em>(Saltlands)</em> next to module-specific options.</p>
+
+<p>When a module is disabled, selections from it are preserved but may cause validation warnings. Re-enable the module to clear these.</p>
+
+<div class="note">Module data is loaded from companion JavaScript files (<code>swade-core.js</code>, <code>ammaria.js</code>, etc.). These are cached by your browser after first load.</div>
+
+<div class="page-nav">
+  <a onclick="goPage('json-transfer')">← JSON Transfer</a>
+  <a onclick="goPage('validation')">Build Validation →</a>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<div class="page" id="page-validation">
+<h2>Build Validation</h2>
+
+<p>The Forge validates your character at every step. The step bar colour-codes each tab, and the Summary step shows aggregate status.</p>
 
 <table>
 <tr><th>Rule</th><th>Step</th><th>Trigger</th></tr>
 <tr><td>Name required</td><td>Concept</td><td>Empty name field</td></tr>
 <tr><td>Ancestry required</td><td>Ancestry</td><td>No ancestry selected</td></tr>
-<tr><td>Attribute budget</td><td>Attributes</td><td>Points spent ≠ points available</td></tr>
-<tr><td>Skill budget</td><td>Skills</td><td>Points spent ≠ points available</td></tr>
-<tr><td>Edge budget</td><td>Hindrances &amp; Edges</td><td>Edges selected ≠ edges available</td></tr>
-<tr><td>Hindrance allocation</td><td>Hindrances &amp; Edges</td><td>Points earned ≠ points spent</td></tr>
-<tr><td>Power count</td><td>Powers</td><td>Powers selected ≠ starting powers</td></tr>
-<tr><td>AB required</td><td>Powers</td><td>Arcane Background edge without AB type selected</td></tr>
-<tr><td>Gear budget</td><td>Gear</td><td>Total gear cost exceeds starting funds</td></tr>
+<tr><td>Attribute budget</td><td>Attributes</td><td>Points spent ≠ available</td></tr>
+<tr><td>Skill budget</td><td>Skills</td><td>Points spent ≠ available</td></tr>
+<tr><td>Edge budget</td><td>Hindrances &amp; Edges</td><td>Edges ≠ available</td></tr>
+<tr><td>Hindrance allocation</td><td>Hindrances &amp; Edges</td><td>Points earned ≠ spent</td></tr>
+<tr><td>Power count</td><td>Powers</td><td>Powers ≠ starting powers</td></tr>
+<tr><td>Gear budget</td><td>Gear</td><td>Cost exceeds funds</td></tr>
 </table>
 
-<p>A fully valid character shows <strong>all green</strong> on the step bar. Red on any step means there's a budget violation or missing requirement. Gold means the step hasn't been completed yet.</p>
+<p>All green on the step bar means a fully valid character. Red means a budget violation or missing requirement. Gold means incomplete.</p>
+
+<div class="page-nav">
+  <a onclick="goPage('modules')">← Setting Modules</a>
+  <a onclick="goPage('troubleshooting')">Troubleshooting →</a>
+</div>
+</div>
 
 <!-- ═══════════════════════════════════════════════ -->
-<h2 id="shortcuts">Keyboard Shortcuts</h2>
+<div class="page" id="page-troubleshooting">
+<h2>Troubleshooting</h2>
 
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>⌘</kbd> + <kbd>K</kbd></td><td>Focus search (this help page)</td></tr>
-<tr><td><kbd>←</kbd></td><td>Previous step</td></tr>
-<tr><td><kbd>→</kbd></td><td>Next step</td></tr>
-</table>
-
-<!-- ═══════════════════════════════════════════════ -->
-<h2 id="troubleshooting">Troubleshooting</h2>
-
-<h3>My character disappeared when I refreshed the page</h3>
-<p>The Forge runs in-memory and does not auto-save. Always export (JSON recommended) before closing or refreshing. If you've lost a build, it cannot be recovered.</p>
+<h3>My character disappeared when I refreshed</h3>
+<p>The Forge runs in-memory and does not auto-save. Always export (JSON recommended) before closing or refreshing. Lost builds cannot be recovered.</p>
 
 <h3>An edge shows as available but shouldn't be</h3>
-<p>Edge requirements are checked against your current selections. Some prerequisites (like rank requirements beyond Novice) aren't enforced in the builder because Novice is the assumed starting rank. Review the edge's requirements text manually.</p>
+<p>Some prerequisites (like rank requirements beyond Novice) aren't enforced because Novice is the assumed starting rank. Review the edge's requirements text manually.</p>
 
 <h3>Gear costs don't match the rulebook</h3>
-<p>Gear prices come from the module data files. If you're using a setting module, prices may differ from the core Savage Worlds equipment list. Check which modules are active on the Concept step.</p>
+<p>Prices come from module data files. If you're using a setting module, prices may differ from core equipment lists. Check which modules are active.</p>
 
 <h3>Import failed with "Invalid JSON"</h3>
-<p>Ensure you're pasting the complete JSON object, starting with <code>{</code> and ending with <code>}</code>. If you exported from the Vault, make sure you used the JSON format, not the text stat block. HTML and RTF are not importable in the Forge.</p>
+<p>Ensure you're pasting the complete object, starting with <code>{</code> and ending with <code>}</code>. Use JSON format, not text stat block. HTML and RTF are not importable in the Forge.</p>
 
-<h3>The PDF export looks wrong or has missing sections</h3>
-<p>PDF generation uses the jsPDF library. Very long character names or extremely long gear lists may cause layout overflow. Try shortening the name or concept. If the portrait is missing, ensure it's a JPG or PNG under 2MB.</p>
+<h3>PDF export looks wrong</h3>
+<p>Very long character names or gear lists may cause layout overflow. Try shortening. Ensure portraits are JPG or PNG under 2MB.</p>
+
+<div class="page-nav">
+  <a onclick="goPage('validation')">← Build Validation</a>
+  <a onclick="goPage('about')">About &amp; Licence →</a>
+</div>
+</div>
 
 <!-- ═══════════════════════════════════════════════ -->
-<h2 id="about">About &amp; Licence</h2>
+<div class="page" id="page-about">
+<h2>About &amp; Licence</h2>
 
 <p>The Character Forge is developed by <strong>DiceForge Studios Ltd</strong> as a free companion tool for Savage Worlds players and game masters.</p>
 
 <p>This tool references the Savage Worlds game system, available from Pinnacle Entertainment Group at <a href="https://www.peginc.com" target="_blank">peginc.com</a>. Savage Worlds and all associated logos and trademarks are copyrights of Pinnacle Entertainment Group. Used with permission. Pinnacle makes no representation or warranty as to the quality, viability, or suitability for purpose of this product.</p>
 
-<p>You will need the <strong>Savage Worlds Adventure Edition</strong> core rules to play. This tool does not reproduce the full rules text — it provides a character creation workflow that assumes familiarity with the system.</p>
+<p>You will need the <strong>Savage Worlds Adventure Edition</strong> core rules to play.</p>
 
-<p>Setting module content (Ammaria, Saltlands, Vinlands, Concordium, Glasrya) is © DiceForge Studios Ltd and is included under the DiceForge Studios content licence.</p>
+<p>Setting module content (Ammaria, Saltlands, Vinlands, Concordium, Glasrya) is © DiceForge Studios Ltd.</p>
+
+<div class="page-nav">
+  <a onclick="goPage('troubleshooting')">← Troubleshooting</a>
+  <span></span>
+</div>
+</div>
 
 </main>
 </div>
 
-<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Top</button>
-
 <script>
-// Search
+const navLinks = document.querySelectorAll('.nav-link[data-page]');
+const pages = document.querySelectorAll('.page');
+const mainEl = document.getElementById('main');
 const searchInput = document.getElementById('searchInput');
-const navLinks = document.querySelectorAll('.nav-link');
-const sections = document.querySelectorAll('h2[id], h3[id]');
+
+function goPage(id) {
+  pages.forEach(p => p.classList.remove('active'));
+  navLinks.forEach(l => l.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  const link = document.querySelector('.nav-link[data-page="' + id + '"]');
+  if (page) page.classList.add('active');
+  if (link) link.classList.add('active');
+  mainEl.scrollTop = 0;
+  document.querySelector('.sidebar').classList.remove('open');
+}
+
+navLinks.forEach(function(link) {
+  link.addEventListener('click', function() { goPage(this.dataset.page); });
+});
 
 searchInput.addEventListener('input', function() {
   const q = this.value.toLowerCase().trim();
-  if (!q) {
-    navLinks.forEach(l => l.classList.remove('hidden'));
-    return;
-  }
+  if (!q) { navLinks.forEach(l => l.classList.remove('hidden')); return; }
   navLinks.forEach(function(link) {
     const text = link.textContent.toLowerCase();
-    const targetId = link.getAttribute('href')?.replace('#','');
-    const target = targetId ? document.getElementById(targetId) : null;
-    let sectionText = '';
-    if (target) {
-      let el = target.nextElementSibling;
-      while (el && el.tagName !== 'H2') {
-        sectionText += ' ' + el.textContent;
-        el = el.nextElementSibling;
-      }
-    }
-    const match = text.includes(q) || sectionText.toLowerCase().includes(q);
-    link.classList.toggle('hidden', !match);
+    const pageId = link.dataset.page;
+    const page = document.getElementById('page-' + pageId);
+    const pageText = page ? page.textContent.toLowerCase() : '';
+    link.classList.toggle('hidden', !(text.includes(q) || pageText.includes(q)));
   });
 });
 
-// Keyboard shortcut
 document.addEventListener('keydown', function(e) {
-  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-    e.preventDefault();
-    searchInput.focus();
-    searchInput.select();
-  }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); searchInput.focus(); searchInput.select(); }
   if (e.key === 'Escape') searchInput.blur();
-});
-
-// Active section tracking
-const observer = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) {
-    if (entry.isIntersecting) {
-      navLinks.forEach(l => l.classList.remove('active'));
-      const link = document.querySelector('.nav-link[href="#' + entry.target.id + '"]');
-      if (link) link.classList.add('active');
-    }
-  });
-}, { rootMargin: '-20% 0px -70% 0px' });
-
-document.querySelectorAll('h2[id]').forEach(function(el) { observer.observe(el); });
-
-// Back to top
-window.addEventListener('scroll', function() {
-  document.getElementById('backTop').style.display = window.scrollY > 400 ? 'block' : 'none';
 });
 </script>
 </body>
