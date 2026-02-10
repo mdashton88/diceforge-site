@@ -1205,16 +1205,25 @@ function setExportFmt(fmt){
     json:'Lossless — full character data. Use for Forge/Vault transfer.',
     text:'Plain text stat block — for documents, sharing with players. Not reliably re-importable.',
     html:'Formatted HTML — opens in any browser. Import is experimental.',
-    rtf:'Rich Text Format — opens in Word, LibreOffice. Import is experimental.'
+    rtf:'Rich Text Format — Download opens in Word/LibreOffice. Copy pastes as formatted text into Word.'
   };
   note.textContent=notes[fmt]||'';
   if(fmt==='json') ta.value=JSON.stringify(buildExportJSON(currentNPC),null,2);
   else if(fmt==='text') ta.value=buildStatBlockText(currentNPC);
   else if(fmt==='html') ta.value=buildExportHTML(currentNPC);
-  else if(fmt==='rtf') ta.value=buildExportRTF(currentNPC);
+  else if(fmt==='rtf') ta.value=buildStatBlockText(currentNPC);
 }
 
 function copyExport(){
+  if(!currentNPC) return;
+  if(currentExportFmt==='rtf'){
+    // Copy as HTML so Word pastes formatted text, not RTF codes
+    const html=buildExportHTML(currentNPC);
+    const blob=new Blob([html],{type:'text/html'});
+    const item=new ClipboardItem({'text/html':blob,'text/plain':new Blob([buildStatBlockText(currentNPC)],{type:'text/plain'})});
+    navigator.clipboard.write([item]).then(()=>showCopyToast('Formatted text copied — paste into Word'));
+    return;
+  }
   const ta=document.getElementById('exportPreview');
   if(!ta) return;
   navigator.clipboard.writeText(ta.value).then(()=>showCopyToast(currentExportFmt.toUpperCase()+' copied to clipboard'));
@@ -1222,13 +1231,14 @@ function copyExport(){
 
 function downloadExport(){
   if(!currentNPC) return;
-  const ta=document.getElementById('exportPreview');
   const safeName=currentNPC.name.replace(/[^a-zA-Z0-9_-]/g,'_');
   const exts={json:'.json',text:'.txt',html:'.html',rtf:'.rtf'};
   const mimes={json:'application/json',text:'text/plain',html:'text/html',rtf:'application/rtf'};
   const ext=exts[currentExportFmt]||'.txt';
   const mime=mimes[currentExportFmt]||'text/plain';
-  const blob=new Blob([ta.value],{type:mime});
+  // For RTF download, use actual RTF content, not the preview text
+  const content=currentExportFmt==='rtf'?buildExportRTF(currentNPC):document.getElementById('exportPreview').value;
+  const blob=new Blob([content],{type:mime});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
   a.download=safeName+ext;
