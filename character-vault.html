@@ -135,6 +135,10 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .catalogue-section { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
 .catalogue-section h4 { font-size: 12px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; }
 .catalogue-list { max-height: 200px; overflow-y: auto; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 3px; margin-bottom: 8px; }
+.cat-info { background: var(--bg-dark); border: 1px solid var(--accent); border-radius: 4px; padding: 10px 12px; margin-bottom: 10px; font-size: 12px; line-height: 1.6; }
+.cat-info .ci-name { color: var(--accent); font-weight: bold; font-size: 13px; }
+.cat-info .ci-meta { color: var(--text-dim); font-size: 11px; margin-bottom: 4px; }
+.cat-info .ci-desc { color: var(--text); }
 .catalogue-item { padding: 4px 8px; cursor: pointer; font-size: 12px; border-bottom: 1px solid #2a2a2a; }
 .catalogue-item:hover { background: var(--bg-hover); }
 .catalogue-item .cat-name { color: var(--text-bright); }
@@ -791,6 +795,7 @@ function renderHindrancesPanel(n){
     <div class="catalogue-section"><h4>Add Hindrance</h4><div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
     <input type="text" id="hindSearch" placeholder="Search hindrances..." oninput="filterHindCat()" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:3px;font-size:12px;margin-bottom:4px">
     <div class="catalogue-list" id="hindCatList"></div>
+    <div id="hindInfo"></div>
     <div class="form-row"><div class="form-group"><label>Name</label><input id="hind_name"></div><div class="form-group" style="max-width:120px"><label>Severity</label><select id="hind_sev"><option>Minor</option><option>Major</option></select></div></div>
     <div class="form-group"><label>Notes</label><input id="hind_notes" placeholder="Optional details"></div>
     <button class="btn primary" onclick="addHindrance()">Add Hindrance</button></div>`;
@@ -800,7 +805,15 @@ function filterHindCat(){
   const s=(document.getElementById('hindSearch')?.value||'').toLowerCase();
   const cat=getCatalogueHindrances().filter(h=>!s||h.name.toLowerCase().includes(s));
   const el=document.getElementById('hindCatList');if(!el)return;
-  el.innerHTML=cat.map(h=>`<div class="catalogue-item" onclick="document.getElementById('hind_name').value='${esc(h.name)}';document.getElementById('hind_sev').value='${(h.type||'Minor').includes('Major')?'Major':'Minor'}'"><span class="cat-name">${esc(h.name)}</span> <span class="cat-detail">(${esc(h.type||'Minor')}) — ${esc(h.source)}</span></div>`).join('');
+  el.innerHTML=cat.map((h,i)=>`<div class="catalogue-item" onclick="selectHindInfo(${i},'${esc(s)}')"><span class="cat-name">${esc(h.name)}</span> <span class="cat-detail">(${esc(h.type||h.sev||'Minor')}) — ${esc(h.source)}</span></div>`).join('');
+}
+function selectHindInfo(idx,search){
+  const cat=getCatalogueHindrances().filter(h=>!search||h.name.toLowerCase().includes(search));
+  const h=cat[idx];if(!h)return;
+  document.getElementById('hind_name').value=h.name;
+  document.getElementById('hind_sev').value=(h.type||h.sev||'Minor').includes('Major')?'Major':'Minor';
+  const info=document.getElementById('hindInfo');if(!info)return;
+  info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(h.name)}</div><div class="ci-meta">${esc(h.type||h.sev||'Minor')} · ${esc(h.source)}</div><div class="ci-desc">${esc(h.summary||'No description available.')}</div></div>`;
 }
 function addHindrance(){
   const name=document.getElementById('hind_name').value.trim();if(!name)return;
@@ -821,6 +834,7 @@ function renderEdgesPanel(n){
     <div class="catalogue-section"><h4>Add Edge</h4>
     <input type="text" id="edgeSearch" placeholder="Search edges..." oninput="filterEdgeCat()" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:3px;font-size:12px;margin-bottom:4px">
     <div class="catalogue-list" id="edgeCatList"></div>
+    <div id="edgeInfo"></div>
     <div class="form-group"><label>Name</label><input id="edge_name"></div>
     <button class="btn primary" onclick="addEdge()">Add Edge</button></div>`;
   filterEdgeCat();
@@ -829,7 +843,15 @@ function filterEdgeCat(){
   const s=(document.getElementById('edgeSearch')?.value||'').toLowerCase();
   const cat=getCatalogueEdges().filter(e=>!s||e.name.toLowerCase().includes(s));
   const el=document.getElementById('edgeCatList');if(!el)return;
-  el.innerHTML=cat.map(e=>`<div class="catalogue-item" onclick="document.getElementById('edge_name').value='${esc(e.name)}'"><span class="cat-name">${esc(e.name)}</span> <span class="cat-detail">${esc(e.rank||'')} ${esc(e.type||'')} — ${esc(e.source)}</span></div>`).join('');
+  el.innerHTML=cat.map((e,i)=>`<div class="catalogue-item" onclick="selectEdgeInfo(${i},'${esc(s)}')"><span class="cat-name">${esc(e.name)}</span> <span class="cat-detail">${esc(e.rank||'')} ${esc(e.cat||e.type||'')} — ${esc(e.source)}</span></div>`).join('');
+}
+function selectEdgeInfo(idx,search){
+  const cat=getCatalogueEdges().filter(e=>!search||e.name.toLowerCase().includes(search));
+  const e=cat[idx];if(!e)return;
+  document.getElementById('edge_name').value=e.name;
+  const info=document.getElementById('edgeInfo');if(!info)return;
+  const reqs=e.reqs&&e.reqs!=='—'?`<div class="ci-meta">Requirements: ${esc(e.reqs)}</div>`:'';
+  info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(e.name)}</div><div class="ci-meta">${esc(e.rank||'N')} · ${esc(e.cat||e.type||'General')} · ${esc(e.source)}</div>${reqs}<div class="ci-desc">${esc(e.summary||'No description available.')}</div></div>`;
 }
 function addEdge(){const name=document.getElementById('edge_name').value.trim();if(!name)return;currentNPC.edges.push(name);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
 function removeEdge(btn){const val=btn.dataset.val;currentNPC.edges=currentNPC.edges.filter(x=>x!==val);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
@@ -967,6 +989,7 @@ function renderPowersPanel(n){
     <div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
     <input placeholder="Search powers..." oninput="filterPowerCatalogue(this.value)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
     <div class="catalogue-list" id="powCatList"></div>
+    <div id="powInfo"></div>
     <div style="margin:10px 0 4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Or Enter Custom</div>
     <div class="form-group"><label>Power Name</label><input id="pow_name"></div>
     <button class="btn primary" onclick="addPower()">Add Power</button></div>
@@ -978,7 +1001,15 @@ function filterPowerCatalogue(s){
   const existing=currentNPC?currentNPC.powers.map(p=>p.toLowerCase()):[];
   const cat=getCataloguePowers().filter(p=>(!s||p.name.toLowerCase().includes(s))&&!existing.includes(p.name.toLowerCase()));
   const el=document.getElementById('powCatList');if(!el)return;
-  el.innerHTML=cat.map(p=>`<div class="catalogue-item" onclick="document.getElementById('pow_name').value='${esc(p.name)}'"><span class="cat-name">${esc(p.name)}</span> <span class="cat-detail">${esc(p.rank)} ${esc(p.pp)}PP ${p.range?p.range:''} — ${esc(p.source)}</span></div>`).join('');
+  el.innerHTML=cat.map((p,i)=>`<div class="catalogue-item" onclick="selectPowInfo(${i},'${esc(s)}')"><span class="cat-name">${esc(p.name)}</span> <span class="cat-detail">${esc(p.rank)} ${esc(p.pp)}PP ${p.range?p.range:''} — ${esc(p.source)}</span></div>`).join('');
+}
+function selectPowInfo(idx,search){
+  const existing=currentNPC?currentNPC.powers.map(p=>p.toLowerCase()):[];
+  const cat=getCataloguePowers().filter(p=>(!search||p.name.toLowerCase().includes(search))&&!existing.includes(p.name.toLowerCase()));
+  const p=cat[idx];if(!p)return;
+  document.getElementById('pow_name').value=p.name;
+  const info=document.getElementById('powInfo');if(!info)return;
+  info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(p.name)}</div><div class="ci-meta">${esc(p.rank)} · ${esc(p.pp)} PP · Range: ${esc(p.range||'Self')} · Duration: ${esc(p.dur||'Instant')} · ${esc(p.source)}</div><div class="ci-desc">${esc(p.summary||'No description available.')}</div></div>`;
 }
 function addPower(){const name=document.getElementById('pow_name').value.trim();if(!name)return;currentNPC.powers.push(name);saveCharacter(currentNPC);renderPowersPanel(currentNPC);renderStatColumn(currentNPC);}
 function removePower(idx){currentNPC.powers.splice(idx,1);saveCharacter(currentNPC);renderPowersPanel(currentNPC);renderStatColumn(currentNPC);}
