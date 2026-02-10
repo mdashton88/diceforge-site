@@ -851,7 +851,7 @@ function removeHindrance(btn){
 
 function renderEdgesPanel(n){
   const el=document.getElementById('panelContent');
-  const items=n.edges.map(e=>{const leg=isLegacyEdge(e)?' <span class="legacy-tag">(legacy)</span>':'';return `<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0">${esc(e)}${leg} <button class="btn sm danger" onclick="removeEdge(this)" data-val="${esc(e)}">×</button></div>`;}).join('');
+  const items=n.edges.map(e=>{const leg=isLegacyEdge(e)?' <span class="legacy-tag">(legacy)</span>':'';return `<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span style="cursor:pointer" onclick="showExistingEdgeInfo('${esc(e)}')">${esc(e)}${leg}</span> <button class="btn sm danger" onclick="removeEdge(this)" data-val="${esc(e)}">×</button></div>`;}).join('');
   el.innerHTML=`<div>${items||'<div style="color:var(--text-dim)">No edges yet</div>'}</div>
     <div class="catalogue-section"><h4>Add Edge</h4>
     <input type="text" id="edgeSearch" placeholder="Search edges... (↑↓ to browse)" oninput="filterEdgeCat()" onkeydown="edgeCatKeyNav(event)" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:3px;font-size:12px;margin-bottom:4px">
@@ -928,6 +928,14 @@ function scrollToEdgeCatItem(idx){
   const list=document.getElementById('edgeCatList');if(!list)return;
   const items=list.querySelectorAll('.catalogue-item');
   if(items[idx]){items[idx].scrollIntoView({block:'nearest',behavior:'smooth'});}
+}
+function showExistingEdgeInfo(name){
+  const search=document.getElementById('edgeSearch');if(search)search.value='';
+  filterEdgeCat();
+  const baseName=name.replace(/\s*\(.*\)/,'').trim();
+  const idx=edgeCatFiltered.findIndex(e=>e.name===name||e.name===baseName);
+  if(idx>=0){selectEdgeInfo(idx);scrollToEdgeCatItem(idx);}
+  else{const info=document.getElementById('edgeInfo');if(info)info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(name)}</div><div class="ci-desc" style="color:var(--text-dim)">Custom edge — not in catalogue</div></div>`;}
 }
 function addEdge(){const name=document.getElementById('edge_name').value.trim();if(!name)return;currentNPC.edges.push(name);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
 function removeEdge(btn){const val=btn.dataset.val;currentNPC.edges=currentNPC.edges.filter(x=>x!==val);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
