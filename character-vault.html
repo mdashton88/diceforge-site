@@ -800,7 +800,7 @@ function filterHindCat(){
   const s=(document.getElementById('hindSearch')?.value||'').toLowerCase();
   const cat=getCatalogueHindrances().filter(h=>!s||h.name.toLowerCase().includes(s));
   const el=document.getElementById('hindCatList');if(!el)return;
-  el.innerHTML=cat.slice(0,30).map(h=>`<div class="catalogue-item" onclick="document.getElementById('hind_name').value='${esc(h.name)}';document.getElementById('hind_sev').value='${(h.type||'Minor').includes('Major')?'Major':'Minor'}'"><span class="cat-name">${esc(h.name)}</span> <span class="cat-detail">(${esc(h.type||'Minor')}) — ${esc(h.source)}</span></div>`).join('');
+  el.innerHTML=cat.map(h=>`<div class="catalogue-item" onclick="document.getElementById('hind_name').value='${esc(h.name)}';document.getElementById('hind_sev').value='${(h.type||'Minor').includes('Major')?'Major':'Minor'}'"><span class="cat-name">${esc(h.name)}</span> <span class="cat-detail">(${esc(h.type||'Minor')}) — ${esc(h.source)}</span></div>`).join('');
 }
 function addHindrance(){
   const name=document.getElementById('hind_name').value.trim();if(!name)return;
@@ -829,7 +829,7 @@ function filterEdgeCat(){
   const s=(document.getElementById('edgeSearch')?.value||'').toLowerCase();
   const cat=getCatalogueEdges().filter(e=>!s||e.name.toLowerCase().includes(s));
   const el=document.getElementById('edgeCatList');if(!el)return;
-  el.innerHTML=cat.slice(0,30).map(e=>`<div class="catalogue-item" onclick="document.getElementById('edge_name').value='${esc(e.name)}'"><span class="cat-name">${esc(e.name)}</span> <span class="cat-detail">${esc(e.rank||'')} ${esc(e.type||'')} — ${esc(e.source)}</span></div>`).join('');
+  el.innerHTML=cat.map(e=>`<div class="catalogue-item" onclick="document.getElementById('edge_name').value='${esc(e.name)}'"><span class="cat-name">${esc(e.name)}</span> <span class="cat-detail">${esc(e.rank||'')} ${esc(e.type||'')} — ${esc(e.source)}</span></div>`).join('');
 }
 function addEdge(){const name=document.getElementById('edge_name').value.trim();if(!name)return;currentNPC.edges.push(name);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
 function removeEdge(btn){const val=btn.dataset.val;currentNPC.edges=currentNPC.edges.filter(x=>x!==val);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
@@ -852,7 +852,7 @@ function filterSkillCatalogue(s){
   const existing=currentNPC?Object.keys(currentNPC.skills).map(k=>k.toLowerCase()):[];
   const cat=getCatalogueSkills().filter(sk=>(!s||sk.name.toLowerCase().includes(s))&&!existing.includes(sk.name.toLowerCase()));
   const el=document.getElementById('skillCatList');if(!el)return;
-  el.innerHTML=cat.slice(0,30).map(sk=>`<div class="catalogue-item" onclick="selectCatalogueSkill('${esc(sk.name)}')"><span class="cat-name">${esc(sk.name)}</span> <span class="cat-detail">(${esc(sk.attr)}) — ${esc(sk.source)}</span></div>`).join('');
+  el.innerHTML=cat.map(sk=>`<div class="catalogue-item" onclick="selectCatalogueSkill('${esc(sk.name)}')"><span class="cat-name">${esc(sk.name)}</span> <span class="cat-detail">(${esc(sk.attr)}) — ${esc(sk.source)}</span></div>`).join('');
 }
 function selectCatalogueSkill(name){document.getElementById('skill_name').value=name;}
 function addSkill(){const name=document.getElementById('skill_name').value.trim();if(!name)return;currentNPC.skills[name]=4;calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
@@ -877,7 +877,7 @@ function filterWeaponCatalogue(s){
   s=s.toLowerCase();
   const cat=getCatalogueWeapons().filter(w=>!s||w.name.toLowerCase().includes(s));
   const el=document.getElementById('wepCatList');if(!el)return;
-  el.innerHTML=cat.slice(0,30).map(w=>`<div class="catalogue-item" onclick="selectCatalogueWeapon('${esc(w.name)}')"><span class="cat-name">${esc(w.name)}</span> <span class="cat-detail">${esc(w.dmg)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''} — ${esc(w.source)}</span></div>`).join('');
+  el.innerHTML=cat.map(w=>`<div class="catalogue-item" onclick="selectCatalogueWeapon('${esc(w.name)}')"><span class="cat-name">${esc(w.name)}</span> <span class="cat-detail">${esc(w.dmg)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''} — ${esc(w.source)}</span></div>`).join('');
 }
 function selectCatalogueWeapon(name){
   const w=getCatalogueWeapons().find(x=>x.name===name);if(!w)return;
@@ -913,7 +913,7 @@ function filterArmourCatalogue(s){
   s=s.toLowerCase();
   const cat=getCatalogueArmour().filter(a=>!s||a.name.toLowerCase().includes(s));
   const el=document.getElementById('armCatList');if(!el)return;
-  el.innerHTML=cat.slice(0,30).map(a=>{
+  el.innerHTML=cat.map(a=>{
     const val=a.armor?'+'+a.armor:(a.parry?'Parry +'+a.parry:'');
     return `<div class="catalogue-item" onclick="selectCatalogueArmour('${esc(a.name)}')"><span class="cat-name">${esc(a.name)}</span> <span class="cat-detail">(${val}) — ${esc(a.source)}</span></div>`;
   }).join('');
@@ -951,7 +951,7 @@ function filterGearCatalogue(s){
   s=s.toLowerCase();
   const cat=getCatalogueGear().filter(g=>!s||g.name.toLowerCase().includes(s));
   const el=document.getElementById('gearCatList');if(!el)return;
-  el.innerHTML=cat.slice(0,30).map(g=>{
+  el.innerHTML=cat.map(g=>{
     const detail=g.notes?` — ${g.notes}`:'';
     return `<div class="catalogue-item" onclick="document.getElementById('gear_name').value='${esc(g.name)}'"><span class="cat-name">${esc(g.name)}</span> <span class="cat-detail">${g.cost?g.cost+'₡':''}${detail} — ${esc(g.source)}</span></div>`;
   }).join('');
@@ -978,7 +978,7 @@ function filterPowerCatalogue(s){
   const existing=currentNPC?currentNPC.powers.map(p=>p.toLowerCase()):[];
   const cat=getCataloguePowers().filter(p=>(!s||p.name.toLowerCase().includes(s))&&!existing.includes(p.name.toLowerCase()));
   const el=document.getElementById('powCatList');if(!el)return;
-  el.innerHTML=cat.slice(0,30).map(p=>`<div class="catalogue-item" onclick="document.getElementById('pow_name').value='${esc(p.name)}'"><span class="cat-name">${esc(p.name)}</span> <span class="cat-detail">${esc(p.rank)} ${esc(p.pp)}PP ${p.range?p.range:''} — ${esc(p.source)}</span></div>`).join('');
+  el.innerHTML=cat.map(p=>`<div class="catalogue-item" onclick="document.getElementById('pow_name').value='${esc(p.name)}'"><span class="cat-name">${esc(p.name)}</span> <span class="cat-detail">${esc(p.rank)} ${esc(p.pp)}PP ${p.range?p.range:''} — ${esc(p.source)}</span></div>`).join('');
 }
 function addPower(){const name=document.getElementById('pow_name').value.trim();if(!name)return;currentNPC.powers.push(name);saveCharacter(currentNPC);renderPowersPanel(currentNPC);renderStatColumn(currentNPC);}
 function removePower(idx){currentNPC.powers.splice(idx,1);saveCharacter(currentNPC);renderPowersPanel(currentNPC);renderStatColumn(currentNPC);}
