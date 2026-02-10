@@ -942,7 +942,7 @@ function removeEdge(btn){const val=btn.dataset.val;currentNPC.edges=currentNPC.e
 
 function renderSkillsPanel(n){
   const el=document.getElementById('panelContent');
-  const rows=Object.entries(n.skills).sort((a,b)=>a[0].localeCompare(b[0])).map(([name,die])=>`<tr><td>${esc(name)}</td><td style="text-align:center"><button class="btn sm" onclick="stepSkill('${esc(name)}',-1)" style="padding:1px 6px;font-size:13px;min-width:22px">−</button> <span style="display:inline-block;min-width:42px;text-align:center;font-weight:bold">${d(die)}</span> <button class="btn sm" onclick="stepSkill('${esc(name)}',1)" style="padding:1px 6px;font-size:13px;min-width:22px">+</button></td><td><button class="btn sm danger" onclick="removeSkill('${esc(name)}')" title="Remove skill">×</button></td></tr>`).join('');
+  const rows=Object.entries(n.skills).sort((a,b)=>a[0].localeCompare(b[0])).map(([name,die])=>`<tr><td style="cursor:pointer" onclick="showExistingSkillInfo('${esc(name)}')">${esc(name)}</td><td style="text-align:center"><button class="btn sm" onclick="stepSkill('${esc(name)}',-1)" style="padding:1px 6px;font-size:13px;min-width:22px">−</button> <span style="display:inline-block;min-width:42px;text-align:center;font-weight:bold">${d(die)}</span> <button class="btn sm" onclick="stepSkill('${esc(name)}',1)" style="padding:1px 6px;font-size:13px;min-width:22px">+</button></td><td><button class="btn sm danger" onclick="removeSkill('${esc(name)}')" title="Remove skill">×</button></td></tr>`).join('');
   el.innerHTML=`<table class="data-table"><tr><th>Skill</th><th>Die</th><th></th></tr>${rows||'<tr><td colspan="3" style="color:var(--text-dim)">No skills</td></tr>'}</table>
     <div class="catalogue-section"><h4>Add Skill</h4>
     <div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
@@ -996,6 +996,13 @@ function scrollToSkillCatItem(idx){
   const list=document.getElementById('skillCatList');if(!list)return;
   const items=list.querySelectorAll('.catalogue-item');
   if(items[idx])items[idx].scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+function showExistingSkillInfo(name){
+  const search=document.getElementById('skillSearch');if(search)search.value='';
+  filterSkillCatalogue('');
+  const idx=skillCatFiltered.findIndex(s=>s.name===name);
+  if(idx>=0){selectSkillInfo(idx);scrollToSkillCatItem(idx);}
+  else{const info=document.getElementById('skillInfo');if(info)info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(name)}</div><div class="ci-desc" style="color:var(--text-dim)">Custom skill — not in catalogue</div></div>`;}
 }
 function selectCatalogueSkill(name){document.getElementById('skill_name').value=name;}
 function addSkill(){const name=document.getElementById('skill_name').value.trim();if(!name)return;currentNPC.skills[name]=4;calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
