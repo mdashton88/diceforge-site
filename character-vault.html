@@ -942,7 +942,8 @@ function removeEdge(btn){const val=btn.dataset.val;currentNPC.edges=currentNPC.e
 
 function renderSkillsPanel(n){
   const el=document.getElementById('panelContent');
-  const rows=Object.entries(n.skills).sort((a,b)=>a[0].localeCompare(b[0])).map(([name,die])=>`<tr><td style="cursor:pointer" onclick="showExistingSkillInfo('${esc(name)}')">${esc(name)}</td><td style="text-align:center"><button class="btn sm" onclick="stepSkill('${esc(name)}',-1)" style="padding:1px 6px;font-size:13px;min-width:22px">−</button> <span style="display:inline-block;min-width:42px;text-align:center;font-weight:bold">${d(die)}</span> <button class="btn sm" onclick="stepSkill('${esc(name)}',1)" style="padding:1px 6px;font-size:13px;min-width:22px">+</button></td><td><button class="btn sm danger" onclick="removeSkill('${esc(name)}')" title="Remove skill">×</button></td></tr>`).join('');
+  const coreSkills=(window.CharacterForge?.data?.coreSkills||[]).map(s=>s.toLowerCase());
+  const rows=Object.entries(n.skills).sort((a,b)=>a[0].localeCompare(b[0])).map(([name,die])=>{const isCore=coreSkills.includes(name.toLowerCase());const star=isCore?'<span style="color:var(--accent)" title="Core Skill"> ★</span>':'';return `<tr><td style="cursor:pointer" onclick="showExistingSkillInfo('${esc(name)}')">${esc(name)}${star}</td><td style="text-align:center"><button class="btn sm" onclick="stepSkill('${esc(name)}',-1)" style="padding:1px 6px;font-size:13px;min-width:22px">−</button> <span style="display:inline-block;min-width:42px;text-align:center;font-weight:bold">${d(die)}</span> <button class="btn sm" onclick="stepSkill('${esc(name)}',1)" style="padding:1px 6px;font-size:13px;min-width:22px">+</button></td><td><button class="btn sm danger" onclick="removeSkill('${esc(name)}')" title="Remove skill">×</button></td></tr>`;}).join('');
   el.innerHTML=`<table class="data-table"><tr><th>Skill</th><th>Die</th><th></th></tr>${rows||'<tr><td colspan="3" style="color:var(--text-dim)">No skills</td></tr>'}</table>
     <div class="catalogue-section"><h4>Add Skill</h4>
     <div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
@@ -1008,7 +1009,11 @@ function selectCatalogueSkill(name){document.getElementById('skill_name').value=
 function addSkill(){const name=document.getElementById('skill_name').value.trim();if(!name)return;currentNPC.skills[name]=4;calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
 function stepAttr(id,dir){const el=document.getElementById(id);if(!el)return;let v=parseInt(el.dataset.val)||0;const cap=isPregen();v=dir>0?dieStepUp(v,cap):dieStepDown(v);if(v<0)v=0;el.dataset.val=v;el.textContent=d(v);}
 function stepSkill(name,dir){console.log("🎯 stepSkill:",name,dir>0?"+":"-");if(!currentNPC||!currentNPC.skills[name])return;const v=currentNPC.skills[name];const cap=isPregen();currentNPC.skills[name]=dir>0?dieStepUp(v,cap):dieStepDown(v);calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
-function removeSkill(name){delete currentNPC.skills[name];calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
+function removeSkill(name){
+  const coreSkills=(window.CharacterForge?.data?.coreSkills||[]).map(s=>s.toLowerCase());
+  if(coreSkills.includes(name.toLowerCase())){if(!confirm(name+' is a Core Skill. Are you sure you want to remove it?'))return;}
+  delete currentNPC.skills[name];calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);
+}
 
 function renderWeaponsPanel(n){
   const current=n.weapons.map((w,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span>${esc(w.name)} <span style="color:var(--text-dim)">${esc(w.damage)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''}</span></span><button class="btn sm danger" onclick="removeWeapon(${i})">×</button></div>`).join('');
