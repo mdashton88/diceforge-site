@@ -716,7 +716,7 @@ function buildSectionBox(title,panel,items,renderItem,isLegacy){
   const content=items.length?items.map(renderItem).join('')+(isLegacy?'<div class="legacy-tag" style="margin-top:4px">Legacy</div>':''):'<div class="none-text">None</div>';
   return `<div class="section-box"><h3 onclick="showPanel('${panel}')">${title} <span class="edit-icon">✎</span></h3>${content}</div>`;
 }
-function isLegacyEdge(name){return !getCatalogueEdges().find(e=>e.name===name);}
+function isLegacyEdge(name){if(name.startsWith('Arcane Background ('))return false;return !getCatalogueEdges().find(e=>e.name===name);}
 
 function renderMiddleColumn(n){
   const el=document.getElementById('colMiddle');
@@ -851,7 +851,12 @@ function selectEdgeInfo(idx,search){
   document.getElementById('edge_name').value=e.name;
   const info=document.getElementById('edgeInfo');if(!info)return;
   const reqs=e.reqs&&e.reqs!=='—'?`<div class="ci-meta">Requirements: ${esc(e.reqs)}</div>`:'';
-  info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(e.name)}</div><div class="ci-meta">${esc(e.rank||'N')} · ${esc(e.cat||e.type||'General')} · ${esc(e.source)}</div>${reqs}<div class="ci-desc">${esc(e.summary||'No description available.')}</div></div>`;
+  let abPicker='';
+  if(e.name==='Arcane Background'){
+    abPicker=`<div style="margin-top:6px"><label style="font-size:11px;text-transform:uppercase;color:var(--text-dim)">Type</label><select id="abTypePick" onchange="document.getElementById('edge_name').value='Arcane Background ('+this.value+')'" style="margin-left:6px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:12px"><option value="Gifted">Gifted</option><option value="Magic">Magic</option><option value="Miracles">Miracles</option><option value="Psionics">Psionics</option><option value="Weird Science">Weird Science</option></select></div>`;
+    document.getElementById('edge_name').value='Arcane Background (Gifted)';
+  }
+  info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(e.name)}</div><div class="ci-meta">${esc(e.rank||'N')} · ${esc(e.cat||e.type||'General')} · ${esc(e.source)}</div>${reqs}<div class="ci-desc">${esc(e.summary||'No description available.')}</div>${abPicker}</div>`;
 }
 function addEdge(){const name=document.getElementById('edge_name').value.trim();if(!name)return;currentNPC.edges.push(name);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
 function removeEdge(btn){const val=btn.dataset.val;currentNPC.edges=currentNPC.edges.filter(x=>x!==val);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
