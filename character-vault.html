@@ -520,9 +520,9 @@ function getCatalogueArmour(){
 }
 function getCatalogueSkills(){
   const CF=window.CharacterForge,all=[];
-  if(CF.data?.skillLinks) Object.entries(CF.data.skillLinks).forEach(([name,attr])=>all.push({name,attr,source:'Core'}));
+  if(CF.data?.skillLinks) Object.entries(CF.data.skillLinks).forEach(([name,attr])=>all.push({name,attr,source:'Core',summary:(CF.data.skillDescs&&CF.data.skillDescs[name])||'',core:(CF.data.coreSkills||[]).includes(name)}));
   (CF.getModules?CF.getModules():[]).filter(m=>!m.alwaysOn).forEach(m=>{
-    if(m.skillLinks) Object.entries(m.skillLinks).forEach(([name,attr])=>{if(!all.find(s=>s.name===name))all.push({name,attr,source:m.name||m.id});});
+    if(m.skillLinks) Object.entries(m.skillLinks).forEach(([name,attr])=>{if(!all.find(s=>s.name===name))all.push({name,attr,source:m.name||m.id,summary:(m.skillDescs&&m.skillDescs[name])||'',core:false});});
   });
   return all.sort((a,b)=>a.name.localeCompare(b.name));
 }
@@ -938,19 +938,56 @@ function renderSkillsPanel(n){
   el.innerHTML=`<table class="data-table"><tr><th>Skill</th><th>Die</th><th></th></tr>${rows||'<tr><td colspan="3" style="color:var(--text-dim)">No skills</td></tr>'}</table>
     <div class="catalogue-section"><h4>Add Skill</h4>
     <div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
-    <input placeholder="Search skills..." oninput="filterSkillCatalogue(this.value)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
-    <div class="catalogue-list" id="skillCatList"></div>
+    <input placeholder="Search skills... (↑↓ to browse)" oninput="filterSkillCatalogue(this.value)" onkeydown="skillCatKeyNav(event)" id="skillSearch" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
+    <div style="display:flex;gap:8px;align-items:flex-start">
+      <div class="catalogue-list" id="skillCatList" style="flex:1;min-width:0"></div>
+      <div id="skillInfo" style="flex:1;min-width:0"></div>
+    </div>
     <div style="margin:10px 0 4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Or Enter Custom</div>
     <div class="form-row"><div class="form-group"><label>Skill Name</label><input id="skill_name"></div></div>
     <button class="btn primary" onclick="addSkill()">Add Skill (d4)</button></div>`;
   filterSkillCatalogue('');
 }
+var skillCatIdx=-1;
+var skillCatFiltered=[];
 function filterSkillCatalogue(s){
+  skillCatIdx=-1;
   s=s.toLowerCase();
   const existing=currentNPC?Object.keys(currentNPC.skills).map(k=>k.toLowerCase()):[];
-  const cat=getCatalogueSkills().filter(sk=>(!s||sk.name.toLowerCase().includes(s))&&!existing.includes(sk.name.toLowerCase()));
+  skillCatFiltered=getCatalogueSkills().filter(sk=>(!s||sk.name.toLowerCase().includes(s)));
   const el=document.getElementById('skillCatList');if(!el)return;
-  el.innerHTML=cat.map(sk=>`<div class="catalogue-item" onclick="selectCatalogueSkill('${esc(sk.name)}')"><span class="cat-name">${esc(sk.name)}</span> <span class="cat-detail">(${esc(sk.attr)}) — ${esc(sk.source)}</span></div>`).join('');
+  el.innerHTML=skillCatFiltered.map((sk,i)=>{const taken=existing.includes(sk.name.toLowerCase());return `<div class="catalogue-item" data-idx="${i}" onclick="selectSkillInfo(${i})" style="color:${taken?'var(--text-dim)':'var(--green)'}"><span class="cat-name">${esc(sk.name)}</span> <span class="cat-detail">(${esc(sk.attr)})${sk.core?' ★':''} — ${esc(sk.source)}</span></div>`;}).join('');
+}
+function skillCatKeyNav(e){
+  const list=document.getElementById('skillCatList');if(!list)return;
+  const items=list.querySelectorAll('.catalogue-item');if(!items.length)return;
+  if(e.key==='ArrowDown'){e.preventDefault();skillCatIdx=Math.min(skillCatIdx+1,items.length-1);highlightSkillCat(items);}
+  else if(e.key==='ArrowUp'){e.preventDefault();skillCatIdx=Math.max(skillCatIdx-1,0);highlightSkillCat(items);}
+  else if(e.key==='Enter'&&skillCatIdx>=0){e.preventDefault();selectSkillInfo(skillCatIdx);}
+}
+function highlightSkillCat(items){
+  items.forEach((it,i)=>{it.style.background=i===skillCatIdx?'var(--accent)22':'';});
+  if(items[skillCatIdx]){items[skillCatIdx].scrollIntoView({block:'nearest'});selectSkillInfo(skillCatIdx);}
+}
+function selectSkillInfo(idx){
+  const sk=skillCatFiltered[idx];if(!sk)return;
+  skillCatIdx=idx;
+  document.getElementById('skill_name').value=sk.name;
+  const info=document.getElementById('skillInfo');if(!info)return;
+  const existing=currentNPC?Object.keys(currentNPC.skills).map(k=>k.toLowerCase()):[];
+  const taken=existing.includes(sk.name.toLowerCase());
+  const tagStyle=taken?'color:var(--text-dim)':'color:var(--green)';
+  const tagText=taken?'Already taken':'Available';
+  const coreTag=sk.core?'<span style="color:var(--accent);font-size:10px;margin-left:4px">★ CORE</span>':'';
+  info.innerHTML=`<div class="cat-info" style="cursor:pointer" onclick="scrollToSkillCatItem(${idx})"><div class="ci-name">${esc(sk.name)}${coreTag} <span style="font-size:11px;${tagStyle}">${tagText}</span></div><div class="ci-meta">Linked Attribute: ${esc(sk.attr.charAt(0).toUpperCase()+sk.attr.slice(1))} · ${esc(sk.source)}</div><div class="ci-desc">${esc(sk.summary||'No description available.')}</div></div>`;
+  const items=document.getElementById('skillCatList')?.querySelectorAll('.catalogue-item');
+  if(items)items.forEach((it,i)=>{it.style.background=i===idx?'var(--accent)22':'';});
+  setTimeout(()=>document.getElementById('skillSearch')?.focus(),0);
+}
+function scrollToSkillCatItem(idx){
+  const list=document.getElementById('skillCatList');if(!list)return;
+  const items=list.querySelectorAll('.catalogue-item');
+  if(items[idx])items[idx].scrollIntoView({block:'nearest',behavior:'smooth'});
 }
 function selectCatalogueSkill(name){document.getElementById('skill_name').value=name;}
 function addSkill(){const name=document.getElementById('skill_name').value.trim();if(!name)return;currentNPC.skills[name]=4;calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
