@@ -795,32 +795,47 @@ function renderHindrancesPanel(n){
   filterHindCat();
 }
 var hindCatIdx=-1;
+var hindCatFiltered=[];
+function hasHindrance(name,n){
+  if(!n)return false;
+  return (n.hindrances||[]).some(h=>h.toLowerCase().startsWith(name.toLowerCase()));
+}
 function filterHindCat(){
   hindCatIdx=-1;
   const s=(document.getElementById('hindSearch')?.value||'').toLowerCase();
-  const cat=getCatalogueHindrances().filter(h=>!s||h.name.toLowerCase().includes(s));
+  hindCatFiltered=getCatalogueHindrances().filter(h=>!s||h.name.toLowerCase().includes(s));
   const el=document.getElementById('hindCatList');if(!el)return;
-  el.innerHTML=cat.map((h,i)=>`<div class="catalogue-item" onclick="selectHindInfo(${i},'${esc(s)}')"><span class="cat-name">${esc(h.name)}</span> <span class="cat-detail">(${esc(h.type||h.sev||'Minor')}) — ${esc(h.source)}</span></div>`).join('');
+  el.innerHTML=hindCatFiltered.map((h,i)=>{const taken=hasHindrance(h.name,currentNPC);return `<div class="catalogue-item" onclick="selectHindInfo(${i})" style="color:${taken?'var(--text-dim)':'var(--green)'}"><span class="cat-name">${esc(h.name)}</span> <span class="cat-detail">(${esc(h.type||h.sev||'Minor')}) — ${esc(h.source)}</span></div>`;}).join('');
 }
 function hindCatKeyNav(e){
   const list=document.getElementById('hindCatList');if(!list)return;
   const items=list.querySelectorAll('.catalogue-item');if(!items.length)return;
   if(e.key==='ArrowDown'){e.preventDefault();hindCatIdx=Math.min(hindCatIdx+1,items.length-1);highlightHindCat(items);}
   else if(e.key==='ArrowUp'){e.preventDefault();hindCatIdx=Math.max(hindCatIdx-1,0);highlightHindCat(items);}
-  else if(e.key==='Enter'&&hindCatIdx>=0){e.preventDefault();items[hindCatIdx].click();}
+  else if(e.key==='Enter'&&hindCatIdx>=0){e.preventDefault();selectHindInfo(hindCatIdx);}
 }
 function highlightHindCat(items){
   items.forEach((it,i)=>{it.style.background=i===hindCatIdx?'var(--accent)22':'';});
-  if(items[hindCatIdx]){items[hindCatIdx].scrollIntoView({block:'nearest'});items[hindCatIdx].click();}
+  if(items[hindCatIdx]){items[hindCatIdx].scrollIntoView({block:'nearest'});selectHindInfo(hindCatIdx);}
 }
-function selectHindInfo(idx,search){
-  const cat=getCatalogueHindrances().filter(h=>!search||h.name.toLowerCase().includes(search));
-  const h=cat[idx];if(!h)return;
+function selectHindInfo(idx){
+  const h=hindCatFiltered[idx];if(!h)return;
+  hindCatIdx=idx;
   document.getElementById('hind_name').value=h.name;
   document.getElementById('hind_sev').value=(h.type||h.sev||'Minor').includes('Major')?'Major':'Minor';
   const info=document.getElementById('hindInfo');if(!info)return;
-  info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(h.name)}</div><div class="ci-meta">${esc(h.type||h.sev||'Minor')} · ${esc(h.source)}</div><div class="ci-desc">${esc(h.summary||'No description available.')}</div></div>`;
+  const taken=hasHindrance(h.name,currentNPC);
+  const tagStyle=taken?'color:var(--text-dim)':'color:var(--green)';
+  const tagText=taken?'Already taken':'Available';
+  info.innerHTML=`<div class="cat-info" style="cursor:pointer" onclick="scrollToHindCatItem(${idx})"><div class="ci-name">${esc(h.name)} <span style="font-size:11px;${tagStyle}">${tagText}</span></div><div class="ci-meta">${esc(h.type||h.sev||'Minor')} · ${esc(h.source)}</div><div class="ci-desc">${esc(h.summary||'No description available.')}</div></div>`;
+  const items=document.getElementById('hindCatList')?.querySelectorAll('.catalogue-item');
+  if(items)items.forEach((it,i)=>{it.style.background=i===idx?'var(--accent)22':'';});
   setTimeout(()=>document.getElementById('hindSearch')?.focus(),0);
+}
+function scrollToHindCatItem(idx){
+  const list=document.getElementById('hindCatList');if(!list)return;
+  const items=list.querySelectorAll('.catalogue-item');
+  if(items[idx])items[idx].scrollIntoView({block:'nearest',behavior:'smooth'});
 }
 function addHindrance(){
   const name=document.getElementById('hind_name').value.trim();if(!name)return;
@@ -1060,33 +1075,48 @@ function renderPowersPanel(n){
   filterPowerCatalogue('');
 }
 var powCatIdx=-1;
+var powCatFiltered=[];
+function meetsPowerRank(pow,n){
+  if(!n)return false;
+  const rankOrder={N:0,Novice:0,S:1,Seasoned:1,V:2,Veteran:2,H:3,Heroic:3,L:4,Legendary:4};
+  return (rankOrder[n.rank]||0)>=(rankOrder[pow.rank]||0);
+}
 function filterPowerCatalogue(s){
   powCatIdx=-1;
   s=s.toLowerCase();
   const existing=currentNPC?currentNPC.powers.map(p=>p.toLowerCase()):[];
-  const cat=getCataloguePowers().filter(p=>(!s||p.name.toLowerCase().includes(s))&&!existing.includes(p.name.toLowerCase()));
+  powCatFiltered=getCataloguePowers().filter(p=>(!s||p.name.toLowerCase().includes(s))&&!existing.includes(p.name.toLowerCase()));
   const el=document.getElementById('powCatList');if(!el)return;
-  el.innerHTML=cat.map((p,i)=>`<div class="catalogue-item" onclick="selectPowInfo(${i},'${esc(s)}')"><span class="cat-name">${esc(p.name)}</span> <span class="cat-detail">${esc(p.rank)} ${esc(p.pp)}PP ${p.range?p.range:''} — ${esc(p.source)}</span></div>`).join('');
+  el.innerHTML=powCatFiltered.map((p,i)=>{const ok=meetsPowerRank(p,currentNPC);return `<div class="catalogue-item" onclick="selectPowInfo(${i})" style="color:${ok?'var(--green)':'var(--text-dim)'}"><span class="cat-name">${esc(p.name)}</span> <span class="cat-detail">${esc(p.rank)} ${esc(p.pp)}PP ${p.range?p.range:''} — ${esc(p.source)}</span></div>`;}).join('');
 }
 function powCatKeyNav(e){
   const list=document.getElementById('powCatList');if(!list)return;
   const items=list.querySelectorAll('.catalogue-item');if(!items.length)return;
   if(e.key==='ArrowDown'){e.preventDefault();powCatIdx=Math.min(powCatIdx+1,items.length-1);highlightPowCat(items);}
   else if(e.key==='ArrowUp'){e.preventDefault();powCatIdx=Math.max(powCatIdx-1,0);highlightPowCat(items);}
-  else if(e.key==='Enter'&&powCatIdx>=0){e.preventDefault();items[powCatIdx].click();}
+  else if(e.key==='Enter'&&powCatIdx>=0){e.preventDefault();selectPowInfo(powCatIdx);}
 }
 function highlightPowCat(items){
   items.forEach((it,i)=>{it.style.background=i===powCatIdx?'var(--accent)22':'';});
-  if(items[powCatIdx]){items[powCatIdx].scrollIntoView({block:'nearest'});items[powCatIdx].click();}
+  if(items[powCatIdx]){items[powCatIdx].scrollIntoView({block:'nearest'});selectPowInfo(powCatIdx);}
 }
-function selectPowInfo(idx,search){
-  const existing=currentNPC?currentNPC.powers.map(p=>p.toLowerCase()):[];
-  const cat=getCataloguePowers().filter(p=>(!search||p.name.toLowerCase().includes(search))&&!existing.includes(p.name.toLowerCase()));
-  const p=cat[idx];if(!p)return;
+function selectPowInfo(idx){
+  const p=powCatFiltered[idx];if(!p)return;
+  powCatIdx=idx;
   document.getElementById('pow_name').value=p.name;
   const info=document.getElementById('powInfo');if(!info)return;
-  info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(p.name)}</div><div class="ci-meta">${esc(p.rank)} · ${esc(p.pp)} PP · Range: ${esc(p.range||'Self')} · Duration: ${esc(p.dur||'Instant')} · ${esc(p.source)}</div><div class="ci-desc">${esc(p.summary||'No description available.')}</div></div>`;
+  const ok=meetsPowerRank(p,currentNPC);
+  const eligStyle=ok?'color:var(--green)':'color:var(--red)';
+  const eligText=ok?'✓ Eligible':'✗ Rank too low';
+  info.innerHTML=`<div class="cat-info" style="cursor:pointer" onclick="scrollToPowCatItem(${idx})"><div class="ci-name">${esc(p.name)} <span style="font-size:11px;${eligStyle}">${eligText}</span></div><div class="ci-meta">${esc(p.rank)} · ${esc(p.pp)} PP · Range: ${esc(p.range||'Self')} · Duration: ${esc(p.dur||'Instant')} · ${esc(p.source)}</div><div class="ci-desc">${esc(p.summary||'No description available.')}</div></div>`;
+  const items=document.getElementById('powCatList')?.querySelectorAll('.catalogue-item');
+  if(items)items.forEach((it,i)=>{it.style.background=i===idx?'var(--accent)22':'';});
   setTimeout(()=>document.getElementById('powSearch')?.focus(),0);
+}
+function scrollToPowCatItem(idx){
+  const list=document.getElementById('powCatList');if(!list)return;
+  const items=list.querySelectorAll('.catalogue-item');
+  if(items[idx])items[idx].scrollIntoView({block:'nearest',behavior:'smooth'});
 }
 function addPower(){const name=document.getElementById('pow_name').value.trim();if(!name)return;currentNPC.powers.push(name);saveCharacter(currentNPC);renderPowersPanel(currentNPC);renderStatColumn(currentNPC);}
 function removePower(idx){currentNPC.powers.splice(idx,1);saveCharacter(currentNPC);renderPowersPanel(currentNPC);renderStatColumn(currentNPC);}
