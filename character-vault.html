@@ -231,15 +231,6 @@ var DICEFORGE_AUTH=false;
     <div class="form-actions"><button class="btn" onclick="closeNewNPCModal()">Cancel</button><button class="btn primary" onclick="createNPC()">Create NPC</button></div>
   </div>
 </div>
-<div class="modal-overlay" id="commitModal">
-  <div class="modal">
-    <h3 id="commitModalTitle">📦 Commit to Canon</h3>
-    <div id="commitDiff" style="margin-bottom:14px;font-size:13px;max-height:200px;overflow-y:auto;background:var(--bg-body);padding:10px;border-radius:4px;border:1px solid var(--border)"></div>
-
-    <div id="commitStatus" style="margin-top:8px;font-size:13px"></div>
-    <div class="form-actions"><button class="btn" onclick="closeCommitModal()">Cancel</button><button class="btn primary" id="commitBtn" onclick="executeCommit()">🔒 Commit to Canon</button></div>
-  </div>
-</div>
 <div class="modal-overlay" id="changelogModal">
   <div class="modal" style="width:800px">
     <h3>📋 Canon Changelog</h3>
@@ -1148,10 +1139,13 @@ function renderAuditPanel(n){
   const inCanon=canonCommitted.has(n.name);
   const commitLabel=inCanon?'🔄 Update Canon':'📦 Commit to Canon';
   const removeBtn=inCanon?'<button class="btn" onclick="removeFromCanon()" style="color:var(--red);border-color:var(--red)" title="Remove this character from canonical data">🗑 Remove from Canon</button>':'';
-  html+=`<div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-    <button class="btn primary" onclick="openCommitModal()" title="${inCanon?'Update canonical data':'Commit current state to canon repository'}">${commitLabel}</button>
-    ${removeBtn}
-    <span style="font-size:12px;color:var(--text-dim)">${legal?'✅ Build legal — ready to commit':'❌ Build has issues — commit with caution'}</span>
+  html+=`<div id="commitArea" style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <button class="btn primary" onclick="prepareCommit()" title="${inCanon?'Update canonical data':'Commit current state to canon repository'}">${commitLabel}</button>
+      ${removeBtn}
+      <span style="font-size:12px;color:var(--text-dim)">${legal?'✅ Build legal — ready to commit':'❌ Build has issues — commit with caution'}</span>
+    </div>
+    <div id="commitPreview" style="margin-top:10px"></div>
   </div>`;
   document.getElementById('panelContent').innerHTML=html;
 }
@@ -1637,13 +1631,15 @@ function canonFilePath(n){
 }
 
 async function flushSave(){if(saveTimer){clearTimeout(saveTimer);saveTimer=null;await pushToGist();}}
-async function openCommitModal(){await flushSave();
+async function prepareCommit(){await flushSave();
   if(!currentNPC)return;
   const inCanon=canonCommitted.has(currentNPC.name);
   const canon=buildCanonCharacter(currentNPC);
   const path=canonFilePath(currentNPC);
-  const diffHtml=`<div><strong style="color:var(--accent)">${esc(currentNPC.name)}</strong> → <code style="color:var(--text-dim)">${esc(path)}</code></div>
-    <div style="margin-top:8px"><strong>Attributes:</strong> Agi d${canon.attrs.agility}, Sma d${canon.attrs.smarts}, Spi d${canon.attrs.spirit}, Str d${canon.attrs.strength}, Vig d${canon.attrs.vigor}</div>
+  const preview=document.getElementById('commitPreview');if(!preview)return;
+  preview.innerHTML=`<div style="background:var(--bg-body);border:1px solid var(--border);border-radius:4px;padding:10px;font-size:12px;line-height:1.7;margin-bottom:8px">
+    <div style="color:var(--accent);font-weight:bold;margin-bottom:4px">${esc(currentNPC.name)} → <code style="color:var(--text-dim);font-size:11px">${esc(path)}</code></div>
+    <div><strong>Attributes:</strong> Agi d${canon.attrs.agility}, Sma d${canon.attrs.smarts}, Spi d${canon.attrs.spirit}, Str d${canon.attrs.strength}, Vig d${canon.attrs.vigor}</div>
     <div><strong>Skills:</strong> ${Object.entries(canon.skills).map(([k,v])=>k+' d'+v).join(', ')}</div>
     <div><strong>Edges:</strong> ${canon.edges.join(', ')||'None'}</div>
     <div><strong>Hindrances:</strong> ${canon.hindrances.join(', ')||'None'}</div>
@@ -1652,15 +1648,16 @@ async function openCommitModal(){await flushSave();
     <div><strong>Armour:</strong> ${canon.armour.map(a=>a.name+' (+'+a.armor+')').join(', ')||'None'}</div>
     <div><strong>Gear:</strong> ${canon.gearText||canon.gear.map(g=>typeof g==='string'?g:g.name).join(', ')||'None'}</div>
     <div><strong>Derived:</strong> Pace ${canon.pace}, Parry ${canon.parry}, Toughness ${canon.toughness}${canon.toughnessArmor?' ('+canon.toughnessArmor+')':''}</div>
-    <div><strong>Funds:</strong> ${canon.startingFunds}₡ starting, ${canon.gearCost}₡ spent</div>`;
-  document.getElementById('commitDiff').innerHTML=diffHtml;
-    document.getElementById('commitStatus').innerHTML='';
-  document.getElementById('commitBtn').disabled=false;
-  document.getElementById('commitModalTitle').textContent=inCanon?'🔄 Update Canon':'📦 Commit to Canon';
-  document.getElementById('commitBtn').textContent=inCanon?'🔄 Update Canon':'🔒 Commit to Canon';
-  document.getElementById('commitModal').classList.add('active');
+    <div><strong>Funds:</strong> ${canon.startingFunds}₡ starting, ${canon.gearCost}₡ spent</div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="btn primary" id="commitBtn" onclick="executeCommit()">${inCanon?'🔄 Confirm Update':'🔒 Confirm Commit'}</button>
+    <button class="btn" onclick="document.getElementById('commitPreview').innerHTML=''">Cancel</button>
+  </div>
+  <div id="commitStatus" style="margin-top:6px;font-size:13px"></div>`;
 }
-function closeCommitModal(){document.getElementById('commitModal').classList.remove('active');}
+function openCommitModal(){prepareCommit();}
+function closeCommitModal(){const p=document.getElementById('commitPreview');if(p)p.innerHTML='';}
 
 async function executeCommit(){
   const summary='Updated '+currentNPC.name;
