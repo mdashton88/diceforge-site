@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Character Vault — User Manual</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0F0F0F;--bg-sidebar:#141414;--bg-card:#1A1A1A;--bg-search:#222;--border:#2A2A2A;--text:#D4C5A0;--text-dim:#8A7A5A;--text-bright:#E8DCC0;--gold:#C4A44A;--gold-dim:#8A7A3A;--green:#5A9A5A;--red:#B04040;--blue:#5A8ABF;--accent:#C4A44A;--link:#7AB0D4;--code-bg:#1E1E1E}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{font-family:'Crimson Text',Georgia,serif;background:var(--bg);color:var(--text);line-height:1.75;font-size:16px}
+.help-layout{display:flex;min-height:100vh}
+.sidebar{width:280px;background:var(--bg-sidebar);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;padding-bottom:40px}
+.main{margin-left:280px;flex:1;max-width:800px;padding:40px 48px 80px}
+.sidebar-header{padding:20px 20px 12px;border-bottom:1px solid var(--border)}
+.sidebar-header h1{font-family:'Cinzel',serif;font-size:16px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:700}
+.sidebar-header .subtitle{font-size:12px;color:var(--text-dim);letter-spacing:1px;margin-top:2px}
+.sidebar-search{padding:10px 16px;position:relative}
+.sidebar-search input{width:100%;padding:7px 10px 7px 30px;background:var(--bg-search);border:1px solid var(--border);color:var(--text);font-size:13px;font-family:inherit;border-radius:4px;outline:none}
+.sidebar-search input:focus{border-color:var(--gold)}
+.sidebar-search::before{content:'⌕';position:absolute;left:24px;top:50%;transform:translateY(-50%);color:var(--text-dim);font-size:14px;pointer-events:none}
+.sidebar-search .shortcut{position:absolute;right:24px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--text-dim);background:var(--bg);padding:2px 6px;border-radius:3px;border:1px solid var(--border);pointer-events:none}
+.nav-section{padding:8px 0}
+.nav-section-title{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);padding:6px 20px;font-weight:600}
+.nav-link{display:block;padding:6px 20px 6px 28px;font-size:14px;color:var(--text-dim);text-decoration:none;border-left:2px solid transparent;transition:all .15s;cursor:pointer;font-family:'Crimson Text',serif}
+.nav-link:hover{color:var(--text);background:var(--bg-card)}
+.nav-link.active{color:var(--gold);border-left-color:var(--gold);background:var(--gold)08}
+.nav-link.hidden{display:none}
+h2{font-family:'Cinzel',serif;font-size:22px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin:48px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h2:first-of-type{margin-top:0}
+h3{font-family:'Cinzel',serif;font-size:16px;color:var(--text-bright);letter-spacing:1px;margin:28px 0 10px;text-transform:uppercase}
+p{margin-bottom:14px}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+strong{color:var(--text-bright);font-weight:600}
+em{color:var(--gold-dim)}
+.tip,.warning,.note{padding:14px 18px;border-radius:4px;margin:16px 0;font-size:15px;line-height:1.6}
+.tip{background:#5A9A5A15;border-left:3px solid var(--green)}.warning{background:#B0404015;border-left:3px solid var(--red)}.note{background:#C4A44A10;border-left:3px solid var(--gold-dim)}
+.tip::before{content:'💡 '}.warning::before{content:'⚠ '}.note::before{content:'📌 '}
+code{font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--code-bg);padding:2px 6px;border-radius:3px;color:var(--gold)}
+pre{background:var(--code-bg);padding:16px;border-radius:4px;overflow-x:auto;margin:14px 0;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:15px}
+th{font-family:'Cinzel',serif;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);text-align:left;padding:8px 12px;border-bottom:2px solid var(--border)}
+td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:hover td{background:var(--bg-card)}
+kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 7px;background:var(--bg-card);border:1px solid var(--border);border-radius:3px;color:var(--text-dim);min-width:20px;text-align:center;box-shadow:0 1px 0 var(--border)}
+.field-ref{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}.field-ref:last-child{border-bottom:none}
+.field-name{font-weight:600;color:var(--text-bright);min-width:160px;flex-shrink:0}.field-desc{color:var(--text)}
+.format-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.format-card{padding:14px;border:1px solid var(--border);border-radius:4px;background:var(--bg-card)}
+.format-card h4{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:6px;letter-spacing:1px}
+.format-card p{font-size:14px;margin:0;color:var(--text-dim)}
+.back-top{position:fixed;bottom:20px;right:20px;padding:8px 14px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-dim);font-size:12px;cursor:pointer;border-radius:4px;display:none;z-index:200}.back-top:hover{color:var(--gold);border-color:var(--gold)}
+@media(max-width:900px){.sidebar{width:240px}.main{margin-left:240px;padding:24px 24px 60px}}
+@media(max-width:680px){.sidebar{transform:translateX(-100%);transition:transform .2s;width:280px}.sidebar.open{transform:translateX(0)}.main{margin-left:0;padding:20px 16px 60px}.mobile-toggle{display:block!important}}
+.mobile-toggle{display:none;position:fixed;top:12px;left:12px;z-index:200;padding:6px 10px;background:var(--bg-card);border:1px solid var(--border);color:var(--gold);font-size:16px;cursor:pointer;border-radius:4px}
+</style>
+</head>
+<body>
+
+<button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+<div class="help-layout">
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h1>Character Vault</h1>
+    <div class="subtitle">User Manual · v1.0</div>
+  </div>
+  <div class="sidebar-search">
+    <input type="text" id="searchInput" placeholder="Search docs..." autocomplete="off">
+    <span class="shortcut">⌘K</span>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Getting Started</div>
+    <a class="nav-link" href="#overview">Overview</a>
+    <a class="nav-link" href="#quick-start">Quick Start</a>
+    <a class="nav-link" href="#interface">Interface Layout</a>
+    <a class="nav-link" href="#cloud-storage">Cloud Storage (Gist)</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Character Management</div>
+    <a class="nav-link" href="#roster">Character Roster</a>
+    <a class="nav-link" href="#create">Creating Characters</a>
+    <a class="nav-link" href="#editing">Editing Characters</a>
+    <a class="nav-link" href="#filtering">Search &amp; Filtering</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Build Panels</div>
+    <a class="nav-link" href="#panel-edit">Edit (Core Stats)</a>
+    <a class="nav-link" href="#panel-skills">Skills</a>
+    <a class="nav-link" href="#panel-hindrances">Hindrances</a>
+    <a class="nav-link" href="#panel-edges">Edges</a>
+    <a class="nav-link" href="#panel-weapons">Weapons</a>
+    <a class="nav-link" href="#panel-armour">Armour</a>
+    <a class="nav-link" href="#panel-gear">Gear</a>
+    <a class="nav-link" href="#panel-powers">Powers</a>
+    <a class="nav-link" href="#panel-narrative">Narrative</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Quality Tools</div>
+    <a class="nav-link" href="#stat-block">Stat Block</a>
+    <a class="nav-link" href="#audit">Build Audit</a>
+    <a class="nav-link" href="#funds">Equipment Funds</a>
+    <a class="nav-link" href="#status">Status Dashboard</a>
+    <a class="nav-link" href="#canon">Canon Commits</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Transfer</div>
+    <a class="nav-link" href="#export">Export Formats</a>
+    <a class="nav-link" href="#import">Import</a>
+    <a class="nav-link" href="#json-transfer">JSON Transfer</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">Reference</div>
+    <a class="nav-link" href="#catalogues">Equipment Catalogues</a>
+    <a class="nav-link" href="#troubleshooting">Troubleshooting</a>
+    <a class="nav-link" href="#about">About &amp; Licence</a>
+  </div>
+</nav>
+
+<main class="main" id="main">
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="overview">Overview</h2>
+
+<p>The <strong>Character Vault</strong> is a roster management tool for Savage Worlds characters. It's designed for game masters, writers, and publishers who need to maintain large collections of NPCs, pre-generated characters, and named personalities across multiple products and regions.</p>
+
+<p>Where the <strong>Character Forge</strong> builds one character at a time from scratch, the Vault manages the <em>fleet</em> — dozens or hundreds of characters across a product line, each with mechanical builds, narrative content, and production status tracking.</p>
+
+<p>The Vault saves automatically to a <strong>GitHub Gist</strong> (cloud storage) with every edit. Your data persists across sessions, devices, and browser refreshes. No manual saving is required.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="quick-start">Quick Start</h2>
+
+<p>First visit: the Vault will prompt you to enter a <strong>GitHub Personal Access Token</strong> with Gist permissions. This connects the tool to your private cloud storage. You'll only need to do this once per browser.</p>
+
+<p>Once connected, you can create characters with <strong>+ New Character</strong>, or import existing builds via <strong>⇄ Import</strong>. Each character appears in the sidebar list and can be selected for editing.</p>
+
+<p>The three-column layout shows your roster on the left, the active editing panel in the middle, and the character's stat summary on the right. Click any section heading on the right to jump into its editor.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="interface">Interface Layout</h2>
+
+<h3>Three-Column Design</h3>
+
+<p><strong>Left column</strong> — Character roster. Searchable, filterable list of all characters. Status badges show completion state. Click to select.</p>
+
+<p><strong>Middle column</strong> — Active panel. When no panel is selected, shows quick-link buttons. When editing, shows the full panel interface for the selected category (skills, weapons, narrative, etc.).</p>
+
+<p><strong>Right column</strong> — Stat summary. Shows the selected character's complete stat block in compact format: tier, ancestry, attributes, skills, derived stats, hindrances, edges, weapons, armour, gear, powers. Each section heading is clickable — click to open the corresponding editor in the middle column.</p>
+
+<h3>Header Bar</h3>
+
+<p>The header shows: tool title, total character count, production stats (how many are stat-complete, narrative-complete, and FG-ready), and a <strong>cloud sync indicator</strong>. A green dot means your last save synced successfully; red means there was a problem.</p>
+
+<h3>Action Bar</h3>
+
+<p>Below the stat summary, the action bar contains: <strong>Edit</strong>, <strong>Stat Block</strong>, <strong>Audit</strong>, <strong>⇄ Transfer</strong>, and <strong>Delete</strong> buttons. The Transfer button opens the Import/Export panel.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="cloud-storage">Cloud Storage (Gist)</h2>
+
+<p>The Vault stores all character data in a <strong>GitHub Gist</strong> — a private, version-controlled JSON file hosted on GitHub's infrastructure. This gives you cloud persistence, device portability, and a complete edit history accessible through GitHub's web interface.</p>
+
+<h3>Setup</h3>
+
+<p>On first use, the Vault asks for a <strong>GitHub Personal Access Token</strong>. Generate one at <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> with the <code>gist</code> scope. The token is stored in your browser's localStorage and never sent anywhere except GitHub's API.</p>
+
+<h3>How Saving Works</h3>
+
+<p>Every edit triggers an automatic save cycle: a 500ms debounce collects rapid changes, then the full roster is serialized and pushed to the Gist. The header sync indicator shows the result — green for success, red for failure.</p>
+
+<p>Saves happen silently in the background. There is no save button and no save overlay during normal operation. If a save fails (network issues, token expiry), the indicator turns red and the error is logged to the browser console.</p>
+
+<h3>Version History</h3>
+
+<p>Because the Gist is a Git repository, every save creates a new revision. You can view the full edit history at <code>https://gist.github.com/&lt;gist-id&gt;/revisions</code>. GitHub stores these revisions indefinitely, providing a free backup system.</p>
+
+<div class="tip">If you ever need to roll back to a previous version, you can view the Gist revision history on GitHub and copy an earlier version of the JSON data.</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="roster">Character Roster</h2>
+
+<p>The left column displays your complete character roster. Each entry shows the character's name, ancestry, region, and tier. Status indicators appear as coloured dots or checkmarks for completion milestones.</p>
+
+<p>Click a character to select it and load their data into the right column and editing panels.</p>
+
+<h3>Roster Stats</h3>
+
+<p>The header bar shows aggregate production stats: total characters, how many have their stat block complete, how many have narrative content finished, and how many are marked as Fantasy Grounds-ready. These update in real time as you edit.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="create">Creating Characters</h2>
+
+<p>Click <strong>+ New Character</strong> in the sidebar to open the creation modal. Required fields:</p>
+
+<div class="field-ref"><span class="field-name">Name</span><span class="field-desc">Character's name. Must be unique within the roster.</span></div>
+<div class="field-ref"><span class="field-name">Ancestry</span><span class="field-desc">Dropdown of available ancestries (Human, Dwarf, Elf, etc.).</span></div>
+<div class="field-ref"><span class="field-name">Region</span><span class="field-desc">Where this character is from — Ammaria, Saltlands, Vinlands, Concordium, or Glasrya.</span></div>
+<div class="field-ref"><span class="field-name">Tier</span><span class="field-desc">Wild Card or Extra. Affects bennies and the Wild Die.</span></div>
+<div class="field-ref"><span class="field-name">Category</span><span class="field-desc">NPC, Pre-gen, Named NPC, Villain, Creature, etc. For filtering and organisation.</span></div>
+
+<p>Optional fields: concept, product reference code. These can be filled in later via the Edit panel.</p>
+
+<p>New characters start with all attributes at d4, no skills, and default derived stats. Build them up using the editing panels.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="editing">Editing Characters</h2>
+
+<p>Select a character, then click any section heading on the right column to open its editor. Alternatively, click the <strong>Edit</strong> button in the action bar for the core stats panel, or use the quick-link buttons in the middle column.</p>
+
+<p>All edits save automatically. There is no save button — the moment you change a value, it's written to memory and queued for cloud sync. You can edit freely without worrying about losing work.</p>
+
+<div class="note">The ✎ icon next to section headings indicates that section is clickable and will open an editor panel.</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="filtering">Search &amp; Filtering</h2>
+
+<p>The search bar at the top of the roster filters characters by name. Type to filter — matches are instant. Clear the search to show all characters.</p>
+
+<p>Filter dropdowns below the search bar let you narrow by <strong>Region</strong>, <strong>Category</strong>, and <strong>Tier</strong>. Filters are cumulative — selecting both "Ammaria" and "Wild Card" shows only Wild Card characters from Ammaria.</p>
+
+<p>The <strong>Status Dashboard</strong> button switches to a table view showing all characters with their completion status in a sortable grid.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="panel-edit">Panel — Edit (Core Stats)</h2>
+
+<p>The Edit panel is the central hub for a character's mechanical identity. It contains:</p>
+
+<h3>Identity</h3>
+<div class="field-ref"><span class="field-name">Name</span><span class="field-desc">Character name (editable).</span></div>
+<div class="field-ref"><span class="field-name">Ref Code</span><span class="field-desc">Product reference code, e.g. <code>AM-NPC-017</code>.</span></div>
+<div class="field-ref"><span class="field-name">Concept</span><span class="field-desc">One-line character summary.</span></div>
+<div class="field-ref"><span class="field-name">Ancestry</span><span class="field-desc">Dropdown selector.</span></div>
+<div class="field-ref"><span class="field-name">Region</span><span class="field-desc">Setting region.</span></div>
+<div class="field-ref"><span class="field-name">Tier</span><span class="field-desc">Wild Card or Extra.</span></div>
+<div class="field-ref"><span class="field-name">Rank</span><span class="field-desc">Novice, Seasoned, Veteran, Heroic, Legendary.</span></div>
+<div class="field-ref"><span class="field-name">Category</span><span class="field-desc">Character type for filtering.</span></div>
+
+<h3>Attributes</h3>
+
+<p>Five attributes displayed with <strong>die stepper buttons</strong> (− and +). Click − to step down, + to step up. Die sizes follow the Savage Worlds die chain: d4, d6, d8, d10, d12, d12+1, d12+2.</p>
+
+<p>Pre-generated characters (category "Pre-gen") are capped at d12 to match Novice character creation rules. Other categories can go above d12 for veteran or legendary builds.</p>
+
+<h3>Derived Stats</h3>
+
+<div class="field-ref"><span class="field-name">Pace</span><span class="field-desc">Base movement. Default 6. Edit manually for ancestries or edges that modify it.</span></div>
+<div class="field-ref"><span class="field-name">Parry</span><span class="field-desc">2 + half Fighting die. Auto-calculated when you change Fighting, but editable for edge or shield modifiers.</span></div>
+<div class="field-ref"><span class="field-name">Toughness</span><span class="field-desc">2 + half Vigor die + armour bonus. Auto-calculated but editable.</span></div>
+<div class="field-ref"><span class="field-name">Armour Bonus</span><span class="field-desc">Added from equipped armour. Factors into Toughness display as "X (Y)".</span></div>
+<div class="field-ref"><span class="field-name">Bennies</span><span class="field-desc">Default 0 for NPCs/Extras, 3 for Wild Cards. Edit for Luck/Great Luck.</span></div>
+
+<h3>Equipment Funds</h3>
+
+<div class="field-ref"><span class="field-name">Starting Funds (₡)</span><span class="field-desc">Default 500₡. Set manually — or the Build Audit will auto-detect Rich, Filthy Rich, and Poverty modifiers.</span></div>
+<div class="field-ref"><span class="field-name">Gear Cost (₡)</span><span class="field-desc">Total cost of all equipped gear. Enter manually after adding up item costs.</span></div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="panel-skills">Panel — Skills</h2>
+
+<p>Lists all assigned skills with die stepper buttons. Click + to add a new skill from the dropdown, or type a custom skill name. Skills are sorted alphabetically.</p>
+
+<p>Each skill shows its current die value. Use the − and + buttons to step up or down. The die chain is d4→d6→d8→d10→d12. Pre-gen characters are capped at d12.</p>
+
+<p>Click the ✕ button next to a skill to remove it entirely.</p>
+
+<div class="tip">Core skills (Athletics, Common Knowledge, Notice, Persuasion, Stealth) typically start at d4 for player characters. For NPCs, only assign the skills that character would actually use — there's no point budget for NPCs.</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="panel-hindrances">Panel — Hindrances</h2>
+
+<p>Select hindrances from the catalogue dropdown or type a custom hindrance name. Each hindrance is added to the character's list and displayed in the stat summary.</p>
+
+<p>Include the severity in the name for clarity — e.g. "Loyal (Minor)" or "Vengeful (Major)". The Build Audit checks hindrance count against Savage Worlds limits.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="panel-edges">Panel — Edges</h2>
+
+<p>Select edges from the catalogue or type a custom edge name. The catalogue contains all core Savage Worlds edges plus any edges from enabled setting modules.</p>
+
+<p>Edges not found in the catalogue are tagged as <strong>(legacy)</strong> in the stat summary — this flags them for review but doesn't prevent their use. This is common when importing characters built under older rulesets.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="panel-weapons">Panel — Weapons</h2>
+
+<p>Add weapons from the equipment catalogue. Each weapon entry includes name, damage, AP value, and range (if applicable). The catalogue covers all Savage Worlds core weapons.</p>
+
+<p>Weapons appear in the stat summary with their full stats and are included in all exports. Weapons with apostrophes in their names (Sailor's Cutlass, etc.) are handled correctly.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="panel-armour">Panel — Armour</h2>
+
+<p>Add armour from the catalogue. Each piece shows name, protection value, and location coverage. When armour is added or removed, the character's <strong>Toughness armour bonus</strong> is recalculated automatically.</p>
+
+<p>The Toughness display updates in real time — "7 (2)" means base Toughness 7 with 2 points of armour. The stat summary on the right column reflects this immediately.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="panel-gear">Panel — Gear</h2>
+
+<p>General equipment that isn't a weapon or armour — rope, lanterns, backpacks, trade goods, etc. Enter items as a comma-separated text list. The gear text is displayed as-is in stat blocks and exports.</p>
+
+<p>This is a <strong>legacy field</strong> from earlier versions of the Vault. Characters imported from older data may have their weapons and armour listed here as text rather than in the structured Weapons and Armour panels. If so, add them properly via those panels and clear the gear text.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="panel-powers">Panel — Powers</h2>
+
+<p>Add arcane powers from the catalogue or type custom power names. The panel also includes fields for:</p>
+
+<div class="field-ref"><span class="field-name">Arcane Background</span><span class="field-desc">The type of AB — Magic, Miracles, Gifted, etc.</span></div>
+<div class="field-ref"><span class="field-name">Arcane Skill</span><span class="field-desc">The skill used for power activation — Spellcasting, Faith, Focus, etc.</span></div>
+<div class="field-ref"><span class="field-name">Power Points</span><span class="field-desc">Total PP available to this character.</span></div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="panel-narrative">Panel — Narrative</h2>
+
+<p>Rich text fields for the character's story and GM-facing content:</p>
+
+<div class="field-ref"><span class="field-name">Quote</span><span class="field-desc">A signature line that captures the character's voice.</span></div>
+<div class="field-ref"><span class="field-name">Description</span><span class="field-desc">Physical appearance and first impressions.</span></div>
+<div class="field-ref"><span class="field-name">Background</span><span class="field-desc">History, how they got where they are.</span></div>
+<div class="field-ref"><span class="field-name">Motivation</span><span class="field-desc">What drives them — goals, fears, desires.</span></div>
+<div class="field-ref"><span class="field-name">Secret</span><span class="field-desc">Something the players don't know. GM-only content.</span></div>
+<div class="field-ref"><span class="field-name">Services</span><span class="field-desc">What this NPC can offer the players — goods, information, quests.</span></div>
+<div class="field-ref"><span class="field-name">Adventure Hook</span><span class="field-desc">A scenario seed involving this character.</span></div>
+<div class="field-ref"><span class="field-name">Tactics</span><span class="field-desc">How this character fights. Combat AI notes for the GM.</span></div>
+
+<p>All narrative fields are included in JSON exports and Canon Commits. They appear in the Stat Block view but not in the Build Audit (which focuses on mechanical validity).</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="stat-block">Stat Block</h2>
+
+<p>The Stat Block panel renders a formatted, read-only view of the character in the standard Savage Worlds stat block format. This is the "what it looks like in the book" view — attributes on one line, skills on the next, derived stats, then edges, hindrances, gear, and powers.</p>
+
+<p>Use this to proofread before export or Canon Commit. The layout matches Pinnacle Entertainment's published format for pre-generated characters.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="audit">Build Audit</h2>
+
+<p>The Build Audit runs a suite of validation checks against the character's mechanical build. Each check shows <strong>✓ Pass</strong>, <strong>✗ Fail</strong>, or <strong>⚠ Warning</strong>.</p>
+
+<h3>Checks Performed</h3>
+
+<table>
+<tr><th>Check</th><th>Rule</th></tr>
+<tr><td>Attribute Points</td><td>Total attribute die steps vs. expected budget (5 for Novice)</td></tr>
+<tr><td>Skill Points</td><td>Skill die steps vs. expected budget (12 for Novice, accounting for linked attributes)</td></tr>
+<tr><td>Hindrance Count</td><td>Maximum 1 Major + 2 Minor (or 4 Minor) for Novice</td></tr>
+<tr><td>Edge Count</td><td>Edges taken vs. edges earned from rank + hindrances</td></tr>
+<tr><td>Fighting ↔ Parry</td><td>Parry should equal 2 + half Fighting die</td></tr>
+<tr><td>Vigor ↔ Toughness</td><td>Base Toughness should equal 2 + half Vigor die + armour</td></tr>
+<tr><td>Equipment Funds</td><td>Total gear cost vs. starting funds (with Rich/Poverty modifiers)</td></tr>
+<tr><td>Core Skills</td><td>Pre-gens should have all 5 core skills at d4+</td></tr>
+<tr><td>Arcane Consistency</td><td>If powers are listed, AB name and skill should be set</td></tr>
+</table>
+
+<p>The audit result feeds into the <strong>Build Legal</strong> badge shown on the stat summary. A green "✓ Build Legal" badge means all checks pass. A red "✗ Issues" badge means at least one check failed. Warning-only characters show as legal with a gold warning count.</p>
+
+<div class="note">The audit is calibrated for Novice-rank player characters and pre-gens. NPCs and creatures don't follow the same budget rules, so some warnings are expected for those categories.</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="funds">Equipment Funds</h2>
+
+<p>The Equipment Funds tracker on the Edit panel and the Build Audit monitors spending against starting funds.</p>
+
+<h3>Auto-Detection</h3>
+
+<p>The audit automatically adjusts starting funds based on edges and hindrances it finds in the character's lists:</p>
+
+<table>
+<tr><th>Modifier</th><th>Effect</th></tr>
+<tr><td>Rich</td><td>×3 starting funds (1,500₡)</td></tr>
+<tr><td>Filthy Rich</td><td>×5 starting funds (2,500₡)</td></tr>
+<tr><td>Poverty</td><td>÷2 starting funds (250₡)</td></tr>
+<tr><td>None</td><td>Base 500₡</td></tr>
+</table>
+
+<p>You can override the starting funds manually in the Edit panel if the auto-detection doesn't match your intended build.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="status">Status Dashboard</h2>
+
+<p>Click the <strong>Status</strong> button in the header to switch to a table view showing every character's production status. Columns include: ref code, name, category, region, tier, build legal status, canon committed, stat complete, narrative complete, and FG-ready.</p>
+
+<p>Use this view to identify which characters still need work. The three completion checkboxes (Stats, Narrative, FG Ready) are manually toggled on each character's action bar — check them when you're satisfied that section is finished.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="canon">Canon Commits</h2>
+
+<p>The Canon Commit system provides a formal "sign-off" mechanism for finished characters. When you click <strong>📦 Commit to Canon</strong>, the Vault takes a snapshot of the character's current state and records it as the canonical version.</p>
+
+<p>The commit modal shows a diff of the character's data — attributes, skills, edges, hindrances, weapons, armour, derived stats, and equipment funds. Review the diff, then click <strong>🔒 Commit to Canon</strong> to confirm.</p>
+
+<p>Committed characters show a 📦 badge in the Status Dashboard. The commit timestamp is recorded for audit trail purposes.</p>
+
+<div class="note">Canon Commits are a development workflow tool. The commit data is stored in the Gist alongside the character roster. A future Canon API endpoint will accept these commits for external validation, but this is not yet implemented.</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="export">Export Formats</h2>
+
+<p>Open the <strong>⇄ Transfer</strong> panel on any character to access export. Four formats are available, each with <strong>Copy to Clipboard</strong> and <strong>Download File</strong> buttons:</p>
+
+<div class="format-grid">
+  <div class="format-card" style="border-color:var(--green)">
+    <h4>JSON (Recommended)</h4>
+    <p><strong>Lossless.</strong> Complete character data in <code>diceforge-character-v1</code> format. Use for Forge transfer, archiving, collaboration, or backup. The only format that round-trips perfectly.</p>
+  </div>
+  <div class="format-card">
+    <h4>Plain Text</h4>
+    <p>Formatted stat block in the standard Savage Worlds layout. For pasting into documents, emails, or chat. <strong>Not reliably re-importable.</strong></p>
+  </div>
+  <div class="format-card">
+    <h4>HTML</h4>
+    <p>Self-contained styled web page with Georgia serif type, dark red headings, proper stat block layout. Opens in any browser. Print-friendly. <strong>Import is experimental.</strong></p>
+  </div>
+  <div class="format-card">
+    <h4>RTF</h4>
+    <p>Rich Text Format — opens in Word, LibreOffice, Google Docs. Bold labels, coloured headings, formatted sections. <strong>Import is experimental.</strong></p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="import">Import</h2>
+
+<p>Click <strong>⇄ Import</strong> in the sidebar to open the import modal. Two input modes:</p>
+
+<h3>Paste Text</h3>
+<p>Paste character data directly into the text area. The Vault auto-detects the format: JSON objects starting with <code>{</code> get lossless parsing; HTML or RTF markup is stripped and fed through the stat block parser; plain text goes through the stat block parser directly.</p>
+
+<h3>Upload File</h3>
+<p>Click to browse or drag a file. Accepts <code>.json</code>, <code>.txt</code>, <code>.html</code>, and <code>.rtf</code>. The file's content is loaded into the text area and auto-detected as above.</p>
+
+<h3>Preview &amp; Validate</h3>
+<p>Click <strong>👁 Preview</strong> to parse the data without committing. The preview shows: name, ancestry, tier, category, attributes, skills, edges, hindrances, weapons, and armour. If the format is non-JSON, a yellow warning appears reminding you to review all fields.</p>
+
+<p>If a character with the same name already exists, a duplicate warning appears. You can still import — it creates a second character with the same name.</p>
+
+<div class="warning"><strong>Non-JSON imports are best-effort.</strong> The stat block parser looks for lines starting with "Attributes:", "Skills:", "Edges:", "Hindrances:", "Pace:", "Gear:", etc. Weapons and armour listed as text will not be parsed into structured data — add them via the Weapons and Armour panels after import.</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="json-transfer">JSON Transfer</h2>
+
+<p>The Vault and the Forge share the <code>diceforge-character-v1</code> JSON schema. This enables <strong>lossless bidirectional transfer</strong> between the two tools.</p>
+
+<h3>Vault → Forge</h3>
+<p>Open a character's Transfer panel → select JSON → Copy or Download → Go to the Forge → Concept step → Upload JSON or Paste JSON.</p>
+
+<h3>Forge → Vault</h3>
+<p>In the Forge, go to the Export step → click JSON (Vault Transfer) → Download or copy → Go to the Vault → ⇄ Import → paste or upload the file.</p>
+
+<h3>Field Mapping</h3>
+
+<p>The core build transfers perfectly: name, concept, ancestry, attributes, skills, edges, hindrances, powers. Some fields require awareness:</p>
+
+<p><strong>Skills format:</strong> The Forge uses an array of <code>{name, die}</code> objects; the Vault uses a <code>{name: die}</code> object. Both tools convert automatically on import.</p>
+
+<p><strong>Gear:</strong> The Forge stores all equipment in a single unified array with type flags (dmg for weapons, armor value for armour). The Vault separates weapons, armour, and general gear into three fields. Conversion maps damage-bearing items to weapons, armour-value items to armour, and everything else to gearText. Costs may need re-entry as the tools track them differently.</p>
+
+<p><strong>Narrative fields:</strong> The Forge doesn't display quote, background, motivation, secret, services, adventureHook, or tactics — but these fields survive a Forge round-trip in the JSON data, so Vault→Forge→Vault won't lose them.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="catalogues">Equipment Catalogues</h2>
+
+<p>The Vault ships with equipment catalogues for Weapons, Armour, and Gear drawn from the Savage Worlds core rules. Catalogue items include correct damage values, armour ratings, costs, weights, and AP values.</p>
+
+<p>You can also type custom item names that aren't in the catalogue. Custom items are stored as-is — you'll need to enter damage, armour, and other values manually.</p>
+
+<p>Items with apostrophes (Sailor's Coat, Knight's Shield, etc.) are handled correctly throughout the tool — an HTML entity escaping function prevents display issues in catalogue dropdowns and stat summaries.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<h3>Cloud sync indicator is red</h3>
+<p>This means a save to GitHub Gist failed. Common causes: expired or revoked Personal Access Token, network connectivity issues, or GitHub API rate limiting. Check the browser console (F12 → Console) for the specific error. If your token has expired, generate a new one and clear/re-enter it in the Vault's setup prompt.</p>
+
+<h3>Characters don't appear after refresh</h3>
+<p>The Vault loads from the Gist on page load. If the Gist is empty or the token is wrong, the roster will be empty. Check that your token has <code>gist</code> scope and that the Gist ID is correct. You can view your Gist directly at <code>https://gist.github.com/&lt;your-gist-id&gt;</code>.</p>
+
+<h3>Weapons or armour disappear on reload</h3>
+<p>This was a known bug in early versions where the Gist serialization omitted weapon and armour arrays. If you encounter this on an older version, hard-refresh (Ctrl+Shift+R) to load the latest code. Weapons and armour now persist correctly.</p>
+
+<h3>Build Audit shows red but the character looks right</h3>
+<p>The audit is calibrated for Novice-rank characters. Higher-rank characters will naturally exceed Novice budgets. NPCs and creatures don't follow player creation rules. Read the specific audit message — it tells you what's expected vs. actual. Warnings (yellow) are informational; only failures (red) indicate a genuine rules issue.</p>
+
+<h3>Apostrophe items won't add from catalogue</h3>
+<p>Fixed in the current version. Hard-refresh if you're still seeing this. The HTML entity escaping now handles single quotes correctly.</p>
+
+<h3>Import shows "No attributes or skills found"</h3>
+<p>The stat block parser expects lines formatted as "Attributes: Agility d6, Smarts d8..." and "Skills: Fighting d8, Shooting d6...". If your source text uses a different format (colons, em-dashes, tabs), the parser may not recognise it. Use JSON import for reliable transfer.</p>
+
+<!-- ═══════════════════════════════════════════════ -->
+<h2 id="about">About &amp; Licence</h2>
+
+<p>The Character Vault is developed by <strong>DiceForge Studios Ltd</strong> as an internal production tool for managing character content across the Tribute Lands product line. It is provided as-is for use by writers, developers, and game masters working with Savage Worlds content.</p>
+
+<p>This tool references the Savage Worlds game system, available from Pinnacle Entertainment Group at <a href="https://www.peginc.com" target="_blank">peginc.com</a>. Savage Worlds and all associated logos and trademarks are copyrights of Pinnacle Entertainment Group. Used with permission.</p>
+
+<p>Setting content (Ammaria, Saltlands, Vinlands, Concordium, Glasrya) is © DiceForge Studios Ltd.</p>
+
+<p>Cloud storage is provided by GitHub Gist. DiceForge Studios does not store, access, or process your character data — it lives entirely in your own GitHub account.</p>
+
+</main>
+</div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Top</button>
+
+<script>
+const searchInput = document.getElementById('searchInput');
+const navLinks = document.querySelectorAll('.nav-link');
+
+searchInput.addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  if (!q) { navLinks.forEach(l => l.classList.remove('hidden')); return; }
+  navLinks.forEach(function(link) {
+    const text = link.textContent.toLowerCase();
+    const targetId = link.getAttribute('href')?.replace('#','');
+    const target = targetId ? document.getElementById(targetId) : null;
+    let sectionText = '';
+    if (target) {
+      let el = target.nextElementSibling;
+      while (el && el.tagName !== 'H2') { sectionText += ' ' + el.textContent; el = el.nextElementSibling; }
+    }
+    link.classList.toggle('hidden', !(text.includes(q) || sectionText.toLowerCase().includes(q)));
+  });
+});
+
+document.addEventListener('keydown', function(e) {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); searchInput.focus(); searchInput.select(); }
+  if (e.key === 'Escape') searchInput.blur();
+});
+
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector('.nav-link[href="#' + entry.target.id + '"]');
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+document.querySelectorAll('h2[id]').forEach(el => observer.observe(el));
+
+window.addEventListener('scroll', function() {
+  document.getElementById('backTop').style.display = window.scrollY > 400 ? 'block' : 'none';
+});
+</script>
+</body>
+</html>
