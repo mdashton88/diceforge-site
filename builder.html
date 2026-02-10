@@ -373,6 +373,25 @@ function CharacterForgeApp() {
         })}
       </div>}
 
+      <div style={Object.assign({},card,{background:'transparent',border:'1px solid '+C.gold+'30',padding:'14px 20px'})}>
+        <div style={cTitle}>Import Character</div>
+        <p style={{fontSize:'14px',color:C.textDim,lineHeight:'1.6',marginBottom:'12px'}}>
+          Load a character from JSON — exported from <strong style={{color:C.gold}}>Character Vault</strong> or another Forge session. This replaces your current build.
+        </p>
+        <div style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
+          <label style={{display:'inline-flex',alignItems:'center',gap:'6px',padding:'8px 16px',border:'1px solid '+C.border,background:'transparent',color:C.gold,fontSize:'13px',fontWeight:600,letterSpacing:'1px',textTransform:'uppercase',cursor:'pointer',fontFamily:"'Cinzel',serif"}}>
+            {'\u21C4 Upload JSON'}
+            <input type="file" accept=".json" style={{display:'none'}} onChange={function(e){handleJSONImportFile(e.target)}} />
+          </label>
+          <button onClick={handleJSONImportPaste} style={{padding:'8px 16px',border:'1px solid '+C.border,background:'transparent',color:C.textDim,fontSize:'13px',fontWeight:600,letterSpacing:'1px',textTransform:'uppercase',cursor:'pointer',fontFamily:"'Cinzel',serif"}}>
+            {'\uD83D\uDCCB Paste JSON'}
+          </button>
+        </div>
+        <div style={{fontSize:'11px',color:C.textDim,marginTop:'8px',lineHeight:'1.5'}}>
+          Accepts <strong>diceforge-character-v1</strong> format. Gear costs will need manual re-entry as the Vault stores costs separately.
+        </div>
+      </div>
+
       <div style={Object.assign({},card,{background:'transparent',border:'1px solid '+C.border,padding:'14px 20px'})}>
         <div style={{fontSize:'13px',color:C.textDim,lineHeight:'1.6'}}>
           <strong style={{color:C.goldDim}}>Active content:</strong> {allModules.filter(function(m){return m.alwaysOn || activeSupplements.indexOf(m.id)>=0}).map(function(m){return m.name}).join(', ')}
@@ -985,6 +1004,157 @@ function CharacterForgeApp() {
     rtf += '}';
     downloadFile((ch.name.replace(/[^a-zA-Z0-9]+/g,'_')||'character')+'.rtf', rtf, 'application/rtf');
   }
+  // ── JSON EXPORT (diceforge-character-v1) ──
+  function exportJSON() {
+    var ch = collectCharData();
+    var skillObj = {};
+    ch.skills.forEach(function(s){ if(s.die>0) skillObj[s.name] = s.die; });
+    var weapons = ch.gear.filter(function(g){return g.dmg}).map(function(g){
+      return {name:g.name, damage:g.dmg||'', ap:0, range:g.range||''};
+    });
+    var armourItems = ch.gear.filter(function(g){return g.armor>0}).map(function(g){
+      return {name:g.name, armor:g.armor||0};
+    });
+    var generalGear = ch.gear.filter(function(g){return !g.dmg && !(g.armor>0)}).map(function(g){return g.name}).join(', ');
+    var v1 = {
+      _format:'diceforge-character-v1',
+      name:ch.name, refCode:'', concept:ch.concept||'', ancestry:ch.ancestry||'Human',
+      region:'Ammaria', tier:'Wild Card', rank:'Novice',
+      category:'Pre-gen', product:'',
+      attributes:{agility:ch.attrs.agility, smarts:ch.attrs.smarts, spirit:ch.attrs.spirit, strength:ch.attrs.strength, vigor:ch.attrs.vigor},
+      skills:skillObj,
+      edges:ch.edges.map(function(e){return e.name}),
+      hindrances:ch.hindrances.map(function(h){return h.severity==='Major'?h.name+' (Major)':h.name+' (Minor)'}),
+      powers:ch.powers.map(function(p){return p.name}),
+      weapons:weapons, armour:armourItems, gearText:generalGear,
+      abName:ch.hasAB&&ch.abData?ch.abData.name:'', abSkill:ch.hasAB&&ch.abData?ch.abData.skill:'',
+      pp:ch.totalPP||0,
+      pace:ch.derived.pace, parry:ch.derived.parry, toughness:ch.derived.toughness,
+      toughnessArmor:ch.derived.armor||0, bennies:ch.derived.bennies||3,
+      startingFunds:ch.startFunds||500, gearCost:ch.gearCost||0,
+      quote:'', description:'', background:'', motivation:'', secret:'',
+      services:'', adventureHook:'', tactics:''
+    };
+    downloadFile((ch.name.replace(/[^a-zA-Z0-9]+/g,'_')||'character')+'.json', JSON.stringify(v1,null,2), 'application/json');
+  }
+
+  function copyJSON() {
+    var ch = collectCharData();
+    var skillObj = {};
+    ch.skills.forEach(function(s){ if(s.die>0) skillObj[s.name] = s.die; });
+    var weapons = ch.gear.filter(function(g){return g.dmg}).map(function(g){
+      return {name:g.name, damage:g.dmg||'', ap:0, range:g.range||''};
+    });
+    var armourItems = ch.gear.filter(function(g){return g.armor>0}).map(function(g){
+      return {name:g.name, armor:g.armor||0};
+    });
+    var generalGear = ch.gear.filter(function(g){return !g.dmg && !(g.armor>0)}).map(function(g){return g.name}).join(', ');
+    var v1 = {
+      _format:'diceforge-character-v1',
+      name:ch.name, refCode:'', concept:ch.concept||'', ancestry:ch.ancestry||'Human',
+      region:'Ammaria', tier:'Wild Card', rank:'Novice',
+      category:'Pre-gen', product:'',
+      attributes:{agility:ch.attrs.agility, smarts:ch.attrs.smarts, spirit:ch.attrs.spirit, strength:ch.attrs.strength, vigor:ch.attrs.vigor},
+      skills:skillObj,
+      edges:ch.edges.map(function(e){return e.name}),
+      hindrances:ch.hindrances.map(function(h){return h.severity==='Major'?h.name+' (Major)':h.name+' (Minor)'}),
+      powers:ch.powers.map(function(p){return p.name}),
+      weapons:weapons, armour:armourItems, gearText:generalGear,
+      abName:ch.hasAB&&ch.abData?ch.abData.name:'', abSkill:ch.hasAB&&ch.abData?ch.abData.skill:'',
+      pp:ch.totalPP||0,
+      pace:ch.derived.pace, parry:ch.derived.parry, toughness:ch.derived.toughness,
+      toughnessArmor:ch.derived.armor||0, bennies:ch.derived.bennies||3,
+      startingFunds:ch.startFunds||500, gearCost:ch.gearCost||0,
+      quote:'', description:'', background:'', motivation:'', secret:'',
+      services:'', adventureHook:'', tactics:''
+    };
+    navigator.clipboard.writeText(JSON.stringify(v1,null,2));
+    alert('JSON copied to clipboard');
+  }
+
+  function importFromJSON(obj) {
+    // Accept both v1 format and raw Forge format
+    var a = obj.attributes || obj.attrs || {};
+    setCharName(obj.name || '');
+    setCharConcept(obj.concept || '');
+    if(obj.ancestry) setAncestry(obj.ancestry);
+    setAttrs({
+      agility: a.agility || 4, smarts: a.smarts || 4, spirit: a.spirit || 4,
+      strength: a.strength || 4, vigor: a.vigor || 4
+    });
+    // Skills: v1 has {name:die} object, Forge uses {name:die} object for setSkills
+    var sk = {};
+    if(obj.skills && !Array.isArray(obj.skills)) {
+      Object.entries(obj.skills).forEach(function(p){ sk[p[0]] = p[1]; });
+    } else if(Array.isArray(obj.skills)) {
+      obj.skills.forEach(function(s){ sk[s.name] = s.die; });
+    }
+    setSkills(sk);
+    // Edges: strip to names
+    var edgeNames = (obj.edges||[]).map(function(e){ return typeof e==='string'?e:e.name; });
+    setSelectedEdges(edgeNames);
+    // Hindrances: parse "Name (Major)" format
+    var hindNames = [], hindSevs = {};
+    (obj.hindrances||[]).forEach(function(h){
+      var str = typeof h==='string'?h:h.name;
+      var mj = str.match(/^(.+?)\s*\(Major\)\s*$/i);
+      var mn = str.match(/^(.+?)\s*\(Minor\)\s*$/i);
+      if(mj) { hindNames.push(mj[1].trim()); hindSevs[mj[1].trim()] = 'Major'; }
+      else if(mn) { hindNames.push(mn[1].trim()); hindSevs[mn[1].trim()] = 'Minor'; }
+      else { hindNames.push(str); hindSevs[str] = 'Minor'; }
+    });
+    setSelectedHindrances(hindNames);
+    setHindranceSeverities(hindSevs);
+    // Arcane Background
+    if(obj.abName && edgeNames.includes('Arcane Background')) {
+      setArcaneBg(obj.abName);
+      setSelectedPowers((obj.powers||[]).map(function(p){return typeof p==='string'?p:p.name;}));
+    }
+    // Gear: convert v1 weapons/armour/gearText back to Forge gear array
+    var gearArr = [];
+    (obj.weapons||[]).forEach(function(w){
+      gearArr.push({name:w.name, qty:1, cost:0, wt:0, dmg:w.damage||'', armor:0, parry:0, range:w.range||'', notes:''});
+    });
+    (obj.armour||[]).forEach(function(a){
+      gearArr.push({name:a.name, qty:1, cost:0, wt:0, dmg:'', armor:a.armor||0, parry:0, range:'', notes:''});
+    });
+    if(obj.gearText) {
+      obj.gearText.split(',').map(function(s){return s.trim()}).filter(function(s){return s}).forEach(function(g){
+        gearArr.push({name:g, qty:1, cost:0, wt:0, dmg:'', armor:0, parry:0, range:'', notes:''});
+      });
+    }
+    setGear(gearArr);
+    setHindAlloc({edges:0,attrs:0,skills:0,funds:0});
+    setStep(7); // Go to Summary
+  }
+
+  function handleJSONImportFile(input) {
+    var file = input.files[0]; if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        var obj = JSON.parse(e.target.result);
+        if(!obj.name) { alert('Invalid JSON — no character name found'); return; }
+        if(charName && !confirm('This will replace your current character build with "'+obj.name+'". Continue?')) return;
+        importFromJSON(obj);
+        alert('Imported: '+obj.name+'\nCheck the Summary tab to review, then adjust any steps as needed.');
+      } catch(err) { alert('JSON parse error: '+err.message); }
+    };
+    reader.readAsText(file);
+  }
+
+  function handleJSONImportPaste() {
+    var raw = prompt('Paste the full JSON character data:');
+    if(!raw) return;
+    try {
+      var obj = JSON.parse(raw);
+      if(!obj.name) { alert('Invalid JSON — no character name found'); return; }
+      if(charName && !confirm('This will replace your current character build with "'+obj.name+'". Continue?')) return;
+      importFromJSON(obj);
+      alert('Imported: '+obj.name+'\nCheck the Summary tab to review, then adjust any steps as needed.');
+    } catch(err) { alert('JSON parse error: '+err.message); }
+  }
+
   function rtfEsc(s) { return String(s).replace(/\\/g,'\\\\').replace(/\{/g,'\\{').replace(/\}/g,'\\}'); }
 
   // ── EXPORT PANEL ──
@@ -996,6 +1166,7 @@ function CharacterForgeApp() {
       transition:'all .15s',width:'100%',textAlign:'left'
     }};
     var formats = [
+      {id:'json', label:'JSON (Vault Transfer)', desc:'Lossless diceforge-character-v1 format. Import directly into Character Vault or share with other DiceForge tools. Copy or download.', icon:'\u21C4', colour:'#C4A44A', fn:exportJSON, copyFn:copyJSON},
       {id:'fgxml', label:'Fantasy Grounds XML', desc:'Import directly into Fantasy Grounds Unity as a character sheet. Includes attributes, skills, edges, hindrances, weapons, powers, and inventory.', icon:'\u2694', colour:'#5A9A5A', fn:exportFGXML},
       {id:'pdf', label:'PDF Character Sheet', desc:'Print-ready A4 character sheet styled to Pinnacle canon. Portrait, derived stats bar, all sections formatted for table use.', icon:'\uD83D\uDCC4', colour:'#4A7A9A', fn:exportPDF},
       {id:'html', label:'HTML Character Sheet', desc:'Standalone web page in Pinnacle pre-generated character format. Print-friendly, works in any browser.', icon:'\uD83C\uDF10', colour:'#9A7A4A', fn:exportHTML},
@@ -1020,7 +1191,10 @@ function CharacterForgeApp() {
               <div style={{fontFamily:"'Cinzel',serif",fontSize:'16px',fontWeight:700,color:C.textBright,letterSpacing:'1px'}}>{f.label}</div>
               <div style={{fontSize:'14px',color:C.textDim,marginTop:'4px',lineHeight:'1.5'}}>{f.desc}</div>
             </div>
-            <div style={{fontSize:'20px',color:C.goldDim,flexShrink:0}}>{'\u2913'}</div>
+            <div style={{display:'flex',flexDirection:'column',gap:'4px',flexShrink:0}}>
+              <div style={{fontSize:'20px',color:C.goldDim}}>{'\u2913'}</div>
+              {f.copyFn && <div onClick={function(e){e.stopPropagation();f.copyFn()}} style={{fontSize:'11px',color:C.gold,cursor:'pointer',textAlign:'center'}} title="Copy to clipboard">{'\uD83D\uDCCB'}</div>}
+            </div>
           </div>);
         })}
       </div>
