@@ -793,19 +793,34 @@ function renderHindrancesPanel(n){
   const items=n.hindrances.map(h=>`<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0">${esc(h)} <button class="btn sm danger" onclick="removeHindrance(this)" data-val="${esc(h)}">×</button></div>`).join('');
   el.innerHTML=`<div>${items||'<div style="color:var(--text-dim)">No hindrances yet</div>'}</div>
     <div class="catalogue-section"><h4>Add Hindrance</h4><div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
-    <input type="text" id="hindSearch" placeholder="Search hindrances..." oninput="filterHindCat()" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:3px;font-size:12px;margin-bottom:4px">
-    <div class="catalogue-list" id="hindCatList"></div>
-    <div id="hindInfo"></div>
+    <input type="text" id="hindSearch" placeholder="Search hindrances... (↑↓ to browse)" oninput="filterHindCat()" onkeydown="hindCatKeyNav(event)" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:3px;font-size:12px;margin-bottom:4px">
+    <div style="display:flex;gap:8px;align-items:flex-start">
+      <div class="catalogue-list" id="hindCatList" style="flex:1;min-width:0"></div>
+      <div id="hindInfo" style="flex:1;min-width:0"></div>
+    </div>
     <div class="form-row"><div class="form-group"><label>Name</label><input id="hind_name"></div><div class="form-group" style="max-width:120px"><label>Severity</label><select id="hind_sev"><option>Minor</option><option>Major</option></select></div></div>
     <div class="form-group"><label>Notes</label><input id="hind_notes" placeholder="Optional details"></div>
     <button class="btn primary" onclick="addHindrance()">Add Hindrance</button></div>`;
   filterHindCat();
 }
+var hindCatIdx=-1;
 function filterHindCat(){
+  hindCatIdx=-1;
   const s=(document.getElementById('hindSearch')?.value||'').toLowerCase();
   const cat=getCatalogueHindrances().filter(h=>!s||h.name.toLowerCase().includes(s));
   const el=document.getElementById('hindCatList');if(!el)return;
   el.innerHTML=cat.map((h,i)=>`<div class="catalogue-item" onclick="selectHindInfo(${i},'${esc(s)}')"><span class="cat-name">${esc(h.name)}</span> <span class="cat-detail">(${esc(h.type||h.sev||'Minor')}) — ${esc(h.source)}</span></div>`).join('');
+}
+function hindCatKeyNav(e){
+  const list=document.getElementById('hindCatList');if(!list)return;
+  const items=list.querySelectorAll('.catalogue-item');if(!items.length)return;
+  if(e.key==='ArrowDown'){e.preventDefault();hindCatIdx=Math.min(hindCatIdx+1,items.length-1);highlightHindCat(items);}
+  else if(e.key==='ArrowUp'){e.preventDefault();hindCatIdx=Math.max(hindCatIdx-1,0);highlightHindCat(items);}
+  else if(e.key==='Enter'&&hindCatIdx>=0){e.preventDefault();items[hindCatIdx].click();}
+}
+function highlightHindCat(items){
+  items.forEach((it,i)=>{it.style.background=i===hindCatIdx?'var(--accent)22':'';});
+  if(items[hindCatIdx]){items[hindCatIdx].scrollIntoView({block:'nearest'});items[hindCatIdx].click();}
 }
 function selectHindInfo(idx,search){
   const cat=getCatalogueHindrances().filter(h=>!search||h.name.toLowerCase().includes(search));
@@ -832,18 +847,33 @@ function renderEdgesPanel(n){
   const items=n.edges.map(e=>{const leg=isLegacyEdge(e)?' <span class="legacy-tag">(legacy)</span>':'';return `<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0">${esc(e)}${leg} <button class="btn sm danger" onclick="removeEdge(this)" data-val="${esc(e)}">×</button></div>`;}).join('');
   el.innerHTML=`<div>${items||'<div style="color:var(--text-dim)">No edges yet</div>'}</div>
     <div class="catalogue-section"><h4>Add Edge</h4>
-    <input type="text" id="edgeSearch" placeholder="Search edges..." oninput="filterEdgeCat()" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:3px;font-size:12px;margin-bottom:4px">
-    <div class="catalogue-list" id="edgeCatList"></div>
-    <div id="edgeInfo"></div>
+    <input type="text" id="edgeSearch" placeholder="Search edges... (↑↓ to browse)" oninput="filterEdgeCat()" onkeydown="edgeCatKeyNav(event)" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:3px;font-size:12px;margin-bottom:4px">
+    <div style="display:flex;gap:8px;align-items:flex-start">
+      <div class="catalogue-list" id="edgeCatList" style="flex:1;min-width:0"></div>
+      <div id="edgeInfo" style="flex:1;min-width:0"></div>
+    </div>
     <div class="form-group"><label>Name</label><input id="edge_name"></div>
     <button class="btn primary" onclick="addEdge()">Add Edge</button></div>`;
   filterEdgeCat();
 }
 function filterEdgeCat(){
+  edgeCatIdx=-1;
   const s=(document.getElementById('edgeSearch')?.value||'').toLowerCase();
   const cat=getCatalogueEdges().filter(e=>!s||e.name.toLowerCase().includes(s));
   const el=document.getElementById('edgeCatList');if(!el)return;
-  el.innerHTML=cat.map((e,i)=>`<div class="catalogue-item" onclick="selectEdgeInfo(${i},'${esc(s)}')"><span class="cat-name">${esc(e.name)}</span> <span class="cat-detail">${esc(e.rank||'')} ${esc(e.cat||e.type||'')} — ${esc(e.source)}</span></div>`).join('');
+  el.innerHTML=cat.map((e,i)=>`<div class="catalogue-item" data-idx="${i}" onclick="selectEdgeInfo(${i},'${esc(s)}')"><span class="cat-name">${esc(e.name)}</span> <span class="cat-detail">${esc(e.rank||'')} ${esc(e.cat||e.type||'')} — ${esc(e.source)}</span></div>`).join('');
+}
+var edgeCatIdx=-1;
+function edgeCatKeyNav(e){
+  const list=document.getElementById('edgeCatList');if(!list)return;
+  const items=list.querySelectorAll('.catalogue-item');if(!items.length)return;
+  if(e.key==='ArrowDown'){e.preventDefault();edgeCatIdx=Math.min(edgeCatIdx+1,items.length-1);highlightEdgeCat(items);}
+  else if(e.key==='ArrowUp'){e.preventDefault();edgeCatIdx=Math.max(edgeCatIdx-1,0);highlightEdgeCat(items);}
+  else if(e.key==='Enter'&&edgeCatIdx>=0){e.preventDefault();items[edgeCatIdx].click();}
+}
+function highlightEdgeCat(items){
+  items.forEach((it,i)=>{it.style.background=i===edgeCatIdx?'var(--accent)22':'';it.style.color=i===edgeCatIdx?'var(--text)':'';});
+  if(items[edgeCatIdx]){items[edgeCatIdx].scrollIntoView({block:'nearest'});items[edgeCatIdx].click();}
 }
 function selectEdgeInfo(idx,search){
   const cat=getCatalogueEdges().filter(e=>!search||e.name.toLowerCase().includes(search));
@@ -992,21 +1022,36 @@ function renderPowersPanel(n){
     <div>${rows||'<div style="color:var(--text-dim)">No powers yet</div>'}</div>
     <div class="catalogue-section"><h4>Add Power</h4>
     <div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
-    <input placeholder="Search powers..." oninput="filterPowerCatalogue(this.value)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
-    <div class="catalogue-list" id="powCatList"></div>
-    <div id="powInfo"></div>
+    <input placeholder="Search powers... (↑↓ to browse)" oninput="filterPowerCatalogue(this.value)" onkeydown="powCatKeyNav(event)" id="powSearch" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
+    <div style="display:flex;gap:8px;align-items:flex-start">
+      <div class="catalogue-list" id="powCatList" style="flex:1;min-width:0"></div>
+      <div id="powInfo" style="flex:1;min-width:0"></div>
+    </div>
     <div style="margin:10px 0 4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Or Enter Custom</div>
     <div class="form-group"><label>Power Name</label><input id="pow_name"></div>
     <button class="btn primary" onclick="addPower()">Add Power</button></div>
     <div class="form-actions"><button class="btn" onclick="savePowerSettings()">Save AB Settings</button></div>`;
   filterPowerCatalogue('');
 }
+var powCatIdx=-1;
 function filterPowerCatalogue(s){
+  powCatIdx=-1;
   s=s.toLowerCase();
   const existing=currentNPC?currentNPC.powers.map(p=>p.toLowerCase()):[];
   const cat=getCataloguePowers().filter(p=>(!s||p.name.toLowerCase().includes(s))&&!existing.includes(p.name.toLowerCase()));
   const el=document.getElementById('powCatList');if(!el)return;
   el.innerHTML=cat.map((p,i)=>`<div class="catalogue-item" onclick="selectPowInfo(${i},'${esc(s)}')"><span class="cat-name">${esc(p.name)}</span> <span class="cat-detail">${esc(p.rank)} ${esc(p.pp)}PP ${p.range?p.range:''} — ${esc(p.source)}</span></div>`).join('');
+}
+function powCatKeyNav(e){
+  const list=document.getElementById('powCatList');if(!list)return;
+  const items=list.querySelectorAll('.catalogue-item');if(!items.length)return;
+  if(e.key==='ArrowDown'){e.preventDefault();powCatIdx=Math.min(powCatIdx+1,items.length-1);highlightPowCat(items);}
+  else if(e.key==='ArrowUp'){e.preventDefault();powCatIdx=Math.max(powCatIdx-1,0);highlightPowCat(items);}
+  else if(e.key==='Enter'&&powCatIdx>=0){e.preventDefault();items[powCatIdx].click();}
+}
+function highlightPowCat(items){
+  items.forEach((it,i)=>{it.style.background=i===powCatIdx?'var(--accent)22':'';});
+  if(items[powCatIdx]){items[powCatIdx].scrollIntoView({block:'nearest'});items[powCatIdx].click();}
 }
 function selectPowInfo(idx,search){
   const existing=currentNPC?currentNPC.powers.map(p=>p.toLowerCase()):[];
