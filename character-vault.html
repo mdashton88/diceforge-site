@@ -820,6 +820,7 @@ function selectHindInfo(idx,search){
   document.getElementById('hind_sev').value=(h.type||h.sev||'Minor').includes('Major')?'Major':'Minor';
   const info=document.getElementById('hindInfo');if(!info)return;
   info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(h.name)}</div><div class="ci-meta">${esc(h.type||h.sev||'Minor')} · ${esc(h.source)}</div><div class="ci-desc">${esc(h.summary||'No description available.')}</div></div>`;
+  setTimeout(()=>document.getElementById('hindSearch')?.focus(),0);
 }
 function addHindrance(){
   const name=document.getElementById('hind_name').value.trim();if(!name)return;
@@ -878,6 +879,7 @@ function selectEdgeInfo(idx,search){
     document.getElementById('edge_name').value='Arcane Background (Gifted)';
   }
   info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(e.name)}</div><div class="ci-meta">${esc(e.rank||'N')} · ${esc(e.cat||e.type||'General')} · ${esc(e.source)}</div>${reqs}<div class="ci-desc">${esc(e.summary||'No description available.')}</div>${abPicker}</div>`;
+  setTimeout(()=>document.getElementById('edgeSearch')?.focus(),0);
 }
 function addEdge(){const name=document.getElementById('edge_name').value.trim();if(!name)return;currentNPC.edges.push(name);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
 function removeEdge(btn){const val=btn.dataset.val;currentNPC.edges=currentNPC.edges.filter(x=>x!==val);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
@@ -1051,6 +1053,7 @@ function selectPowInfo(idx,search){
   document.getElementById('pow_name').value=p.name;
   const info=document.getElementById('powInfo');if(!info)return;
   info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(p.name)}</div><div class="ci-meta">${esc(p.rank)} · ${esc(p.pp)} PP · Range: ${esc(p.range||'Self')} · Duration: ${esc(p.dur||'Instant')} · ${esc(p.source)}</div><div class="ci-desc">${esc(p.summary||'No description available.')}</div></div>`;
+  setTimeout(()=>document.getElementById('powSearch')?.focus(),0);
 }
 function addPower(){const name=document.getElementById('pow_name').value.trim();if(!name)return;currentNPC.powers.push(name);saveCharacter(currentNPC);renderPowersPanel(currentNPC);renderStatColumn(currentNPC);}
 function removePower(idx){currentNPC.powers.splice(idx,1);saveCharacter(currentNPC);renderPowersPanel(currentNPC);renderStatColumn(currentNPC);}
