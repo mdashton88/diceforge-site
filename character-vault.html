@@ -699,7 +699,7 @@ function renderStatColumn(n){
   const weaponBox=buildSectionBox('Weapons','weapons',n.weapons,w=>`<div class="item-entry">${esc(w.name)} <span style="color:var(--text-dim)">${esc(w.damage)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''}</span></div>`);
   const powersBox=buildSectionBox('Powers','powers',n.powers,p=>`<div class="item-entry">${esc(p)}</div>`);
   const gearItems=n.gearText?n.gearText.split(',').map(g=>g.trim()).filter(g=>g):[];
-  const gearBox=buildSectionBox('Gear','gear',gearItems,g=>`<div class="item-entry">${esc(g)}</div>`,true);
+  const gearBox=buildSectionBox('Gear','gear',gearItems,g=>`<div class="item-entry">${esc(g)}</div>`);
   const statusHTML=`<div class="status-bar"><div class="status-row">
     <label><input type="checkbox" ${n.statComplete?'checked':''} onchange="toggleStatus('statComplete',this.checked)"> Stats</label>
     <label><input type="checkbox" ${n.narrativeComplete?'checked':''} onchange="toggleStatus('narrativeComplete',this.checked)"> Narrative</label>
