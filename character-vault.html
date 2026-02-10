@@ -843,9 +843,8 @@ function renderSkillsPanel(n){
     <input placeholder="Search skills..." oninput="filterSkillCatalogue(this.value)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
     <div class="catalogue-list" id="skillCatList"></div>
     <div style="margin:10px 0 4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Or Enter Custom</div>
-    <div class="form-row"><div class="form-group"><label>Skill Name</label><input id="skill_name"></div>
-    <div class="form-group" style="max-width:100px"><label>Die</label><select id="skill_die"><option value="4">d4</option><option value="6">d6</option><option value="8" selected>d8</option><option value="10">d10</option><option value="12">d12</option></select></div></div>
-    <button class="btn primary" onclick="addSkill()">Add Skill</button></div>`;
+    <div class="form-row"><div class="form-group"><label>Skill Name</label><input id="skill_name"></div></div>
+    <button class="btn primary" onclick="addSkill()">Add Skill (d4)</button></div>`;
   filterSkillCatalogue('');
 }
 function filterSkillCatalogue(s){
@@ -856,7 +855,7 @@ function filterSkillCatalogue(s){
   el.innerHTML=cat.slice(0,30).map(sk=>`<div class="catalogue-item" onclick="selectCatalogueSkill('${esc(sk.name)}')"><span class="cat-name">${esc(sk.name)}</span> <span class="cat-detail">(${esc(sk.attr)}) — ${esc(sk.source)}</span></div>`).join('');
 }
 function selectCatalogueSkill(name){document.getElementById('skill_name').value=name;}
-function addSkill(){const name=document.getElementById('skill_name').value.trim(),die=parseInt(document.getElementById('skill_die').value);if(!name)return;currentNPC.skills[name]=die;calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
+function addSkill(){const name=document.getElementById('skill_name').value.trim();if(!name)return;currentNPC.skills[name]=4;calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
 function stepAttr(id,dir){const el=document.getElementById(id);if(!el)return;let v=parseInt(el.dataset.val)||0;const cap=isPregen();v=dir>0?dieStepUp(v,cap):dieStepDown(v);if(v<0)v=0;el.dataset.val=v;el.textContent=d(v);}
 function stepSkill(name,dir){console.log("🎯 stepSkill:",name,dir>0?"+":"-");if(!currentNPC||!currentNPC.skills[name])return;const v=currentNPC.skills[name];const cap=isPregen();currentNPC.skills[name]=dir>0?dieStepUp(v,cap):dieStepDown(v);calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
 function removeSkill(name){delete currentNPC.skills[name];calcDerived(currentNPC);saveCharacter(currentNPC);renderSkillsPanel(currentNPC);renderStatColumn(currentNPC);}
