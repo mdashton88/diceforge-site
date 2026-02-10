@@ -1081,12 +1081,13 @@ function renderWeaponsPanel(n){
 }
 function filterWeaponCatalogue(s){
   s=s.toLowerCase();
-  const cat=getCatalogueWeapons().filter(w=>!s||w.name.toLowerCase().includes(s));
+  var wepCatList=getCatalogueWeapons().filter(w=>!s||w.name.toLowerCase().includes(s));
   const el=document.getElementById('wepCatList');if(!el)return;
-  el.innerHTML=cat.map(w=>`<div class="catalogue-item" onclick="selectCatalogueWeapon('${esc(w.name).replace(/'/g,"\\'")}')">`+`<span class="cat-name">${esc(w.name)}</span> <span class="cat-detail">${esc(w.dmg)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''} — ${esc(w.source)}</span></div>`).join('');
+  el.innerHTML=wepCatList.map((w,i)=>`<div class="catalogue-item" onclick="selectCatalogueWeapon(${i})"><span class="cat-name">${esc(w.name)}</span> <span class="cat-detail">${esc(w.dmg)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''} — ${esc(w.source)}</span></div>`).join('');
+  window._wepCatList=wepCatList;
 }
-function selectCatalogueWeapon(name){
-  const w=getCatalogueWeapons().find(x=>x.name===name);if(!w)return;
+function selectCatalogueWeapon(idx){
+  const w=window._wepCatList?.[idx];if(!w)return;
   document.getElementById('wep_name').value=w.name;
   document.getElementById('wep_damage').value=w.dmg;
   document.getElementById('wep_ap').value=w.ap||0;
@@ -1117,15 +1118,16 @@ function renderArmourPanel(n){
 }
 function filterArmourCatalogue(s){
   s=s.toLowerCase();
-  const cat=getCatalogueArmour().filter(a=>!s||a.name.toLowerCase().includes(s));
+  var armCatArr=getCatalogueArmour().filter(a=>!s||a.name.toLowerCase().includes(s));
   const el=document.getElementById('armCatList');if(!el)return;
-  el.innerHTML=cat.map(a=>{
+  el.innerHTML=armCatArr.map((a,i)=>{
     const val=a.armor?'+'+a.armor:(a.parry?'Parry +'+a.parry:'');
-    return `<div class="catalogue-item" onclick="selectCatalogueArmour('${esc(a.name).replace(/'/g,"\\'")}')">`+`<span class="cat-name">${esc(a.name)}</span> <span class="cat-detail">(${val}) — ${esc(a.source)}</span></div>`;
+    return `<div class="catalogue-item" onclick="selectCatalogueArmour(${i})"><span class="cat-name">${esc(a.name)}</span> <span class="cat-detail">(${val}) — ${esc(a.source)}</span></div>`;
   }).join('');
+  window._armCatList=armCatArr;
 }
-function selectCatalogueArmour(name){
-  const a=getCatalogueArmour().find(x=>x.name===name);if(!a)return;
+function selectCatalogueArmour(idx){
+  const a=window._armCatList?.[idx];if(!a)return;
   document.getElementById('arm_name').value=a.name;
   document.getElementById('arm_prot').value=a.armor||a.parry||0;
   document.getElementById('arm_notes').value=a.notes||'';
