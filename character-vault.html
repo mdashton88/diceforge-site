@@ -407,7 +407,7 @@ async function pushToGist(){console.log("☁️ pushToGist firing...");
         region:n.region||'Ammaria',tier:n.tier||'Wild Card',rank:n.rank||'Novice',
         category:n.category||'NPC',product:n.product||n.region||'Ammaria',
         attrs:{agility:n.agility||0,smarts:n.smarts||0,spirit:n.spirit||0,strength:n.strength||0,vigor:n.vigor||0},
-        skills:n.skills||{},edges:n.edges||[],hindrances:n.hindrances||[],powers:n.powers||[],
+        skills:n.skills||{},edges:n.edges||[],edgeNotes:n.edgeNotes||{},hindrances:n.hindrances||[],powers:n.powers||[],
         weapons:n.weapons||[],armour:n.armour||[],
         pace:n.pace||6,parry:n.parry||2,toughness:n.toughness||5,toughnessArmor:n.toughnessArmor||0,bennies:n.bennies||0,
         gearText:n.gearText||'',quote:n.quote||'',notes:n.notes||'',
@@ -436,7 +436,7 @@ async function pushToGist(){console.log("☁️ pushToGist firing...");
 }
 
 function normaliseChar(c,moduleId){
-  const n={name:c.name,refCode:c.refCode||'',concept:c.concept||'',ancestry:c.ancestry||'Human',region:c.region||'Ammaria',tier:c.tier||'Wild Card',rank:c.rank||'Novice',category:c.category||'NPC',product:c.product||'',source:moduleId,agility:c.attrs?.agility||c.agility||0,smarts:c.attrs?.smarts||c.smarts||0,spirit:c.attrs?.spirit||c.spirit||0,strength:c.attrs?.strength||c.strength||0,vigor:c.attrs?.vigor||c.vigor||0,skills:c.skills||{},edges:c.edges||[],hindrances:c.hindrances||[],powers:c.powers||[],armour:c.armour||[],weapons:c.weapons||[],gearText:c.gearText||'',quote:c.quote||'',description:c.description||'',background:c.background||'',motivation:c.motivation||'',secret:c.secret||'',services:c.services||'',adventureHook:c.adventureHook||'',tactics:c.tactics||'',abName:c.abName||'',abSkill:c.abSkill||'',pp:c.pp||0,startingFunds:c.startingFunds||500,gearCost:c.gearCost||0,statComplete:c.statComplete||false,narrativeComplete:c.narrativeComplete||false,fgReady:c.fgReady||false,pace:c.pace||6,parry:c.parry||2,toughness:c.toughness||5,toughnessArmor:c.toughnessArmor||0,bennies:c.bennies||0};
+  const n={name:c.name,refCode:c.refCode||'',concept:c.concept||'',ancestry:c.ancestry||'Human',region:c.region||'Ammaria',tier:c.tier||'Wild Card',rank:c.rank||'Novice',category:c.category||'NPC',product:c.product||'',source:moduleId,agility:c.attrs?.agility||c.agility||0,smarts:c.attrs?.smarts||c.smarts||0,spirit:c.attrs?.spirit||c.spirit||0,strength:c.attrs?.strength||c.strength||0,vigor:c.attrs?.vigor||c.vigor||0,skills:c.skills||{},edges:c.edges||[],edgeNotes:c.edgeNotes||{},hindrances:c.hindrances||[],powers:c.powers||[],armour:c.armour||[],weapons:c.weapons||[],gearText:c.gearText||'',quote:c.quote||'',description:c.description||'',background:c.background||'',motivation:c.motivation||'',secret:c.secret||'',services:c.services||'',adventureHook:c.adventureHook||'',tactics:c.tactics||'',abName:c.abName||'',abSkill:c.abSkill||'',pp:c.pp||0,startingFunds:c.startingFunds||500,gearCost:c.gearCost||0,statComplete:c.statComplete||false,narrativeComplete:c.narrativeComplete||false,fgReady:c.fgReady||false,pace:c.pace||6,parry:c.parry||2,toughness:c.toughness||5,toughnessArmor:c.toughnessArmor||0,bennies:c.bennies||0};
   // Parse gear text into structured armour/weapons if not already populated
   if(!n.armour.length&&!n.weapons.length&&n.gearText) parseGearInto(n);
   n.toughnessArmor=n.armour.reduce((best,a)=>Math.max(best,a.armor||0),0);
@@ -782,7 +782,18 @@ function saveEdit(){
 function renderHindrancesPanel(n){
   const el=document.getElementById('panelContent');
   const catalogue=getCatalogueHindrances();
-  const items=n.hindrances.map(h=>`<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0">${esc(h)} <button class="btn sm danger" onclick="removeHindrance(this)" data-val="${esc(h)}">×</button></div>`).join('');
+  const items=n.hindrances.map((h,i)=>{
+    const parsed=parseHindrance(h);
+    return `<div class="item-entry" style="padding:4px 0">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="cursor:pointer" onclick="toggleHindNotes(${i})">${esc(parsed.name)} <span style="color:var(--text-dim);font-size:11px">(${esc(parsed.sev)}${parsed.notes?' — '+esc(parsed.notes):''})</span></span>
+        <button class="btn sm danger" onclick="removeHindrance(this)" data-val="${esc(h)}">×</button>
+      </div>
+      <div id="hindNotes_${i}" style="display:none;margin-top:4px">
+        <input id="hindNotesInput_${i}" value="${esc(parsed.notes)}" placeholder="e.g. Wanted by the Brotherhood" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:12px" onkeydown="if(event.key==='Enter')saveHindNotes(${i})">
+        <button class="btn sm" onclick="saveHindNotes(${i})" style="margin-top:4px">Save</button>
+      </div>
+    </div>`;}).join('');
   el.innerHTML=`<div>${items||'<div style="color:var(--text-dim)">No hindrances yet</div>'}</div>
     <div class="catalogue-section"><h4>Add Hindrance</h4><div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
     <input type="text" id="hindSearch" placeholder="Search hindrances... (↑↓ to browse)" oninput="filterHindCat()" onkeydown="hindCatKeyNav(event)" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:3px;font-size:12px;margin-bottom:4px">
@@ -849,10 +860,37 @@ function removeHindrance(btn){
   const val=btn.dataset.val;currentNPC.hindrances=currentNPC.hindrances.filter(x=>x!==val);
   saveCharacter(currentNPC);renderHindrancesPanel(currentNPC);renderStatColumn(currentNPC);
 }
+function parseHindrance(str){
+  const m=str.match(/^(.+?)\s*\((\w+)(?:\s*—\s*(.*))?\)\s*$/);
+  if(m)return{name:m[1].trim(),sev:m[2],notes:m[3]||''};
+  return{name:str,sev:'Minor',notes:''};
+}
+function toggleHindNotes(idx){
+  const el=document.getElementById('hindNotes_'+idx);if(!el)return;
+  el.style.display=el.style.display==='none'?'block':'none';
+  if(el.style.display==='block')document.getElementById('hindNotesInput_'+idx)?.focus();
+}
+function saveHindNotes(idx){
+  const notes=document.getElementById('hindNotesInput_'+idx)?.value?.trim()||'';
+  const parsed=parseHindrance(currentNPC.hindrances[idx]);
+  currentNPC.hindrances[idx]=notes?`${parsed.name} (${parsed.sev} — ${notes})`:`${parsed.name} (${parsed.sev})`;
+  saveCharacter(currentNPC);renderHindrancesPanel(currentNPC);renderStatColumn(currentNPC);
+}
+}
 
 function renderEdgesPanel(n){
+  if(!n.edgeNotes)n.edgeNotes={};
   const el=document.getElementById('panelContent');
-  const items=n.edges.map(e=>{const leg=isLegacyEdge(e)?' <span class="legacy-tag">(legacy)</span>':'';return `<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span style="cursor:pointer" onclick="showExistingEdgeInfo('${esc(e)}')">${esc(e)}${leg}</span> <button class="btn sm danger" onclick="removeEdge(this)" data-val="${esc(e)}">×</button></div>`;}).join('');
+  const items=n.edges.map((e,i)=>{const leg=isLegacyEdge(e)?' <span class="legacy-tag">(legacy)</span>':'';const note=n.edgeNotes[e]||'';const noteDisp=note?` <span style="color:var(--text-dim);font-size:11px">— ${esc(note)}</span>`:'';return `<div class="item-entry" style="padding:4px 0">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="cursor:pointer" onclick="showExistingEdgeInfo('${esc(e)}');toggleEdgeNotes(${i})">${esc(e)}${noteDisp}${leg}</span>
+        <button class="btn sm danger" onclick="removeEdge(this)" data-val="${esc(e)}">×</button>
+      </div>
+      <div id="edgeNotes_${i}" style="display:none;margin-top:4px">
+        <input id="edgeNotesInput_${i}" value="${esc(note)}" placeholder="e.g. Thieves Guild, Brotherhood contacts" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:12px" onkeydown="if(event.key==='Enter')saveEdgeNotes(${i})">
+        <button class="btn sm" onclick="saveEdgeNotes(${i})" style="margin-top:4px">Save</button>
+      </div>
+    </div>`;}).join('');
   el.innerHTML=`<div>${items||'<div style="color:var(--text-dim)">No edges yet</div>'}</div>
     <div class="catalogue-section"><h4>Add Edge</h4>
     <input type="text" id="edgeSearch" placeholder="Search edges... (↑↓ to browse)" oninput="filterEdgeCat()" onkeydown="edgeCatKeyNav(event)" style="width:100%;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:3px;font-size:12px;margin-bottom:4px">
@@ -939,7 +977,19 @@ function showExistingEdgeInfo(name){
   else{const info=document.getElementById('edgeInfo');if(info)info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(name)}</div><div class="ci-desc" style="color:var(--text-dim)">Custom edge — not in catalogue</div></div>`;}
 }
 function addEdge(){const name=document.getElementById('edge_name').value.trim();if(!name)return;currentNPC.edges.push(name);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
-function removeEdge(btn){const val=btn.dataset.val;currentNPC.edges=currentNPC.edges.filter(x=>x!==val);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
+function removeEdge(btn){const val=btn.dataset.val;currentNPC.edges=currentNPC.edges.filter(x=>x!==val);if(currentNPC.edgeNotes)delete currentNPC.edgeNotes[val];saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
+function toggleEdgeNotes(idx){
+  const el=document.getElementById('edgeNotes_'+idx);if(!el)return;
+  el.style.display=el.style.display==='none'?'block':'none';
+  if(el.style.display==='block')document.getElementById('edgeNotesInput_'+idx)?.focus();
+}
+function saveEdgeNotes(idx){
+  const notes=document.getElementById('edgeNotesInput_'+idx)?.value?.trim()||'';
+  const edge=currentNPC.edges[idx];if(!edge)return;
+  if(!currentNPC.edgeNotes)currentNPC.edgeNotes={};
+  if(notes)currentNPC.edgeNotes[edge]=notes;else delete currentNPC.edgeNotes[edge];
+  saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);
+}
 
 function renderSkillsPanel(n){
   const el=document.getElementById('panelContent');
@@ -1287,7 +1337,7 @@ function openNewNPCModal(){document.getElementById('newNpcModal').classList.add(
 function closeNewNPCModal(){document.getElementById('newNpcModal').classList.remove('active');}
 function createNPC(){
   const name=document.getElementById('new_name').value.trim();if(!name){alert('Name is required');return;}
-  const npc={name,refCode:'',concept:document.getElementById('new_concept')?.value?.trim()||'',ancestry:document.getElementById('new_ancestry').value,region:document.getElementById('new_region').value,tier:document.getElementById('new_tier').value,rank:'Novice',category:document.getElementById('new_category').value,product:'',source:'custom',agility:0,smarts:0,spirit:0,strength:0,vigor:0,skills:{},edges:[],hindrances:[],powers:[],gearText:'',quote:'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:'',abSkill:'',pp:0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0,startingFunds:500,gearCost:0};
+  const npc={name,refCode:'',concept:document.getElementById('new_concept')?.value?.trim()||'',ancestry:document.getElementById('new_ancestry').value,region:document.getElementById('new_region').value,tier:document.getElementById('new_tier').value,rank:'Novice',category:document.getElementById('new_category').value,product:'',source:'custom',agility:0,smarts:0,spirit:0,strength:0,vigor:0,skills:{},edges:[],edgeNotes:{},hindrances:[],powers:[],gearText:'',quote:'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:'',abSkill:'',pp:0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0,startingFunds:500,gearCost:0};
   calcDerived(npc);allNPCs.push(npc);saveCharacter(npc);closeNewNPCModal();filterNPCs();updateHeaderStats();selectNPC(name);
 }
 
@@ -1662,7 +1712,7 @@ function parseImportJSON(raw){
     category:obj.category||'NPC',product:obj.product||'',source:'import',
     agility:a.agility||obj.agility||4,smarts:a.smarts||obj.smarts||4,spirit:a.spirit||obj.spirit||4,
     strength:a.strength||obj.strength||4,vigor:a.vigor||obj.vigor||4,
-    skills:obj.skills||{},edges:obj.edges||[],hindrances:obj.hindrances||[],
+    skills:obj.skills||{},edges:obj.edges||[],edgeNotes:obj.edgeNotes||{},hindrances:obj.hindrances||[],
     powers:obj.powers||[],weapons:obj.weapons||[],armour:obj.armour||[],
     gearText:obj.gearText||'',quote:obj.quote||'',description:obj.description||'',
     background:obj.background||'',motivation:obj.motivation||'',secret:obj.secret||'',
