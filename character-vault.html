@@ -851,11 +851,33 @@ function renderEdgesPanel(n){
 function filterEdgeCat(){
   edgeCatIdx=-1;
   const s=(document.getElementById('edgeSearch')?.value||'').toLowerCase();
-  const cat=getCatalogueEdges().filter(e=>!s||e.name.toLowerCase().includes(s));
+  edgeCatFiltered=getCatalogueEdges().filter(e=>!s||e.name.toLowerCase().includes(s));
   const el=document.getElementById('edgeCatList');if(!el)return;
-  el.innerHTML=cat.map((e,i)=>`<div class="catalogue-item" data-idx="${i}" onclick="selectEdgeInfo(${i},'${esc(s)}')"><span class="cat-name">${esc(e.name)}</span> <span class="cat-detail">${esc(e.rank||'')} ${esc(e.cat||e.type||'')} — ${esc(e.source)}</span></div>`).join('');
+  el.innerHTML=edgeCatFiltered.map((e,i)=>{const ok=meetsEdgeReqs(e,currentNPC);return `<div class="catalogue-item" data-idx="${i}" onclick="selectEdgeInfo(${i})" style="color:${ok?'var(--green)':'var(--text-dim)'}"><span class="cat-name">${esc(e.name)}</span> <span class="cat-detail">${esc(e.rank||'')} ${esc(e.cat||e.type||'')} — ${esc(e.source)}</span></div>`;}).join('');
 }
 var edgeCatIdx=-1;
+var edgeCatFiltered=[];
+function meetsEdgeReqs(edge,n){
+  if(!n)return false;
+  const rankOrder={N:0,Novice:0,S:1,Seasoned:1,V:2,Veteran:2,H:3,Heroic:3,L:4,Legendary:4};
+  const charRank=rankOrder[n.rank]||0;
+  const edgeRank=rankOrder[edge.rank]||0;
+  if(charRank<edgeRank)return false;
+  const reqs=edge.reqs||'';
+  if(reqs==='—'||!reqs)return true;
+  const parts=reqs.split(',').map(s=>s.trim());
+  const attrs={agility:n.agility||0,smarts:n.smarts||0,spirit:n.spirit||0,strength:n.strength||0,vigor:n.vigor||0};
+  for(const p of parts){
+    const attrMatch=p.match(/^(Agility|Smarts|Spirit|Strength|Vigor)\s+d(\d+)\+?$/i);
+    if(attrMatch){if((attrs[attrMatch[1].toLowerCase()]||0)<parseInt(attrMatch[2]))return false;continue;}
+    const skillMatch=p.match(/^(\w[\w\s]*?)\s+d(\d+)\+?$/);
+    if(skillMatch){const has=Object.entries(n.skills||{}).find(([k])=>k.toLowerCase()===skillMatch[1].toLowerCase());if(!has||has[1]<parseInt(skillMatch[2]))return false;continue;}
+    if(p.match(/only$/i)||p.match(/^d\d/)||p.match(/related skill/i))continue;
+    const edgeReq=p.replace(/\s*\(.*\)/,'').trim();
+    if(edgeReq.length>1&&edgeReq!=='—'){if(!(n.edges||[]).some(e=>e===edgeReq||e.startsWith(edgeReq+' (')))return false;}
+  }
+  return true;
+}
 function edgeCatKeyNav(e){
   const list=document.getElementById('edgeCatList');if(!list)return;
   const items=list.querySelectorAll('.catalogue-item');if(!items.length)return;
@@ -864,22 +886,33 @@ function edgeCatKeyNav(e){
   else if(e.key==='Enter'&&edgeCatIdx>=0){e.preventDefault();items[edgeCatIdx].click();}
 }
 function highlightEdgeCat(items){
-  items.forEach((it,i)=>{it.style.background=i===edgeCatIdx?'var(--accent)22':'';it.style.color=i===edgeCatIdx?'var(--text)':'';});
-  if(items[edgeCatIdx]){items[edgeCatIdx].scrollIntoView({block:'nearest'});items[edgeCatIdx].click();}
+  items.forEach((it,i)=>{it.style.background=i===edgeCatIdx?'var(--accent)22':'';});
+  if(items[edgeCatIdx]){items[edgeCatIdx].scrollIntoView({block:'nearest'});selectEdgeInfo(edgeCatIdx);}
 }
-function selectEdgeInfo(idx,search){
-  const cat=getCatalogueEdges().filter(e=>!search||e.name.toLowerCase().includes(search));
-  const e=cat[idx];if(!e)return;
+function selectEdgeInfo(idx){
+  const e=edgeCatFiltered[idx];if(!e)return;
+  edgeCatIdx=idx;
   document.getElementById('edge_name').value=e.name;
   const info=document.getElementById('edgeInfo');if(!info)return;
+  const ok=meetsEdgeReqs(e,currentNPC);
+  const eligStyle=ok?'color:var(--green)':'color:var(--red)';
+  const eligText=ok?'✓ Eligible':'✗ Requirements not met';
   const reqs=e.reqs&&e.reqs!=='—'?`<div class="ci-meta">Requirements: ${esc(e.reqs)}</div>`:'';
   let abPicker='';
   if(e.name==='Arcane Background'){
     abPicker=`<div style="margin-top:6px"><label style="font-size:11px;text-transform:uppercase;color:var(--text-dim)">Type</label><select id="abTypePick" onchange="document.getElementById('edge_name').value='Arcane Background ('+this.value+')'" style="margin-left:6px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:3px;font-size:12px"><option value="Gifted">Gifted</option><option value="Magic">Magic</option><option value="Miracles">Miracles</option><option value="Psionics">Psionics</option><option value="Weird Science">Weird Science</option></select></div>`;
     document.getElementById('edge_name').value='Arcane Background (Gifted)';
   }
-  info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(e.name)}</div><div class="ci-meta">${esc(e.rank||'N')} · ${esc(e.cat||e.type||'General')} · ${esc(e.source)}</div>${reqs}<div class="ci-desc">${esc(e.summary||'No description available.')}</div>${abPicker}</div>`;
+  info.innerHTML=`<div class="cat-info" style="cursor:pointer" onclick="scrollToEdgeCatItem(${idx})"><div class="ci-name">${esc(e.name)} <span style="font-size:11px;${eligStyle}">${eligText}</span></div><div class="ci-meta">${esc(e.rank||'N')} · ${esc(e.cat||e.type||'General')} · ${esc(e.source)}</div>${reqs}<div class="ci-desc">${esc(e.summary||'No description available.')}</div>${abPicker}</div>`;
+  // highlight active in list
+  const items=document.getElementById('edgeCatList')?.querySelectorAll('.catalogue-item');
+  if(items)items.forEach((it,i)=>{it.style.background=i===idx?'var(--accent)22':'';});
   setTimeout(()=>document.getElementById('edgeSearch')?.focus(),0);
+}
+function scrollToEdgeCatItem(idx){
+  const list=document.getElementById('edgeCatList');if(!list)return;
+  const items=list.querySelectorAll('.catalogue-item');
+  if(items[idx]){items[idx].scrollIntoView({block:'nearest',behavior:'smooth'});}
 }
 function addEdge(){const name=document.getElementById('edge_name').value.trim();if(!name)return;currentNPC.edges.push(name);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
 function removeEdge(btn){const val=btn.dataset.val;currentNPC.edges=currentNPC.edges.filter(x=>x!==val);saveCharacter(currentNPC);renderEdgesPanel(currentNPC);renderStatColumn(currentNPC);}
