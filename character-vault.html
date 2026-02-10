@@ -197,7 +197,6 @@ var DICEFORGE_AUTH=false;
     <div class="npc-list" id="npcList"></div>
     <div class="sidebar-footer">
       <button class="btn primary" onclick="openNewNPCModal()" style="flex:1">+ New Character</button>
-      <button class="btn" onclick="openImportModal()" style="flex:1;color:var(--accent)">⇄ Import</button>
       <button class="btn" onclick="showStatusView()">Status</button>
       <button class="btn" onclick="showChangelog()">Changes</button>
     </div>
@@ -235,38 +234,6 @@ var DICEFORGE_AUTH=false;
 
     <div id="commitStatus" style="margin-top:8px;font-size:13px"></div>
     <div class="form-actions"><button class="btn" onclick="closeCommitModal()">Cancel</button><button class="btn primary" id="commitBtn" onclick="executeCommit()">🔒 Commit to Canon</button></div>
-  </div>
-</div>
-<div class="modal-overlay" id="importModal">
-  <div class="modal" style="max-width:620px">
-    <h3>⇄ Import Character</h3>
-    <div style="margin-bottom:10px;font-size:12px;color:var(--text-dim)">
-      <strong style="color:var(--green)">JSON</strong> — lossless, recommended.
-      <strong style="color:#e6a117">Text / HTML / RTF</strong> — best-effort parse, review carefully.
-    </div>
-    <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
-      <label style="font-size:11px;text-transform:uppercase;color:var(--text-dim)">Source</label>
-      <button class="btn sm" id="impSrcPaste" onclick="setImportSource('paste')" style="border-color:var(--accent);color:var(--accent)">Paste Text</button>
-      <button class="btn sm" id="impSrcFile" onclick="setImportSource('file')">Upload File</button>
-    </div>
-    <div id="importPasteArea">
-      <textarea id="import_data" rows="10" placeholder="Paste character JSON, stat block text, or HTML here..." style="width:100%;box-sizing:border-box;font-family:monospace;font-size:11px;background:var(--bg-input);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;resize:vertical"></textarea>
-    </div>
-    <div id="importFileArea" style="display:none">
-      <div style="border:2px dashed var(--border);border-radius:6px;padding:20px;text-align:center;margin-bottom:8px">
-        <div style="font-size:13px;color:var(--text-dim);margin-bottom:8px">Drop a file here or click to browse</div>
-        <input type="file" id="import_file" accept=".json,.txt,.html,.htm,.rtf" onchange="handleImportFile(this)" style="display:block;margin:0 auto">
-        <div style="font-size:11px;color:var(--text-dim);margin-top:6px">Accepts: .json, .txt, .html, .rtf</div>
-      </div>
-      <div id="importFileName" style="font-size:12px;color:var(--accent)"></div>
-    </div>
-    <div id="importPreview" style="margin-top:8px;font-size:12px;max-height:150px;overflow-y:auto"></div>
-    <div id="importStatus" style="margin-top:6px;font-size:13px"></div>
-    <div class="form-actions">
-      <button class="btn" onclick="closeImportModal()">Cancel</button>
-      <button class="btn" onclick="previewImport()">👁 Preview</button>
-      <button class="btn primary" id="importBtn" onclick="executeImport()">⇄ Import Character</button>
-    </div>
   </div>
 </div>
 <div class="modal-overlay" id="changelogModal">
@@ -737,7 +704,7 @@ function renderStatColumn(n){
     <label><input type="checkbox" ${n.statComplete?'checked':''} onchange="toggleStatus('statComplete',this.checked)"> Stats</label>
     <label><input type="checkbox" ${n.narrativeComplete?'checked':''} onchange="toggleStatus('narrativeComplete',this.checked)"> Narrative</label>
     <label><input type="checkbox" ${n.fgReady?'checked':''} onchange="toggleStatus('fgReady',this.checked)"> FG Ready</label></div>
-    <div class="action-btns"><button class="btn sm" onclick="showPanel('edit')">Edit</button><button class="btn sm" onclick="showPanel('statblock')">Stat Block</button><button class="btn sm" onclick="showPanel('audit')">Audit</button><button class="btn sm" onclick="showPanel('transfer')" style="color:var(--accent)">⇄ Transfer</button><button class="btn sm danger" onclick="deleteNPC()" style="margin-left:auto">Delete</button></div></div>`;
+    <div class="action-btns"><button class="btn sm" onclick="showPanel('edit')">Edit</button><button class="btn sm" onclick="showPanel('statblock')">Stat Block</button><button class="btn sm" onclick="showPanel('audit')">Audit</button><button class="btn sm" onclick="showPanel('transfer')" style="color:var(--accent)">Import / Export</button><button class="btn sm danger" onclick="deleteNPC()" style="margin-left:auto">Delete</button></div></div>`;
   el.innerHTML=`<div class="col-stats-scroll">${statsHTML}<div class="section-box-pair">${hindBox}${edgeBox}</div><div class="section-box-pair">${armourBox}${weaponBox}</div><div class="section-box-pair">${powersBox}${gearBox}</div></div><div class="col-stats-footer">${statusHTML}</div>`;
 }
 
@@ -1185,8 +1152,33 @@ function renderTransferPanel(n){
     </div>
     <hr style="border-color:var(--border);margin:16px 0">
     <div>
-      <h4 style="color:var(--accent);margin-bottom:6px">Import</h4>
-      <p style="font-size:12px;color:var(--text-dim);margin-bottom:4px">Use the <strong>⇄ Import</strong> button in the sidebar to import from clipboard or file.</p>
+      <h4 style="color:var(--accent);margin-bottom:8px">Import Character</h4>
+      <div style="margin-bottom:8px;font-size:12px;color:var(--text-dim)">
+        <strong style="color:var(--green)">JSON</strong> — lossless, recommended.
+        <strong style="color:#e6a117">Text / HTML / RTF</strong> — best-effort parse, review carefully.
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
+        <label style="font-size:11px;text-transform:uppercase;color:var(--text-dim)">Source</label>
+        <button class="btn sm" id="impSrcPaste" onclick="setImportSource('paste')" style="border-color:var(--accent);color:var(--accent)">Paste Text</button>
+        <button class="btn sm" id="impSrcFile" onclick="setImportSource('file')">Upload File</button>
+      </div>
+      <div id="importPasteArea">
+        <textarea id="import_data" rows="6" placeholder="Paste character JSON, stat block text, or HTML here..." style="width:100%;box-sizing:border-box;font-family:monospace;font-size:11px;background:var(--bg-input);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;resize:vertical"></textarea>
+      </div>
+      <div id="importFileArea" style="display:none">
+        <div style="border:2px dashed var(--border);border-radius:6px;padding:14px;text-align:center;margin-bottom:6px">
+          <div style="font-size:12px;color:var(--text-dim);margin-bottom:6px">Drop a file or click to browse</div>
+          <input type="file" id="import_file" accept=".json,.txt,.html,.htm,.rtf" onchange="handleImportFile(this)" style="display:block;margin:0 auto;font-size:12px">
+          <div style="font-size:10px;color:var(--text-dim);margin-top:4px">Accepts: .json, .txt, .html, .rtf</div>
+        </div>
+        <div id="importFileName" style="font-size:12px;color:var(--accent)"></div>
+      </div>
+      <div id="importPreview" style="margin-top:6px;font-size:12px;max-height:120px;overflow-y:auto"></div>
+      <div id="importStatus" style="margin-top:4px;font-size:13px"></div>
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <button class="btn" onclick="previewImport()">👁 Preview</button>
+        <button class="btn primary" id="importBtn" onclick="executeImport()">⇄ Import Character</button>
+      </div>
     </div>`;
   setExportFmt('json');
 }
@@ -1346,8 +1338,8 @@ function showCopyToast(msg){
 }
 
 // === IMPORT ===
-function openImportModal(){document.getElementById('importModal').classList.add('active');document.getElementById('import_data').value='';document.getElementById('importPreview').innerHTML='';document.getElementById('importStatus').innerHTML='';document.getElementById('importFileName').textContent='';setImportSource('paste');}
-function closeImportModal(){document.getElementById('importModal').classList.remove('active');}
+function openImportModal(){/* legacy — import is now inline in the transfer panel */}
+function closeImportModal(){/* legacy — no modal to close */}
 
 function setImportSource(mode){
   document.getElementById('importPasteArea').style.display=mode==='paste'?'block':'none';
@@ -1411,7 +1403,6 @@ function executeImport(){
   calcDerived(npc);
   allNPCs.push(npc);
   saveCharacter(npc);
-  closeImportModal();
   filterNPCs();updateHeaderStats();selectNPC(npc.name);
 }
 
