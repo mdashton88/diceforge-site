@@ -595,10 +595,11 @@ document.addEventListener('keydown',function(e){
 function renderNPCList(npcs){
   const el=document.getElementById('npcList');
   if(!npcs.length){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--text-dim)">No characters found</div>';return;}
-  const pregens=npcs.filter(n=>(n.category||'NPC')==='Pre-gen');
-  const npcWC=npcs.filter(n=>(n.category||'NPC')!=='Pre-gen'&&n.tier==='Wild Card');
-  const npcExt=npcs.filter(n=>(n.category||'NPC')!=='Pre-gen'&&n.tier==='Extra');
-  const npcWalk=npcs.filter(n=>(n.category||'NPC')!=='Pre-gen'&&n.tier==='Walk-on');
+  const sortByRef=(a,b)=>{if(!a.refCode&&!b.refCode)return a.name.localeCompare(b.name);if(!a.refCode)return 1;if(!b.refCode)return -1;return a.refCode.localeCompare(b.refCode);};
+  const pregens=npcs.filter(n=>(n.category||'NPC')==='Pre-gen').sort(sortByRef);
+  const npcWC=npcs.filter(n=>(n.category||'NPC')!=='Pre-gen'&&n.tier==='Wild Card').sort(sortByRef);
+  const npcExt=npcs.filter(n=>(n.category||'NPC')!=='Pre-gen'&&n.tier==='Extra').sort(sortByRef);
+  const npcWalk=npcs.filter(n=>(n.category||'NPC')!=='Pre-gen'&&n.tier==='Walk-on').sort(sortByRef);
   function renderItem(n){
     const tc=n.tier==='Wild Card'?'wc':n.tier==='Walk-on'?'walkon':'extra';
     const tl=n.tier==='Wild Card'?'WC':n.tier==='Walk-on'?'W-O':'EXT';
