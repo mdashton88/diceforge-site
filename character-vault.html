@@ -877,7 +877,6 @@ function saveHindNotes(idx){
   currentNPC.hindrances[idx]=notes?`${parsed.name} (${parsed.sev} — ${notes})`:`${parsed.name} (${parsed.sev})`;
   saveCharacter(currentNPC);renderHindrancesPanel(currentNPC);renderStatColumn(currentNPC);
 }
-}
 
 function renderEdgesPanel(n){
   if(!n.edgeNotes)n.edgeNotes={};
