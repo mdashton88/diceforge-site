@@ -614,6 +614,14 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <div class="note">Canon Commits work alongside the Release Management system. Once a character is committed and assigned to a released product, it becomes locked — any subsequent edits are flagged as errata and require explicit justification.</div>
 
+<h3>Worked Example: First Canon Commit</h3>
+
+<p>You've finished building Brother Aldric — attributes, skills, edges, hindrances, equipment, and all narrative fields are complete. The Build Audit shows a clean bill of health.</p>
+
+<p>Click <strong>📦 Commit to Canon</strong> on the audit panel. The commit modal shows a full snapshot: attributes, skills, edges, hindrances, weapons, armour, derived stats, and funds. Read through it — this is the version you're signing off as canonical. Click <strong>🔒 Confirm Commit</strong>. Brother Aldric now shows a 📦 badge in the roster and the Status Dashboard.</p>
+
+<p>If you later change his Spirit from d6 to d8, the roster shows an amber "EDITED" badge. Open the Review Panel to see the diff and either approve the change (resetting the baseline) or revert to the committed version.</p>
+
 <div class="page-nav">
   <a onclick="goPage('status')">← Status Dashboard</a>
   <a onclick="goPage('release')">Release Management →</a>
@@ -677,6 +685,60 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <p>The Build Audit panel includes a <strong>Release Lifecycle</strong> section showing the character's current state, which products it's published in, and a line-by-line diff of any pending changes. Below that, the <strong>Errata Log</strong> lists every historical override: date, reason, and what changed. This log is stored permanently on the character object and persists through Gist saves.</p>
 
 <div class="note">The product registry is stored as <code>product-registry.json</code> in the same Gist as the character data. It loads automatically on startup alongside the character roster.</div>
+
+<h3>Worked Example: Weekly One-Sheet Release</h3>
+
+<p>You've finished writing Ammaria Week 3: "The Tallow Market." It features three characters — Viktor Crane, Sable Maren, and a Walk-on called Dockhand Piotr. Here's the workflow from start to finish.</p>
+
+<p><strong>1. Register the product.</strong> Click <strong>Products</strong> in the sidebar. Enter code <code>AM-W03</code> and title "The Tallow Market." It appears as a draft product card.</p>
+
+<p><strong>2. Assign characters.</strong> Use the dropdown on the AM-W03 card to add Viktor Crane, Sable Maren, and Dockhand Piotr. Their names appear as tags on the card. If you realise Piotr isn't needed, click the × on his tag to remove him.</p>
+
+<p><strong>3. Final review.</strong> Select each character in turn, run the Build Audit, check the stat block reads correctly. Make any last tweaks — maybe Viktor needs his Vigor bumped to d8. The roster shows his entry with a blue "DRAFT" badge since he's been changed.</p>
+
+<p><strong>4. Approve changes.</strong> Click <strong>Review</strong> in the sidebar. Viktor's card shows the diff: "Attributes: Vig d6→d8." Click <strong>✓ Approve</strong> to accept the change. His badge disappears — baseline updated.</p>
+
+<p><strong>5. Move to review.</strong> Back in <strong>Products</strong>, click <strong>→ In Review</strong> on AM-W03. The card turns amber. Characters are still editable but you'll see warnings — this is your "proof stage."</p>
+
+<p><strong>6. Release.</strong> When the PDF ships to DriveThruRPG, click <strong>🔒 Release</strong>. Confirm the dialog. AM-W03 turns green with a lock icon. Viktor, Sable, and Piotr are now locked. The release date is recorded.</p>
+
+<p><strong>Done.</strong> Next week's one-sheet gets its own product entry. Characters shared across products are locked by whichever ships first.</p>
+
+<h3>Worked Example: Post-Release Errata</h3>
+
+<p>Three weeks after AM-W03 shipped, a playtester reports that Viktor Crane has the Trademark Weapon edge but no weapon that qualifies. You need to fix it.</p>
+
+<p><strong>1. Select Viktor.</strong> His roster entry shows the 🔒 badge. Click him to load his data.</p>
+
+<p><strong>2. Open the Weapons panel.</strong> The Vault shows a confirmation: "Viktor Crane is published in AM-W03. Editing creates an errata situation. Proceed?" Click yes. A red lock banner appears at the top of the panel.</p>
+
+<p><strong>3. Make the fix.</strong> Add a Longsword from the weapons catalogue. The roster immediately shows Viktor with a red left border and an <span style="color:#ee6666">ERRATA</span> badge.</p>
+
+<p><strong>4. Review and approve.</strong> Click <strong>Review</strong>. Viktor's card appears at the top of the review panel in red, showing "Weapons added: Longsword" and a warning that he's published in AM-W03. Type the reason: "Missing Trademark Weapon qualifier — added Longsword per playtester report." Click <strong>✓ Approve</strong>.</p>
+
+<p><strong>5. Audit trail.</strong> The override is logged permanently on Viktor's record with the date, reason, and diff. If anyone later asks why Viktor's stat block changed after Week 3 shipped, the answer is right there.</p>
+
+<h3>Worked Example: Editing Multiple Characters</h3>
+
+<p>You're doing a consistency pass across a dozen Ammaria NPCs — standardising gear text, fixing a few skill values, adding inline notes. Here's how batch review handles that.</p>
+
+<p><strong>1. Edit freely.</strong> Work through the roster character by character. Fix Merchant Aldric's gear text. Bump Harbour-Reeve Koldan's Notice to d8. Add edge notes for Sable Maren's Connections. Each edited character picks up a coloured border and badge in the roster.</p>
+
+<p><strong>2. Review all at once.</strong> When you're finished, click <strong>Review</strong> (or the <strong>✏️ Pending</strong> count in the header). The review panel lists all dirty characters. Each card shows exactly what changed — "Skills changed: Notice d6→d8" for Koldan, "Gear list updated" for Aldric, "Edge notes updated: Connections" for Sable.</p>
+
+<p><strong>3. Approve or reject.</strong> Scan the diffs. If Koldan's Notice change was a mistake, click <strong>↶ Revert</strong> to restore him to his baseline. Approve the rest individually, or hit <strong>✓ Approve All</strong> to batch-approve everything that isn't published.</p>
+
+<p><strong>4. Baselines reset.</strong> Approved characters lose their badges. The pending count drops to zero. You're clean.</p>
+
+<h3>Worked Example: Character Appearing in Multiple Products</h3>
+
+<p>Viktor Crane debuted in AM-W03 but also appears in the Ammaria core module (AM-CORE). He's already locked by AM-W03's release.</p>
+
+<p><strong>1. Assign to the new product.</strong> Open <strong>Products</strong>, find AM-CORE (still in draft), and add Viktor Crane from the dropdown. He now appears on both product cards.</p>
+
+<p><strong>2. No double-lock concern.</strong> Viktor is already locked by AM-W03. When AM-CORE releases, it doesn't change anything — he was locked by the first product to ship. The errata system knows about both products.</p>
+
+<p><strong>3. If errata is needed,</strong> the review panel shows all products the character appears in: "Published in: AM-W03 — The Tallow Market, AM-CORE — Ammaria." The errata reason covers both.</p>
 
 <div class="page-nav">
   <a onclick="goPage('canon')">← Canon Commits</a>
