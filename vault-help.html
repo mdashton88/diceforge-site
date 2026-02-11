@@ -335,11 +335,15 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <div class="page" id="page-filtering">
 <h2>Search &amp; Filtering</h2>
 
-<p>The search bar at the top of the roster filters characters by name. Type to filter — matches are instant. Clear the search to show all characters.</p>
+<p>The search bar at the top of the roster filters characters by name or concept. Type to filter — matches are instant. Clear the search to show all characters.</p>
 
-<p>Filter dropdowns below the search bar let you narrow by <strong>Region</strong>, <strong>Category</strong>, and <strong>Tier</strong>. Filters are cumulative — selecting both "Ammaria" and "Wild Card" shows only Wild Card characters from Ammaria.</p>
+<p>Filter dropdowns below the search bar let you narrow by <strong>Category</strong> (Pre-gen, NPC), <strong>Region</strong> (Ammaria, Saltlands, etc.), and <strong>Tier</strong> (Wild Card, Extra, Walk-on). Filters are cumulative — selecting both "Ammaria" and "Wild Card" shows only Wild Card characters from Ammaria.</p>
 
-<p>The <strong>Status Dashboard</strong> button switches to a table view showing all characters with their completion status in a sortable grid.</p>
+<p>The <strong>Lifecycle</strong> filter narrows by release state: Draft (not yet committed), Committed (canon-approved), Published (shipped in a released product), Pending Edits (any character with unsaved changes), or Errata (published characters with pending changes). This is particularly useful during production — filter to "Pending Edits" to see everything that needs review, or "Published" to check what's already locked down.</p>
+
+<p>When products are registered, a <strong>Product</strong> filter row appears showing all products from the registry. Select a product to see only the characters assigned to it — useful for pre-release checks ("show me everything in AM-W03") and post-release audits.</p>
+
+<p>All filters reset independently. The <strong>Status Dashboard</strong> button switches to a table view showing all characters with their completion and lifecycle status in a sortable grid.</p>
 
 <div class="page-nav">
   <a onclick="goPage('editing')">← Editing Characters</a>
@@ -614,6 +618,8 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <div class="note">Canon Commits work alongside the Release Management system. Once a character is committed and assigned to a released product, it becomes locked — any subsequent edits are flagged as errata and require explicit justification.</div>
 
+<div class="tip">Committing to canon automatically resets the character's dirty-tracking baseline. This means the commit and approve actions are synchronised — you won't see a "pending changes" badge on a character you've just committed. For the reverse direction (approving changes and committing in one step), use <strong>✓ Approve &amp; Commit</strong> in the Review Panel.</div>
+
 <h3>Worked Example: First Canon Commit</h3>
 
 <p>You've finished building Brother Aldric — attributes, skills, edges, hindrances, equipment, and all narrative fields are complete. The Build Audit shows a clean bill of health.</p>
@@ -656,7 +662,9 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <p><strong>✓ Approve</strong> — accepts the changes and resets the baseline. For published characters, you must provide an errata reason before approval. The reason is logged permanently on the character's override record.</p>
 
-<p><strong>↶ Revert</strong> — discards all changes and restores the character to its last approved state. This includes full restoration of attributes, skills, edges, equipment, and narrative fields. A confirmation prompt is required.</p>
+<p><strong>✓ Approve &amp; Commit</strong> — available for committed and published characters. Performs the same approval as above, then automatically pushes a canon commit to the repository. This is the recommended workflow for characters already in canon — it keeps the baseline and the canonical record in sync with a single click.</p>
+
+<p><strong>↶ Revert</strong> — discards all changes and restores the character to its last approved state. This includes full restoration of attributes, skills, edges, equipment (including full weapon and armour data), and narrative fields. A confirmation prompt is required.</p>
 
 <p>The <strong>✓ Approve All</strong> button batch-approves all non-published characters. Published characters always require individual review with errata reasons.</p>
 
