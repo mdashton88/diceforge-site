@@ -103,7 +103,7 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <nav class="sidebar">
   <div class="sidebar-header">
     <h1>Character Vault</h1>
-    <div class="subtitle">User Manual · v2.0</div>
+    <div class="subtitle">User Manual · v2.1</div>
   </div>
   <div class="sidebar-search">
     <input type="text" id="searchInput" placeholder="Search docs..." autocomplete="off">
@@ -141,6 +141,7 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
     <a class="nav-link" data-page="funds">Equipment Funds</a>
     <a class="nav-link" data-page="status">Status Dashboard</a>
     <a class="nav-link" data-page="canon">Canon Commits</a>
+    <a class="nav-link" data-page="release">Release Management</a>
   </div>
   <div class="nav-section">
     <div class="nav-section-title">Transfer</div>
@@ -573,7 +574,11 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <div class="page" id="page-status">
 <h2>Status Dashboard</h2>
 
-<p>Click the <strong>Status</strong> button in the header to switch to a table view showing every character's production status. Columns include ref code, name, category, region, tier, build legal status, canon committed, stat complete, narrative complete, and FG-ready.</p>
+<p>Click the <strong>Status</strong> button in the sidebar footer to see a table of every character's production status. Columns include ref code, name, category, region, tier, build legal status, lifecycle state, pending edits, stat complete, narrative complete, and FG-ready.</p>
+
+<p>The <strong>Lifecycle</strong> column shows each character's current state: 📝 Draft (not yet committed), 📦 Committed (approved as canonical), or 🔒 Published (shipped in a released product). The <strong>Edits</strong> column flags characters with pending changes — ✏️ for standard edits, ⚠ for errata on published characters.</p>
+
+<p>A product summary line at the top shows all registered products with their status colours. Click <strong>Manage</strong> to open the Product Registry.</p>
 
 <p>Use this view to identify which characters still need work. The three completion checkboxes (Stats, Narrative, FG Ready) are manually toggled on each character's action bar — check them when you're satisfied that section is finished.</p>
 
@@ -593,10 +598,74 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <p>Committed characters show a 📦 badge in the Status Dashboard. The commit timestamp is recorded for audit trail purposes.</p>
 
-<div class="note">Canon Commits are a development workflow tool. The commit data is stored in the Gist alongside the character roster. A future Canon API endpoint will accept these for external validation.</div>
+<div class="note">Canon Commits work alongside the Release Management system. Once a character is committed and assigned to a released product, it becomes locked — any subsequent edits are flagged as errata and require explicit justification.</div>
 
 <div class="page-nav">
   <a onclick="goPage('status')">← Status Dashboard</a>
+  <a onclick="goPage('release')">Release Management →</a>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<div class="page" id="page-release">
+<h2>Release Management</h2>
+
+<p>The Release Management system tracks character changes through their entire lifecycle from initial creation to published product. It prevents accidental modification of characters that have already shipped, and provides a clear audit trail for any post-release errata.</p>
+
+<h3>Character Lifecycle</h3>
+
+<p>Every character exists in one of three states:</p>
+
+<p><strong>📝 Draft</strong> — not yet formally committed. Free to edit without restriction. New characters start here. In the roster, dirty drafts show a blue left border and a <span style="color:#88bbee">DRAFT</span> badge.</p>
+
+<p><strong>📦 Committed</strong> — approved as canonical via Canon Commit. Edits are permitted but flagged for review. Dirty committed characters show an amber left border and a <span style="color:#e8b84e">EDITED</span> badge.</p>
+
+<p><strong>🔒 Published</strong> — appears in a released product. Editing requires explicit acknowledgement and all changes are logged with mandatory errata reasons. Dirty published characters show a red left border and a <span style="color:#ee6666">ERRATA</span> badge.</p>
+
+<h3>Dirty Tracking</h3>
+
+<p>When the Vault loads, it takes a baseline snapshot of every character. Any subsequent edits make the character "dirty" — the roster immediately reflects this with coloured borders and badges appropriate to the character's lifecycle state. The header stats bar shows a clickable <strong>✏️ Pending</strong> count whenever changes are outstanding.</p>
+
+<h3>Review Panel</h3>
+
+<p>Click <strong>Review</strong> in the sidebar footer (or click the <strong>✏️ Pending</strong> count in the header) to open the Review Panel. This shows every dirty character grouped by severity: published errata at the top (red), committed changes in the middle (amber), and draft changes at the bottom (blue).</p>
+
+<p>Each card shows a human-readable diff summarising exactly what changed — attributes, skills added or removed, edges, hindrances, weapons, armour, gear, narrative fields. Two actions are available per character:</p>
+
+<p><strong>✓ Approve</strong> — accepts the changes and resets the baseline. For published characters, you must provide an errata reason before approval. The reason is logged permanently on the character's override record.</p>
+
+<p><strong>↶ Revert</strong> — discards all changes and restores the character to its last approved state. This includes full restoration of attributes, skills, edges, equipment, and narrative fields. A confirmation prompt is required.</p>
+
+<p>The <strong>✓ Approve All</strong> button batch-approves all non-published characters. Published characters always require individual review with errata reasons.</p>
+
+<h3>Product Registry</h3>
+
+<p>Click <strong>Products</strong> in the sidebar footer to manage the product registry. Each product has a code (e.g. AM-W03), a title, a lifecycle status, and a list of assigned characters.</p>
+
+<p>Products move through three stages:</p>
+
+<p><strong>📝 Draft</strong> — product is in development. Assigned characters are freely editable. Characters can be added or removed.</p>
+
+<p><strong>⏳ In Review</strong> — product is queued for release. Characters show a warning when edited but remain unlocked. Characters can still be added or removed.</p>
+
+<p><strong>🔒 Released</strong> — product has shipped. The release date is recorded. All assigned characters are locked. Characters cannot be removed from a released product. Editing a locked character triggers the edit lock gate.</p>
+
+<p>Assign characters to products using the dropdown on each product card. The same character can appear in multiple products — the lock cascades from whichever product released first.</p>
+
+<h3>Edit Lock Gate</h3>
+
+<p>When you open an editing panel on a published character, the Vault shows a confirmation dialog explaining the character is published, which products it appears in, and that changes will be flagged as errata. You must confirm to proceed. Once acknowledged, the lock gate won't prompt again until you switch to a different character.</p>
+
+<p>A red lock banner appears at the top of every editing panel for published characters as a persistent reminder.</p>
+
+<h3>Errata Log</h3>
+
+<p>The Build Audit panel includes a <strong>Release Lifecycle</strong> section showing the character's current state, which products it's published in, and a line-by-line diff of any pending changes. Below that, the <strong>Errata Log</strong> lists every historical override: date, reason, and what changed. This log is stored permanently on the character object and persists through Gist saves.</p>
+
+<div class="note">The product registry is stored as <code>product-registry.json</code> in the same Gist as the character data. It loads automatically on startup alongside the character roster.</div>
+
+<div class="page-nav">
+  <a onclick="goPage('canon')">← Canon Commits</a>
   <a onclick="goPage('export')">Export Formats →</a>
 </div>
 </div>
@@ -629,7 +698,7 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <div class="tip">All exports include the Pinnacle Fan Licence attribution automatically.</div>
 
 <div class="page-nav">
-  <a onclick="goPage('canon')">← Canon Commits</a>
+  <a onclick="goPage('release')">← Release Management</a>
   <a onclick="goPage('import')">Import →</a>
 </div>
 </div>
