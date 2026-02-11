@@ -613,7 +613,7 @@ function setSyncStatus(s,msg){
 
 async function forceRefresh(){
   if(saveTimer){clearTimeout(saveTimer);saveTimer=null;}
-  await loadData();filterNPCs();updateHeaderStats();
+  await loadData();captureBaselines();filterNPCs();updateHeaderStats();loadProductRegistry();
   if(currentNPC){const fresh=allNPCs.find(n=>n.name===currentNPC.name);if(fresh){currentNPC=fresh;renderDetail();}else{currentNPC=null;document.getElementById('mainContent').innerHTML='<span style="color:var(--text-dim)">Character no longer exists</span>';}}
 }
 
@@ -1829,7 +1829,7 @@ function closeNewNPCModal(){document.getElementById('newNpcModal').classList.rem
 function createNPC(){
   const name=document.getElementById('new_name').value.trim();if(!name){alert('Name is required');return;}
   const npc={name,refCode:'',concept:document.getElementById('new_concept')?.value?.trim()||'',ancestry:document.getElementById('new_ancestry').value,region:document.getElementById('new_region').value,tier:document.getElementById('new_tier').value,rank:'Novice',category:document.getElementById('new_category').value,product:'',source:'custom',agility:0,smarts:0,spirit:0,strength:0,vigor:0,skills:{},edges:[],edgeNotes:{},hindrances:[],powers:[],gearText:'',quote:'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:'',abSkill:'',pp:0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0,startingFunds:500,gearCost:0};
-  calcDerived(npc);allNPCs.push(npc);saveCharacter(npc);closeNewNPCModal();filterNPCs();updateHeaderStats();selectNPC(name);
+  calcDerived(npc);allNPCs.push(npc);saveCharacter(npc);captureBaseline(name);closeNewNPCModal();filterNPCs();updateHeaderStats();selectNPC(name);
 }
 
 // === TRANSFER (IMPORT / EXPORT) ===
@@ -2141,7 +2141,7 @@ function executeImport(){
   npc.weapons=npc.weapons||[];npc.armour=npc.armour||[];
   calcDerived(npc);
   allNPCs.push(npc);
-  saveCharacter(npc);
+  saveCharacter(npc);captureBaseline(npc.name);
   filterNPCs();updateHeaderStats();selectNPC(npc.name);
 }
 
