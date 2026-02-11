@@ -217,6 +217,10 @@ var DICEFORGE_AUTH=false;
         <select id="categoryFilter" onchange="filterNPCs()"><option value="">All Types</option><option>Pre-gen</option><option>NPC</option></select>
         <select id="regionFilter" onchange="filterNPCs()"><option value="">All Regions</option><option>Ammaria</option><option>Saltlands</option><option>Vinlands</option><option>Concordium</option><option>Glasrya</option><option>Global</option></select>
         <select id="tierFilter" onchange="filterNPCs()"><option value="">All Tiers</option><option>Wild Card</option><option>Extra</option><option>Walk-on</option></select>
+        <select id="lifecycleFilter" onchange="filterNPCs()" title="Filter by lifecycle state"><option value="">All States</option><option value="draft">📝 Draft</option><option value="committed">📦 Committed</option><option value="published">🔒 Published</option><option value="dirty">✏️ Pending Edits</option><option value="errata">⚠ Errata</option></select>
+      </div>
+      <div class="filter-row" id="productFilterRow" style="display:none">
+        <select id="productFilter" onchange="filterNPCs()" title="Filter by product" style="flex:1"><option value="">All Products</option></select>
       </div>
     </div>
     <div class="npc-list" id="npcList"></div>
@@ -338,8 +342,8 @@ function serialiseForCompare(n){
     attrs:{agility:n.agility||0,smarts:n.smarts||0,spirit:n.spirit||0,strength:n.strength||0,vigor:n.vigor||0},
     skills:Object.assign({},n.skills||{}),edges:[...(n.edges||[])].sort(),edgeNotes:Object.assign({},n.edgeNotes||{}),
     hindrances:[...(n.hindrances||[])].sort(),powers:[...(n.powers||[])].sort(),
-    weapons:(n.weapons||[]).map(w=>typeof w==='string'?w:w.name).sort(),
-    armour:(n.armour||[]).map(a=>typeof a==='string'?a:a.name).sort(),
+    weapons:JSON.parse(JSON.stringify(n.weapons||[])),
+    armour:JSON.parse(JSON.stringify(n.armour||[])),
     gearText:n.gearText||'',pace:n.pace||6,parry:n.parry||2,toughness:n.toughness||5,toughnessArmor:n.toughnessArmor||0,
     abName:n.abName||'',pp:n.pp||0,startingFunds:n.startingFunds||500,gearCost:n.gearCost||0,
     quote:n.quote||'',description:n.description||'',background:n.background||'',
@@ -484,7 +488,7 @@ async function loadProductRegistry(){
     if(!resp.ok)return;
     const gist=await resp.json();
     const raw=gist.files[REGISTRY_FILENAME]?.content;
-    if(raw){_productRegistry=JSON.parse(raw);console.log('📦 Product registry loaded:',_productRegistry.products.length,'products');}
+    if(raw){_productRegistry=JSON.parse(raw);console.log('📦 Product registry loaded:',_productRegistry.products.length,'products');refreshProductFilter();}
   }catch(e){console.warn('Registry load failed:',e);}
 }
 async function saveProductRegistry(){
@@ -495,7 +499,7 @@ async function saveProductRegistry(){
       headers:{'Authorization':`token ${GIST_TOKEN}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
       body:JSON.stringify({files:{[REGISTRY_FILENAME]:{content:JSON.stringify(_productRegistry,null,2)}}})
     });
-    console.log('📦 Registry saved');
+    console.log('📦 Registry saved');refreshProductFilter();
   }catch(e){console.error('Registry save failed:',e);}
 }
 function addProduct(code,title){
@@ -865,13 +869,43 @@ function getFilteredNPCs(){
   const region=document.getElementById('regionFilter').value;
   const tier=document.getElementById('tierFilter').value;
   const cat=document.getElementById('categoryFilter').value;
+  const lf=document.getElementById('lifecycleFilter')?.value||'';
+  const pf=document.getElementById('productFilter')?.value||'';
   return allNPCs.filter(n=>{
     if(cat&&(n.category||'NPC')!==cat)return false;
     if(region&&n.region!==region)return false;
     if(tier&&n.tier!==tier)return false;
     if(search&&!n.name.toLowerCase().includes(search)&&!(n.concept||'').toLowerCase().includes(search))return false;
+    if(lf){
+      const lc=getLifecycle(n.name);
+      const dirty=isCharDirty(n.name);
+      if(lf==='draft'&&lc!=='draft')return false;
+      if(lf==='committed'&&lc!=='committed')return false;
+      if(lf==='published'&&lc!=='published')return false;
+      if(lf==='dirty'&&!dirty)return false;
+      if(lf==='errata'&&!(lc==='published'&&dirty))return false;
+    }
+    if(pf){
+      const prod=_productRegistry.products.find(p=>p.code===pf);
+      if(!prod||!(prod.characters||[]).includes(n.name))return false;
+    }
     return true;
   });
+}
+
+function refreshProductFilter(){
+  const sel=document.getElementById('productFilter');
+  const row=document.getElementById('productFilterRow');
+  if(!sel||!row)return;
+  const products=_productRegistry.products||[];
+  if(!products.length){row.style.display='none';return;}
+  row.style.display='';
+  const cur=sel.value;
+  sel.innerHTML='<option value="">All Products</option>'+products.map(p=>{
+    const icon=p.status==='released'?'🔒':p.status==='in-review'?'⏳':'📝';
+    return `<option value="${esc(p.code)}">${icon} ${esc(p.code)} — ${esc(p.title)}</option>`;
+  }).join('');
+  if(cur)sel.value=cur;
 }
 
 function filterNPCs(){
@@ -2355,6 +2389,7 @@ async function executeCommit(){
       statusEl.innerHTML=`<span style="color:var(--green)">✅ Committed as <strong>${esc(data.changeId)}</strong></span>
         <div style="margin-top:6px;font-size:12px;color:var(--text-dim)">Pending updates: ${products.filter(p=>p!==canonFilePath(currentNPC)).join(', ')||'None'}</div>`;
       canonCommitted.add(currentNPC.name);
+      captureBaseline(currentNPC.name);
       filterNPCs();updateHeaderStats();renderDetail();
       const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
       if(s.overrides&&s.overrides[currentNPC.name]){delete s.overrides[currentNPC.name];localStorage.setItem(LS_KEY,JSON.stringify(s));}
@@ -2494,6 +2529,7 @@ function renderReviewContent(){
       <div class="rc-actions">
         ${pubProducts.length?`<input id="override-reason-${esc(n.name).replace(/\s/g,'_')}" placeholder="Errata reason (required for published characters)" style="flex:1;background:var(--bg-input);border:1px solid #cc3333;color:var(--text);padding:4px 8px;border-radius:3px;font-size:12px">`:''} 
         <button class="btn sm" style="color:var(--green);border-color:var(--green)" onclick="reviewApprove('${esc(n.name).replace(/'/g,"\\'")}')">✓ Approve</button>
+        ${lc!=='draft'?`<button class="btn sm" style="color:var(--accent);border-color:var(--accent)" onclick="reviewApproveAndCommit('${esc(n.name).replace(/'/g,"\\'")}')">✓ Approve &amp; Commit</button>`:''}
         <button class="btn sm" style="color:var(--red);border-color:var(--red)" onclick="reviewRevert('${esc(n.name).replace(/'/g,"\\'")}')">↶ Revert</button>
       </div>
     </div>`;
@@ -2533,6 +2569,35 @@ function reviewApproveAll(){
     dirty.forEach(n=>approveCharacter(n.name));
   }
   renderReviewContent();
+}
+
+async function reviewApproveAndCommit(name){
+  const lc=getLifecycle(name);
+  if(lc==='published'){
+    const reasonEl=document.getElementById('override-reason-'+name.replace(/\s/g,'_'));
+    const reason=reasonEl?reasonEl.value.trim():'';
+    if(!reason){alert('An errata reason is required for published characters.');if(reasonEl)reasonEl.focus();return;}
+    logOverride(name,reason);
+  }
+  // Approve baseline first
+  approveCharacter(name);
+  // Then fire canon commit
+  const prev=currentNPC;
+  currentNPC=allNPCs.find(n=>n.name===name);
+  if(!currentNPC){currentNPC=prev;return;}
+  try{
+    await flushSave();
+    const canon=buildCanonCharacter(currentNPC);
+    const res=await fetch(CANON_API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'commit_character',secret:'diceforge2026',character:canon,filePath:canonFilePath(currentNPC),summary:'Approved & committed '+name,author:'Character Vault — Review Panel'})
+    });
+    const data=await res.json();
+    if(data.success){canonCommitted.add(name);}
+  }catch(e){/* canon commit is best-effort from review panel */}
+  currentNPC=prev;
+  filterNPCs();updateHeaderStats();renderReviewContent();
 }
 
 /* ═══ PRODUCT REGISTRY UI ═══ */
