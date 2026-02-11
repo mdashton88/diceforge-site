@@ -1077,7 +1077,19 @@ function renderMiddleColumn(n){
   const panelNames={edit:'Edit',hindrances:'Hindrances',edges:'Edges',skills:'Skills',weapons:'Weapons',armour:'Armour',gear:'Gear',powers:'Powers',narrative:'Narrative',statblock:'Stat Block',audit:'Build Audit',transfer:'Import / Export'};
   const editPanels=['edit','hindrances','edges','skills','weapons','armour','gear','powers','narrative'];
   const lockBanner=isLocked(n.name)&&editPanels.includes(activePanel)?'<div class="lock-warning" style="margin-bottom:8px">🔒 This character is published. Changes will be flagged as errata and require review approval.</div>':'';
-  el.innerHTML=`<div class="middle-panel"><div class="panel-title"><h3>${panelNames[activePanel]||activePanel}</h3><button class="btn" onclick="closePanel()">✕ Done</button></div>${lockBanner}<div id="panelContent"></div></div>`;
+  const undoCount=_undoStack.length;
+  const redoCount=_redoStack.length;
+  const undoStyle=undoCount>0?'color:var(--accent);border-color:var(--accent)':'color:var(--text-dim);border-color:var(--border);opacity:0.4;cursor:default';
+  const redoStyle=redoCount>0?'color:var(--accent);border-color:var(--accent)':'color:var(--text-dim);border-color:var(--border);opacity:0.4;cursor:default';
+  let undoBar='';
+  if(editPanels.includes(activePanel)){
+    const depthLabel=undoCount+redoCount>0?'<span style="font-size:10px;color:var(--text-dim)" title="'+undoCount+' undo / '+redoCount+' redo">'+undoCount+'/'+redoCount+'</span>':'';
+    undoBar='<div style="display:flex;gap:4px;align-items:center;margin-left:auto;margin-right:8px">'
+      +'<button class="btn sm" onclick="undo()" style="'+undoStyle+'" title="Undo (Ctrl+Z)">↶</button>'
+      +'<button class="btn sm" onclick="redo()" style="'+redoStyle+'" title="Redo (Ctrl+Y)">↷</button>'
+      +depthLabel+'</div>';
+  }
+  el.innerHTML=`<div class="middle-panel"><div class="panel-title"><h3>${panelNames[activePanel]||activePanel}</h3>${undoBar}<button class="btn" onclick="closePanel()">✕ Done</button></div>${lockBanner}<div id="panelContent"></div></div>`;
   const panels={edit:renderEditPanel,hindrances:renderHindrancesPanel,edges:renderEdgesPanel,skills:renderSkillsPanel,weapons:renderWeaponsPanel,armour:renderArmourPanel,gear:renderGearPanel,powers:renderPowersPanel,narrative:renderNarrativePanel,statblock:renderStatBlockPanel,audit:renderAuditPanel};
   const panels2={transfer:renderTransferPanel};
 if(panels[activePanel]) panels[activePanel](n);
@@ -2656,11 +2668,17 @@ function renderProductsContent(){
       let checklistHtml='';
       if(charCount>0){
         checklistHtml=`<div id="${checklistId}" style="display:none;margin:6px 0;font-size:11px;line-height:1.8">`;
-        chars.forEach(n=>{
+        // Sort: needs attention first (illegal builds, missing completions, dirty edits)
+        const sortedChars=[...chars].sort((a,b)=>{
+          const scoreN=n=>{let s=0;const au=runBuildAudit(n);if(!au.every(r=>r.pass))s+=4;if(!n.statComplete)s+=2;if(!n.narrativeComplete)s+=2;if(isCharDirty(n.name))s+=1;return s;};
+          return scoreN(b)-scoreN(a);
+        });
+        sortedChars.forEach(n=>{
           const audit=runBuildAudit(n);const legal=audit.every(r=>r.pass);
           const dirty=isCharDirty(n.name);
           const ref=n.refCode?n.refCode+' — ':'';
-          checklistHtml+=`<div style="padding:2px 0;border-bottom:1px solid var(--border)">
+          const needsWork=!legal||!n.statComplete||!n.narrativeComplete||dirty;
+          checklistHtml+=`<div style="padding:2px 0;border-bottom:1px solid var(--border);${needsWork?'background:rgba(238,102,102,0.05)':''}">
             <span style="cursor:pointer;color:var(--accent)" onclick="closeProductsModal();selectNPC('${esc(n.name).replace(/'/g,"\\'")}')">${esc(ref+n.name)}</span>
             <span style="margin-left:8px;color:${legal?'var(--green)':'var(--red)'}">${legal?'✓':'✗'} Build</span>
             <span style="margin-left:6px;color:${n.statComplete?'var(--green)':'var(--text-dim)'}">${n.statComplete?'✓':'—'} Stats</span>
@@ -2737,16 +2755,39 @@ function toggleChecklist(id){
   el.style.display=el.style.display==='none'?'block':'none';
 }
 
+function buildStatBlockHTML(n){
+  const d=v=>v?'d'+v:'—';
+  const tDisp=n.toughnessArmor>0?n.toughness+' ('+n.toughnessArmor+')':''+n.toughness;
+  let html=`<div style="border:1px solid #666;border-radius:4px;padding:12px;margin-bottom:16px;font-family:Georgia,serif;font-size:13px;max-width:600px">`;
+  html+=`<div style="font-size:16px;font-weight:bold;border-bottom:2px solid #333;padding-bottom:4px;margin-bottom:8px">${esc(n.name)}${n.concept?' <span style="font-weight:normal;font-style:italic;font-size:13px">— '+esc(n.concept)+'</span>':''}</div>`;
+  if(n.quote) html+=`<div style="font-style:italic;color:#666;margin-bottom:6px">"${esc(n.quote)}"</div>`;
+  if(n.description) html+=`<div style="margin-bottom:8px">${esc(n.description)}</div>`;
+  html+=`<div style="margin-bottom:4px"><strong>Attributes:</strong> Agility ${d(n.agility)}, Smarts ${d(n.smarts)}, Spirit ${d(n.spirit)}, Strength ${d(n.strength)}, Vigor ${d(n.vigor)}</div>`;
+  if(Object.keys(n.skills||{}).length) html+=`<div style="margin-bottom:4px"><strong>Skills:</strong> ${Object.entries(n.skills).sort((a,b)=>a[0].localeCompare(b[0])).map(([k,v])=>k+' '+d(v)).join(', ')}</div>`;
+  html+=`<div style="margin-bottom:4px"><strong>Pace:</strong> ${n.pace}; <strong>Parry:</strong> ${n.parry}; <strong>Toughness:</strong> ${tDisp}</div>`;
+  if(n.edges&&n.edges.length) html+=`<div style="margin-bottom:4px"><strong>Edges:</strong> ${n.edges.map(e=>esc(e)).join(', ')}</div>`;
+  if(n.hindrances&&n.hindrances.length) html+=`<div style="margin-bottom:4px"><strong>Hindrances:</strong> ${n.hindrances.map(h=>esc(h)).join(', ')}</div>`;
+  if(n.powers&&n.powers.length) html+=`<div style="margin-bottom:4px"><strong>Powers:</strong> ${n.powers.map(p=>esc(p)).join(', ')}${n.pp?' ('+n.pp+' Power Points)':''}</div>`;
+  if(n.weapons&&n.weapons.length) html+=`<div style="margin-bottom:4px"><strong>Weapons:</strong> ${n.weapons.map(w=>esc(w.name)+' ('+esc(w.damage||'')+(w.ap?', AP '+w.ap:'')+(w.range?', '+esc(w.range):'')+')').join(', ')}</div>`;
+  if(n.armour&&n.armour.length) html+=`<div style="margin-bottom:4px"><strong>Armour:</strong> ${n.armour.map(a=>esc(a.name)+' (+'+a.armor+')').join(', ')}</div>`;
+  if(n.gearText) html+=`<div style="margin-bottom:4px"><strong>Gear:</strong> ${esc(n.gearText)}</div>`;
+  if(n.abName) html+=`<div style="margin-bottom:4px"><strong>Arcane Background:</strong> ${esc(n.abName)}${n.abSkill?' ('+esc(n.abSkill)+')':''}</div>`;
+  html+=`</div>`;
+  return html;
+}
+
 function exportProductStatBlocks(code){
   const p=_productRegistry.products.find(x=>x.code===code);
   if(!p)return;
   const chars=(p.characters||[]).map(c=>allNPCs.find(x=>x.name===c)).filter(Boolean);
   if(!chars.length){alert('No characters assigned to this product.');return;}
+  // Build both formats
   const separator='\n'+('═'.repeat(60))+'\n\n';
-  const header=`STAT BLOCKS — ${p.code}: ${p.title}\nGenerated: ${new Date().toLocaleDateString()}\nCharacters: ${chars.length}\n`;
-  const blocks=chars.map(n=>buildStatBlockText(n)).join(separator);
-  const full=header+'\n'+separator+blocks;
-  // Show in a modal with copy/download
+  const headerTxt=`STAT BLOCKS — ${p.code}: ${p.title}\nGenerated: ${new Date().toLocaleDateString()}\nCharacters: ${chars.length}\n`;
+  const textBlocks=headerTxt+'\n'+separator+chars.map(n=>buildStatBlockText(n)).join(separator);
+  const htmlBlocks=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Stat Blocks — ${esc(p.code)}: ${esc(p.title)}</title><style>body{font-family:Georgia,serif;max-width:700px;margin:20px auto;color:#222;background:#fff}h1{font-size:20px;border-bottom:2px solid #333;padding-bottom:6px}p.meta{font-size:12px;color:#888}</style></head><body><h1>${esc(p.code)}: ${esc(p.title)}</h1><p class="meta">Generated: ${new Date().toLocaleDateString()} · ${chars.length} character${chars.length===1?'':'s'}</p>${chars.map(n=>buildStatBlockHTML(n)).join('')}</body></html>`;
+  // State
+  let currentFmt='text';
   const modal=document.createElement('div');
   modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center';
   modal.innerHTML=`<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:16px;width:800px;max-height:85vh;display:flex;flex-direction:column">
@@ -2754,21 +2795,49 @@ function exportProductStatBlocks(code){
       <h3 style="margin:0;color:var(--accent)">📄 Stat Blocks — ${esc(p.code)}: ${esc(p.title)}</h3>
       <button class="btn" onclick="this.closest('div[style*=fixed]').remove()">✕ Close</button>
     </div>
-    <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px">${chars.length} character${chars.length===1?'':'s'} · ${full.length.toLocaleString()} characters</div>
-    <textarea readonly style="flex:1;font-family:monospace;font-size:11px;background:var(--bg-body);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;resize:none;min-height:300px">${esc(full)}</textarea>
+    <div style="display:flex;gap:4px;margin-bottom:8px">
+      <button class="btn sm" id="expFmtTxt" style="border-color:var(--accent);color:var(--accent)" onclick="setExpFmt('text')">Plain Text</button>
+      <button class="btn sm" id="expFmtHtml" onclick="setExpFmt('html')">HTML</button>
+      <span style="flex:1"></span>
+      <span id="expMeta" style="font-size:11px;color:var(--text-dim);align-self:center">${chars.length} characters · ${textBlocks.length.toLocaleString()} chars</span>
+    </div>
+    <div id="expPreviewArea" style="flex:1;min-height:300px;overflow:auto;border:1px solid var(--border);border-radius:4px;background:var(--bg-body)">
+      <textarea id="expTextArea" readonly style="width:100%;height:100%;box-sizing:border-box;font-family:monospace;font-size:11px;background:transparent;color:var(--text);border:none;padding:8px;resize:none">${esc(textBlocks)}</textarea>
+      <div id="expHtmlArea" style="display:none;padding:8px"></div>
+    </div>
     <div style="display:flex;gap:8px;margin-top:10px">
-      <button class="btn primary" id="copyStatBlocksBtn">📋 Copy All</button>
-      <button class="btn" id="downloadStatBlocksBtn">💾 Download .txt</button>
+      <button class="btn primary" id="copyStatBlocksBtn">📋 Copy</button>
+      <button class="btn" id="downloadStatBlocksBtn">💾 Download</button>
     </div>
   </div>`;
   document.body.appendChild(modal);
+  // HTML preview
+  const htmlArea=modal.querySelector('#expHtmlArea');
+  const iframe=document.createElement('iframe');
+  iframe.style.cssText='width:100%;border:none;min-height:400px';
+  htmlArea.appendChild(iframe);
+  iframe.srcdoc=htmlBlocks;
+  function setExpFmt(fmt){
+    currentFmt=fmt;
+    modal.querySelector('#expFmtTxt').style.cssText=fmt==='text'?'border-color:var(--accent);color:var(--accent)':'';
+    modal.querySelector('#expFmtHtml').style.cssText=fmt==='html'?'border-color:var(--accent);color:var(--accent)':'';
+    modal.querySelector('#expTextArea').style.display=fmt==='text'?'':'none';
+    modal.querySelector('#expHtmlArea').style.display=fmt==='html'?'':'none';
+    const len=fmt==='text'?textBlocks.length:htmlBlocks.length;
+    modal.querySelector('#expMeta').textContent=chars.length+' characters · '+len.toLocaleString()+' chars';
+  }
+  window.setExpFmt=setExpFmt;
   modal.querySelector('#copyStatBlocksBtn').onclick=()=>{
-    navigator.clipboard.writeText(full).then(()=>{modal.querySelector('#copyStatBlocksBtn').textContent='✅ Copied!';setTimeout(()=>{modal.querySelector('#copyStatBlocksBtn').textContent='📋 Copy All';},1500);});
+    const content=currentFmt==='text'?textBlocks:htmlBlocks;
+    navigator.clipboard.writeText(content).then(()=>{modal.querySelector('#copyStatBlocksBtn').textContent='✅ Copied!';setTimeout(()=>{modal.querySelector('#copyStatBlocksBtn').textContent='📋 Copy';},1500);});
   };
   modal.querySelector('#downloadStatBlocksBtn').onclick=()=>{
-    const blob=new Blob([full],{type:'text/plain'});
+    const content=currentFmt==='text'?textBlocks:htmlBlocks;
+    const ext=currentFmt==='text'?'.txt':'.html';
+    const mime=currentFmt==='text'?'text/plain':'text/html';
+    const blob=new Blob([content],{type:mime});
     const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-    a.download=p.code.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-stat-blocks.txt';
+    a.download=p.code.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-stat-blocks'+ext;
     a.click();URL.revokeObjectURL(a.href);
   };
   modal.addEventListener('click',(e)=>{if(e.target===modal)modal.remove();});
