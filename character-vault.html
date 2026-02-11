@@ -207,6 +207,10 @@ var DICEFORGE_AUTH=false;
 </script>
 <header>
   <div><h1>TRIBUTE LANDS — CHARACTER VAULT</h1><div class="subtitle">DiceForge Studios Ltd <a href="vault-help.html" target="_blank" style="margin-left:10px;font-size:10px;color:var(--text-dim);letter-spacing:1px;text-decoration:none;border:1px solid var(--border);padding:1px 7px;border-radius:3px">? Help</a></div></div>
+  <div id="navButtons" style="display:flex;gap:4px;align-items:center">
+    <button id="navBack" class="btn sm" onclick="navBack()" style="font-size:14px;padding:2px 8px;opacity:0.3;cursor:default" title="Back">◀</button>
+    <button id="navFwd" class="btn sm" onclick="navForward()" style="font-size:14px;padding:2px 8px;opacity:0.3;cursor:default" title="Forward">▶</button>
+  </div>
   <div class="header-stats" id="headerStats"></div>
   <div id="syncIndicator" style="text-align:right;padding:2px 10px;display:flex;align-items:center;justify-content:flex-end;gap:8px">
     <span id="syncLabel" style="font-size:11px;font-family:monospace;color:var(--text-dim)">●</span>
@@ -265,22 +269,6 @@ var DICEFORGE_AUTH=false;
     <div class="form-actions"><button class="btn" onclick="closeNewNPCModal()">Cancel</button><button class="btn primary" onclick="createNPC()">Create NPC</button></div>
   </div>
 </div>
-<div class="modal-overlay" id="changelogModal">
-  <div class="modal" style="width:800px">
-    <h3>📋 Canon Changelog</h3>
-    <div id="changelogContent" style="font-size:13px">Loading...</div>
-    <div class="form-actions" style="margin-top:14px"><button class="btn" onclick="closeChangelogModal()">Close</button></div>
-  </div>
-</div>
-<div class="modal-overlay" id="productsModal">
-  <div class="modal" style="width:860px;max-height:85vh;overflow-y:auto">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <h3 style="margin:0">📦 Product Registry</h3>
-      <button class="btn" onclick="closeProductsModal()">✕ Close</button>
-    </div>
-    <div id="productsContent" style="font-size:13px">Loading...</div>
-  </div>
-</div>
 <script>
 // CharacterForge Engine Bootstrap
 window.CharacterForge = (function(){
@@ -309,6 +297,44 @@ window.CharacterForge = (function(){
 <script>
 let allNPCs=[], currentNPC=null, activePanel=null;
 let canonCommitted=new Set();
+/* ═══ NAVIGATION HISTORY ═══ */
+let _navHistory=[], _navFwdStack=[], _navPushing=false;
+function navPush(view){
+  if(_navPushing)return;
+  _navHistory.push(view);_navFwdStack=[];
+  updateNavButtons();
+}
+function navBack(){
+  if(_navHistory.length<2)return;
+  _navFwdStack.push(_navHistory.pop());
+  const prev=_navHistory[_navHistory.length-1];
+  _navPushing=true;
+  navGo(prev);
+  _navPushing=false;
+  updateNavButtons();
+}
+function navForward(){
+  if(!_navFwdStack.length)return;
+  const next=_navFwdStack.pop();
+  _navHistory.push(next);
+  _navPushing=true;
+  navGo(next);
+  _navPushing=false;
+  updateNavButtons();
+}
+function navGo(view){
+  if(view.type==='character') selectNPC(view.name);
+  else if(view.type==='status') showStatusView();
+  else if(view.type==='review') showReviewPanel();
+  else if(view.type==='products') showProductsModal();
+  else if(view.type==='changelog') showChangelog();
+}
+function updateNavButtons(){
+  const back=document.getElementById('navBack');
+  const fwd=document.getElementById('navFwd');
+  if(back){back.style.opacity=_navHistory.length>1?'1':'0.3';back.style.cursor=_navHistory.length>1?'pointer':'default';}
+  if(fwd){fwd.style.opacity=_navFwdStack.length>0?'1':'0.3';fwd.style.cursor=_navFwdStack.length>0?'pointer':'default';}
+}
 /* ═══ UNDO / REDO ═══ */
 const UNDO_CAP=40;
 let _undoStack=[], _redoStack=[], _lastSnapshot=null;
@@ -317,7 +343,7 @@ function _pushUndo(){if(!currentNPC)return;if(_lastSnapshot){_undoStack.push(_la
 function _restoreSnap(snap){if(!snap||!currentNPC)return;const idx=allNPCs.findIndex(n=>n.name===currentNPC.name);Object.assign(currentNPC,snap);if(idx>=0)allNPCs[idx]=currentNPC;calcDerived(currentNPC);scheduleSave();if(activePanel){renderMiddleColumn(currentNPC);renderStatColumn(currentNPC);}else{renderDetail();}}
 function undo(){if(!_undoStack.length||!currentNPC)return;_redoStack.push(_snap(currentNPC));const prev=_undoStack.pop();_lastSnapshot=_snap(prev);_restoreSnap(prev);}
 function redo(){if(!_redoStack.length||!currentNPC)return;_undoStack.push(_snap(currentNPC));const next=_redoStack.pop();_lastSnapshot=_snap(next);_restoreSnap(next);}
-document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='z'&&!e.shiftKey){e.preventDefault();undo();}if((e.ctrlKey||e.metaKey)&&(e.key==='y'||(e.key==='z'&&e.shiftKey))){e.preventDefault();redo();}});
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='z'&&!e.shiftKey){e.preventDefault();undo();}if((e.ctrlKey||e.metaKey)&&(e.key==='y'||(e.key==='z'&&e.shiftKey))){e.preventDefault();redo();}if(e.altKey&&e.key==='ArrowLeft'){e.preventDefault();navBack();}if(e.altKey&&e.key==='ArrowRight'){e.preventDefault();navForward();}});
 
 /* ═══ RELEASE MANAGEMENT — baselines, dirty tracking, product registry, locks ═══ */
 let _baselines={};
@@ -922,13 +948,23 @@ function filterNPCs(){
   renderNPCList(getFilteredNPCs());
 }
 
+function getVisualOrder(){
+  const npcs=getFilteredNPCs();
+  const sortByRef=(a,b)=>{if(!a.refCode&&!b.refCode)return a.name.localeCompare(b.name);if(!a.refCode)return 1;if(!b.refCode)return -1;return a.refCode.localeCompare(b.refCode);};
+  const pregens=npcs.filter(n=>(n.category||'NPC')==='Pre-gen').sort(sortByRef);
+  const npcWC=npcs.filter(n=>(n.category||'NPC')!=='Pre-gen'&&n.tier==='Wild Card').sort(sortByRef);
+  const npcExt=npcs.filter(n=>(n.category||'NPC')!=='Pre-gen'&&n.tier==='Extra').sort(sortByRef);
+  const npcWalk=npcs.filter(n=>(n.category||'NPC')!=='Pre-gen'&&n.tier==='Walk-on').sort(sortByRef);
+  return [...pregens,...npcWC,...npcExt,...npcWalk];
+}
+
 document.addEventListener('keydown',function(e){
   if(!currentNPC)return;
   if(e.key!=='ArrowUp'&&e.key!=='ArrowDown')return;
   const tag=document.activeElement?.tagName;
   if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT')return;
   e.preventDefault();
-  const list=getFilteredNPCs();
+  const list=getVisualOrder();
   const idx=list.findIndex(n=>n.name===currentNPC.name);
   if(idx<0)return;
   const next=e.key==='ArrowUp'?idx-1:idx+1;
@@ -992,7 +1028,7 @@ function updateHeaderStats(){
   document.getElementById("headerStats").innerHTML=`<span style="${hdrLink}" onclick="headerFilter('category','Pre-gen')" title="Filter to Pre-gens"><span class="stat-num">${pg}</span> Pre-gens</span><span style="${hdrLink}" onclick="headerFilter('category','NPC')" title="Filter to NPCs"><span class="stat-num">${np}</span> NPCs</span><span style="${hdrLink}" onclick="headerFilter('lifecycle','committed')" title="Filter to committed characters"><span class="stat-num">${cn}</span> 📦 Canon</span>${dirtySpan}<span style="${hdrLink}" onclick="showStatusView()" title="Open production status"><span class="stat-num">${c}</span> Complete</span><span style="${hdrLink}" onclick="showStatusView()" title="Open production status"><span class="stat-num">${f}</span> FG Ready</span>`;
 }
 
-function selectNPC(name){flushSave();currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;currentNPC._lockAcknowledged=false;_undoStack=[];_redoStack=[];_lastSnapshot=_snap(currentNPC);activePanel='audit';renderDetail();filterNPCs();}
+function selectNPC(name){flushSave();currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;currentNPC._lockAcknowledged=false;_undoStack=[];_redoStack=[];_lastSnapshot=_snap(currentNPC);activePanel='audit';renderDetail();filterNPCs();navPush({type:'character',name:name});}
 
 function renderDetail(){
   const n=currentNPC;if(!n)return;
@@ -2336,7 +2372,7 @@ function parseImportStatBlock(raw){
   return npc;
 }
 function showStatusView(){
-  hideBottomBar();currentNPC=null;activePanel=null;
+  hideBottomBar();currentNPC=null;activePanel=null;navPush({type:'status'});
   const el=document.getElementById('mainContent');el.classList.remove('empty-state');el.style.overflowY='auto';
   const rows=allNPCs.map(n=>{
     const audit=runBuildAudit(n);const legal=audit.every(r=>r.pass);
@@ -2346,7 +2382,7 @@ function showStatusView(){
     const lcColour=lc==='published'?'var(--green)':lc==='committed'?'#e8b84e':'var(--text-dim)';
     const lcIcon=lc==='published'?'🔒':lc==='committed'?'📦':'📝';
     const dirtyIcon=dirty?(lc==='published'?'<span style="color:#ee6666" title="Errata pending">⚠</span>':'<span style="color:#e8b84e" title="Edited">✏️</span>'):'';
-    return `<tr><td style="font-family:monospace;font-size:11px;color:var(--text-dim)">${esc(n.refCode||'—')}</td><td>${esc(n.name)}</td><td>${esc(n.category||'NPC')}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td>${legal?'✅':'❌'}</td><td style="color:${lcColour}">${lcIcon} ${lc}</td><td>${dirtyIcon}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">&#${n.statComplete?'10003':'8212'};</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">&#${n.narrativeComplete?'10003':'8212'};</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">&#${n.fgReady?'10003':'8212'};</td></tr>`;
+    return `<tr><td style="font-family:monospace;font-size:11px;color:var(--text-dim)">${esc(n.refCode||'—')}</td><td style="cursor:pointer;color:var(--accent)" onclick="selectNPC('${esc(n.name).replace(/'/g,"\\'")}')">${esc(n.name)}</td><td>${esc(n.category||'NPC')}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td>${legal?'✅':'❌'}</td><td style="color:${lcColour}">${lcIcon} ${lc}</td><td>${dirtyIcon}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">&#${n.statComplete?'10003':'8212'};</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">&#${n.narrativeComplete?'10003':'8212'};</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">&#${n.fgReady?'10003':'8212'};</td></tr>`;
   }).join('');
   const prodSummary=_productRegistry.products.length?`<div style="margin-bottom:14px;font-size:13px;color:var(--text-dim)">Products: ${_productRegistry.products.map(p=>`<span style="color:${p.status==='released'?'var(--green)':p.status==='in-review'?'#e8b84e':'var(--text-dim)'}">${esc(p.code)}</span>`).join(', ')} · <a style="color:var(--accent);cursor:pointer" onclick="showProductsModal()">Manage</a></div>`:'';
   el.innerHTML=`<h2 style="color:var(--accent);margin-bottom:14px">Production Status</h2>${prodSummary}<table class="data-table"><tr><th>Ref</th><th>Name</th><th>Type</th><th>Region</th><th>Tier</th><th>Build</th><th>Lifecycle</th><th>Edits</th><th>Stats</th><th>Narrative</th><th>FG Ready</th></tr>${rows}</table>`;
@@ -2481,8 +2517,13 @@ async function removeFromCanon(){
 }
 
 // ── CHANGELOG VIEW ──
-function showChangelog(){document.getElementById('changelogModal').classList.add('active');loadChangelog();}
-function closeChangelogModal(){document.getElementById('changelogModal').classList.remove('active');}
+function showChangelog(){
+  hideBottomBar();currentNPC=null;activePanel=null;navPush({type:'changelog'});
+  const el=document.getElementById('mainContent');el.classList.remove('empty-state');el.style.overflowY='auto';
+  el.innerHTML='<h2 style="color:var(--accent);margin-bottom:14px">📋 Canon Changelog</h2><div id="changelogContent" style="font-size:13px">Loading...</div>';
+  loadChangelog();filterNPCs();
+}
+function closeChangelogModal(){}
 
 async function loadChangelog(){
   const el=document.getElementById('changelogContent');
@@ -2539,7 +2580,7 @@ function checkPin(){
 
 /* ═══ REVIEW PANEL — batch review/approve/reject dirty characters ═══ */
 function showReviewPanel(){
-  hideBottomBar();currentNPC=null;activePanel=null;
+  hideBottomBar();currentNPC=null;activePanel=null;navPush({type:'review'});
   const el=document.getElementById('mainContent');
   el.classList.remove('empty-state');el.style.overflowY='auto';
   el.innerHTML='<div id="reviewInline" style="padding:0"><h2 style="color:var(--accent);margin-bottom:14px">✏️ Review Pending Changes</h2><div id="reviewContent" style="font-size:13px">Loading...</div><div id="reviewActions" style="margin-top:14px;display:flex;gap:8px"></div></div>';
@@ -2573,7 +2614,7 @@ function renderReviewContent(){
     html+=`<div class="review-card ${lc}" id="rc-${esc(n.name).replace(/\s/g,'_')}">
       ${pubWarning}
       <div class="rc-header">
-        <div><span class="rc-name">${esc(n.name)}</span> <span style="font-size:11px;color:var(--text-dim)">${esc(n.refCode||'')} · ${esc(n.category||'NPC')} · ${esc(n.tier)}</span></div>
+        <div><span class="rc-name" style="cursor:pointer" onclick="selectNPC('${esc(n.name).replace(/'/g,"\\'")}')">${esc(n.name)}</span> <span style="font-size:11px;color:var(--text-dim)">${esc(n.refCode||'')} · ${esc(n.category||'NPC')} · ${esc(n.tier)}</span></div>
         <span style="font-size:11px;text-transform:uppercase;color:${lc==='published'?'#ee6666':lc==='committed'?'#e8b84e':'#88bbee'}">${lc}</span>
       </div>
       <div class="rc-diff">${diffHtml||'<span style="color:var(--text-dim)">No details available</span>'}</div>
@@ -2653,10 +2694,12 @@ async function reviewApproveAndCommit(name){
 
 /* ═══ PRODUCT REGISTRY UI ═══ */
 function showProductsModal(){
-  document.getElementById('productsModal').classList.add('active');
-  renderProductsContent();
+  hideBottomBar();currentNPC=null;activePanel=null;navPush({type:'products'});
+  const el=document.getElementById('mainContent');el.classList.remove('empty-state');el.style.overflowY='auto';
+  el.innerHTML='<h2 style="color:var(--accent);margin-bottom:14px">📦 Product Registry</h2><div id="productsContent" style="font-size:13px">Loading...</div>';
+  renderProductsContent();filterNPCs();
 }
-function closeProductsModal(){document.getElementById('productsModal').classList.remove('active');}
+function closeProductsModal(){}
 
 function renderProductsContent(){
   const el=document.getElementById('productsContent');
