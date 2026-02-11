@@ -32,6 +32,19 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .header-stats { display: flex; gap: 16px; font-size: 13px; color: var(--text-dim); }
 .header-stats > span:hover { color: var(--accent); }
 .header-stats .stat-num { color: var(--accent); font-weight: 600; }
+#breadcrumb { background: var(--bg-dark); border-bottom: 1px solid var(--border); padding: 4px 24px 4px 324px; font-size: 11px; color: var(--text-dim); flex-shrink: 0; display: flex; align-items: center; gap: 6px; min-height: 22px; }
+#breadcrumb .bc-sep { color: var(--border); margin: 0 2px; }
+#breadcrumb .bc-link { color: var(--text-dim); cursor: pointer; text-decoration: none; }
+#breadcrumb .bc-link:hover { color: var(--accent); }
+#breadcrumb .bc-current { color: var(--accent); font-weight: 600; }
+#kbOverlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.75); z-index: 300; align-items: center; justify-content: center; }
+#kbOverlay.active { display: flex; }
+#kbOverlay .kb-panel { background: var(--bg-card); border: 1px solid var(--accent-dim); border-radius: 8px; padding: 24px 32px; max-width: 560px; width: 90%; max-height: 80vh; overflow-y: auto; }
+#kbOverlay .kb-title { font-size: 18px; color: var(--accent); font-weight: 600; margin-bottom: 16px; }
+#kbOverlay .kb-section { margin-bottom: 14px; }
+#kbOverlay .kb-section h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); margin-bottom: 6px; }
+#kbOverlay .kb-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 13px; }
+#kbOverlay .kb-key { font-family: monospace; background: var(--bg-body); border: 1px solid var(--border); border-radius: 3px; padding: 1px 8px; font-size: 12px; color: var(--accent); }
 .container { display: flex; flex: 1; min-height: 0; }
 .sidebar { width: 300px; min-width: 300px; background: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
 #sidebarInner { display: flex; flex-direction: column; flex: 1 1 0; min-height: 0; overflow: hidden; }
@@ -208,8 +221,9 @@ var DICEFORGE_AUTH=false;
 <header>
   <div><h1>TRIBUTE LANDS — CHARACTER VAULT</h1><div class="subtitle">DiceForge Studios Ltd <a href="vault-help.html" target="_blank" style="margin-left:10px;font-size:10px;color:var(--text-dim);letter-spacing:1px;text-decoration:none;border:1px solid var(--border);padding:1px 7px;border-radius:3px">? Help</a></div></div>
   <div id="navButtons" style="display:flex;gap:4px;align-items:center">
-    <button id="navBack" class="btn sm" onclick="navBack()" style="font-size:14px;padding:2px 8px;opacity:0.3;cursor:default" title="Back">◀</button>
-    <button id="navFwd" class="btn sm" onclick="navForward()" style="font-size:14px;padding:2px 8px;opacity:0.3;cursor:default" title="Forward">▶</button>
+    <button id="navBack" class="btn sm" onclick="navBack()" style="font-size:14px;padding:2px 8px;opacity:0.3;cursor:default" title="Back (Alt+←)">◀</button>
+    <button id="navFwd" class="btn sm" onclick="navForward()" style="font-size:14px;padding:2px 8px;opacity:0.3;cursor:default" title="Forward (Alt+→)">▶</button>
+    <button class="btn sm" onclick="toggleShortcutHelp()" style="font-size:12px;padding:2px 8px;margin-left:4px" title="Keyboard shortcuts (?)">⌨</button>
   </div>
   <div class="header-stats" id="headerStats"></div>
   <div id="syncIndicator" style="text-align:right;padding:2px 10px;display:flex;align-items:center;justify-content:flex-end;gap:8px">
@@ -218,6 +232,26 @@ var DICEFORGE_AUTH=false;
     <button onclick="promptForToken()" id="tokenBtn" style="font-size:10px;padding:1px 6px;background:none;border:1px solid var(--border);color:var(--text-dim);border-radius:3px;cursor:pointer;display:none" title="Set GitHub token">🔑 Token</button>
   </div>
 </header>
+<div id="breadcrumb"><span class="bc-current">Home</span></div>
+<div id="kbOverlay" onclick="if(event.target===this)toggleKBHelp()">
+  <div class="kb-panel">
+    <div class="kb-title">⌨ Keyboard Shortcuts</div>
+    <div class="kb-section"><h4>Navigation</h4>
+      <div class="kb-row"><span>Navigate roster</span><span><span class="kb-key">↑</span> <span class="kb-key">↓</span></span></div>
+      <div class="kb-row"><span>Go back</span><span><span class="kb-key">Alt</span> + <span class="kb-key">←</span></span></div>
+      <div class="kb-row"><span>Go forward</span><span><span class="kb-key">Alt</span> + <span class="kb-key">→</span></span></div>
+    </div>
+    <div class="kb-section"><h4>Editing</h4>
+      <div class="kb-row"><span>Undo</span><span><span class="kb-key">Ctrl</span> + <span class="kb-key">Z</span></span></div>
+      <div class="kb-row"><span>Redo</span><span><span class="kb-key">Ctrl</span> + <span class="kb-key">Y</span></span></div>
+    </div>
+    <div class="kb-section"><h4>Panels</h4>
+      <div class="kb-row"><span>Show shortcuts</span><span><span class="kb-key">?</span></span></div>
+      <div class="kb-row"><span>Close panel / overlay</span><span><span class="kb-key">Esc</span></span></div>
+    </div>
+    <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--text-dim)">Press <span class="kb-key">?</span> or <span class="kb-key">Esc</span> to close</div>
+  </div>
+</div>
 <div class="container">
   <div class="sidebar">
     <div id="sidebarInner">
@@ -311,7 +345,7 @@ function navBack(){
   _navPushing=true;
   navGo(prev);
   _navPushing=false;
-  updateNavButtons();
+  updateNavButtons();updateBreadcrumb();
 }
 function navForward(){
   if(!_navFwdStack.length)return;
@@ -320,7 +354,7 @@ function navForward(){
   _navPushing=true;
   navGo(next);
   _navPushing=false;
-  updateNavButtons();
+  updateNavButtons();updateBreadcrumb();
 }
 function navGo(view){
   if(view.type==='character') selectNPC(view.name);
@@ -335,6 +369,72 @@ function updateNavButtons(){
   if(back){back.style.opacity=_navHistory.length>1?'1':'0.3';back.style.cursor=_navHistory.length>1?'pointer':'default';}
   if(fwd){fwd.style.opacity=_navFwdStack.length>0?'1':'0.3';fwd.style.cursor=_navFwdStack.length>0?'pointer':'default';}
 }
+
+/* ═══ BREADCRUMB TRAIL ═══ */
+function updateBreadcrumb(){
+  const el=document.getElementById('breadcrumb');if(!el)return;
+  const sep='<span class="bc-sep">›</span>';
+  const home='<span class="bc-link" onclick="clearView()">Vault</span>';
+  let trail=home;
+  if(currentNPC){
+    const cat=(currentNPC.category||'NPC')==='Pre-gen'?'Pre-gens':'NPCs';
+    trail+=sep+'<span class="bc-link" onclick="headerFilter(\'category\',\''+cat+'\')">'+cat+'</span>';
+    trail+=sep+'<span class="bc-current">'+esc(currentNPC.name)+'</span>';
+    if(activePanel&&activePanel!=='audit'){
+      const panelNames={edit:'Edit',hindrances:'Hindrances',edges:'Edges',skills:'Skills',weapons:'Weapons',armour:'Armour',gear:'Gear',powers:'Powers',narrative:'Narrative',statblock:'Stat Block',transfer:'Import / Export'};
+      trail+=sep+'<span class="bc-current" style="font-weight:normal">'+esc(panelNames[activePanel]||activePanel)+'</span>';
+    }
+  } else {
+    const view=_navHistory.length?_navHistory[_navHistory.length-1]:null;
+    if(view){
+      const names={status:'Production Status',review:'Review Pending Changes',products:'Product Registry',changelog:'Canon Changelog'};
+      if(names[view.type]) trail+=sep+'<span class="bc-current">'+names[view.type]+'</span>';
+    }
+  }
+  el.innerHTML=trail;
+}
+function clearView(){
+  hideBottomBar();currentNPC=null;activePanel=null;
+  const el=document.getElementById('mainContent');
+  el.innerHTML='Select an NPC or create a new one';
+  el.classList.add('empty-state');
+  document.getElementById('categoryFilter').value='';
+  document.getElementById('regionFilter').value='';
+  document.getElementById('lifecycleFilter').value='';
+  document.getElementById('searchInput').value='';
+  filterNPCs();updateBreadcrumb();
+}
+
+/* ═══ KEYBOARD SHORTCUT OVERLAY ═══ */
+function toggleShortcutHelp(){
+  let overlay=document.getElementById('shortcutOverlay');
+  if(overlay){overlay.remove();return;}
+  overlay=document.createElement('div');
+  overlay.id='shortcutOverlay';
+  overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:300;display:flex;align-items:center;justify-content:center';
+  overlay.onclick=e=>{if(e.target===overlay)overlay.remove();};
+  const shortcuts=[
+    ['Navigation',''],
+    ['↑ / ↓','Move through character roster'],
+    ['Alt + ←','Navigate back'],
+    ['Alt + →','Navigate forward'],
+    ['',''],
+    ['Editing',''],
+    ['Ctrl + Z','Undo last edit'],
+    ['Ctrl + Y','Redo last edit'],
+    ['Ctrl + Shift + Z','Redo (alternative)'],
+    ['',''],
+    ['Views',''],
+    ['?','Toggle this shortcut help'],
+  ];
+  let rows=shortcuts.map(([key,desc])=>{
+    if(!key&&!desc) return '';
+    if(!desc) return '<tr><td colspan="2" style="padding:10px 0 4px;font-weight:bold;color:var(--accent);font-size:13px;border-bottom:1px solid var(--border)">'+key+'</td></tr>';
+    return '<tr><td style="padding:4px 16px 4px 0;text-align:right"><kbd style="background:var(--bg-input);border:1px solid var(--border);border-radius:3px;padding:2px 8px;font-family:monospace;font-size:12px;color:var(--text-bright);min-width:60px;display:inline-block;text-align:center">'+key+'</kbd></td><td style="padding:4px 0;color:var(--text);font-size:13px">'+desc+'</td></tr>';
+  }).join('');
+  overlay.innerHTML='<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:24px 32px;max-width:480px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h3 style="margin:0;color:var(--accent)">⌨ Keyboard Shortcuts</h3><button class="btn sm" onclick="document.getElementById(\'shortcutOverlay\').remove()">✕</button></div><table style="width:100%">'+rows+'</table><div style="margin-top:16px;font-size:11px;color:var(--text-dim);text-align:center">Press <kbd style="background:var(--bg-input);border:1px solid var(--border);border-radius:2px;padding:1px 5px;font-family:monospace;font-size:11px">?</kbd> or click anywhere to close</div></div>';
+  document.body.appendChild(overlay);
+}
 /* ═══ UNDO / REDO ═══ */
 const UNDO_CAP=40;
 let _undoStack=[], _redoStack=[], _lastSnapshot=null;
@@ -343,7 +443,7 @@ function _pushUndo(){if(!currentNPC)return;if(_lastSnapshot){_undoStack.push(_la
 function _restoreSnap(snap){if(!snap||!currentNPC)return;const idx=allNPCs.findIndex(n=>n.name===currentNPC.name);Object.assign(currentNPC,snap);if(idx>=0)allNPCs[idx]=currentNPC;calcDerived(currentNPC);scheduleSave();if(activePanel){renderMiddleColumn(currentNPC);renderStatColumn(currentNPC);}else{renderDetail();}}
 function undo(){if(!_undoStack.length||!currentNPC)return;_redoStack.push(_snap(currentNPC));const prev=_undoStack.pop();_lastSnapshot=_snap(prev);_restoreSnap(prev);}
 function redo(){if(!_redoStack.length||!currentNPC)return;_undoStack.push(_snap(currentNPC));const next=_redoStack.pop();_lastSnapshot=_snap(next);_restoreSnap(next);}
-document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='z'&&!e.shiftKey){e.preventDefault();undo();}if((e.ctrlKey||e.metaKey)&&(e.key==='y'||(e.key==='z'&&e.shiftKey))){e.preventDefault();redo();}if(e.altKey&&e.key==='ArrowLeft'){e.preventDefault();navBack();}if(e.altKey&&e.key==='ArrowRight'){e.preventDefault();navForward();}});
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='z'&&!e.shiftKey){e.preventDefault();undo();}if((e.ctrlKey||e.metaKey)&&(e.key==='y'||(e.key==='z'&&e.shiftKey))){e.preventDefault();redo();}if(e.altKey&&e.key==='ArrowLeft'){e.preventDefault();navBack();}if(e.altKey&&e.key==='ArrowRight'){e.preventDefault();navForward();}const tag=document.activeElement?.tagName;if(e.key==='?'&&tag!=='INPUT'&&tag!=='TEXTAREA'&&tag!=='SELECT'){e.preventDefault();toggleShortcutHelp();}});
 
 /* ═══ RELEASE MANAGEMENT — baselines, dirty tracking, product registry, locks ═══ */
 let _baselines={};
@@ -1028,7 +1128,7 @@ function updateHeaderStats(){
   document.getElementById("headerStats").innerHTML=`<span style="${hdrLink}" onclick="headerFilter('category','Pre-gen')" title="Filter to Pre-gens"><span class="stat-num">${pg}</span> Pre-gens</span><span style="${hdrLink}" onclick="headerFilter('category','NPC')" title="Filter to NPCs"><span class="stat-num">${np}</span> NPCs</span><span style="${hdrLink}" onclick="headerFilter('lifecycle','committed')" title="Filter to committed characters"><span class="stat-num">${cn}</span> 📦 Canon</span>${dirtySpan}<span style="${hdrLink}" onclick="showStatusView()" title="Open production status"><span class="stat-num">${c}</span> Complete</span><span style="${hdrLink}" onclick="showStatusView()" title="Open production status"><span class="stat-num">${f}</span> FG Ready</span>`;
 }
 
-function selectNPC(name){flushSave();currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;currentNPC._lockAcknowledged=false;_undoStack=[];_redoStack=[];_lastSnapshot=_snap(currentNPC);activePanel='audit';renderDetail();filterNPCs();navPush({type:'character',name:name});}
+function selectNPC(name){flushSave();currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;currentNPC._lockAcknowledged=false;_undoStack=[];_redoStack=[];_lastSnapshot=_snap(currentNPC);activePanel='audit';renderDetail();filterNPCs();navPush({type:'character',name:name});updateBreadcrumb();}
 
 function renderDetail(){
   const n=currentNPC;if(!n)return;
@@ -1165,9 +1265,9 @@ function showPanel(name){
       currentNPC._lockAcknowledged=true;
     }
   }
-  activePanel=name;if(currentNPC){renderMiddleColumn(currentNPC);renderStatColumn(currentNPC);}
+  activePanel=name;if(currentNPC){renderMiddleColumn(currentNPC);renderStatColumn(currentNPC);}updateBreadcrumb();
 }
-function closePanel(){activePanel=null;if(currentNPC)renderDetail();}
+function closePanel(){activePanel=null;if(currentNPC)renderDetail();updateBreadcrumb();}
 
 function renderNarrativeColumn(n){
   const el=document.getElementById('colNarrative');
@@ -2372,7 +2472,7 @@ function parseImportStatBlock(raw){
   return npc;
 }
 function showStatusView(){
-  hideBottomBar();currentNPC=null;activePanel=null;navPush({type:'status'});
+  hideBottomBar();currentNPC=null;activePanel=null;navPush({type:'status'});updateBreadcrumb();
   const el=document.getElementById('mainContent');el.classList.remove('empty-state');el.style.overflowY='auto';
   const rows=allNPCs.map(n=>{
     const audit=runBuildAudit(n);const legal=audit.every(r=>r.pass);
@@ -2518,7 +2618,7 @@ async function removeFromCanon(){
 
 // ── CHANGELOG VIEW ──
 function showChangelog(){
-  hideBottomBar();currentNPC=null;activePanel=null;navPush({type:'changelog'});
+  hideBottomBar();currentNPC=null;activePanel=null;navPush({type:'changelog'});updateBreadcrumb();
   const el=document.getElementById('mainContent');el.classList.remove('empty-state');el.style.overflowY='auto';
   el.innerHTML='<h2 style="color:var(--accent);margin-bottom:14px">📋 Canon Changelog</h2><div id="changelogContent" style="font-size:13px">Loading...</div>';
   loadChangelog();filterNPCs();
@@ -2580,7 +2680,7 @@ function checkPin(){
 
 /* ═══ REVIEW PANEL — batch review/approve/reject dirty characters ═══ */
 function showReviewPanel(){
-  hideBottomBar();currentNPC=null;activePanel=null;navPush({type:'review'});
+  hideBottomBar();currentNPC=null;activePanel=null;navPush({type:'review'});updateBreadcrumb();
   const el=document.getElementById('mainContent');
   el.classList.remove('empty-state');el.style.overflowY='auto';
   el.innerHTML='<div id="reviewInline" style="padding:0"><h2 style="color:var(--accent);margin-bottom:14px">✏️ Review Pending Changes</h2><div id="reviewContent" style="font-size:13px">Loading...</div><div id="reviewActions" style="margin-top:14px;display:flex;gap:8px"></div></div>';
@@ -2694,7 +2794,7 @@ async function reviewApproveAndCommit(name){
 
 /* ═══ PRODUCT REGISTRY UI ═══ */
 function showProductsModal(){
-  hideBottomBar();currentNPC=null;activePanel=null;navPush({type:'products'});
+  hideBottomBar();currentNPC=null;activePanel=null;navPush({type:'products'});updateBreadcrumb();
   const el=document.getElementById('mainContent');el.classList.remove('empty-state');el.style.overflowY='auto';
   el.innerHTML='<h2 style="color:var(--accent);margin-bottom:14px">📦 Product Registry</h2><div id="productsContent" style="font-size:13px">Loading...</div>';
   renderProductsContent();filterNPCs();
