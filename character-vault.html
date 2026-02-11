@@ -81,7 +81,7 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .status-dot.on { background: var(--green); }
 .status-dot.off { background: var(--border); }
-.sidebar-footer { padding: 8px 10px; border-top: 1px solid var(--border); display: flex; gap: 6px; flex-shrink: 0; }
+.sidebar-footer { padding: 8px 10px; border-top: 1px solid var(--border); display: flex; gap: 4px; flex-shrink: 0; flex-wrap: wrap; }
 .main { flex: 1; overflow: hidden; padding: 20px 28px; display: flex; flex-direction: column; }
 .main.empty-state { display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 15px; }
 .npc-header { margin-bottom: 16px; flex-shrink: 0; }
@@ -225,11 +225,11 @@ var DICEFORGE_AUTH=false;
     </div>
     <div class="npc-list" id="npcList"></div>
     <div class="sidebar-footer">
-      <button class="btn primary" onclick="openNewNPCModal()" style="flex:1">+ New Character</button>
-      <button class="btn" onclick="showReviewPanel()" id="reviewBtn" title="Review pending changes">Review</button>
-      <button class="btn" onclick="showProductsModal()" title="Product registry">Products</button>
-      <button class="btn" onclick="showStatusView()">Status</button>
-      <button class="btn" onclick="showChangelog()">Changes</button>
+      <button class="btn primary" onclick="openNewNPCModal()" style="flex:1 1 100%">+ New Character</button>
+      <button class="btn sm" onclick="showReviewPanel()" id="reviewBtn" title="Review pending changes" style="flex:1">Review</button>
+      <button class="btn sm" onclick="showProductsModal()" title="Product registry" style="flex:1">Products</button>
+      <button class="btn sm" onclick="showStatusView()" style="flex:1">Status</button>
+      <button class="btn sm" onclick="showChangelog()" style="flex:1">Changes</button>
     </div>
     </div>
   </div>
@@ -263,16 +263,6 @@ var DICEFORGE_AUTH=false;
     <h3>📋 Canon Changelog</h3>
     <div id="changelogContent" style="font-size:13px">Loading...</div>
     <div class="form-actions" style="margin-top:14px"><button class="btn" onclick="closeChangelogModal()">Close</button></div>
-  </div>
-</div>
-<div class="modal-overlay" id="reviewModal">
-  <div class="modal" style="width:860px;max-height:85vh;overflow-y:auto">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <h3 style="margin:0">✏️ Review Pending Changes</h3>
-      <button class="btn" onclick="closeReviewModal()">✕ Close</button>
-    </div>
-    <div id="reviewContent" style="font-size:13px">Loading...</div>
-    <div id="reviewActions" style="margin-top:14px;display:flex;gap:8px"></div>
   </div>
 </div>
 <div class="modal-overlay" id="productsModal">
@@ -2513,10 +2503,17 @@ function checkPin(){
 
 /* ═══ REVIEW PANEL — batch review/approve/reject dirty characters ═══ */
 function showReviewPanel(){
-  document.getElementById('reviewModal').classList.add('active');
+  currentNPC=null;activePanel=null;
+  const el=document.getElementById('mainContent');
+  el.classList.remove('empty-state');el.style.overflowY='auto';
+  el.innerHTML='<div id="reviewInline" style="padding:0"><h2 style="color:var(--accent);margin-bottom:14px">✏️ Review Pending Changes</h2><div id="reviewContent" style="font-size:13px">Loading...</div><div id="reviewActions" style="margin-top:14px;display:flex;gap:8px"></div></div>';
   renderReviewContent();
+  filterNPCs();
 }
-function closeReviewModal(){document.getElementById('reviewModal').classList.remove('active');}
+function closeReviewModal(){
+  if(currentNPC){renderDetail();}
+  else{const el=document.getElementById('mainContent');el.innerHTML='Select an NPC or create a new one';el.classList.add('empty-state');}
+}
 
 function renderReviewContent(){
   const dirty=getAllDirty();
