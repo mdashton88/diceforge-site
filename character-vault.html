@@ -30,6 +30,7 @@ header { background: linear-gradient(135deg, #1a1a1a 0%, #2a2218 100%); border-b
 header h1 { font-size: 18px; color: var(--accent); font-weight: 600; letter-spacing: 1px; }
 header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; }
 .header-stats { display: flex; gap: 16px; font-size: 13px; color: var(--text-dim); }
+.header-stats > span:hover { color: var(--accent); }
 .header-stats .stat-num { color: var(--accent); font-weight: 600; }
 .container { display: flex; flex: 1; min-height: 0; }
 .sidebar { width: 300px; min-width: 300px; background: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
@@ -82,7 +83,7 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .status-dot.on { background: var(--green); }
 .status-dot.off { background: var(--border); }
 .sidebar-footer { padding: 8px 10px; border-top: 1px solid var(--border); display: flex; gap: 4px; flex-shrink: 0; flex-wrap: wrap; }
-.main { flex: 1; overflow: hidden; padding: 20px 28px; display: flex; flex-direction: column; }
+.main { flex: 1; overflow: hidden; padding: 20px 28px 52px 28px; display: flex; flex-direction: column; }
 .main.empty-state { display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 15px; }
 .npc-header { margin-bottom: 16px; flex-shrink: 0; }
 .npc-header h2 { font-size: 24px; color: var(--text-bright); font-weight: 600; }
@@ -91,6 +92,11 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .col-stats { width: 400px; min-width: 400px; flex-shrink: 0; display: flex; flex-direction: column; }
 .col-stats-scroll { flex: 1; overflow-y: auto; }
 .col-stats-footer { flex-shrink: 0; border-top: 1px solid var(--border); background: var(--bg-card); padding-bottom: 4px; }
+#charBottomBar { position: fixed; bottom: 0; left: 300px; right: 0; z-index: 50; background: var(--bg-card); border-top: 1px solid var(--border); padding: 6px 20px; display: none; }
+#charBottomBar .status-bar { display: flex; align-items: center; gap: 0; }
+#charBottomBar .status-row { display: flex; align-items: center; gap: 14px; font-size: 13px; }
+#charBottomBar .action-btns { display: flex; gap: 4px; margin-left: 20px; padding-left: 20px; border-left: 1px solid var(--border); }
+#charBottomBar .commit-area { margin-left: auto; padding-left: 20px; border-left: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
 .col-middle { min-width: 380px; flex: 1; overflow-y: auto; }
 .col-narrative { width: 360px; min-width: 300px; flex-shrink: 0; overflow-y: auto; }
 .stat-block-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; padding: 14px 16px; font-size: 13px; }
@@ -245,6 +251,7 @@ var DICEFORGE_AUTH=false;
     </div>
   </div>
 </div>
+<div id="charBottomBar" style="display:none"></div>
 <div class="modal-overlay" id="newNpcModal">
   <div class="modal">
     <h3>New Character</h3>
@@ -898,6 +905,19 @@ function refreshProductFilter(){
   if(cur)sel.value=cur;
 }
 
+function headerFilter(type,value){
+  // Reset all filters first
+  document.getElementById('categoryFilter').value='';
+  document.getElementById('regionFilter').value='';
+  document.getElementById('lifecycleFilter').value='';
+  document.getElementById('searchInput').value='';
+  const pf=document.getElementById('productFilter');if(pf)pf.value='';
+  // Set the target filter
+  if(type==='category') document.getElementById('categoryFilter').value=value;
+  else if(type==='lifecycle') document.getElementById('lifecycleFilter').value=value;
+  filterNPCs();
+}
+
 function filterNPCs(){
   renderNPCList(getFilteredNPCs());
 }
@@ -967,8 +987,9 @@ function updateHeaderStats(){
   const c=allNPCs.filter(n=>n.statComplete&&n.narrativeComplete).length,f=allNPCs.filter(n=>n.fgReady).length;
   const cn=allNPCs.filter(n=>canonCommitted.has(n.name)).length;
   const dc=getDirtyCount();
-  const dirtySpan=dc>0?`<span style="cursor:pointer" onclick="showReviewPanel()" title="Click to review changes"><span class="stat-num" style="color:#e8b84e">${dc}</span> ✏️ Pending</span>`:'';
-  document.getElementById("headerStats").innerHTML=`<span><span class="stat-num">${pg}</span> Pre-gens</span><span><span class="stat-num">${np}</span> NPCs</span><span><span class="stat-num">${cn}</span> 📦 Canon</span>${dirtySpan}<span><span class="stat-num">${c}</span> Complete</span><span><span class="stat-num">${f}</span> FG Ready</span>`;
+  const dirtySpan=dc>0?`<span style="cursor:pointer;border-bottom:1px dotted #e8b84e;padding-bottom:1px" onclick="showReviewPanel()" title="Click to review changes"><span class="stat-num" style="color:#e8b84e">${dc}</span> ✏️ Pending</span>`:'';
+  const hdrLink='cursor:pointer;border-bottom:1px dotted var(--text-dim);padding-bottom:1px';
+  document.getElementById("headerStats").innerHTML=`<span style="${hdrLink}" onclick="headerFilter('category','Pre-gen')" title="Filter to Pre-gens"><span class="stat-num">${pg}</span> Pre-gens</span><span style="${hdrLink}" onclick="headerFilter('category','NPC')" title="Filter to NPCs"><span class="stat-num">${np}</span> NPCs</span><span style="${hdrLink}" onclick="headerFilter('lifecycle','committed')" title="Filter to committed characters"><span class="stat-num">${cn}</span> 📦 Canon</span>${dirtySpan}<span style="${hdrLink}" onclick="showStatusView()" title="Open production status"><span class="stat-num">${c}</span> Complete</span><span style="${hdrLink}" onclick="showStatusView()" title="Open production status"><span class="stat-num">${f}</span> FG Ready</span>`;
 }
 
 function selectNPC(name){flushSave();currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;currentNPC._lockAcknowledged=false;_undoStack=[];_redoStack=[];_lastSnapshot=_snap(currentNPC);activePanel='audit';renderDetail();filterNPCs();}
@@ -1042,13 +1063,27 @@ function renderStatColumn(n){
   const powersBox=buildSectionBox('Powers','powers',n.powers,p=>`<div class="item-entry">${esc(p)}</div>`);
   const gearItems=n.gearText?n.gearText.split(',').map(g=>g.trim()).filter(g=>g):[];
   const gearBox=buildSectionBox('Gear','gear',gearItems,g=>`<div class="item-entry">${esc(g)}</div>`);
-  const statusHTML=`<div class="status-bar"><div class="status-row">
+  el.innerHTML=`<div class="col-stats-scroll">${statsHTML}<div class="section-box-pair">${hindBox}${edgeBox}</div><div class="section-box-pair">${armourBox}${weaponBox}</div><div class="section-box-pair">${powersBox}${gearBox}</div></div>`;
+  renderBottomBar(n);
+}
+
+function renderBottomBar(n){
+  const bar=document.getElementById('charBottomBar');
+  if(!n){bar.style.display='none';return;}
+  const inCanon=canonCommitted.has(n.name);
+  const audit=runBuildAudit(n);const legal=audit.every(r=>r.pass);
+  const commitLabel=inCanon?'🔄 Update Canon':'📦 Commit to Canon';
+  const legalLabel=legal?'<span style="color:var(--green)">✅ Build legal — ready to commit</span>':'<span style="color:var(--red)">❌ Build has issues</span>';
+  bar.style.display='';
+  bar.innerHTML=`<div class="status-bar"><div class="status-row">
     <label><input type="checkbox" ${n.statComplete?'checked':''} onchange="toggleStatus('statComplete',this.checked)"> Stats</label>
     <label><input type="checkbox" ${n.narrativeComplete?'checked':''} onchange="toggleStatus('narrativeComplete',this.checked)"> Narrative</label>
     <label><input type="checkbox" ${n.fgReady?'checked':''} onchange="toggleStatus('fgReady',this.checked)"> FG Ready</label></div>
-    <div class="action-btns"><button class="btn sm" onclick="showPanel('edit')">Edit</button><button class="btn sm" onclick="showPanel('statblock')">Stat Block</button><button class="btn sm" onclick="showPanel('audit')">Audit</button><button class="btn sm" onclick="showPanel('transfer')" style="color:var(--accent)">Import / Export</button><button class="btn sm danger" onclick="deleteNPC()" style="margin-left:auto">Delete</button></div></div>`;
-  el.innerHTML=`<div class="col-stats-scroll">${statsHTML}<div class="section-box-pair">${hindBox}${edgeBox}</div><div class="section-box-pair">${armourBox}${weaponBox}</div><div class="section-box-pair">${powersBox}${gearBox}</div></div><div class="col-stats-footer">${statusHTML}</div>`;
+    <div class="action-btns"><button class="btn sm" onclick="showPanel('edit')">Edit</button><button class="btn sm" onclick="showPanel('statblock')">Stat Block</button><button class="btn sm" onclick="showPanel('audit')">Audit</button><button class="btn sm" onclick="showPanel('transfer')" style="color:var(--accent)">Import / Export</button><button class="btn sm danger" onclick="deleteNPC()">Delete</button></div>
+    <div class="commit-area"><button class="btn primary" onclick="showPanel('audit');setTimeout(prepareCommit,100)" title="${inCanon?'Update canonical data':'Commit to canon'}">${commitLabel}</button>${legalLabel}</div>
+  </div>`;
 }
+function hideBottomBar(){const bar=document.getElementById('charBottomBar');if(bar)bar.style.display='none';}
 
 function buildSectionBox(title,panel,items,renderItem,isLegacy){
   const content=items.length?items.map(renderItem).join('')+(isLegacy?'<div class="legacy-tag" style="margin-top:4px">Legacy</div>':''):'<div class="none-text">None</div>';
@@ -1861,7 +1896,7 @@ function toggleStatus(field,val){currentNPC[field]=val;saveCharacter(currentNPC)
 function deleteNPC(){
   if(!confirm(`Delete ${currentNPC.name}?`))return;
   allNPCs=allNPCs.filter(n=>n.name!==currentNPC.name);currentNPC=null;
-  scheduleSave();
+  hideBottomBar();scheduleSave();
   document.getElementById('mainContent').innerHTML='Select an NPC or create a new one';
   document.getElementById('mainContent').classList.add('empty-state');
   filterNPCs();updateHeaderStats();
@@ -2301,6 +2336,7 @@ function parseImportStatBlock(raw){
   return npc;
 }
 function showStatusView(){
+  hideBottomBar();currentNPC=null;activePanel=null;
   const el=document.getElementById('mainContent');el.classList.remove('empty-state');el.style.overflowY='auto';
   const rows=allNPCs.map(n=>{
     const audit=runBuildAudit(n);const legal=audit.every(r=>r.pass);
@@ -2503,7 +2539,7 @@ function checkPin(){
 
 /* ═══ REVIEW PANEL — batch review/approve/reject dirty characters ═══ */
 function showReviewPanel(){
-  currentNPC=null;activePanel=null;
+  hideBottomBar();currentNPC=null;activePanel=null;
   const el=document.getElementById('mainContent');
   el.classList.remove('empty-state');el.style.overflowY='auto';
   el.innerHTML='<div id="reviewInline" style="padding:0"><h2 style="color:var(--accent);margin-bottom:14px">✏️ Review Pending Changes</h2><div id="reviewContent" style="font-size:13px">Loading...</div><div id="reviewActions" style="margin-top:14px;display:flex;gap:8px"></div></div>';
