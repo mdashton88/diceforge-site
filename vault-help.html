@@ -103,7 +103,7 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <nav class="sidebar">
   <div class="sidebar-header">
     <h1>Character Vault</h1>
-    <div class="subtitle">User Manual · v2.1</div>
+    <div class="subtitle">User Manual · v3.0</div>
   </div>
   <div class="sidebar-search">
     <input type="text" id="searchInput" placeholder="Search docs..." autocomplete="off">
@@ -215,11 +215,15 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <h3>Header Bar</h3>
 
-<p>The header shows the tool title, total character count, production stats (stat-complete, narrative-complete, FG-ready counts), and a <strong>cloud sync indicator</strong>. Green dot means synced; red means a problem occurred.</p>
+<p>The header shows the tool title, total character count, production stats (pre-gens, NPCs, canon-committed, stat-complete, FG-ready), and a <strong>cloud sync indicator</strong>. Green dot means synced; red means a problem occurred. When any characters have unsaved changes, a clickable <strong>✏️ Pending</strong> count appears — click it to jump straight to the Review Panel.</p>
 
 <h3>Action Bar</h3>
 
 <p>Below the stat summary: <strong>Edit</strong>, <strong>Stat Block</strong>, <strong>Audit</strong>, <strong>⇄ Transfer</strong>, and <strong>Delete</strong> buttons. Transfer opens the full Import/Export panel.</p>
+
+<h3>Sidebar Footer</h3>
+
+<p>At the bottom of the roster column: <strong>+ New Character</strong> creates a new entry. <strong>Review</strong> opens the batch change review panel (see <em>Release Management</em>). <strong>Products</strong> opens the product registry. <strong>Status</strong> shows the production dashboard. <strong>Changes</strong> opens the canon changelog.</p>
 
 <div class="page-nav">
   <a onclick="goPage('quick-start')">← Quick Start</a>
@@ -262,6 +266,12 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <p>Within each group, characters are sorted by <strong>reference code</strong> (AM-C001, AM-C002, etc.), keeping them in production order. Characters without a refCode fall to the end of their group, sorted alphabetically.</p>
 
 <p>Click a character to select it and load their data into the right column and editing panels.</p>
+
+<h3>Dirty State Indicators</h3>
+
+<p>Characters with pending changes show visual indicators in the roster based on their lifecycle state. A <strong>blue left border</strong> with a <span style="color:#88bbee">DRAFT</span> badge indicates an uncommitted character with edits. An <strong>amber left border</strong> with an <span style="color:#e8b84e">EDITED</span> badge marks a canon-committed character with changes pending review. A <strong>red left border</strong> with an <span style="color:#ee6666">ERRATA</span> badge flags a published character that's been modified — these require explicit errata justification before approval.</p>
+
+<p>These indicators appear automatically whenever the character's current state differs from its last approved baseline, and disappear when changes are approved or reverted through the Review Panel.</p>
 
 <h3>Roster Stats</h3>
 
@@ -310,6 +320,10 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <p>Every edit is recorded on an undo stack (up to 40 steps). Press <strong>Ctrl+Z</strong> (or <strong>⌘Z</strong> on Mac) to undo the last change, <strong>Ctrl+Y</strong> or <strong>Ctrl+Shift+Z</strong> to redo. This covers all edits: attributes, skills, edges, hindrances, weapons, armour, gear, powers, and narrative text.</p>
 
 <p>The undo stack resets when you switch to a different character — each character maintains its own history for the current session.</p>
+
+<h3>Published Character Lock</h3>
+
+<p>Characters assigned to a released product are locked. When you attempt to open an editing panel on a locked character, the Vault shows a confirmation dialog explaining the character is published and that edits will be flagged as errata. Once acknowledged, a red lock banner appears at the top of every editing panel as a persistent reminder. See <em>Release Management</em> for full details.</p>
 
 <div class="page-nav">
   <a onclick="goPage('create')">← Creating Characters</a>
