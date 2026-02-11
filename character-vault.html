@@ -47,6 +47,27 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .npc-item { padding: 8px 10px; border-radius: 4px; cursor: pointer; border: 1px solid transparent; margin-bottom: 2px; }
 .npc-item:hover { background: var(--bg-hover); }
 .npc-item.active { background: var(--bg-hover); border-color: var(--accent-dim); }
+.npc-item.dirty-draft { border-left: 3px solid #5588cc; }
+.npc-item.dirty-committed { background: rgba(200,150,30,0.08); border-left: 3px solid #c8961e; }
+.npc-item.dirty-published { background: rgba(200,50,50,0.1); border-left: 3px solid #cc3333; }
+.npc-item .dirty-badge { font-size: 9px; padding: 1px 5px; border-radius: 3px; margin-left: 4px; font-weight: 600; letter-spacing: 0.5px; vertical-align: middle; }
+.npc-item .dirty-badge.draft { background: #5588cc33; color: #88bbee; }
+.npc-item .dirty-badge.committed { background: #c8961e33; color: #e8b84e; }
+.npc-item .dirty-badge.published { background: #cc333333; color: #ee6666; }
+.review-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; padding: 10px; margin-bottom: 8px; }
+.review-card.published { border-color: #cc3333; }
+.review-card.committed { border-color: #c8961e; }
+.review-card .rc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.review-card .rc-name { font-weight: bold; color: var(--text-bright); }
+.review-card .rc-diff { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+.review-card .rc-diff .added { color: var(--green); }
+.review-card .rc-diff .removed { color: var(--red); }
+.review-card .rc-diff .changed { color: var(--accent); }
+.review-card .rc-actions { margin-top: 6px; display: flex; gap: 6px; }
+.product-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; padding: 10px; margin-bottom: 8px; }
+.product-card.released { border-color: var(--green); }
+.product-card.in-review { border-color: #c8961e; }
+.lock-warning { background: rgba(200,50,50,0.1); border: 1px solid #cc3333; border-radius: 4px; padding: 8px 10px; margin-bottom: 8px; font-size: 12px; color: #ee6666; }
 .npc-item .npc-name { font-size: 14px; font-weight: 600; color: var(--text-bright); }
 .npc-item .npc-meta { font-size: 12px; color: var(--text-dim); margin-top: 1px; }
 .tier-tag { display: inline-block; padding: 0 6px; border-radius: 2px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; vertical-align: middle; margin-left: 4px; }
@@ -201,6 +222,8 @@ var DICEFORGE_AUTH=false;
     <div class="npc-list" id="npcList"></div>
     <div class="sidebar-footer">
       <button class="btn primary" onclick="openNewNPCModal()" style="flex:1">+ New Character</button>
+      <button class="btn" onclick="showReviewPanel()" id="reviewBtn" title="Review pending changes">Review</button>
+      <button class="btn" onclick="showProductsModal()" title="Product registry">Products</button>
       <button class="btn" onclick="showStatusView()">Status</button>
       <button class="btn" onclick="showChangelog()">Changes</button>
     </div>
@@ -236,6 +259,25 @@ var DICEFORGE_AUTH=false;
     <h3>📋 Canon Changelog</h3>
     <div id="changelogContent" style="font-size:13px">Loading...</div>
     <div class="form-actions" style="margin-top:14px"><button class="btn" onclick="closeChangelogModal()">Close</button></div>
+  </div>
+</div>
+<div class="modal-overlay" id="reviewModal">
+  <div class="modal" style="width:860px;max-height:85vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3 style="margin:0">✏️ Review Pending Changes</h3>
+      <button class="btn" onclick="closeReviewModal()">✕ Close</button>
+    </div>
+    <div id="reviewContent" style="font-size:13px">Loading...</div>
+    <div id="reviewActions" style="margin-top:14px;display:flex;gap:8px"></div>
+  </div>
+</div>
+<div class="modal-overlay" id="productsModal">
+  <div class="modal" style="width:860px;max-height:85vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3 style="margin:0">📦 Product Registry</h3>
+      <button class="btn" onclick="closeProductsModal()">✕ Close</button>
+    </div>
+    <div id="productsContent" style="font-size:13px">Loading...</div>
   </div>
 </div>
 <script>
@@ -275,6 +317,256 @@ function _restoreSnap(snap){if(!snap||!currentNPC)return;const idx=allNPCs.findI
 function undo(){if(!_undoStack.length||!currentNPC)return;_redoStack.push(_snap(currentNPC));const prev=_undoStack.pop();_lastSnapshot=_snap(prev);_restoreSnap(prev);}
 function redo(){if(!_redoStack.length||!currentNPC)return;_undoStack.push(_snap(currentNPC));const next=_redoStack.pop();_lastSnapshot=_snap(next);_restoreSnap(next);}
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='z'&&!e.shiftKey){e.preventDefault();undo();}if((e.ctrlKey||e.metaKey)&&(e.key==='y'||(e.key==='z'&&e.shiftKey))){e.preventDefault();redo();}});
+
+/* ═══ RELEASE MANAGEMENT — baselines, dirty tracking, product registry, locks ═══ */
+let _baselines={};
+let _productRegistry={products:[]};
+const REGISTRY_FILENAME='product-registry.json';
+
+/* ── Baseline Management ── */
+function captureBaselines(){
+  _baselines={};
+  allNPCs.forEach(n=>{_baselines[n.name]=JSON.stringify(serialiseForBaseline(n));});
+  console.log('📸 Baselines captured for',Object.keys(_baselines).length,'characters');
+}
+function captureBaseline(name){
+  const n=allNPCs.find(c=>c.name===name);
+  if(n)_baselines[name]=JSON.stringify(serialiseForBaseline(n));
+}
+function serialiseForCompare(n){
+  return {
+    attrs:{agility:n.agility||0,smarts:n.smarts||0,spirit:n.spirit||0,strength:n.strength||0,vigor:n.vigor||0},
+    skills:Object.assign({},n.skills||{}),edges:[...(n.edges||[])].sort(),edgeNotes:Object.assign({},n.edgeNotes||{}),
+    hindrances:[...(n.hindrances||[])].sort(),powers:[...(n.powers||[])].sort(),
+    weapons:(n.weapons||[]).map(w=>typeof w==='string'?w:w.name).sort(),
+    armour:(n.armour||[]).map(a=>typeof a==='string'?a:a.name).sort(),
+    gearText:n.gearText||'',pace:n.pace||6,parry:n.parry||2,toughness:n.toughness||5,toughnessArmor:n.toughnessArmor||0,
+    abName:n.abName||'',pp:n.pp||0,startingFunds:n.startingFunds||500,gearCost:n.gearCost||0,
+    quote:n.quote||'',description:n.description||'',background:n.background||'',
+    motivation:n.motivation||'',secret:n.secret||'',services:n.services||'',
+    adventureHook:n.adventureHook||'',tactics:n.tactics||'',notes:n.notes||'',
+    refCode:n.refCode||'',concept:n.concept||'',ancestry:n.ancestry||'Human',
+    region:n.region||'Ammaria',tier:n.tier||'Wild Card',rank:n.rank||'Novice',category:n.category||'NPC'
+  };
+}
+function serialiseForBaseline(n){
+  const base=serialiseForCompare(n);
+  base.weapons=(n.weapons||[]).map(w=>({...w}));
+  base.armour=(n.armour||[]).map(a=>({...a}));
+  return base;
+}
+
+/* ── Dirty Detection ── */
+function isCharDirty(name){
+  const n=allNPCs.find(c=>c.name===name);
+  if(!n)return false;
+  const baseline=_baselines[name];
+  if(!baseline)return true;
+  // Compare using the compare-only serialisation (names not objects) for stable comparison
+  const oldFull=JSON.parse(baseline);
+  // Re-normalise baseline through compare path (strips weapon/armour objects to sorted names)
+  const oldCompare={...oldFull,
+    weapons:(oldFull.weapons||[]).map(w=>typeof w==='string'?w:w.name).sort(),
+    armour:(oldFull.armour||[]).map(a=>typeof a==='string'?a:a.name).sort()
+  };
+  return JSON.stringify(serialiseForCompare(n))!==JSON.stringify(oldCompare);
+}
+function getAllDirty(){return allNPCs.filter(n=>isCharDirty(n.name));}
+function getDirtyCount(){return getAllDirty().length;}
+
+/* ── Character Lifecycle ── */
+function getLifecycle(name){
+  const n=allNPCs.find(c=>c.name===name);
+  if(!n)return 'draft';
+  if(isPublished(name))return 'published';
+  if(canonCommitted.has(name))return 'committed';
+  return 'draft';
+}
+function isPublished(name){
+  return _productRegistry.products.some(p=>p.status==='released'&&(p.characters||[]).includes(name));
+}
+function getPublishedProducts(name){
+  return _productRegistry.products.filter(p=>p.status==='released'&&(p.characters||[]).includes(name));
+}
+function isLocked(name){
+  return isPublished(name);
+}
+
+/* ── Human-Readable Diff Engine ── */
+function getCharDiff(name){
+  const n=allNPCs.find(c=>c.name===name);
+  if(!n)return [];
+  const baseline=_baselines[name];
+  if(!baseline)return [{type:'added',text:'New character (no baseline)'}];
+  const old=JSON.parse(baseline);
+  const cur=serialiseForCompare(n);
+  const changes=[];
+  // Identity
+  if(old.concept!==cur.concept) changes.push({type:'changed',text:`Concept: "${old.concept||'—'}" → "${cur.concept||'—'}"`});
+  if(old.ancestry!==cur.ancestry) changes.push({type:'changed',text:`Ancestry: ${old.ancestry} → ${cur.ancestry}`});
+  if(old.tier!==cur.tier) changes.push({type:'changed',text:`Tier: ${old.tier} → ${cur.tier}`});
+  if(old.rank!==cur.rank) changes.push({type:'changed',text:`Rank: ${old.rank} → ${cur.rank}`});
+  if(old.refCode!==cur.refCode) changes.push({type:'changed',text:`RefCode: ${old.refCode||'—'} → ${cur.refCode||'—'}`});
+  // Attributes
+  const attrNames=['agility','smarts','spirit','strength','vigor'];
+  const attrLabels={agility:'Agi',smarts:'Sma',spirit:'Spi',strength:'Str',vigor:'Vig'};
+  const attrChanges=[];
+  attrNames.forEach(a=>{if(old.attrs[a]!==cur.attrs[a]) attrChanges.push(`${attrLabels[a]} ${d(old.attrs[a])}→${d(cur.attrs[a])}`);});
+  if(attrChanges.length) changes.push({type:'changed',text:'Attributes: '+attrChanges.join(', ')});
+  // Skills
+  const allSkills=new Set([...Object.keys(old.skills),...Object.keys(cur.skills)]);
+  const skillAdded=[],skillRemoved=[],skillChanged=[];
+  allSkills.forEach(sk=>{
+    if(!old.skills[sk]) skillAdded.push(sk+' '+d(cur.skills[sk]));
+    else if(!cur.skills[sk]) skillRemoved.push(sk);
+    else if(old.skills[sk]!==cur.skills[sk]) skillChanged.push(sk+' '+d(old.skills[sk])+'→'+d(cur.skills[sk]));
+  });
+  if(skillAdded.length) changes.push({type:'added',text:'Skills added: '+skillAdded.join(', ')});
+  if(skillRemoved.length) changes.push({type:'removed',text:'Skills removed: '+skillRemoved.join(', ')});
+  if(skillChanged.length) changes.push({type:'changed',text:'Skills changed: '+skillChanged.join(', ')});
+  // Edges
+  const edgeAdded=cur.edges.filter(e=>!old.edges.includes(e));
+  const edgeRemoved=old.edges.filter(e=>!cur.edges.includes(e));
+  if(edgeAdded.length) changes.push({type:'added',text:'Edges added: '+edgeAdded.join(', ')});
+  if(edgeRemoved.length) changes.push({type:'removed',text:'Edges removed: '+edgeRemoved.join(', ')});
+  // Edge notes
+  const allEdgeNoteKeys=new Set([...Object.keys(old.edgeNotes||{}),...Object.keys(cur.edgeNotes||{})]);
+  const noteChanges=[];
+  allEdgeNoteKeys.forEach(k=>{if((old.edgeNotes||{})[k]!==(cur.edgeNotes||{})[k]) noteChanges.push(k);});
+  if(noteChanges.length) changes.push({type:'changed',text:'Edge notes updated: '+noteChanges.join(', ')});
+  // Hindrances
+  const hindAdded=cur.hindrances.filter(h=>!old.hindrances.includes(h));
+  const hindRemoved=old.hindrances.filter(h=>!cur.hindrances.includes(h));
+  if(hindAdded.length) changes.push({type:'added',text:'Hindrances added: '+hindAdded.join(', ')});
+  if(hindRemoved.length) changes.push({type:'removed',text:'Hindrances removed: '+hindRemoved.join(', ')});
+  // Powers
+  const powAdded=cur.powers.filter(p=>!old.powers.includes(p));
+  const powRemoved=old.powers.filter(p=>!cur.powers.includes(p));
+  if(powAdded.length) changes.push({type:'added',text:'Powers added: '+powAdded.join(', ')});
+  if(powRemoved.length) changes.push({type:'removed',text:'Powers removed: '+powRemoved.join(', ')});
+  if(old.pp!==cur.pp) changes.push({type:'changed',text:`Power Points: ${old.pp}→${cur.pp}`});
+  // Weapons
+  const oldWepNames=(old.weapons||[]).map(w=>typeof w==='string'?w:w.name).sort();
+  const curWepNames=(cur.weapons||[]).map(w=>typeof w==='string'?w:w.name).sort();
+  const wepAdded=curWepNames.filter(w=>!oldWepNames.includes(w));
+  const wepRemoved=oldWepNames.filter(w=>!curWepNames.includes(w));
+  if(wepAdded.length) changes.push({type:'added',text:'Weapons added: '+wepAdded.join(', ')});
+  if(wepRemoved.length) changes.push({type:'removed',text:'Weapons removed: '+wepRemoved.join(', ')});
+  // Armour
+  const oldArmNames=(old.armour||[]).map(a=>typeof a==='string'?a:a.name).sort();
+  const curArmNames=(cur.armour||[]).map(a=>typeof a==='string'?a:a.name).sort();
+  const armAdded=curArmNames.filter(a=>!oldArmNames.includes(a));
+  const armRemoved=oldArmNames.filter(a=>!curArmNames.includes(a));
+  if(armAdded.length) changes.push({type:'added',text:'Armour added: '+armAdded.join(', ')});
+  if(armRemoved.length) changes.push({type:'removed',text:'Armour removed: '+armRemoved.join(', ')});
+  // Gear
+  if(old.gearText!==cur.gearText) changes.push({type:'changed',text:'Gear list updated'});
+  // Derived
+  if(old.pace!==cur.pace) changes.push({type:'changed',text:`Pace: ${old.pace}→${cur.pace}`});
+  // Funds
+  if(old.startingFunds!==cur.startingFunds) changes.push({type:'changed',text:`Starting Funds: ${old.startingFunds}₡→${cur.startingFunds}₡`});
+  if(old.gearCost!==cur.gearCost) changes.push({type:'changed',text:`Gear Cost: ${old.gearCost}₡→${cur.gearCost}₡`});
+  // Narrative
+  const narrativeFields=[{key:'description',label:'Description'},{key:'background',label:'Background'},{key:'motivation',label:'Motivation'},{key:'secret',label:'Secret'},{key:'services',label:'Services'},{key:'adventureHook',label:'Adventure Hook'},{key:'tactics',label:'Tactics'},{key:'notes',label:'Notes'},{key:'quote',label:'Quote'}];
+  narrativeFields.forEach(f=>{if(old[f.key]!==cur[f.key]){
+    if(!old[f.key]&&cur[f.key]) changes.push({type:'added',text:f.label+' added'});
+    else if(old[f.key]&&!cur[f.key]) changes.push({type:'removed',text:f.label+' removed'});
+    else changes.push({type:'changed',text:f.label+' updated'});
+  }});
+  return changes;
+}
+
+/* ── Product Registry ── */
+async function loadProductRegistry(){
+  if(!GIST_ID||!GIST_TOKEN)return;
+  try{
+    const resp=await fetch(`https://api.github.com/gists/${GIST_ID}`,{headers:{'Authorization':`token ${GIST_TOKEN}`,'Accept':'application/vnd.github.v3+json'}});
+    if(!resp.ok)return;
+    const gist=await resp.json();
+    const raw=gist.files[REGISTRY_FILENAME]?.content;
+    if(raw){_productRegistry=JSON.parse(raw);console.log('📦 Product registry loaded:',_productRegistry.products.length,'products');}
+  }catch(e){console.warn('Registry load failed:',e);}
+}
+async function saveProductRegistry(){
+  if(!GIST_ID||!GIST_TOKEN)return;
+  try{
+    await fetch(`https://api.github.com/gists/${GIST_ID}`,{
+      method:'PATCH',
+      headers:{'Authorization':`token ${GIST_TOKEN}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      body:JSON.stringify({files:{[REGISTRY_FILENAME]:{content:JSON.stringify(_productRegistry,null,2)}}})
+    });
+    console.log('📦 Registry saved');
+  }catch(e){console.error('Registry save failed:',e);}
+}
+function addProduct(code,title){
+  if(_productRegistry.products.find(p=>p.code===code))return false;
+  _productRegistry.products.push({code,title,status:'draft',characters:[],createdAt:new Date().toISOString(),releasedAt:null,platforms:[]});
+  saveProductRegistry();return true;
+}
+function addCharToProduct(productCode,charName){
+  const p=_productRegistry.products.find(x=>x.code===productCode);
+  if(!p)return false;
+  if(!p.characters.includes(charName))p.characters.push(charName);
+  saveProductRegistry();return true;
+}
+function removeCharFromProduct(productCode,charName){
+  const p=_productRegistry.products.find(x=>x.code===productCode);
+  if(!p)return false;
+  p.characters=p.characters.filter(c=>c!==charName);
+  saveProductRegistry();return true;
+}
+function setProductStatus(code,status){
+  const p=_productRegistry.products.find(x=>x.code===code);
+  if(!p)return false;
+  p.status=status;
+  if(status==='released'&&!p.releasedAt)p.releasedAt=new Date().toISOString();
+  saveProductRegistry();return true;
+}
+function removeProduct(code){
+  const p=_productRegistry.products.find(x=>x.code===code);
+  if(!p)return false;
+  if(p.status==='released'){alert('Cannot delete a released product. Archive it instead.');return false;}
+  _productRegistry.products=_productRegistry.products.filter(x=>x.code!==code);
+  saveProductRegistry();return true;
+}
+
+/* ── Override System for Published Characters ── */
+function requiresOverride(name){return isPublished(name)&&isCharDirty(name);}
+function logOverride(name,reason){
+  const n=allNPCs.find(c=>c.name===name);
+  if(!n)return;
+  if(!n.overrideLog)n.overrideLog=[];
+  n.overrideLog.push({date:new Date().toISOString(),reason:reason,changes:getCharDiff(name)});
+}
+
+/* ── Batch Review — approve/reject dirty characters ── */
+function approveCharacter(name){
+  captureBaseline(name);
+  filterNPCs();updateHeaderStats();
+}
+function revertCharacter(name){
+  const baseline=_baselines[name];
+  if(!baseline)return;
+  const n=allNPCs.find(c=>c.name===name);
+  if(!n)return;
+  const old=JSON.parse(baseline);
+  // Restore from baseline — rebuild the full character from serialised compare data
+  n.agility=old.attrs.agility;n.smarts=old.attrs.smarts;n.spirit=old.attrs.spirit;n.strength=old.attrs.strength;n.vigor=old.attrs.vigor;
+  n.skills=Object.assign({},old.skills);n.edges=[...old.edges];n.edgeNotes=Object.assign({},old.edgeNotes);
+  n.hindrances=[...old.hindrances];n.powers=[...old.powers];n.gearText=old.gearText;
+  n.pace=old.pace;n.parry=old.parry;n.toughness=old.toughness;n.toughnessArmor=old.toughnessArmor;
+  n.abName=old.abName;n.pp=old.pp;n.startingFunds=old.startingFunds;n.gearCost=old.gearCost;
+  n.quote=old.quote;n.description=old.description;n.background=old.background;
+  n.motivation=old.motivation;n.secret=old.secret;n.services=old.services;
+  n.adventureHook=old.adventureHook;n.tactics=old.tactics;n.notes=old.notes;
+  n.refCode=old.refCode;n.concept=old.concept;n.ancestry=old.ancestry;
+  n.region=old.region;n.tier=old.tier;n.rank=old.rank;n.category=old.category;
+  n.weapons=(old.weapons||[]).map(w=>typeof w==='string'?{name:w}:{...w});
+  n.armour=(old.armour||[]).map(a=>typeof a==='string'?{name:a}:{...a});
+  calcDerived(n);scheduleSave();
+  if(currentNPC&&currentNPC.name===name){currentNPC=n;renderDetail();}
+  filterNPCs();updateHeaderStats();
+}
 const LS_KEY='tl_npc_db';
 const CACHE_KEY='tl_npc_cache';
 
@@ -423,7 +715,8 @@ async function pushToGist(){console.log("☁️ pushToGist firing...");
         description:n.description||'',background:n.background||'',motivation:n.motivation||'',
         secret:n.secret||'',services:n.services||'',adventureHook:n.adventureHook||'',tactics:n.tactics||'',
         abName:n.abName||'',abSkill:n.abSkill||'',pp:n.pp||0,startingFunds:n.startingFunds||500,gearCost:n.gearCost||0,
-        statComplete:n.statComplete||false,narrativeComplete:n.narrativeComplete||false,fgReady:n.fgReady||false
+        statComplete:n.statComplete||false,narrativeComplete:n.narrativeComplete||false,fgReady:n.fgReady||false,
+        overrideLog:n.overrideLog||[]
       }))
     };
     const raw=JSON.stringify(data,null,2);
@@ -620,8 +913,16 @@ function renderNPCList(npcs){
     const hasWarns=audit.some(r=>r.warn);
     const legalIcon=n.agility>0?(legal?(hasWarns?'<span style="font-size:12px;margin-left:4px" title="Build Legal — optimisation warnings">⚠️</span>':'<span style="font-size:12px;margin-left:4px" title="Build Legal">✅</span>'):'<span style="font-size:12px;margin-left:4px" title="Build Issues">❌</span>'):'<span style="font-size:12px;margin-left:4px;opacity:0.4" title="No stats">⬜</span>';
     const canonIcon=canonCommitted.has(n.name)?'<span style="font-size:11px;margin-left:3px" title="Committed to Canon">📦</span>':'';
-    return `<div class="npc-item ${act}" onclick="selectNPC('${esc(n.name).replace(/'/g,"\\'")}')">
-      <div class="npc-name">${esc(n.name)}${catTag}<span class="tier-tag ${tc}">${tl}</span>${legalIcon}${canonIcon}
+    const dirty=isCharDirty(n.name);
+    const lifecycle=getLifecycle(n.name);
+    let dirtyClass='',dirtyBadge='';
+    if(dirty){
+      if(lifecycle==='published'){dirtyClass='dirty-published';dirtyBadge='<span class="dirty-badge published" title="Published character — changes pending review">ERRATA</span>';}
+      else if(lifecycle==='committed'){dirtyClass='dirty-committed';dirtyBadge='<span class="dirty-badge committed" title="Committed character — changes pending review">EDITED</span>';}
+      else{dirtyClass='dirty-draft';dirtyBadge='<span class="dirty-badge draft" title="Draft — unsaved changes">DRAFT</span>';}
+    }
+    return `<div class="npc-item ${act} ${dirtyClass}" onclick="selectNPC('${esc(n.name).replace(/'/g,"\\'")}')">
+      <div class="npc-name">${esc(n.name)}${catTag}<span class="tier-tag ${tc}">${tl}</span>${legalIcon}${canonIcon}${dirtyBadge}
         <span class="status-dots" title="Stats / Narrative / FG">
           <span class="status-dot ${n.statComplete?'on':'off'}"></span>
           <span class="status-dot ${n.narrativeComplete?'on':'off'}"></span>
@@ -641,10 +942,12 @@ function updateHeaderStats(){
   const t=allNPCs.length,pg=allNPCs.filter(n=>(n.category||'NPC')==='Pre-gen').length,np=t-pg;
   const c=allNPCs.filter(n=>n.statComplete&&n.narrativeComplete).length,f=allNPCs.filter(n=>n.fgReady).length;
   const cn=allNPCs.filter(n=>canonCommitted.has(n.name)).length;
-  document.getElementById("headerStats").innerHTML=`<span><span class="stat-num">${pg}</span> Pre-gens</span><span><span class="stat-num">${np}</span> NPCs</span><span><span class="stat-num">${cn}</span> 📦 Canon</span><span><span class="stat-num">${c}</span> Complete</span><span><span class="stat-num">${f}</span> FG Ready</span>`;
+  const dc=getDirtyCount();
+  const dirtySpan=dc>0?`<span style="cursor:pointer" onclick="showReviewPanel()" title="Click to review changes"><span class="stat-num" style="color:#e8b84e">${dc}</span> ✏️ Pending</span>`:'';
+  document.getElementById("headerStats").innerHTML=`<span><span class="stat-num">${pg}</span> Pre-gens</span><span><span class="stat-num">${np}</span> NPCs</span><span><span class="stat-num">${cn}</span> 📦 Canon</span>${dirtySpan}<span><span class="stat-num">${c}</span> Complete</span><span><span class="stat-num">${f}</span> FG Ready</span>`;
 }
 
-function selectNPC(name){flushSave();currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;_undoStack=[];_redoStack=[];_lastSnapshot=_snap(currentNPC);activePanel='audit';renderDetail();filterNPCs();}
+function selectNPC(name){flushSave();currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;currentNPC._lockAcknowledged=false;_undoStack=[];_redoStack=[];_lastSnapshot=_snap(currentNPC);activePanel='audit';renderDetail();filterNPCs();}
 
 function renderDetail(){
   const n=currentNPC;if(!n)return;
@@ -653,12 +956,15 @@ function renderDetail(){
   const ancestryTag=n.ancestry&&n.ancestry!=='Human'?` · ${esc(n.ancestry)}`:'';
   const titleLine=n.concept?`<div class="npc-title-line">${esc(n.concept)}${ancestryTag}</div>`:(n.ancestry?`<div class="npc-title-line">${esc(n.ancestry)}</div>`:'');
   const canonBadge=canonCommitted.has(n.name)?'<span style="font-size:13px;margin-left:10px;color:var(--green)" title="Committed to Canon">📦 In Canon</span>':'<span style="font-size:13px;margin-left:10px;color:var(--text-dim)" title="Not yet committed">📦 Not in Canon</span>';
+  const pubProds=getPublishedProducts(n.name);
+  const pubBadge=pubProds.length?'<span style="font-size:13px;margin-left:10px;color:var(--green)" title="Published in: '+pubProds.map(p=>p.code).join(', ')+'">🔒 Published</span>':'';
+  const dirtyBadge=isCharDirty(n.name)?'<span style="font-size:13px;margin-left:10px;color:#e8b84e" title="Changes pending review">✏️ Edited</span>':'';
   const catBadge=(n.category||'NPC')==='Pre-gen'?'<span class="tier-tag pregen" style="margin-left:10px;font-size:11px;padding:2px 8px">PRE-GEN</span>':'<span class="tier-tag npc" style="margin-left:10px;font-size:11px;padding:2px 8px">NPC</span>';
   const tierBadgeClass=n.tier==='Wild Card'?'wc':n.tier==='Walk-on'?'walkon':'extra';
   const tierBadgeText=n.tier==='Wild Card'?'WILD CARD':n.tier==='Walk-on'?'WALK-ON':'EXTRA';
   const tierBadge='<span class="tier-tag '+tierBadgeClass+'" style="margin-left:6px;font-size:11px;padding:2px 8px">'+tierBadgeText+'</span>';
   const refBadge=n.refCode?`<span style="font-family:monospace;font-size:11px;color:var(--text-dim);margin-right:8px;background:var(--bg-card);padding:2px 6px;border-radius:3px;border:1px solid var(--border)">${esc(n.refCode)}</span>`:'';
-  el.innerHTML=`<div class="npc-header"><h2>${refBadge}${esc(n.name)}${catBadge}${tierBadge}${canonBadge}</h2>${titleLine}</div><div class="detail-columns"><div class="col-stats" id="colStats"></div><div class="col-middle" id="colMiddle"></div><div class="col-narrative" id="colNarrative"></div></div>`;
+  el.innerHTML=`<div class="npc-header"><h2>${refBadge}${esc(n.name)}${catBadge}${tierBadge}${canonBadge}${pubBadge}${dirtyBadge}</h2>${titleLine}</div><div class="detail-columns"><div class="col-stats" id="colStats"></div><div class="col-middle" id="colMiddle"></div><div class="col-narrative" id="colNarrative"></div></div>`;
   renderStatColumn(n);renderMiddleColumn(n);renderNarrativeColumn(n);
 }
 
@@ -729,14 +1035,25 @@ function renderMiddleColumn(n){
     return;
   }
   const panelNames={edit:'Edit',hindrances:'Hindrances',edges:'Edges',skills:'Skills',weapons:'Weapons',armour:'Armour',gear:'Gear',powers:'Powers',narrative:'Narrative',statblock:'Stat Block',audit:'Build Audit',transfer:'Import / Export'};
-  el.innerHTML=`<div class="middle-panel"><div class="panel-title"><h3>${panelNames[activePanel]||activePanel}</h3><button class="btn" onclick="closePanel()">✕ Done</button></div><div id="panelContent"></div></div>`;
+  const editPanels=['edit','hindrances','edges','skills','weapons','armour','gear','powers','narrative'];
+  const lockBanner=isLocked(n.name)&&editPanels.includes(activePanel)?'<div class="lock-warning" style="margin-bottom:8px">🔒 This character is published. Changes will be flagged as errata and require review approval.</div>':'';
+  el.innerHTML=`<div class="middle-panel"><div class="panel-title"><h3>${panelNames[activePanel]||activePanel}</h3><button class="btn" onclick="closePanel()">✕ Done</button></div>${lockBanner}<div id="panelContent"></div></div>`;
   const panels={edit:renderEditPanel,hindrances:renderHindrancesPanel,edges:renderEdgesPanel,skills:renderSkillsPanel,weapons:renderWeaponsPanel,armour:renderArmourPanel,gear:renderGearPanel,powers:renderPowersPanel,narrative:renderNarrativePanel,statblock:renderStatBlockPanel,audit:renderAuditPanel};
   const panels2={transfer:renderTransferPanel};
 if(panels[activePanel]) panels[activePanel](n);
 else if(panels2[activePanel]) panels2[activePanel](n);
 }
 
-function showPanel(name){activePanel=name;if(currentNPC){renderMiddleColumn(currentNPC);renderStatColumn(currentNPC);}}
+function showPanel(name){
+  const editPanels=['edit','hindrances','edges','skills','weapons','armour','gear','powers','narrative'];
+  if(currentNPC&&editPanels.includes(name)&&isLocked(currentNPC.name)){
+    if(!currentNPC._lockAcknowledged){
+      if(!checkEditLock(currentNPC.name))return;
+      currentNPC._lockAcknowledged=true;
+    }
+  }
+  activePanel=name;if(currentNPC){renderMiddleColumn(currentNPC);renderStatColumn(currentNPC);}
+}
 function closePanel(){activePanel=null;if(currentNPC)renderDetail();}
 
 function renderNarrativeColumn(n){
@@ -1460,6 +1777,33 @@ function renderAuditPanel(n){
   const inCanon=canonCommitted.has(n.name);
   const commitLabel=inCanon?'🔄 Update Canon':'📦 Commit to Canon';
   const removeBtn=inCanon?'<button class="btn" onclick="removeFromCanon()" style="color:var(--red);border-color:var(--red)" title="Remove this character from canonical data">🗑 Remove from Canon</button>':'';
+  // Lifecycle info
+  const lc=getLifecycle(n.name);
+  const dirty=isCharDirty(n.name);
+  const pubProds=getPublishedProducts(n.name);
+  html+='<div class="audit-block"><div class="audit-section"><h4>Release Lifecycle</h4>';
+  const lcColour=lc==='published'?'var(--green)':lc==='committed'?'#e8b84e':'var(--text-dim)';
+  const lcIcon=lc==='published'?'🔒':lc==='committed'?'📦':'📝';
+  html+=`<div class="audit-line audit-pass">${lcIcon} Status: <span style="color:${lcColour};text-transform:uppercase">${lc}</span></div>`;
+  if(pubProds.length) html+=`<div class="audit-line audit-pass">Published in: ${pubProds.map(p=>esc(p.code)+' — '+esc(p.title)+' ('+new Date(p.releasedAt).toLocaleDateString()+')').join(', ')}</div>`;
+  if(dirty){
+    const diff=getCharDiff(n.name);
+    html+=`<div class="audit-line audit-warn">✏️ ${diff.length} pending change${diff.length===1?'':'s'} since last approval</div>`;
+    diff.forEach(d=>html+=`<div class="audit-line" style="padding-left:20px;font-size:11px;color:${d.type==='added'?'var(--green)':d.type==='removed'?'var(--red)':'var(--accent)'}">${d.type==='added'?'+':d.type==='removed'?'−':'~'} ${esc(d.text)}</div>`);
+  }else{
+    html+='<div class="audit-line audit-pass">✓ No pending changes — matches baseline</div>';
+  }
+  // Override log
+  if(n.overrideLog&&n.overrideLog.length){
+    html+='<h4 style="margin-top:10px">Errata Log</h4>';
+    n.overrideLog.forEach(o=>{
+      html+=`<div class="audit-line" style="font-size:11px;border-left:2px solid #cc3333;padding-left:8px;margin-bottom:4px">
+        <span style="color:var(--text-dim)">${new Date(o.date).toLocaleDateString()}</span> — <span style="color:#ee6666">${esc(o.reason)}</span>
+        ${o.changes?'<br>'+o.changes.map(c=>esc(c.text)).join(', '):''}
+      </div>`;
+    });
+  }
+  html+='</div></div>';
   html+=`<div id="commitArea" style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
       <button class="btn primary" onclick="prepareCommit()" title="${inCanon?'Update canonical data':'Commit current state to canon repository'}">${commitLabel}</button>
@@ -1919,9 +2263,15 @@ function showStatusView(){
   const rows=allNPCs.map(n=>{
     const audit=runBuildAudit(n);const legal=audit.every(r=>r.pass);
     const inCanon=canonCommitted.has(n.name);
-    return `<tr><td style="font-family:monospace;font-size:11px;color:var(--text-dim)">${esc(n.refCode||'—')}</td><td>${esc(n.name)}</td><td>${esc(n.category||'NPC')}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td>${legal?'✅':'❌'}</td><td>${inCanon?'📦':'—'}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">&#${n.statComplete?'10003':'8212'};</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">&#${n.narrativeComplete?'10003':'8212'};</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">&#${n.fgReady?'10003':'8212'};</td></tr>`;
+    const lc=getLifecycle(n.name);
+    const dirty=isCharDirty(n.name);
+    const lcColour=lc==='published'?'var(--green)':lc==='committed'?'#e8b84e':'var(--text-dim)';
+    const lcIcon=lc==='published'?'🔒':lc==='committed'?'📦':'📝';
+    const dirtyIcon=dirty?(lc==='published'?'<span style="color:#ee6666" title="Errata pending">⚠</span>':'<span style="color:#e8b84e" title="Edited">✏️</span>'):'';
+    return `<tr><td style="font-family:monospace;font-size:11px;color:var(--text-dim)">${esc(n.refCode||'—')}</td><td>${esc(n.name)}</td><td>${esc(n.category||'NPC')}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td>${legal?'✅':'❌'}</td><td style="color:${lcColour}">${lcIcon} ${lc}</td><td>${dirtyIcon}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">&#${n.statComplete?'10003':'8212'};</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">&#${n.narrativeComplete?'10003':'8212'};</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">&#${n.fgReady?'10003':'8212'};</td></tr>`;
   }).join('');
-  el.innerHTML=`<h2 style="color:var(--accent);margin-bottom:14px">Production Status</h2><table class="data-table"><tr><th>Ref</th><th>Name</th><th>Type</th><th>Region</th><th>Tier</th><th>Build</th><th>Canon</th><th>Stats</th><th>Narrative</th><th>FG Ready</th></tr>${rows}</table>`;
+  const prodSummary=_productRegistry.products.length?`<div style="margin-bottom:14px;font-size:13px;color:var(--text-dim)">Products: ${_productRegistry.products.map(p=>`<span style="color:${p.status==='released'?'var(--green)':p.status==='in-review'?'#e8b84e':'var(--text-dim)'}">${esc(p.code)}</span>`).join(', ')} · <a style="color:var(--accent);cursor:pointer" onclick="showProductsModal()">Manage</a></div>`:'';
+  el.innerHTML=`<h2 style="color:var(--accent);margin-bottom:14px">Production Status</h2>${prodSummary}<table class="data-table"><tr><th>Ref</th><th>Name</th><th>Type</th><th>Region</th><th>Tier</th><th>Build</th><th>Lifecycle</th><th>Edits</th><th>Stats</th><th>Narrative</th><th>FG Ready</th></tr>${rows}</table>`;
 }
 
 // ── CANON COMMIT SYSTEM ──
@@ -2108,6 +2458,176 @@ function checkPin(){
   }
 }
 
+/* ═══ REVIEW PANEL — batch review/approve/reject dirty characters ═══ */
+function showReviewPanel(){
+  document.getElementById('reviewModal').classList.add('active');
+  renderReviewContent();
+}
+function closeReviewModal(){document.getElementById('reviewModal').classList.remove('active');}
+
+function renderReviewContent(){
+  const dirty=getAllDirty();
+  const el=document.getElementById('reviewContent');
+  const actions=document.getElementById('reviewActions');
+  if(!dirty.length){
+    el.innerHTML='<div style="text-align:center;color:var(--text-dim);padding:20px">No pending changes. All characters match their baselines.</div>';
+    actions.innerHTML='';
+    return;
+  }
+  // Sort: published first (red), then committed (amber), then drafts (blue)
+  const order={published:0,committed:1,draft:2};
+  dirty.sort((a,b)=>(order[getLifecycle(a.name)]||2)-(order[getLifecycle(b.name)]||2));
+  let html=`<div style="margin-bottom:10px;color:var(--text-dim)">${dirty.length} character${dirty.length===1?'':'s'} with pending changes:</div>`;
+  dirty.forEach(n=>{
+    const lc=getLifecycle(n.name);
+    const diff=getCharDiff(n.name);
+    const pubProducts=getPublishedProducts(n.name);
+    const pubWarning=pubProducts.length?`<div class="lock-warning" style="margin-bottom:6px">⚠ Published in: ${pubProducts.map(p=>p.title+' ('+p.code+')').join(', ')}. Changes to this character require an errata justification.</div>`:'';
+    const diffHtml=diff.map(d=>`<div class="${d.type}">${d.type==='added'?'+ ':d.type==='removed'?'− ':'~ '}${esc(d.text)}</div>`).join('');
+    html+=`<div class="review-card ${lc}" id="rc-${esc(n.name).replace(/\s/g,'_')}">
+      ${pubWarning}
+      <div class="rc-header">
+        <div><span class="rc-name">${esc(n.name)}</span> <span style="font-size:11px;color:var(--text-dim)">${esc(n.refCode||'')} · ${esc(n.category||'NPC')} · ${esc(n.tier)}</span></div>
+        <span style="font-size:11px;text-transform:uppercase;color:${lc==='published'?'#ee6666':lc==='committed'?'#e8b84e':'#88bbee'}">${lc}</span>
+      </div>
+      <div class="rc-diff">${diffHtml||'<span style="color:var(--text-dim)">No details available</span>'}</div>
+      <div class="rc-actions">
+        ${pubProducts.length?`<input id="override-reason-${esc(n.name).replace(/\s/g,'_')}" placeholder="Errata reason (required for published characters)" style="flex:1;background:var(--bg-input);border:1px solid #cc3333;color:var(--text);padding:4px 8px;border-radius:3px;font-size:12px">`:''} 
+        <button class="btn sm" style="color:var(--green);border-color:var(--green)" onclick="reviewApprove('${esc(n.name).replace(/'/g,"\\'")}')">✓ Approve</button>
+        <button class="btn sm" style="color:var(--red);border-color:var(--red)" onclick="reviewRevert('${esc(n.name).replace(/'/g,"\\'")}')">↶ Revert</button>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=html;
+  actions.innerHTML=`<button class="btn primary" onclick="reviewApproveAll()">✓ Approve All</button><button class="btn" onclick="closeReviewModal()">Close</button><span style="flex:1"></span><span style="font-size:11px;color:var(--text-dim)">${dirty.length} pending</span>`;
+}
+
+function reviewApprove(name){
+  const lc=getLifecycle(name);
+  if(lc==='published'){
+    const reasonEl=document.getElementById('override-reason-'+name.replace(/\s/g,'_'));
+    const reason=reasonEl?reasonEl.value.trim():'';
+    if(!reason){alert('An errata reason is required for published characters.');if(reasonEl)reasonEl.focus();return;}
+    logOverride(name,reason);
+  }
+  approveCharacter(name);
+  renderReviewContent();
+}
+function reviewRevert(name){
+  const lc=getLifecycle(name);
+  const msg=lc==='published'
+    ?`Revert ${name} to its last approved state?\n\nThis character is published — all changes since last approval will be lost.`
+    :`Revert ${name} to its last approved state?\n\nAll changes since last approval will be lost.`;
+  if(!confirm(msg))return;
+  revertCharacter(name);
+  renderReviewContent();
+}
+function reviewApproveAll(){
+  const dirty=getAllDirty();
+  const published=dirty.filter(n=>getLifecycle(n.name)==='published');
+  if(published.length){
+    alert(`${published.length} published character${published.length===1?'':'s'} require individual review with errata reasons. Approve non-published characters first, then review published ones individually.`);
+    dirty.filter(n=>getLifecycle(n.name)!=='published').forEach(n=>approveCharacter(n.name));
+  }else{
+    if(!confirm(`Approve all ${dirty.length} pending changes?`))return;
+    dirty.forEach(n=>approveCharacter(n.name));
+  }
+  renderReviewContent();
+}
+
+/* ═══ PRODUCT REGISTRY UI ═══ */
+function showProductsModal(){
+  document.getElementById('productsModal').classList.add('active');
+  renderProductsContent();
+}
+function closeProductsModal(){document.getElementById('productsModal').classList.remove('active');}
+
+function renderProductsContent(){
+  const el=document.getElementById('productsContent');
+  const products=_productRegistry.products||[];
+  let html=`<div style="margin-bottom:12px;display:flex;gap:8px;align-items:center">
+    <input id="newProdCode" placeholder="Product code (e.g. AM-W03)" style="padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);border-radius:3px;font-size:12px;width:180px">
+    <input id="newProdTitle" placeholder="Product title" style="flex:1;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);border-radius:3px;font-size:12px">
+    <button class="btn primary sm" onclick="uiAddProduct()">+ Add Product</button>
+  </div>`;
+  if(!products.length){
+    html+='<div style="text-align:center;color:var(--text-dim);padding:20px">No products registered yet. Add your first product above.</div>';
+  }else{
+    // Sort: released first, then in-review, then draft
+    const sorted=[...products].sort((a,b)=>{const o={released:0,'in-review':1,draft:2};return (o[a.status]||2)-(o[b.status]||2);});
+    sorted.forEach(p=>{
+      const statusColour=p.status==='released'?'var(--green)':p.status==='in-review'?'#e8b84e':'var(--text-dim)';
+      const statusIcon=p.status==='released'?'🔒':p.status==='in-review'?'⏳':'📝';
+      const charList=(p.characters||[]).map(c=>{
+        const n=allNPCs.find(x=>x.name===c);
+        const ref=n&&n.refCode?n.refCode+' ':'';
+        return `<span style="display:inline-block;margin:2px 4px 2px 0;padding:1px 6px;background:var(--bg-body);border:1px solid var(--border);border-radius:3px;font-size:11px">${esc(ref+c)} <span onclick="uiRemoveCharFromProduct('${esc(p.code).replace(/'/g,"\\'")}','${esc(c).replace(/'/g,"\\'")}');event.stopPropagation()" style="cursor:pointer;color:var(--red);margin-left:2px">×</span></span>`;
+      }).join('');
+      const statusBtns=p.status==='draft'
+        ?`<button class="btn sm" onclick="uiSetProductStatus('${esc(p.code)}','in-review')" style="color:#e8b84e;border-color:#e8b84e">→ In Review</button><button class="btn sm danger" onclick="uiRemoveProduct('${esc(p.code)}')">Delete</button>`
+        :p.status==='in-review'
+        ?`<button class="btn sm" onclick="uiSetProductStatus('${esc(p.code)}','released')" style="color:var(--green);border-color:var(--green)">🔒 Release</button><button class="btn sm" onclick="uiSetProductStatus('${esc(p.code)}','draft')">← Draft</button>`
+        :`<span style="font-size:11px;color:var(--text-dim)">Released ${p.releasedAt?new Date(p.releasedAt).toLocaleDateString():''}</span>`;
+      html+=`<div class="product-card ${p.status}">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div><strong style="color:var(--accent);font-family:monospace">${esc(p.code)}</strong> — ${esc(p.title)} <span style="font-size:11px;color:${statusColour}">${statusIcon} ${p.status.toUpperCase()}</span></div>
+          <div style="display:flex;gap:4px">${statusBtns}</div>
+        </div>
+        <div style="margin-bottom:6px">${charList||'<span style="color:var(--text-dim);font-size:12px">No characters assigned</span>'}</div>
+        <div style="display:flex;gap:4px;align-items:center">
+          <select id="addChar-${esc(p.code)}" style="flex:1;padding:4px 8px;background:var(--bg-input);border:1px solid var(--border);color:var(--text);border-radius:3px;font-size:12px">
+            <option value="">Add character...</option>
+            ${allNPCs.filter(n=>!(p.characters||[]).includes(n.name)).sort((a,b)=>(a.refCode||'').localeCompare(b.refCode||'')).map(n=>`<option value="${esc(n.name)}">${n.refCode?esc(n.refCode)+' — ':''}${esc(n.name)}</option>`).join('')}
+          </select>
+          <button class="btn sm" onclick="uiAddCharToProduct('${esc(p.code)}')">+ Add</button>
+        </div>
+      </div>`;
+    });
+  }
+  el.innerHTML=html;
+}
+
+function uiAddProduct(){
+  const code=document.getElementById('newProdCode').value.trim();
+  const title=document.getElementById('newProdTitle').value.trim();
+  if(!code||!title){alert('Both product code and title are required.');return;}
+  if(!addProduct(code,title)){alert('A product with that code already exists.');return;}
+  renderProductsContent();
+}
+function uiRemoveProduct(code){
+  if(!confirm(`Delete product ${code}? This cannot be undone.`))return;
+  removeProduct(code);renderProductsContent();
+}
+function uiSetProductStatus(code,status){
+  if(status==='released'){
+    const p=_productRegistry.products.find(x=>x.code===code);
+    const charCount=(p?.characters||[]).length;
+    if(!confirm(`Release ${code} — "${p?.title}"?\n\n${charCount} character${charCount===1?'':'s'} will be locked. Changes after release will require errata override with justification.\n\nThis action sets the release date and cannot be easily undone.`))return;
+  }
+  setProductStatus(code,status);
+  renderProductsContent();filterNPCs();updateHeaderStats();
+}
+function uiAddCharToProduct(code){
+  const sel=document.getElementById('addChar-'+code);
+  if(!sel||!sel.value)return;
+  addCharToProduct(code,sel.value);
+  renderProductsContent();filterNPCs();
+}
+function uiRemoveCharFromProduct(code,name){
+  const p=_productRegistry.products.find(x=>x.code===code);
+  if(p&&p.status==='released'){alert('Cannot remove characters from a released product.');return;}
+  removeCharFromProduct(code,name);
+  renderProductsContent();filterNPCs();
+}
+
+/* ── Published character edit gate ── */
+function checkEditLock(name){
+  if(!isLocked(name))return true;
+  const products=getPublishedProducts(name);
+  const prodList=products.map(p=>p.code+' — '+p.title).join('\n');
+  return confirm(`⚠ ${name} is published in:\n\n${prodList}\n\nEditing a published character creates an errata situation. All changes will be flagged for review.\n\nProceed?`);
+}
+
 async function loadCanonStatus(){
   try{
     const res=await fetch(CANON_API,{
@@ -2127,7 +2647,7 @@ async function unlockApp(){
   document.getElementById('mainContent').innerHTML='<span style="color:var(--text-dim)">Loading characters...</span>';
   document.getElementById('mainContent').classList.add('empty-state');
   document.getElementById('sidebarInner').style.display='';
-  await loadData();filterNPCs();updateHeaderStats();loadCanonStatus();
+  await loadData();captureBaselines();filterNPCs();updateHeaderStats();loadCanonStatus();loadProductRegistry();
   document.getElementById('mainContent').innerHTML='<span style="color:var(--text-dim)">Select an NPC or create a new one</span>';
 }
 
