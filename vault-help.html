@@ -682,6 +682,28 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <p>Assign characters to products using the dropdown on each product card. The same character can appear in multiple products — the lock cascades from whichever product released first.</p>
 
+<h3>Readiness Dashboard</h3>
+
+<p>Each product card shows a readiness summary bar with at-a-glance metrics: how many characters have legal builds, how many have stats complete, how many have narrative complete, and how many have pending edits. When every character passes all checks and has no pending changes, the bar shows <strong style="color:var(--green)">✓ READY TO SHIP</strong>.</p>
+
+<p>This is the view you'll use on release day. If it's not green, something needs attention before the PDF goes out.</p>
+
+<h3>Release Checklist</h3>
+
+<p>Click <strong>📋 Checklist</strong> on any product card to expand a per-character breakdown. Each row shows the character name (clickable to jump to them), build legality, stat completion, narrative completion, and edit status. This tells you exactly which characters are blocking the release and what they're missing.</p>
+
+<p>Clicking a character name in the checklist closes the Products modal and selects that character in the main interface, so you can fix the issue immediately and return to check progress.</p>
+
+<h3>Batch Stat Block Export</h3>
+
+<p>Click <strong>📄 Export Stat Blocks</strong> on any product card to generate formatted stat blocks for every character assigned to that product. The output appears in a modal with <strong>Copy All</strong> and <strong>Download .txt</strong> buttons. Each character is separated by a double-line divider and the file includes a header with the product code, title, date, and character count.</p>
+
+<p>This is designed for the weekly release workflow — when the PDF is ready for layout, export the stat blocks in one go rather than copying them individually.</p>
+
+<h3>Character-to-Product Visibility</h3>
+
+<p>When you select a character in the main interface, any product assignments appear as a line below the character's name and title. Each product shows its status icon (📝 draft, ⏳ in-review, 🔒 released), code, and title. This tells you at a glance which products this character belongs to without needing to open the Products modal.</p>
+
 <h3>Edit Lock Gate</h3>
 
 <p>When you open an editing panel on a published character, the Vault shows a confirmation dialog explaining the character is published, which products it appears in, and that changes will be flagged as errata. You must confirm to proceed. Once acknowledged, the lock gate won't prompt again until you switch to a different character.</p>
