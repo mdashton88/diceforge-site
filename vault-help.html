@@ -319,6 +319,8 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <p>Every edit is recorded on an undo stack (up to 40 steps). Press <strong>Ctrl+Z</strong> (or <strong>⌘Z</strong> on Mac) to undo the last change, <strong>Ctrl+Y</strong> or <strong>Ctrl+Shift+Z</strong> to redo. This covers all edits: attributes, skills, edges, hindrances, weapons, armour, gear, powers, and narrative text.</p>
 
+<p>When any editing panel is open, <strong>↶ Undo</strong> and <strong>↷ Redo</strong> buttons appear in the panel header alongside a depth counter (e.g. "3/1" meaning 3 undo steps and 1 redo step available). The buttons dim when their respective stacks are empty. The counter disappears entirely when both stacks are empty.</p>
+
 <p>The undo stack resets when you switch to a different character — each character maintains its own history for the current session.</p>
 
 <h3>Published Character Lock</h3>
@@ -690,15 +692,19 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <h3>Release Checklist</h3>
 
-<p>Click <strong>📋 Checklist</strong> on any product card to expand a per-character breakdown. Each row shows the character name (clickable to jump to them), build legality, stat completion, narrative completion, and edit status. This tells you exactly which characters are blocking the release and what they're missing.</p>
+<p>Click <strong>📋 Checklist</strong> on any product card to expand a per-character breakdown. Each row shows the character name (clickable to jump to them), build legality, stat completion, narrative completion, and edit status. Characters that need attention are sorted to the top — those with illegal builds, missing completions, or pending edits appear first, highlighted with a subtle red background. Characters that are fully green sort to the bottom.</p>
 
 <p>Clicking a character name in the checklist closes the Products modal and selects that character in the main interface, so you can fix the issue immediately and return to check progress.</p>
 
 <h3>Batch Stat Block Export</h3>
 
-<p>Click <strong>📄 Export Stat Blocks</strong> on any product card to generate formatted stat blocks for every character assigned to that product. The output appears in a modal with <strong>Copy All</strong> and <strong>Download .txt</strong> buttons. Each character is separated by a double-line divider and the file includes a header with the product code, title, date, and character count.</p>
+<p>Click <strong>📄 Export Stat Blocks</strong> on any product card to generate formatted stat blocks for every character assigned to that product. The export modal offers two format tabs:</p>
 
-<p>This is designed for the weekly release workflow — when the PDF is ready for layout, export the stat blocks in one go rather than copying them individually.</p>
+<p><strong>Plain Text</strong> — clean monospaced output with double-line dividers between characters. Ideal for pasting into layout tools or text editors.</p>
+
+<p><strong>HTML</strong> — styled stat blocks with serif typography, bordered cards, bold labels, and proper formatting. Previewed in an embedded frame within the modal. Download as an .html file to open in any browser, or copy the raw HTML for pasting into web-based layout tools.</p>
+
+<p>Both formats include a header with product code, title, generation date, and character count. Use <strong>📋 Copy</strong> or <strong>💾 Download</strong> to get the output in whichever format is currently selected.</p>
 
 <h3>Character-to-Product Visibility</h3>
 
