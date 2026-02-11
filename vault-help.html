@@ -103,7 +103,7 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <nav class="sidebar">
   <div class="sidebar-header">
     <h1>Character Vault</h1>
-    <div class="subtitle">User Manual · v3.0</div>
+    <div class="subtitle">User Manual · v4.0</div>
   </div>
   <div class="sidebar-search">
     <input type="text" id="searchInput" placeholder="Search docs..." autocomplete="off">
@@ -215,15 +215,25 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <h3>Header Bar</h3>
 
-<p>The header shows the tool title, total character count, production stats (pre-gens, NPCs, canon-committed, stat-complete, FG-ready), and a <strong>cloud sync indicator</strong>. Green dot means synced; red means a problem occurred. When any characters have unsaved changes, a clickable <strong>✏️ Pending</strong> count appears — click it to jump straight to the Review Panel.</p>
+<p>The header shows the tool title, total character count, production stats, cloud sync indicator, navigation buttons, and a keyboard shortcut button.</p>
 
-<h3>Action Bar</h3>
+<p><strong>Navigation Buttons (◀ ▶):</strong> Back and forward buttons track your browsing history within the Vault. Click a character from the Status dashboard, do your work, then click ◀ to return exactly where you were. Supports <strong>Alt+←</strong> and <strong>Alt+→</strong> keyboard shortcuts. Buttons dim when there's nowhere to go.</p>
 
-<p>Below the stat summary: <strong>Edit</strong>, <strong>Stat Block</strong>, <strong>Audit</strong>, <strong>⇄ Transfer</strong>, and <strong>Delete</strong> buttons. Transfer opens the full Import/Export panel.</p>
+<p><strong>Clickable Stats:</strong> Every stat in the header bar is a navigation link. Click <strong>Pre-gens</strong> or <strong>NPCs</strong> to filter the sidebar to that category. Click <strong>📦 Canon</strong> to filter to committed characters. Click <strong>✏️ Pending</strong> to open the Review panel. Click <strong>Complete</strong> or <strong>FG Ready</strong> to open the Production Status dashboard. Each click clears other filters first for a clean view.</p>
+
+<p><strong>⌨ Shortcuts:</strong> Opens a keyboard shortcut reference overlay. Also triggered by pressing <strong>?</strong> on the keyboard.</p>
+
+<h3>Breadcrumb Trail</h3>
+
+<p>Below the header, a breadcrumb trail shows your current location: <em>Vault › NPCs › Viktor Crane › Weapons</em>. Click any segment to jump back to that level. The trail updates as you navigate between characters, open editing panels, or switch to dashboard views.</p>
+
+<h3>Fixed Bottom Bar</h3>
+
+<p>When a character is selected, a fixed bar pins itself to the bottom of the viewport — it never scrolls off screen. The bar contains the status checkboxes (<strong>Stats</strong>, <strong>Narrative</strong>, <strong>FG Ready</strong>), all action buttons (<strong>Edit</strong>, <strong>Stat Block</strong>, <strong>Audit</strong>, <strong>Import/Export</strong>, <strong>Delete</strong>), and the <strong>Commit to Canon</strong> button with a build legality indicator. The bar hides automatically when you switch to any dashboard view.</p>
 
 <h3>Sidebar Footer</h3>
 
-<p>At the bottom of the roster column: <strong>+ New Character</strong> creates a new entry. <strong>Review</strong> opens the batch change review panel (see <em>Release Management</em>). <strong>Products</strong> opens the product registry. <strong>Status</strong> shows the production dashboard. <strong>Changes</strong> opens the canon changelog.</p>
+<p>At the bottom of the roster column: <strong>+ New Character</strong> creates a new entry. The four utility buttons — <strong>Review</strong>, <strong>Products</strong>, <strong>Status</strong>, and <strong>Changes</strong> — all open their views inline in the main content area. Character names within any of these views are clickable, taking you directly to that character's build page. Use the ◀ back button to return.</p>
 
 <div class="page-nav">
   <a onclick="goPage('quick-start')">← Quick Start</a>
@@ -265,7 +275,7 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <p>Within each group, characters are sorted by <strong>reference code</strong> (AM-C001, AM-C002, etc.), keeping them in production order. Characters without a refCode fall to the end of their group, sorted alphabetically.</p>
 
-<p>Click a character to select it and load their data into the right column and editing panels.</p>
+<p>Click a character to select it and load their data into the editing panels. You can also use <strong>↑</strong> and <strong>↓</strong> arrow keys to move through the roster — navigation follows the visual sort order (Pre-gens first by ref code, then Wild Cards, Extras, Walk-ons), so every character is reachable from top to bottom without gaps.</p>
 
 <h3>Dirty State Indicators</h3>
 
@@ -594,7 +604,7 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <div class="page" id="page-status">
 <h2>Status Dashboard</h2>
 
-<p>Click the <strong>Status</strong> button in the sidebar footer to see a table of every character's production status. Columns include ref code, name, category, region, tier, build legal status, lifecycle state, pending edits, stat complete, narrative complete, and FG-ready.</p>
+<p>Click the <strong>Status</strong> button in the sidebar footer to see a table of every character's production status. Columns include ref code, name, category, region, tier, build legal status, lifecycle state, pending edits, stat complete, narrative complete, and FG-ready. Character names are clickable — click any name to jump straight to their build page, then use <strong>◀ Back</strong> to return to the dashboard.</p>
 
 <p>The <strong>Lifecycle</strong> column shows each character's current state: 📝 Draft (not yet committed), 📦 Committed (approved as canonical), or 🔒 Published (shipped in a released product). The <strong>Edits</strong> column flags characters with pending changes — ✏️ for standard edits, ⚠ for errata on published characters.</p>
 
@@ -658,7 +668,7 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <h3>Review Panel</h3>
 
-<p>Click <strong>Review</strong> in the sidebar footer (or click the <strong>✏️ Pending</strong> count in the header) to open the Review Panel. This shows every dirty character grouped by severity: published errata at the top (red), committed changes in the middle (amber), and draft changes at the bottom (blue).</p>
+<p>Click <strong>Review</strong> in the sidebar footer (or click the <strong>✏️ Pending</strong> count in the header) to open the Review Panel inline in the main content area. This shows every dirty character grouped by severity: published errata at the top (red), committed changes in the middle (amber), and draft changes at the bottom (blue). Click any character name to jump directly to their build page — then use <strong>◀ Back</strong> to return to the Review Panel.</p>
 
 <p>Each card shows a human-readable diff summarising exactly what changed — attributes, skills added or removed, edges, hindrances, weapons, armour, gear, narrative fields. Two actions are available per character:</p>
 
@@ -672,7 +682,7 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 
 <h3>Product Registry</h3>
 
-<p>Click <strong>Products</strong> in the sidebar footer to manage the product registry. Each product has a code (e.g. AM-W03), a title, a lifecycle status, and a list of assigned characters.</p>
+<p>Click <strong>Products</strong> in the sidebar footer to open the product registry inline in the main content area. Each product has a code (e.g. AM-W03), a title, a lifecycle status, and a list of assigned characters. Character names within the registry are clickable — click any name to jump to their build page, then use <strong>◀ Back</strong> to return.</p>
 
 <p>Products move through three stages:</p>
 
@@ -876,13 +886,19 @@ kbd{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;p
 <div class="page" id="page-keyboard">
 <h2>Keyboard Shortcuts</h2>
 
-<p>The Vault supports keyboard navigation throughout the catalogue panels and a global undo/redo system.</p>
+<p>The Vault supports keyboard navigation throughout, with a global undo/redo system, navigation history, and catalogue panel browsing. Press <strong>?</strong> at any time (outside text fields) to see the full shortcut overlay, or click the <strong>⌨</strong> button in the header.</p>
 
 <h3>Global</h3>
 
 <div class="field-ref"><span class="field-name">Ctrl+Z / ⌘Z</span><span class="field-desc">Undo the last edit (up to 40 steps per character)</span></div>
 <div class="field-ref"><span class="field-name">Ctrl+Y / Ctrl+Shift+Z</span><span class="field-desc">Redo the last undone edit</span></div>
-<div class="field-ref"><span class="field-name">⌘K</span><span class="field-desc">Focus the help manual search box (when in this manual)</span></div>
+<div class="field-ref"><span class="field-name">?</span><span class="field-desc">Toggle keyboard shortcut overlay</span></div>
+
+<h3>Navigation</h3>
+
+<div class="field-ref"><span class="field-name">↑ / ↓</span><span class="field-desc">Move through the character roster in visual order (respects sort grouping)</span></div>
+<div class="field-ref"><span class="field-name">Alt+←</span><span class="field-desc">Navigate back through browsing history</span></div>
+<div class="field-ref"><span class="field-name">Alt+→</span><span class="field-desc">Navigate forward through browsing history</span></div>
 
 <h3>Catalogue Panels</h3>
 
