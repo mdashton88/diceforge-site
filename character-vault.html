@@ -331,6 +331,9 @@ window.CharacterForge = (function(){
 <script>
 let allNPCs=[], currentNPC=null, activePanel=null;
 let canonCommitted=new Set();
+let _canonSnapshots={};  // name → {snapshot, committedAt, changeId}
+let _canonLog=[];         // [{action, target, changeId, date, summary}]
+let _canonSeq=0;          // auto-increment for change IDs
 /* ═══ NAVIGATION HISTORY ═══ */
 let _navHistory=[], _navFwdStack=[], _navPushing=false;
 function navPush(view){
@@ -764,6 +767,12 @@ async function loadData(){
     const data=JSON.parse(raw);
     // Normalise each character
     allNPCs=data.characters.map(c=>normaliseChar(c,'ammaria'));
+    // Load canon state from gist
+    if(data.canonCommitted){
+      _canonSnapshots=data.canonCommitted;
+      canonCommitted=new Set(Object.keys(_canonSnapshots));
+    }
+    if(data.canonLog){_canonLog=data.canonLog;_canonSeq=_canonLog.length;}
     // Cache locally for offline fallback
     localStorage.setItem(CACHE_KEY,raw);
     setSyncStatus('idle',`Synced — ${allNPCs.length} characters`);
@@ -774,6 +783,8 @@ async function loadData(){
     if(cached){
       const data=JSON.parse(cached);
       allNPCs=data.characters.map(c=>normaliseChar(c,'ammaria'));
+      if(data.canonCommitted){_canonSnapshots=data.canonCommitted;canonCommitted=new Set(Object.keys(_canonSnapshots));}
+      if(data.canonLog){_canonLog=data.canonLog;_canonSeq=_canonLog.length;}
       setSyncStatus('offline',`Offline — ${allNPCs.length} characters (cached)`);
     }else{
       // Last resort: load from module seed data
@@ -844,7 +855,9 @@ async function pushToGist(){console.log("☁️ pushToGist firing...");
         abName:n.abName||'',abSkill:n.abSkill||'',pp:n.pp||0,startingFunds:n.startingFunds||500,gearCost:n.gearCost||0,
         statComplete:n.statComplete||false,narrativeComplete:n.narrativeComplete||false,fgReady:n.fgReady||false,
         overrideLog:n.overrideLog||[]
-      }))
+      })),
+      canonCommitted:_canonSnapshots,
+      canonLog:_canonLog
     };
     const raw=JSON.stringify(data,null,2);
     const resp=await fetch(`https://api.github.com/gists/${GIST_ID}`,{
@@ -1997,13 +2010,40 @@ function runBuildAudit(n){
   var ancestryData=(CF.data.ancestries&&CF.data.ancestries[n.ancestry])||{attrBonus:1,freeEdges:1,pace:6,size:0,toughMod:0};
   var skillLinks=CF.data.skillLinks||{};
   var coreSkills=CF.data.coreSkills||['Athletics','Common Knowledge','Notice','Persuasion','Stealth'];
-  return window.SWADERules.runBuildAudit({
+  var results=window.SWADERules.runBuildAudit({
     attrs:{agility:n.agility,smarts:n.smarts,spirit:n.spirit,strength:n.strength,vigor:n.vigor},
     skills:n.skills, edges:n.edges, hindrances:n.hindrances,
     tier:n.tier, ancestryData:ancestryData, ancestry:n.ancestry||'',
     skillLinks:skillLinks, coreSkills:coreSkills,
     pace:n.pace, parry:n.parry, toughness:n.toughness, toughnessArmor:n.toughnessArmor||0
   });
+  // ── Core Skills Check ──
+  var missingCore=coreSkills.filter(function(sk){return !n.skills[sk];});
+  if(missingCore.length){
+    results.push({section:'Core Skills',label:'Missing: '+missingCore.join(', '),pass:true,warn:true,detail:'All characters should have core skills at d4'});
+  }
+  // ── Arcane Background Prerequisite Check ──
+  var edges=n.edges||[];
+  var hasWizard=edges.some(function(e){return e.toLowerCase()==='wizard';});
+  var hasABMagic=edges.some(function(e){return e.toLowerCase().includes('arcane background')&&e.toLowerCase().includes('magic');});
+  var hasABBare=edges.some(function(e){var l=e.toLowerCase().trim();return l==='arcane background';});
+  if(hasWizard&&!hasABMagic){
+    results.push({section:'Edge Prerequisites',label:'Wizard requires Arcane Background (Magic)',pass:true,warn:true,detail:'Arcane Background should specify tradition'});
+  }
+  if(hasABBare){
+    results.push({section:'Edge Prerequisites',label:'Arcane Background missing tradition (Magic/Miracles/etc)',pass:true,warn:true,detail:'Specify tradition in parentheses'});
+  }
+  var hasChampion=edges.some(function(e){return e.toLowerCase()==='champion';});
+  var hasABMiracles=edges.some(function(e){return e.toLowerCase().includes('arcane background')&&e.toLowerCase().includes('miracles');});
+  if(hasChampion&&!hasABMiracles){
+    results.push({section:'Edge Prerequisites',label:'Champion requires Arcane Background (Miracles)',pass:true,warn:true,detail:'Check Arcane Background tradition'});
+  }
+  // ── Hindrance Overflow Check ──
+  var hindPts=window.SWADERules.calcHindrancePoints(n.hindrances||[]);
+  if(hindPts.raw>4){
+    results.push({section:'Hindrance Overflow',label:hindPts.raw+' raw hindrance points ('+hindPts.majorCount+' Major, '+hindPts.minorCount+' Minor) — only 4 effective',pass:true,warn:true,detail:'Extra hindrances add flavour but no mechanical benefit'});
+  }
+  return results;
 }
 
 function renderAuditPanel(n){
@@ -2015,17 +2055,12 @@ function renderAuditPanel(n){
     const cls=r.warn?'audit-warn':r.pass?'audit-pass':'audit-fail';
     const icon=r.warn?'⚠':r.pass?'✓':'✗';
     html+=`<div class="audit-line ${cls}">${icon} ${esc(r.label)} ${esc(r.detail)}</div>`;
+    // Add fix button after Core Skills warnings
+    if(r.section==='Core Skills'&&r.warn){
+      html+='<div style="margin:4px 0 6px"><button class="btn sm" onclick="fixMissingCoreSkills()" style="color:var(--green);border-color:var(--green)">+ Add Missing Core Skills (d4)</button></div>';
+    }
   });
   html+='</div></div>';
-  // Core skills check
-  const coreNames=window.CharacterForge?.data?.coreSkills||['Athletics','Common Knowledge','Notice','Persuasion','Stealth'];
-  const missing=coreNames.filter(sk=>!n.skills[sk]);
-  if(missing.length){
-    html+='<div class="audit-block"><div class="audit-section"><h4>Core Skills</h4>';
-    html+='<div class="audit-line audit-warn">⚠ Missing core skill'+(missing.length>1?'s':'')+': '+missing.join(', ')+'</div>';
-    html+='<div style="margin-top:6px"><button class="btn sm" onclick="fixMissingCoreSkills()" style="color:var(--green);border-color:var(--green)">+ Add Missing Core Skills (d4)</button></div>';
-    html+='</div></div>';
-  }
   // Funds audit
   let baseFunds=500,fundsNote='';
   if(n.edges.some(e=>e.toLowerCase().includes('filthy rich'))){baseFunds=2500;fundsNote=' (Filthy Rich x5)';}
@@ -2622,40 +2657,33 @@ function openCommitModal(){prepareCommit();}
 function closeCommitModal(){const p=document.getElementById('commitPreview');if(p)p.innerHTML='';}
 
 async function executeCommit(){
-  const summary='Updated '+currentNPC.name;
   const statusEl=document.getElementById('commitStatus');
   document.getElementById('commitBtn').disabled=true;
   statusEl.innerHTML='<span style="color:var(--accent)">⏳ Committing to canon...</span>';
   try{
     const canon=buildCanonCharacter(currentNPC);
-    const res=await fetch(CANON_API,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        action:'commit_character',
-        secret:'diceforge2026',
-        character:canon,
-        filePath:canonFilePath(currentNPC),
-        summary:summary,
-        author:'Character Vault'
-      })
-    });
-    const data=await res.json();
-    if(data.success){
-      const products=Object.keys(data.affectedProducts||{});
-      statusEl.innerHTML=`<span style="color:var(--green)">✅ Committed as <strong>${esc(data.changeId)}</strong></span>
-        <div style="margin-top:6px;font-size:12px;color:var(--text-dim)">Pending updates: ${products.filter(p=>p!==canonFilePath(currentNPC)).join(', ')||'None'}</div>`;
-      canonCommitted.add(currentNPC.name);
-      captureBaseline(currentNPC.name);
-      filterNPCs();updateHeaderStats();renderDetail();
-      const s=JSON.parse(localStorage.getItem(LS_KEY)||'{}');
-      if(s.overrides&&s.overrides[currentNPC.name]){delete s.overrides[currentNPC.name];localStorage.setItem(LS_KEY,JSON.stringify(s));}
-    } else {
-      statusEl.innerHTML=`<span style="color:var(--red)">❌ ${esc(data.error||'Commit failed')}</span>`;
-      document.getElementById('commitBtn').disabled=false;
-    }
+    const changeId='CV-'+(++_canonSeq).toString().padStart(4,'0');
+    const inCanon=canonCommitted.has(currentNPC.name);
+    // Build diff against previous snapshot
+    const prev=_canonSnapshots[currentNPC.name]?.snapshot;
+    const diff={};
+    if(prev){
+      ['attrs','skills','edges','hindrances','powers','weapons','armour','pace','parry','toughness'].forEach(k=>{
+        if(JSON.stringify(prev[k])!==JSON.stringify(canon[k])) diff[k]=true;
+      });
+    } else { diff.added=true; }
+    // Store snapshot
+    _canonSnapshots[currentNPC.name]={snapshot:canon,committedAt:new Date().toISOString(),changeId:changeId};
+    // Log entry
+    _canonLog.push({id:changeId,action:inCanon?'update':'commit',target:currentNPC.name,region:currentNPC.region||'Ammaria',timestamp:new Date().toISOString(),summary:(inCanon?'Updated ':'Committed ')+currentNPC.name,diff:diff});
+    canonCommitted.add(currentNPC.name);
+    captureBaseline(currentNPC.name);
+    // Save everything to gist
+    await pushToGist();
+    statusEl.innerHTML=`<span style="color:var(--green)">✅ Committed as <strong>${esc(changeId)}</strong></span>`;
+    filterNPCs();updateHeaderStats();renderDetail();
   }catch(err){
-    statusEl.innerHTML=`<span style="color:var(--red)">❌ Network error: ${esc(err.message)}</span>`;
+    statusEl.innerHTML=`<span style="color:var(--red)">❌ Save failed: ${esc(err.message)}</span>`;
     document.getElementById('commitBtn').disabled=false;
   }
 }
@@ -2663,33 +2691,19 @@ async function executeCommit(){
 // ── REMOVE FROM CANON ──
 async function removeFromCanon(){
   if(!currentNPC||!canonCommitted.has(currentNPC.name))return;
-  if(!confirm(`Remove ${currentNPC.name} from canon?\n\nThis will delete them from the canonical JSON and log the removal in the changelog.`))return;
+  if(!confirm(`Remove ${currentNPC.name} from canon?\n\nThis will clear the canonical snapshot and log the removal.`))return;
   const summary=prompt('Removal reason:','Character removed from canon');
   if(!summary)return;
   try{
-    const res=await fetch(CANON_API,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        action:'remove_character',
-        secret:'diceforge2026',
-        characterName:currentNPC.name,
-        filePath:canonFilePath(currentNPC),
-        region:currentNPC.region||'Ammaria',
-        summary:summary,
-        author:'Character Vault'
-      })
-    });
-    const data=await res.json();
-    if(data.success){
-      canonCommitted.delete(currentNPC.name);
-      filterNPCs();updateHeaderStats();renderDetail();
-      alert(`${currentNPC.name} removed from canon (${data.changeId})`);
-    } else {
-      alert('Remove failed: '+(data.error||'Unknown error'));
-    }
+    const changeId='CV-'+(++_canonSeq).toString().padStart(4,'0');
+    _canonLog.push({id:changeId,action:'remove',target:currentNPC.name,region:currentNPC.region||'Ammaria',timestamp:new Date().toISOString(),summary:summary});
+    delete _canonSnapshots[currentNPC.name];
+    canonCommitted.delete(currentNPC.name);
+    await pushToGist();
+    filterNPCs();updateHeaderStats();renderDetail();
+    alert(`${currentNPC.name} removed from canon (${changeId})`);
   }catch(err){
-    alert('Network error: '+err.message);
+    alert('Save failed: '+err.message);
   }
 }
 
@@ -2704,42 +2718,28 @@ function closeChangelogModal(){}
 
 async function loadChangelog(){
   const el=document.getElementById('changelogContent');
-  el.innerHTML='<span style="color:var(--accent)">⏳ Loading changelog...</span>';
-  try{
-    const res=await fetch(CANON_API,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'get_changelog',secret:'diceforge2026'})
-    });
-    const data=await res.json();
-    const log=data.changelog||[];
-    if(!log.length){el.innerHTML='<div style="color:var(--text-dim);padding:20px;text-align:center">No changes recorded yet. Commit a character correction to start the audit trail.</div>';return;}
-    let html=`<div style="margin-bottom:10px;color:var(--text-dim);font-size:12px">${log.length} change${log.length===1?'':'s'} recorded</div>`;
-    html+='<table class="data-table" style="font-size:13px"><tr><th>ID</th><th>Date</th><th>Character</th><th>Region</th><th>Summary</th><th>Products</th></tr>';
-    log.slice().reverse().forEach(entry=>{
-      const date=new Date(entry.timestamp).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
-      const time=new Date(entry.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-      const products=Object.entries(entry.affectedProducts||{}).map(([p,applied])=>{
-        const icon=applied?'✅':'⏳';
-        const label=p.replace(/\.js$/,' (module)').replace(/\.json$/,' (canon)');
-        return `<span title="${applied?'Applied: '+new Date(applied).toLocaleDateString('en-GB'):'Pending update'}">${icon} ${esc(label)}</span>`;
-      }).join('<br>');
-      const diffKeys=Object.keys(entry.diff||{}).filter(k=>k!=='added');
-      const diffSummary=diffKeys.length?`<div style="font-size:11px;color:var(--text-dim);margin-top:4px">Changed: ${diffKeys.join(', ')}</div>`:'';
-      html+=`<tr>
-        <td style="color:var(--accent);white-space:nowrap;font-weight:bold">${esc(entry.id)}</td>
-        <td style="white-space:nowrap">${date}<br><span style="color:var(--text-dim);font-size:11px">${time}</span></td>
-        <td>${esc(entry.target)}</td>
-        <td>${esc(entry.region)}</td>
-        <td>${esc(entry.summary)}${diffSummary}</td>
-        <td style="font-size:11px;line-height:1.8">${products}</td>
-      </tr>`;
-    });
-    html+='</table>';
-    el.innerHTML=html;
-  }catch(err){
-    el.innerHTML=`<span style="color:var(--red)">❌ Could not load changelog: ${esc(err.message)}</span>`;
-  }
+  const log=_canonLog;
+  if(!log.length){el.innerHTML='<div style="color:var(--text-dim);padding:20px;text-align:center">No changes recorded yet. Commit a character to start the audit trail.</div>';return;}
+  let html=`<div style="margin-bottom:10px;color:var(--text-dim);font-size:12px">${log.length} change${log.length===1?'':'s'} recorded</div>`;
+  html+='<table class="data-table" style="font-size:13px"><tr><th>ID</th><th>Date</th><th>Action</th><th>Character</th><th>Region</th><th>Summary</th><th>Fields Changed</th></tr>';
+  log.slice().reverse().forEach(entry=>{
+    const date=new Date(entry.timestamp).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+    const time=new Date(entry.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    const actionIcon=entry.action==='commit'?'🔒':entry.action==='update'?'🔄':'🗑️';
+    const diffKeys=Object.keys(entry.diff||{}).filter(k=>k!=='added');
+    const diffSummary=entry.diff?.added?'<em>New</em>':diffKeys.join(', ')||'—';
+    html+=`<tr>
+      <td style="color:var(--accent);white-space:nowrap;font-weight:bold">${esc(entry.id)}</td>
+      <td style="white-space:nowrap">${date}<br><span style="color:var(--text-dim);font-size:11px">${time}</span></td>
+      <td>${actionIcon} ${esc(entry.action)}</td>
+      <td style="cursor:pointer;color:var(--accent)" onclick="selectNPC('${esc(entry.target).replace(/'/g,"\\\\'")}')">${esc(entry.target)}</td>
+      <td>${esc(entry.region)}</td>
+      <td>${esc(entry.summary)}</td>
+      <td style="font-size:11px">${diffSummary}</td>
+    </tr>`;
+  });
+  html+='</table>';
+  el.innerHTML=html;
 }
 
 function checkPin(){
@@ -2857,13 +2857,15 @@ async function reviewApproveAndCommit(name){
   try{
     await flushSave();
     const canon=buildCanonCharacter(currentNPC);
-    const res=await fetch(CANON_API,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'commit_character',secret:'diceforge2026',character:canon,filePath:canonFilePath(currentNPC),summary:'Approved & committed '+name,author:'Character Vault — Review Panel'})
-    });
-    const data=await res.json();
-    if(data.success){canonCommitted.add(name);}
+    const changeId='CV-'+(++_canonSeq).toString().padStart(4,'0');
+    const prev=_canonSnapshots[name]?.snapshot;
+    const diff={};
+    if(prev){['attrs','skills','edges','hindrances','powers','weapons','armour'].forEach(k=>{if(JSON.stringify(prev[k])!==JSON.stringify(canon[k]))diff[k]=true;});}else{diff.added=true;}
+    _canonSnapshots[name]={snapshot:canon,committedAt:new Date().toISOString(),changeId:changeId};
+    _canonLog.push({id:changeId,action:prev?'update':'commit',target:name,region:currentNPC.region||'Ammaria',timestamp:new Date().toISOString(),summary:'Approved & committed '+name,diff:diff});
+    canonCommitted.add(name);
+    captureBaseline(name);
+    await pushToGist();
   }catch(e){/* canon commit is best-effort from review panel */}
   currentNPC=prev;
   filterNPCs();updateHeaderStats();renderReviewContent();
@@ -3105,18 +3107,9 @@ function checkEditLock(name){
 }
 
 async function loadCanonStatus(){
-  try{
-    const res=await fetch(CANON_API,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'get_changelog',secret:'diceforge2026'})
-    });
-    const data=await res.json();
-    const log=data.changelog||[];
-    canonCommitted=new Set(log.map(e=>e.target));
-    filterNPCs();updateHeaderStats();
-    if(currentNPC)renderDetail();
-  }catch(e){/* silent fail — just means no canon icons */}
+  // Canon state now loaded from gist in loadData() — this is a no-op retained for compatibility
+  filterNPCs();updateHeaderStats();
+  if(currentNPC)renderDetail();
 }
 
 async function unlockApp(){
