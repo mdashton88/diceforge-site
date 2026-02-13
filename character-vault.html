@@ -1539,14 +1539,18 @@ function renderSkillsPanel(n){
   const coreLC=coreSkillNames.map(s=>s.toLowerCase());
   const skillLinks=CF.data?.skillLinks||{};
   const attrs={agility:n.agility,smarts:n.smarts,spirit:n.spirit,strength:n.strength,vigor:n.vigor};
-  // Calculate budget — replicate the hindrance-inference from audit
-  const hindAlloc=null;
-  let budget=Rules.calcSkillBudget(n.skills,attrs,skillLinks,coreSkillNames,0);
-  if(budget.spent>budget.total){
-    const hp=Rules.calcHindrancePoints(n.hindrances);
-    const overspend=budget.spent-budget.total;
-    if(overspend<=hp.effective) budget=Rules.calcSkillBudget(n.skills,attrs,skillLinks,coreSkillNames,overspend);
-  }
+  const ancestryData=(CF.data.ancestries&&CF.data.ancestries[n.ancestry])||{attrBonus:1,freeEdges:1};
+  // Calculate what hindrance points are consumed by attrs and edges
+  const hindPts=Rules.calcHindrancePoints(n.hindrances);
+  const attrBase=Rules.calcAttributeBudget(attrs,ancestryData,0);
+  const attrHindSpend=Math.max(0,attrBase.spent-attrBase.total);
+  const edgeBase=Rules.calcEdgeBudget(n.edges.length,ancestryData,0);
+  const edgeHindSpend=Math.max(0,edgeBase.spent-edgeBase.total);
+  // Remaining hindrance pts available for skills (attrs cost 2 hind pts each, edges 2 each)
+  const hindUsedByOther=attrHindSpend*2+edgeHindSpend*2;
+  const hindAvailForSkills=Math.max(0,hindPts.effective-hindUsedByOther);
+  // Skill budget = 12 base + all hindrance pts that COULD go to skills
+  const budget=Rules.calcSkillBudget(n.skills,attrs,skillLinks,coreSkillNames,hindAvailForSkills);
   const remaining=budget.remaining;
   const budgetColour=remaining<0?'var(--red)':remaining===0?'var(--text-dim)':'var(--green)';
   const rows=Object.entries(n.skills).sort((a,b)=>a[0].localeCompare(b[0])).map(([name,die])=>{
