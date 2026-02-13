@@ -1128,7 +1128,7 @@ function updateHeaderStats(){
   document.getElementById("headerStats").innerHTML=`<span style="${hdrLink}" onclick="headerFilter('category','Pre-gen')" title="Filter to Pre-gens"><span class="stat-num">${pg}</span> Pre-gens</span><span style="${hdrLink}" onclick="headerFilter('category','NPC')" title="Filter to NPCs"><span class="stat-num">${np}</span> NPCs</span><span style="${hdrLink}" onclick="headerFilter('lifecycle','committed')" title="Filter to committed characters"><span class="stat-num">${cn}</span> 📦 Canon</span>${dirtySpan}<span style="${hdrLink}" onclick="showStatusView()" title="Open production status"><span class="stat-num">${c}</span> Complete</span><span style="${hdrLink}" onclick="showStatusView()" title="Open production status"><span class="stat-num">${f}</span> FG Ready</span>`;
 }
 
-function selectNPC(name){flushSave();currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;currentNPC._lockAcknowledged=false;_undoStack=[];_redoStack=[];_lastSnapshot=_snap(currentNPC);activePanel='audit';renderDetail();filterNPCs();navPush({type:'character',name:name});updateBreadcrumb();}
+function selectNPC(name){flushSave();currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;currentNPC._lockAcknowledged=false;_undoStack=[];_redoStack=[];_lastSnapshot=_snap(currentNPC);if(!activePanel)activePanel='audit';renderDetail();filterNPCs();navPush({type:'character',name:name});updateBreadcrumb();}
 
 function renderDetail(){
   const n=currentNPC;if(!n)return;
