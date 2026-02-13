@@ -1221,15 +1221,20 @@ function renderBottomBar(n){
   if(!n){bar.style.display='none';return;}
   const inCanon=canonCommitted.has(n.name);
   const audit=runBuildAudit(n);const legal=audit.every(r=>r.pass);
-  const commitLabel=inCanon?'🔄 Update Canon':'📦 Commit to Canon';
-  const legalLabel=legal?'<span style="color:var(--green)">✅ Build legal — ready to commit</span>':'<span style="color:var(--red)">❌ Build has issues</span>';
+  const dirty=isCharDirty(n.name);
+  const needsCommit=!inCanon||dirty;
+  const commitLabel=inCanon?(dirty?'🔄 Update Canon':'✓ Canon Up to Date'):'📦 Commit to Canon';
+  const commitBtnClass=needsCommit?'btn primary':'btn';
+  const commitBtnStyle=needsCommit?'':'opacity:0.4;cursor:default';
+  const commitAction=needsCommit?`showPanel('audit');setTimeout(doCommitFromAudit,200)`:'';
+  const legalLabel=legal?'<span style="color:var(--green)">✅ Build legal</span>':'<span style="color:var(--red)">❌ Build issues</span>';
   bar.style.display='';
   bar.innerHTML=`<div class="status-bar"><div class="status-row">
     <label><input type="checkbox" ${n.statComplete?'checked':''} onchange="toggleStatus('statComplete',this.checked)"> Stats</label>
     <label><input type="checkbox" ${n.narrativeComplete?'checked':''} onchange="toggleStatus('narrativeComplete',this.checked)"> Narrative</label>
     <label><input type="checkbox" ${n.fgReady?'checked':''} onchange="toggleStatus('fgReady',this.checked)"> FG Ready</label></div>
     <div class="action-btns"><button class="btn sm" onclick="showPanel('edit')">Edit</button><button class="btn sm" onclick="showPanel('statblock')">Stat Block</button><button class="btn sm" onclick="showPanel('audit')">Audit</button><button class="btn sm" onclick="showPanel('transfer')" style="color:var(--accent)">Import / Export</button><button class="btn sm danger" onclick="deleteNPC()">Delete</button></div>
-    <div class="commit-area"><button class="btn primary" onclick="showPanel('audit');setTimeout(prepareCommit,100)" title="${inCanon?'Update canonical data':'Commit to canon'}">${commitLabel}</button>${legalLabel}</div>
+    <div class="commit-area"><button class="${commitBtnClass}" onclick="${commitAction}" style="${commitBtnStyle}" title="${needsCommit?(inCanon?'Update canonical data':'Commit to canon'):'Canon is up to date'}">${commitLabel}</button>${legalLabel}</div>
   </div>`;
 }
 function hideBottomBar(){const bar=document.getElementById('charBottomBar');if(bar)bar.style.display='none';}
@@ -2104,13 +2109,18 @@ function renderAuditPanel(n){
     });
   }
   html+='</div></div>';
+  // Commit area
+  const needsCommit=!inCanon||dirty;
+  const commitBtnClass=needsCommit?'btn primary':'btn';
+  const commitBtnStyle=needsCommit?'':'opacity:0.4;cursor:default;pointer-events:none';
+  const commitStatus=inCanon?(dirty?'<span style="color:#e8b84e">⚠ Changes pending — commit to update canon</span>':'<span style="color:var(--green)">✓ Canon is up to date</span>'):'<span style="color:var(--text-dim)">Not yet committed to canon</span>';
   html+=`<div id="commitArea" style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <button class="btn primary" onclick="prepareCommit()" title="${inCanon?'Update canonical data':'Commit current state to canon repository'}">${commitLabel}</button>
+      <button id="auditCommitBtn" class="${commitBtnClass}" onclick="doCommitFromAudit()" style="${commitBtnStyle}" title="${inCanon?'Update canonical data':'Commit current state to canon'}">${commitLabel}</button>
       ${removeBtn}
-      <span style="font-size:12px;color:var(--text-dim)">${legal?'✅ Build legal — ready to commit':'❌ Build has issues — commit with caution'}</span>
+      <span style="font-size:12px">${commitStatus}</span>
     </div>
-    <div id="commitPreview" style="margin-top:10px"></div>
+    <div id="commitFeedback" style="margin-top:8px;font-size:13px"></div>
   </div>`;
   document.getElementById('panelContent').innerHTML=html;
 }
@@ -2627,6 +2637,35 @@ function canonFilePath(n){
   return `${region}/${region}-npcs.json`;
 }
 
+async function doCommitFromAudit(){
+  if(!currentNPC)return;
+  const inCanon=canonCommitted.has(currentNPC.name);
+  const dirty=isCharDirty(currentNPC.name);
+  if(inCanon&&!dirty)return; // nothing to commit
+  const btn=document.getElementById('auditCommitBtn');
+  const fb=document.getElementById('commitFeedback');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Committing...';}
+  if(fb)fb.innerHTML='<span style="color:var(--accent)">Saving to canon...</span>';
+  try{
+    await flushSave();
+    const canon=buildCanonCharacter(currentNPC);
+    const changeId='CV-'+(++_canonSeq).toString().padStart(4,'0');
+    const prev=_canonSnapshots[currentNPC.name]?.snapshot;
+    const diff={};
+    if(prev){['attrs','skills','edges','hindrances','powers','weapons','armour','pace','parry','toughness'].forEach(k=>{if(JSON.stringify(prev[k])!==JSON.stringify(canon[k]))diff[k]=true;});}else{diff.added=true;}
+    _canonSnapshots[currentNPC.name]={snapshot:canon,committedAt:new Date().toISOString(),changeId:changeId};
+    _canonLog.push({id:changeId,action:inCanon?'update':'commit',target:currentNPC.name,region:currentNPC.region||'Ammaria',timestamp:new Date().toISOString(),summary:(inCanon?'Updated ':'Committed ')+currentNPC.name,diff:diff});
+    canonCommitted.add(currentNPC.name);
+    captureBaseline(currentNPC.name);
+    await pushToGist();
+    if(fb)fb.innerHTML=`<span style="color:var(--green)">✅ Committed as <strong>${changeId}</strong> — canon updated</span>`;
+    // Re-render after short delay so user sees the success message
+    setTimeout(()=>{filterNPCs();updateHeaderStats();if(activePanel==='audit')renderMiddleColumn(currentNPC);renderBottomBar(currentNPC);},800);
+  }catch(err){
+    if(fb)fb.innerHTML=`<span style="color:var(--red)">❌ Failed: ${esc(err.message)}</span>`;
+    if(btn){btn.disabled=false;btn.textContent=inCanon?'🔄 Update Canon':'📦 Commit to Canon';}
+  }
+}
 async function flushSave(){if(saveTimer){clearTimeout(saveTimer);saveTimer=null;await pushToGist();}}
 async function prepareCommit(){await flushSave();
   if(!currentNPC)return;
