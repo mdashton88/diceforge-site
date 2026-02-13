@@ -2017,6 +2017,15 @@ function renderAuditPanel(n){
     html+=`<div class="audit-line ${cls}">${icon} ${esc(r.label)} ${esc(r.detail)}</div>`;
   });
   html+='</div></div>';
+  // Core skills check
+  const coreNames=window.CharacterForge?.data?.coreSkills||['Athletics','Common Knowledge','Notice','Persuasion','Stealth'];
+  const missing=coreNames.filter(sk=>!n.skills[sk]);
+  if(missing.length){
+    html+='<div class="audit-block"><div class="audit-section"><h4>Core Skills</h4>';
+    html+='<div class="audit-line audit-warn">⚠ Missing core skill'+(missing.length>1?'s':'')+': '+missing.join(', ')+'</div>';
+    html+='<div style="margin-top:6px"><button class="btn sm" onclick="fixMissingCoreSkills()" style="color:var(--green);border-color:var(--green)">+ Add Missing Core Skills (d4)</button></div>';
+    html+='</div></div>';
+  }
   // Funds audit
   let baseFunds=500,fundsNote='';
   if(n.edges.some(e=>e.toLowerCase().includes('filthy rich'))){baseFunds=2500;fundsNote=' (Filthy Rich x5)';}
@@ -2082,9 +2091,30 @@ function deleteNPC(){
 }
 function openNewNPCModal(){document.getElementById('newNpcModal').classList.add('active');}
 function closeNewNPCModal(){document.getElementById('newNpcModal').classList.remove('active');}
+function ensureCoreSkills(npc){
+  const core=window.CharacterForge?.data?.coreSkills||['Athletics','Common Knowledge','Notice','Persuasion','Stealth'];
+  let added=0;
+  core.forEach(sk=>{if(!npc.skills[sk]){npc.skills[sk]=4;added++;}});
+  return added;
+}
+function fixMissingCoreSkills(){
+  if(!currentNPC)return;
+  const added=ensureCoreSkills(currentNPC);
+  if(added){calcDerived(currentNPC);saveCharacter(currentNPC);renderDetail();}
+}
+function batchFixCoreSkills(){
+  const coreNames=window.CharacterForge?.data?.coreSkills||['Athletics','Common Knowledge','Notice','Persuasion','Stealth'];
+  const affected=allNPCs.filter(n=>coreNames.some(sk=>!n.skills[sk]));
+  if(!affected.length){alert('All characters already have core skills.');return;}
+  if(!confirm('Add missing core skills (d4) to '+affected.length+' character'+(affected.length>1?'s':'')+'?\n\nThis will mark them as edited.')){return;}
+  let total=0;
+  affected.forEach(n=>{total+=ensureCoreSkills(n);calcDerived(n);saveCharacter(n);});
+  filterNPCs();updateHeaderStats();showStatusView();
+}
 function createNPC(){
   const name=document.getElementById('new_name').value.trim();if(!name){alert('Name is required');return;}
   const npc={name,refCode:'',concept:document.getElementById('new_concept')?.value?.trim()||'',ancestry:document.getElementById('new_ancestry').value,region:document.getElementById('new_region').value,tier:document.getElementById('new_tier').value,rank:'Novice',category:document.getElementById('new_category').value,product:'',source:'custom',agility:0,smarts:0,spirit:0,strength:0,vigor:0,skills:{},edges:[],edgeNotes:{},hindrances:[],powers:[],gearText:'',quote:'',description:'',background:'',motivation:'',secret:'',services:'',adventureHook:'',tactics:'',abName:'',abSkill:'',pp:0,statComplete:false,narrativeComplete:false,fgReady:false,pace:6,parry:2,toughness:5,toughnessArmor:0,bennies:0,startingFunds:500,gearCost:0};
+  ensureCoreSkills(npc);
   calcDerived(npc);allNPCs.push(npc);saveCharacter(npc);captureBaseline(name);closeNewNPCModal();filterNPCs();updateHeaderStats();selectNPC(name);
 }
 
@@ -2395,6 +2425,7 @@ function executeImport(){
   const npc=prev._parsedNPC;
   delete npc._importWarning;
   npc.weapons=npc.weapons||[];npc.armour=npc.armour||[];
+  ensureCoreSkills(npc);
   calcDerived(npc);
   allNPCs.push(npc);
   saveCharacter(npc);captureBaseline(npc.name);
@@ -2528,7 +2559,10 @@ function showStatusView(){
     return `<tr><td style="font-family:monospace;font-size:11px;color:var(--text-dim)">${esc(n.refCode||'—')}</td><td style="cursor:pointer;color:var(--accent)" onclick="selectNPC('${esc(n.name).replace(/'/g,"\\'")}')">${esc(n.name)}</td><td>${esc(n.category||'NPC')}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td>${legal?'✅':'❌'}</td><td style="color:${lcColour}">${lcIcon} ${lc}</td><td>${dirtyIcon}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">&#${n.statComplete?'10003':'8212'};</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">&#${n.narrativeComplete?'10003':'8212'};</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">&#${n.fgReady?'10003':'8212'};</td></tr>`;
   }).join('');
   const prodSummary=_productRegistry.products.length?`<div style="margin-bottom:14px;font-size:13px;color:var(--text-dim)">Products: ${_productRegistry.products.map(p=>`<span style="color:${p.status==='released'?'var(--green)':p.status==='in-review'?'#e8b84e':'var(--text-dim)'}">${esc(p.code)}</span>`).join(', ')} · <a style="color:var(--accent);cursor:pointer" onclick="showProductsModal()">Manage</a></div>`:'';
-  el.innerHTML=`<h2 style="color:var(--accent);margin-bottom:14px">Production Status</h2>${prodSummary}<table class="data-table"><tr><th>Ref</th><th>Name</th><th>Type</th><th>Region</th><th>Tier</th><th>Build</th><th>Lifecycle</th><th>Edits</th><th>Stats</th><th>Narrative</th><th>FG Ready</th></tr>${rows}</table>`;
+  const coreNames=window.CharacterForge?.data?.coreSkills||['Athletics','Common Knowledge','Notice','Persuasion','Stealth'];
+  const missingCore=allNPCs.filter(n=>coreNames.some(sk=>!n.skills[sk]));
+  const coreFix=missingCore.length?`<div style="margin-bottom:14px;padding:8px 12px;background:#e8b84e15;border:1px solid #e8b84e44;border-radius:4px;font-size:12px"><span style="color:#e8b84e">⚠ ${missingCore.length} character${missingCore.length>1?'s':''} missing core skills:</span> ${missingCore.slice(0,8).map(n=>esc(n.name)).join(', ')}${missingCore.length>8?'…':''} <button class="btn sm" onclick="batchFixCoreSkills()" style="margin-left:8px;color:var(--green);border-color:var(--green)">Fix All (add d4)</button></div>`:'';
+  el.innerHTML=`<h2 style="color:var(--accent);margin-bottom:14px">Production Status</h2>${prodSummary}${coreFix}<table class="data-table"><tr><th>Ref</th><th>Name</th><th>Type</th><th>Region</th><th>Tier</th><th>Build</th><th>Lifecycle</th><th>Edits</th><th>Stats</th><th>Narrative</th><th>FG Ready</th></tr>${rows}</table>`;
 }
 
 // ── CANON COMMIT SYSTEM ──
