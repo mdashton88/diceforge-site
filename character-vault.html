@@ -1532,9 +1532,48 @@ function saveEdgeNotes(idx){
 
 function renderSkillsPanel(n){
   const el=document.getElementById('panelContent');
-  const coreSkills=(window.CharacterForge?.data?.coreSkills||[]).map(s=>s.toLowerCase());
-  const rows=Object.entries(n.skills).sort((a,b)=>a[0].localeCompare(b[0])).map(([name,die])=>{const isCore=coreSkills.includes(name.toLowerCase());const star=isCore?'<span style="color:var(--accent)" title="Core Skill"> ★</span>':'';return `<tr><td style="cursor:pointer" onclick="showExistingSkillInfo('${esc(name)}')">${esc(name)}${star}</td><td style="text-align:center"><button class="btn sm" onclick="stepSkill('${esc(name)}',-1)" style="padding:1px 6px;font-size:13px;min-width:22px">−</button> <span style="display:inline-block;min-width:42px;text-align:center;font-weight:bold">${d(die)}</span> <button class="btn sm" onclick="stepSkill('${esc(name)}',1)" style="padding:1px 6px;font-size:13px;min-width:22px">+</button></td><td><button class="btn sm danger" onclick="removeSkill('${esc(name)}')" title="Remove skill">×</button></td></tr>`;}).join('');
-  el.innerHTML=`<table class="data-table"><tr><th>Skill</th><th>Die</th><th></th></tr>${rows||'<tr><td colspan="3" style="color:var(--text-dim)">No skills</td></tr>'}</table>
+  const CF=window.CharacterForge;
+  const Rules=window.SWADERules;
+  const DICE=Rules.DICE;
+  const coreSkillNames=(CF.data?.coreSkills||[]);
+  const coreLC=coreSkillNames.map(s=>s.toLowerCase());
+  const skillLinks=CF.data?.skillLinks||{};
+  const attrs={agility:n.agility,smarts:n.smarts,spirit:n.spirit,strength:n.strength,vigor:n.vigor};
+  // Calculate budget — replicate the hindrance-inference from audit
+  const hindAlloc=null;
+  let budget=Rules.calcSkillBudget(n.skills,attrs,skillLinks,coreSkillNames,0);
+  if(budget.spent>budget.total){
+    const hp=Rules.calcHindrancePoints(n.hindrances);
+    const overspend=budget.spent-budget.total;
+    if(overspend<=hp.effective) budget=Rules.calcSkillBudget(n.skills,attrs,skillLinks,coreSkillNames,overspend);
+  }
+  const remaining=budget.remaining;
+  const budgetColour=remaining<0?'var(--red)':remaining===0?'var(--text-dim)':'var(--green)';
+  const rows=Object.entries(n.skills).sort((a,b)=>a[0].localeCompare(b[0])).map(([name,die])=>{
+    const isCore=coreLC.includes(name.toLowerCase());
+    const star=isCore?'<span style="color:var(--accent)" title="Core Skill"> ★</span>':'';
+    // Determine colour for this skill row
+    const linked=skillLinks[name];
+    const linkedDie=linked?(attrs[linked]||4):4;
+    const dIdx=DICE.indexOf(die);
+    const atD12=dIdx>=DICE.length-1;
+    let rowColour='var(--text-dim)';  // grey default
+    let costHint='';
+    if(!atD12){
+      const nextDie=DICE[dIdx+1];
+      const nextCost=nextDie>linkedDie?2:1;
+      if(remaining>=nextCost){
+        rowColour=nextCost===1?'var(--green)':'#e8b84e';
+        costHint='<span style="font-size:10px;margin-left:6px;color:'+rowColour+'" title="Next step costs '+nextCost+'pt'+(nextCost>1?'s':'')+(nextCost===2?' (exceeds '+linked+' d'+linkedDie+')':'')+'">'+nextCost+'pt</span>';
+      }
+    }
+    return '<tr style="border-left:3px solid '+rowColour+'">'
+      +'<td style="cursor:pointer;padding-left:8px" onclick="showExistingSkillInfo(\''+esc(name)+'\')">'+esc(name)+star+costHint+'</td>'
+      +'<td style="text-align:center"><button class="btn sm" onclick="stepSkill(\''+esc(name)+'\',-1)" style="padding:1px 6px;font-size:13px;min-width:22px">−</button> <span style="display:inline-block;min-width:42px;text-align:center;font-weight:bold;color:'+rowColour+'">'+d(die)+'</span> <button class="btn sm" onclick="stepSkill(\''+esc(name)+'\',1)" style="padding:1px 6px;font-size:13px;min-width:22px">+</button></td>'
+      +'<td><button class="btn sm danger" onclick="removeSkill(\''+esc(name)+'\')" title="Remove skill">×</button></td></tr>';
+  }).join('');
+  const budgetLine='<div style="margin-bottom:8px;font-size:12px;padding:6px 10px;background:var(--bg-body);border:1px solid var(--border);border-radius:3px"><span style="color:var(--text-dim)">Skill Points:</span> <strong style="color:'+budgetColour+'">'+budget.spent+' / '+budget.total+'</strong> <span style="color:var(--text-dim)">('+remaining+' remaining)</span></div>';
+  el.innerHTML=budgetLine+`<table class="data-table"><tr><th>Skill</th><th>Die</th><th></th></tr>${rows||'<tr><td colspan="3" style="color:var(--text-dim)">No skills</td></tr>'}</table>
     <div class="catalogue-section"><h4>Add Skill</h4>
     <div style="margin-bottom:4px;font-size:11px;color:var(--text-dim);text-transform:uppercase">Pick from Catalogue</div>
     <input placeholder="Search skills... (↑↓ to browse)" oninput="filterSkillCatalogue(this.value)" onkeydown="skillCatKeyNav(event)" id="skillSearch" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
