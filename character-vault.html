@@ -154,6 +154,14 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .portrait-actions { text-align: right; margin-bottom: 10px; font-size: 12px; }
 .portrait-actions a { color: var(--accent); cursor: pointer; text-decoration: none; margin-left: 8px; }
 .portrait-actions a:hover { text-decoration: underline; }
+.budget-bar { background: var(--bg-dark); border: 1px solid var(--border); border-radius: 4px; padding: 8px 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+.budget-bar .budget-label { color: var(--text-dim); }
+.budget-bar .budget-spent { font-weight: bold; }
+.budget-bar .budget-remaining { font-weight: bold; }
+.budget-bar .budget-over { color: var(--red); }
+.budget-bar .budget-ok { color: var(--green); }
+.budget-meter { height: 4px; background: var(--border); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+.budget-meter-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
 .npc-quote { font-style: italic; color: var(--accent); margin: 12px 0; padding-left: 12px; border-left: 2px solid var(--accent-dim); font-size: 14px; line-height: 1.5; }
 .narrative-section { margin-top: 12px; }
 .narrative-section h4 { font-size: 13px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; cursor: pointer; font-weight: 600; }
@@ -1288,7 +1296,10 @@ function renderStatColumn(n){
   const powersBox=buildSectionBox('Powers','powers',n.powers,p=>`<div class="item-entry">${esc(p)}</div>`);
   const gearItems=n.gearText?n.gearText.split(',').map(g=>g.trim()).filter(g=>g):[];
   const gearBox=buildSectionBox('Gear','gear',gearItems,g=>`<div class="item-entry">${esc(g)}</div>`);
-  el.innerHTML=`<div class="col-stats-scroll">${statsHTML}<div class="section-box-pair">${hindBox}${edgeBox}</div><div class="section-box-pair">${armourBox}${weaponBox}</div><div class="section-box-pair">${powersBox}${gearBox}</div></div>`;
+  const remaining=n.startingFunds-n.gearCost;
+  const fundsColor=remaining>=0?'var(--green)':'var(--red)';
+  const fundsLine=`<div style="text-align:center;font-size:12px;padding:6px 0;color:var(--text-dim)">Funds: <span style="color:${fundsColor};font-weight:bold">${n.gearCost}₡</span> / ${n.startingFunds}₡ <span style="color:${fundsColor}">(${remaining>=0?remaining+'₡ left':'over by '+Math.abs(remaining)+'₡'})</span></div>`;
+  el.innerHTML=`<div class="col-stats-scroll">${statsHTML}<div class="section-box-pair">${hindBox}${edgeBox}</div><div class="section-box-pair">${armourBox}${weaponBox}</div><div class="section-box-pair">${powersBox}${gearBox}</div>${fundsLine}</div>`;
   renderBottomBar(n);
 }
 
@@ -1441,7 +1452,7 @@ function renderEditPanel(n){
     <div class="form-group"><label>Background</label><textarea id="ed_background" rows="3">${esc(n.background)}</textarea></div>
     <div class="form-row"><div class="form-group"><label>Agility</label>${dieSel('ed_agility',n.agility)}</div><div class="form-group"><label>Smarts</label>${dieSel('ed_smarts',n.smarts)}</div><div class="form-group"><label>Spirit</label>${dieSel('ed_spirit',n.spirit)}</div><div class="form-group"><label>Strength</label>${dieSel('ed_strength',n.strength)}</div><div class="form-group"><label>Vigor</label>${dieSel('ed_vigor',n.vigor)}</div></div>
     <div class="form-row"><div class="form-group"><label>Pace</label><input id="ed_pace" type="number" value="${n.pace}"></div><div class="form-group"><label>Parry</label><input id="ed_parry" type="number" value="${n.parry}"></div><div class="form-group"><label>Toughness</label><input id="ed_toughness" type="number" value="${n.toughness}"></div><div class="form-group"><label>Tough (Armor)</label><input id="ed_tougharmor" type="number" value="${n.toughnessArmor}"></div><div class="form-group"><label>Bennies</label><input id="ed_bennies" type="number" value="${n.bennies}"></div></div>
-    <div class="form-row"><div class="form-group"><label>Starting Funds (₡)</label><input id="ed_startFunds" type="number" value="${n.startingFunds}"></div><div class="form-group"><label>Gear Cost (₡)</label><input id="ed_gearCost" type="number" value="${n.gearCost}"></div><div class="form-group"><label>Remaining</label><span style="font-weight:bold;color:${n.startingFunds-n.gearCost>=0?'var(--green)':'var(--red)'}">${n.startingFunds-n.gearCost}₡</span></div></div>
+    <div class="form-row"><div class="form-group"><label>Starting Funds (₡)</label><input id="ed_startFunds" type="number" value="${n.startingFunds}"></div><div class="form-group"><label>Gear Cost (₡) <span style="font-size:10px;color:var(--text-dim)">auto</span></label><input id="ed_gearCost" type="number" value="${n.gearCost}" readonly style="opacity:0.7"></div><div class="form-group"><label>Remaining</label><span style="font-weight:bold;color:${n.startingFunds-n.gearCost>=0?'var(--green)':'var(--red)'}">${n.startingFunds-n.gearCost}₡</span></div><div class="form-group" style="align-self:end"><button class="btn sm" onclick="recalcGearCost(currentNPC);renderEditPanel(currentNPC)" title="Recalculate gear cost from equipped items">⟳ Recalc</button></div></div>
     <div class="form-group"><label>Edges (legacy, comma-separated)</label><input id="ed_edges" value="${esc(n.edges.join(', '))}"></div>
     <div class="form-group"><label>Hindrances (legacy, comma-separated)</label><input id="ed_hindrances" value="${esc(n.hindrances.join(', '))}"></div>
     <div class="form-group"><label>Gear</label><input id="ed_gear" value="${esc(n.gearText)}"></div>
@@ -1451,7 +1462,7 @@ function saveEdit(){
   const n=currentNPC;
   n.name=document.getElementById('ed_name').value.trim();n.refCode=document.getElementById('ed_refCode').value.trim();n.concept=document.getElementById('ed_concept').value.trim();n.region=document.getElementById('ed_region').value;n.tier=document.getElementById('ed_tier').value;n.category=document.getElementById('ed_category').value;n.ancestry=document.getElementById('ed_ancestry').value;n.quote=document.getElementById('ed_quote').value.trim();n.description=document.getElementById('ed_description').value.trim();n.background=document.getElementById('ed_background').value.trim();
   n.agility=parseInt(document.getElementById('ed_agility').dataset.val);n.smarts=parseInt(document.getElementById('ed_smarts').dataset.val);n.spirit=parseInt(document.getElementById('ed_spirit').dataset.val);n.strength=parseInt(document.getElementById('ed_strength').dataset.val);n.vigor=parseInt(document.getElementById('ed_vigor').dataset.val);
-  n.pace=parseInt(document.getElementById('ed_pace').value);n.parry=parseInt(document.getElementById('ed_parry').value);n.toughness=parseInt(document.getElementById('ed_toughness').value);n.toughnessArmor=parseInt(document.getElementById('ed_tougharmor').value);n.bennies=parseInt(document.getElementById('ed_bennies').value);n.startingFunds=parseInt(document.getElementById('ed_startFunds').value)||500;n.gearCost=parseInt(document.getElementById('ed_gearCost').value)||0;
+  n.pace=parseInt(document.getElementById('ed_pace').value);n.parry=parseInt(document.getElementById('ed_parry').value);n.toughness=parseInt(document.getElementById('ed_toughness').value);n.toughnessArmor=parseInt(document.getElementById('ed_tougharmor').value);n.bennies=parseInt(document.getElementById('ed_bennies').value);n.startingFunds=parseInt(document.getElementById('ed_startFunds').value)||500;recalcGearCost(n);
   n.edges=csvToList(document.getElementById('ed_edges').value);n.hindrances=csvToList(document.getElementById('ed_hindrances').value);n.gearText=document.getElementById('ed_gear').value.trim();
   saveCharacter(n);closePanel();updateHeaderStats();
 }
@@ -1789,8 +1800,8 @@ function removeSkill(name){
 var wepCatIdx=-1, wepCatFiltered=[];
 function renderWeaponsPanel(n){
   const owned=n.weapons.map(w=>w.name.toLowerCase());
-  const current=n.weapons.map((w,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;cursor:pointer" onclick="showExistingWepInfo('${esc(w.name).replace(/'/g,"\\'")}')"><span>${esc(w.name)} <span style="color:var(--text-dim)">${esc(w.damage)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''}</span></span><button class="btn sm danger" onclick="event.stopPropagation();removeWeapon(${i})">×</button></div>`).join('');
-  document.getElementById('panelContent').innerHTML=`<div>${current||'<div style="color:var(--text-dim)">No weapons</div>'}</div>
+  const current=n.weapons.map((w,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;cursor:pointer" onclick="showExistingWepInfo('${esc(w.name).replace(/'/g,"\\'")}')"><span>${esc(w.name)} <span style="color:var(--text-dim)">${esc(w.damage)}${w.ap?' AP'+w.ap:''}${w.range?' '+w.range:''}</span>${w.cost?` <span style="color:var(--accent);font-size:11px">${w.cost}₡</span>`:''}</span><button class="btn sm danger" onclick="event.stopPropagation();removeWeapon(${i})">×</button></div>`).join('');
+  document.getElementById('panelContent').innerHTML=`${renderBudgetBar(n)}<div>${current||'<div style="color:var(--text-dim)">No weapons</div>'}</div>
     <div class="catalogue-section"><h4>Add Weapon</h4>
     <input placeholder="Search weapons... (↑↓ to browse)" id="wepSearch" oninput="filterWeaponCatalogue(this.value)" onkeydown="wepCatKeyNav(event)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
     <div style="display:flex;gap:8px;align-items:flex-start">
@@ -1859,17 +1870,20 @@ function showExistingWepInfo(name){
 function addWeapon(){
   const name=document.getElementById('wep_name').value.trim(),dmg=document.getElementById('wep_damage').value.trim();
   if(!name||!dmg)return;
-  currentNPC.weapons.push({name,damage:dmg,ap:parseInt(document.getElementById('wep_ap').value)||0,range:document.getElementById('wep_range').value.trim(),notes:document.getElementById('wep_notes').value.trim(),source:'Manual'});
-  saveCharacter(currentNPC);renderWeaponsPanel(currentNPC);renderStatColumn(currentNPC);
+  // Look up cost from catalogue
+  const catMatch=getCatalogueWeapons().find(w=>w.name.toLowerCase()===name.toLowerCase());
+  const cost=catMatch&&catMatch.cost?catMatch.cost:0;
+  currentNPC.weapons.push({name,damage:dmg,ap:parseInt(document.getElementById('wep_ap').value)||0,range:document.getElementById('wep_range').value.trim(),notes:document.getElementById('wep_notes').value.trim(),source:'Manual',cost:cost});
+  recalcGearCost(currentNPC);saveCharacter(currentNPC);renderWeaponsPanel(currentNPC);renderStatColumn(currentNPC);
 }
-function removeWeapon(idx){currentNPC.weapons.splice(idx,1);saveCharacter(currentNPC);renderWeaponsPanel(currentNPC);renderStatColumn(currentNPC);}
+function removeWeapon(idx){currentNPC.weapons.splice(idx,1);recalcGearCost(currentNPC);saveCharacter(currentNPC);renderWeaponsPanel(currentNPC);renderStatColumn(currentNPC);}
 function addWeaponToGear(){addWeapon();}
 
 /* ═══ ARMOUR PANEL — full catalogue with info, keyboard nav, colour coding ═══ */
 var armCatIdx=-1, armCatFiltered=[];
 function renderArmourPanel(n){
-  const current=n.armour.map((a,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;cursor:pointer" onclick="showExistingArmInfo('${esc(a.name).replace(/'/g,"\\'")}')"><span>${esc(a.name)} <span style="color:var(--accent)">(+${a.armor})</span>${a.notes?' <span style="color:var(--text-dim)">'+esc(a.notes)+'</span>':''}</span><button class="btn sm danger" onclick="event.stopPropagation();removeArmour(${i})">×</button></div>`).join('');
-  document.getElementById('panelContent').innerHTML=`<div>${current||'<div style="color:var(--text-dim)">No armour</div>'}</div>
+  const current=n.armour.map((a,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;cursor:pointer" onclick="showExistingArmInfo('${esc(a.name).replace(/'/g,"\\'")}')"><span>${esc(a.name)} <span style="color:var(--accent)">(+${a.armor})</span>${a.notes?' <span style="color:var(--text-dim)">'+esc(a.notes)+'</span>':''}${a.cost?' <span style="color:var(--accent);font-size:11px">'+a.cost+'₡</span>':''}</span><button class="btn sm danger" onclick="event.stopPropagation();removeArmour(${i})">×</button></div>`).join('');
+  document.getElementById('panelContent').innerHTML=`${renderBudgetBar(n)}<div>${current||'<div style="color:var(--text-dim)">No armour</div>'}</div>
     <div class="catalogue-section"><h4>Add Armour</h4>
     <input placeholder="Search armour & shields... (↑↓ to browse)" id="armSearch" oninput="filterArmourCatalogue(this.value)" onkeydown="armCatKeyNav(event)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
     <div style="display:flex;gap:8px;align-items:flex-start">
@@ -1941,19 +1955,58 @@ function showExistingArmInfo(name){
 function addArmour(){
   const name=document.getElementById('arm_name').value.trim();if(!name)return;
   const armor=parseInt(document.getElementById('arm_prot').value)||0;
-  currentNPC.armour.push({name,armor,notes:document.getElementById('arm_notes').value.trim(),source:'Manual'});
-  recalcArmour();saveCharacter(currentNPC);renderArmourPanel(currentNPC);renderStatColumn(currentNPC);
+  const catMatch=getCatalogueArmour().find(a=>a.name.toLowerCase()===name.toLowerCase());
+  const cost=catMatch&&catMatch.cost?catMatch.cost:0;
+  currentNPC.armour.push({name,armor,notes:document.getElementById('arm_notes').value.trim(),source:'Manual',cost:cost});
+  recalcArmour();recalcGearCost(currentNPC);saveCharacter(currentNPC);renderArmourPanel(currentNPC);renderStatColumn(currentNPC);
 }
-function removeArmour(idx){currentNPC.armour.splice(idx,1);recalcArmour();saveCharacter(currentNPC);renderArmourPanel(currentNPC);renderStatColumn(currentNPC);}
+function removeArmour(idx){currentNPC.armour.splice(idx,1);recalcArmour();recalcGearCost(currentNPC);saveCharacter(currentNPC);renderArmourPanel(currentNPC);renderStatColumn(currentNPC);}
 function addArmourToGear(){addArmour();}
 function recalcArmour(){currentNPC.toughnessArmor=currentNPC.armour.reduce((best,a)=>Math.max(best,a.armor||0),0);calcDerived(currentNPC);}
+function recalcGearCost(n){
+  if(!n) n=currentNPC;if(!n) return;
+  let total=0;
+  // Weapons with stored cost
+  (n.weapons||[]).forEach(w=>{total+=(w.cost||0);});
+  // Armour with stored cost
+  (n.armour||[]).forEach(a=>{total+=(a.cost||0);});
+  // Gear items — look up cost from catalogue (only if catalogue loaded)
+  const catG=getCatalogueGear();
+  if(n.gearText&&catG.length>0){
+    n.gearText.split(',').map(g=>g.trim()).filter(g=>g).forEach(item=>{
+      const norm=item.toLowerCase().replace(/\s*\([^)]*\)/g,'').trim();
+      const match=catG.find(g=>g.name.toLowerCase()===norm||norm.includes(g.name.toLowerCase()));
+      if(match&&match.cost) total+=match.cost;
+    });
+  }
+  // Only update if we actually computed something, or if total > 0
+  // (avoids zeroing out on first load before catalogues are ready)
+  if(total>0||catG.length>0) n.gearCost=total;
+  return total;
+}
+function renderBudgetBar(n){
+  if(!n) return '';
+  const spent=n.gearCost||0;
+  const budget=n.startingFunds||500;
+  const remaining=budget-spent;
+  const pct=budget>0?Math.min(100,Math.round((spent/budget)*100)):0;
+  const cls=remaining>=0?'budget-ok':'budget-over';
+  const barColor=remaining>=0?'var(--green)':'var(--red)';
+  return `<div class="budget-bar"><span class="budget-label">Budget</span><span class="budget-spent">${spent}₡ spent</span><span class="${cls}">${remaining>=0?remaining+'₡ remaining':'Over by '+Math.abs(remaining)+'₡'}</span><span class="budget-label">${budget}₡ total</span></div><div class="budget-meter"><div class="budget-meter-fill" style="width:${pct}%;background:${barColor}"></div></div>`;
+}
 
 /* ═══ GEAR PANEL — full catalogue with info, keyboard nav, colour coding ═══ */
 var gearCatIdx=-1, gearCatFiltered=[];
 function renderGearPanel(n){
   const items=n.gearText?n.gearText.split(',').map(g=>g.trim()).filter(g=>g):[];
-  const rows=items.map((g,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;padding:4px 0;cursor:pointer" onclick="showExistingGearInfo('${esc(g).replace(/'/g,"\\'")}')"><span>${esc(g)}</span> <button class="btn sm danger" onclick="event.stopPropagation();removeGearItem(${i})">×</button></div>`).join('');
-  document.getElementById('panelContent').innerHTML=`<div>${rows||'<div style="color:var(--text-dim)">No gear yet</div>'}</div>
+  const catG=getCatalogueGear();
+  const rows=items.map((g,i)=>{
+    const norm=g.toLowerCase().replace(/\s*\([^)]*\)/g,'').trim();
+    const match=catG.find(c=>c.name.toLowerCase()===norm||norm.includes(c.name.toLowerCase()));
+    const costTag=match&&match.cost?` <span style="color:var(--accent);font-size:11px">${match.cost}₡</span>`:'';
+    return `<div class="item-entry" style="display:flex;justify-content:space-between;padding:4px 0;cursor:pointer" onclick="showExistingGearInfo('${esc(g).replace(/'/g,"\\'")}')"><span>${esc(g)}${costTag}</span> <button class="btn sm danger" onclick="event.stopPropagation();removeGearItem(${i})">×</button></div>`;
+  }).join('');
+  document.getElementById('panelContent').innerHTML=`${renderBudgetBar(n)}<div>${rows||'<div style="color:var(--text-dim)">No gear yet</div>'}</div>
     <div class="catalogue-section"><h4>Add Item</h4>
     <input placeholder="Search gear... (↑↓ to browse)" id="gearSearch" oninput="filterGearCatalogue(this.value)" onkeydown="gearCatKeyNav(event)" style="width:100%;margin-bottom:4px;padding:5px 8px;background:var(--bg-input);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:12px">
     <div style="display:flex;gap:8px;align-items:flex-start">
@@ -2019,8 +2072,8 @@ function showExistingGearInfo(name){
   if(idx>=0){selectGearInfo(idx);scrollToGearCatItem(idx);}
   else{const info=document.getElementById('gearInfo');if(info)info.innerHTML=`<div class="cat-info"><div class="ci-name">${esc(name)}</div><div class="ci-desc" style="color:var(--text-dim)">Custom item — not in catalogue</div></div>`;}
 }
-function addGearItem(){const item=document.getElementById('gear_name').value.trim();if(!item)return;currentNPC.gearText=currentNPC.gearText?currentNPC.gearText+', '+item:item;saveCharacter(currentNPC);renderGearPanel(currentNPC);renderStatColumn(currentNPC);}
-function removeGearItem(idx){const items=currentNPC.gearText.split(',').map(g=>g.trim()).filter(g=>g);items.splice(idx,1);currentNPC.gearText=items.join(', ');saveCharacter(currentNPC);renderGearPanel(currentNPC);renderStatColumn(currentNPC);}
+function addGearItem(){const item=document.getElementById('gear_name').value.trim();if(!item)return;currentNPC.gearText=currentNPC.gearText?currentNPC.gearText+', '+item:item;recalcGearCost(currentNPC);saveCharacter(currentNPC);renderGearPanel(currentNPC);renderStatColumn(currentNPC);}
+function removeGearItem(idx){const items=currentNPC.gearText.split(',').map(g=>g.trim()).filter(g=>g);items.splice(idx,1);currentNPC.gearText=items.join(', ');recalcGearCost(currentNPC);saveCharacter(currentNPC);renderGearPanel(currentNPC);renderStatColumn(currentNPC);}
 
 function renderPowersPanel(n){
   const rows=n.powers.map((p,i)=>`<div class="item-entry" style="display:flex;justify-content:space-between;padding:4px 0">${esc(p)} <button class="btn sm danger" onclick="removePower(${i})">×</button></div>`).join('');
