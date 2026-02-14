@@ -162,6 +162,7 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .budget-bar .budget-ok { color: var(--green); }
 .budget-meter { height: 4px; background: var(--border); border-radius: 2px; margin-top: 4px; overflow: hidden; }
 .budget-meter-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 .npc-quote { font-style: italic; color: var(--accent); margin: 12px 0; padding-left: 12px; border-left: 2px solid var(--accent-dim); font-size: 14px; line-height: 1.5; }
 .narrative-section { margin-top: 12px; }
 .narrative-section h4 { font-size: 13px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; cursor: pointer; font-weight: 600; }
@@ -254,6 +255,7 @@ var DICEFORGE_AUTH=false;
     <span id="syncLabel" style="font-size:11px;font-family:monospace;color:var(--text-dim)">●</span>
     <button onclick="forceRefresh()" style="font-size:10px;padding:1px 6px;background:none;border:1px solid var(--border);color:var(--text-dim);border-radius:3px;cursor:pointer" title="Reload from remote">↻ Refresh</button>
     <button onclick="promptForToken()" id="tokenBtn" style="font-size:10px;padding:1px 6px;background:none;border:1px solid var(--border);color:var(--text-dim);border-radius:3px;cursor:pointer;display:none" title="Set GitHub token">🔑 Token</button>
+    <button onclick="manageOpenAIKey()" style="font-size:10px;padding:1px 6px;background:none;border:1px solid var(--border);color:var(--text-dim);border-radius:3px;cursor:pointer" title="Manage OpenAI API key for portrait generation">🎨 AI Key</button>
   </div>
 </header>
 <div id="breadcrumb"><span class="bc-current">Home</span></div>
@@ -1427,9 +1429,9 @@ function renderNarrativeColumn(n){
   }
   const portraitImg=n.portrait?`<div class="portrait-box"><img src="${n.portrait}" alt="${esc(n.name)}"></div>`:`<div class="portrait-box">No portrait</div>`;
   const portraitActions=n.portrait
-    ?`<div class="portrait-actions"><a onclick="uploadPortrait()">Replace</a> <a onclick="removePortrait()">Remove</a></div>`
-    :`<div class="portrait-actions"><a onclick="uploadPortrait()">Upload</a></div>`;
-  el.innerHTML=`${portraitImg}${portraitActions}<input type="file" id="portraitInput" accept="image/*" style="display:none" onchange="handlePortraitUpload(this)">${quote}${desc}${pers}${bg}${story}${adv}${connHtml}${appearHtml}${fsHtml}`;
+    ?`<div class="portrait-actions"><a onclick="generatePortrait()">✦ Generate</a> <a onclick="generatePortraitCustom()">✎ Prompt</a> <a onclick="uploadPortrait()">Replace</a> <a onclick="removePortrait()">Remove</a></div>`
+    :`<div class="portrait-actions"><a onclick="generatePortrait()">✦ Generate</a> <a onclick="generatePortraitCustom()">✎ Prompt</a> <a onclick="uploadPortrait()">Upload</a></div>`;
+  el.innerHTML=`${portraitImg}${portraitActions}<input type="file" id="portraitInput" accept="image/*" style="display:none" onchange="handlePortraitUpload(this)"><div id="portraitStatus" style="font-size:11px;color:var(--text-dim);margin-bottom:6px"></div>${quote}${desc}${pers}${bg}${story}${adv}${connHtml}${appearHtml}${fsHtml}`;
 }
 
 // ═══ EDITOR PANELS ═══
@@ -2267,6 +2269,154 @@ function removePortrait(){
   currentNPC.portrait='';
   saveCharacter(currentNPC);
   renderNarrativeColumn(currentNPC);
+}
+
+/* ═══ AI PORTRAIT GENERATION — DALL-E 3 via OpenAI API ═══ */
+const PORTRAIT_STYLE='Grimdark fantasy portrait, oil painting style, dark atmospheric lighting, Warhammer Fantasy Old World aesthetic. Moody and weathered. Head and shoulders composition, looking at viewer, highly detailed face. No text, no watermark, no signature, no border, no frame.';
+
+const ANCESTRY_DESC={
+  'Human':'a human','Dwarf':'a dwarf with thick beard and weathered features',
+  'Elf':'an elf with sharp angular features and pointed ears','Half-Elf':'a half-elf with subtle pointed ears',
+  'Orc':'an orc with greenish skin and tusks','Half-Orc':'a half-orc with orcish features',
+  'Halfling':'a halfling with youthful rounded features','Gnome':'a gnome with exaggerated features',
+  'Saurian':'a reptilian saurian with scaled skin and slitted eyes','Rakashani':'a feline rakashani with cat-like features and fur'
+};
+const REGION_FLAVOUR={
+  'Ammaria':'from a wealthy merchant city-state; fine but practical clothing, guild insignia, trade-worn hands',
+  'Saltlands':'from a harsh corsair confederation; weathered by salt and sun, nautical clothing, scarred',
+  'Vinlands':'from the northern resistance lands; furs and practical armour, Germanic warrior aesthetic, defiant',
+  'Concordium':'from a sky city; elaborate robes, artificer goggles, crystal-touched aesthetic',
+  'Glasrya':'from the demon-blooded empire; decadent cruel beauty, pale skin, Melnibonéan aesthetic, otherworldly'
+};
+
+function buildPortraitPrompt(n){
+  const parts=[PORTRAIT_STYLE];
+  const anc=ANCESTRY_DESC[n.ancestry]||'a human';
+  const concept=n.concept?', '+n.concept.toLowerCase():'';
+  parts.push('Portrait of '+anc+concept+'.');
+  if(n.region&&REGION_FLAVOUR[n.region]) parts.push(REGION_FLAVOUR[n.region]+'.');
+  if(n.physicalDescription) parts.push('Appearance: '+n.physicalDescription.slice(0,200));
+  else if(n.description&&n.description.length<200) parts.push('Character: '+n.description.slice(0,200));
+  if(n.age) parts.push('Apparent age: approximately '+n.age+' years old.');
+  if(n.tier==='Wild Card') parts.push('Commanding presence, memorable face, protagonist energy.');
+  if(n.tier==='Extra') parts.push('Common, unremarkable, could be anyone in a crowd.');
+  return parts.join(' ');
+}
+
+function getOpenAIKey(){
+  let key=localStorage.getItem('openai_api_key');
+  if(key) return key;
+  key=prompt('Enter your OpenAI API key (starts with sk-).\nGet one free at platform.openai.com/api-keys\n\nThis is stored locally in your browser only.');
+  if(key&&key.startsWith('sk-')){localStorage.setItem('openai_api_key',key);return key;}
+  return null;
+}
+function clearOpenAIKey(){localStorage.removeItem('openai_api_key');console.log('🔑 OpenAI key cleared');}
+function manageOpenAIKey(){
+  const current=localStorage.getItem('openai_api_key');
+  if(current){
+    const action=confirm('OpenAI API key is set ('+current.slice(0,8)+'…).\n\nOK = Clear key\nCancel = Keep it');
+    if(action){localStorage.removeItem('openai_api_key');alert('API key cleared.');}
+  } else {
+    const key=prompt('Enter your OpenAI API key (starts with sk-).\nGet one at platform.openai.com/api-keys\n\nStored locally in your browser only — never sent to GitHub.');
+    if(key&&key.startsWith('sk-')){localStorage.setItem('openai_api_key',key);alert('API key saved. ✦ Generate buttons are now active.');}
+    else if(key) alert('Key should start with sk-. Try again.');
+  }
+}
+
+async function generatePortrait(){
+  const n=currentNPC;if(!n) return;
+  const key=getOpenAIKey();
+  if(!key){setPortraitStatus('No API key provided.','var(--red)');return;}
+  const prompt=buildPortraitPrompt(n);
+  console.log('🎨 Portrait prompt:',prompt);
+  setPortraitStatus('Generating portrait… (10-20 seconds)','var(--accent)');
+  // Show spinner in portrait box
+  const box=document.querySelector('.portrait-box');
+  if(box&&!n.portrait) box.innerHTML='<div style="font-size:24px;animation:spin 1s linear infinite">⟳</div>';
+  try{
+    const resp=await fetch('https://api.openai.com/v1/images/generations',{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json'},
+      body:JSON.stringify({model:'dall-e-3',prompt:prompt,n:1,size:'1024x1024',quality:'standard',response_format:'b64_json'})
+    });
+    if(!resp.ok){
+      const err=await resp.json().catch(()=>({error:{message:'HTTP '+resp.status}}));
+      const msg=err.error?.message||'API error '+resp.status;
+      if(resp.status===401){localStorage.removeItem('openai_api_key');setPortraitStatus('Invalid API key — cleared. Try again.','var(--red)');}
+      else setPortraitStatus('Error: '+msg,'var(--red)');
+      renderNarrativeColumn(n);return;
+    }
+    const data=await resp.json();
+    const b64=data.data[0].b64_json;
+    // Convert to image, resize to thumbnail, save
+    const img=new Image();
+    img.onload=function(){
+      const canvas=document.createElement('canvas');
+      const tw=300,th=400;
+      canvas.width=tw;canvas.height=th;
+      const ctx=canvas.getContext('2d');
+      const srcR=img.width/img.height,tgtR=tw/th;
+      let sx=0,sy=0,sw=img.width,sh=img.height;
+      if(srcR>tgtR){sw=img.height*tgtR;sx=(img.width-sw)/2;}
+      else{sh=img.width/tgtR;sy=(img.height-sh)/2;}
+      ctx.drawImage(img,sx,sy,sw,sh,0,0,tw,th);
+      const dataUrl=canvas.toDataURL('image/jpeg',0.85);
+      n.portrait=dataUrl;
+      saveCharacter(n);
+      renderNarrativeColumn(n);
+      setPortraitStatus('Portrait generated ✓','var(--green)');
+      console.log('📷 AI portrait saved:',Math.round(dataUrl.length/1024)+'KB');
+    };
+    img.src='data:image/png;base64,'+b64;
+  }catch(e){
+    setPortraitStatus('Network error: '+e.message,'var(--red)');
+    renderNarrativeColumn(n);
+  }
+}
+function setPortraitStatus(msg,color){
+  const el=document.getElementById('portraitStatus');
+  if(el){el.textContent=msg;el.style.color=color||'var(--text-dim)';}
+}
+async function generatePortraitCustom(){
+  const n=currentNPC;if(!n) return;
+  const autoPrompt=buildPortraitPrompt(n);
+  const edited=prompt('Edit portrait prompt (or paste your own):\n\n',autoPrompt);
+  if(!edited) return;
+  const key=getOpenAIKey();
+  if(!key){setPortraitStatus('No API key provided.','var(--red)');return;}
+  setPortraitStatus('Generating from custom prompt…','var(--accent)');
+  const box=document.querySelector('.portrait-box');
+  if(box&&!n.portrait) box.innerHTML='<div style="font-size:24px;animation:spin 1s linear infinite">⟳</div>';
+  try{
+    const resp=await fetch('https://api.openai.com/v1/images/generations',{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json'},
+      body:JSON.stringify({model:'dall-e-3',prompt:edited,n:1,size:'1024x1024',quality:'standard',response_format:'b64_json'})
+    });
+    if(!resp.ok){
+      const err=await resp.json().catch(()=>({error:{message:'HTTP '+resp.status}}));
+      if(resp.status===401){localStorage.removeItem('openai_api_key');setPortraitStatus('Invalid API key — cleared.','var(--red)');}
+      else setPortraitStatus('Error: '+(err.error?.message||resp.status),'var(--red)');
+      renderNarrativeColumn(n);return;
+    }
+    const data=await resp.json();
+    const b64=data.data[0].b64_json;
+    const img=new Image();
+    img.onload=function(){
+      const canvas=document.createElement('canvas');
+      canvas.width=300;canvas.height=400;
+      const ctx=canvas.getContext('2d');
+      const srcR=img.width/img.height,tgtR=300/400;
+      let sx=0,sy=0,sw=img.width,sh=img.height;
+      if(srcR>tgtR){sw=img.height*tgtR;sx=(img.width-sw)/2;}
+      else{sh=img.width/tgtR;sy=(img.height-sh)/2;}
+      ctx.drawImage(img,sx,sy,sw,sh,0,0,300,400);
+      n.portrait=canvas.toDataURL('image/jpeg',0.85);
+      saveCharacter(n);renderNarrativeColumn(n);
+      setPortraitStatus('Portrait generated from custom prompt ✓','var(--green)');
+    };
+    img.src='data:image/png;base64,'+b64;
+  }catch(e){setPortraitStatus('Network error: '+e.message,'var(--red)');renderNarrativeColumn(n);}
 }
 function addNarRow(type){
   const n=currentNPC;
