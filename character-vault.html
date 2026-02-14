@@ -158,6 +158,20 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .narrative-section h4:hover { text-decoration: underline; }
 .narrative-section h4 .edit-icon { font-size: 10px; color: var(--text-dim); margin-left: 2px; }
 .narrative-section p { font-size: 13px; line-height: 1.6; color: var(--text); }
+.conn-list { list-style: none; padding: 0; margin: 4px 0 0 0; }
+.conn-list li { font-size: 12px; padding: 3px 0; border-bottom: 1px solid var(--border); cursor: pointer; color: var(--accent); }
+.conn-list li:hover { text-decoration: underline; }
+.conn-list li .conn-rel { color: var(--text-dim); font-style: italic; margin-left: 4px; }
+.appear-list { list-style: none; padding: 0; margin: 4px 0 0 0; }
+.appear-list li { font-size: 12px; padding: 3px 0; border-bottom: 1px solid var(--border); }
+.appear-list li .appear-code { font-family: monospace; color: var(--accent); margin-right: 6px; }
+.appear-list li .appear-role { color: var(--text-dim); font-style: italic; margin-left: 4px; }
+.foreshadow-list { list-style: none; padding: 0; margin: 4px 0 0 0; }
+.foreshadow-list li { font-size: 12px; padding: 3px 0; border-bottom: 1px solid var(--border); }
+.foreshadow-list .fs-seed { color: var(--text); }
+.foreshadow-list .fs-link { font-family: monospace; color: var(--accent); font-size: 11px; }
+.char-age { font-size: 12px; color: var(--text-dim); margin-left: 6px; }
+.phys-desc { font-size: 12px; color: var(--text-dim); font-style: italic; line-height: 1.5; margin-top: 4px; }
 .btn { background: var(--bg-input); border: 1px solid var(--border); color: var(--text); padding: 5px 12px; border-radius: 3px; cursor: pointer; font-size: 13px; font-family: inherit; }
 .btn:hover { background: var(--bg-hover); border-color: var(--accent-dim); }
 .btn.primary { background: var(--accent-dim); color: var(--text-bright); border-color: var(--accent); }
@@ -520,6 +534,10 @@ function serialiseForCompare(n){
     quote:n.quote||'',description:n.description||'',background:n.background||'',
     motivation:n.motivation||'',secret:n.secret||'',services:n.services||'',
     adventureHook:n.adventureHook||'',tactics:n.tactics||'',notes:n.notes||'',
+    personality:n.personality||'',physicalDescription:n.physicalDescription||'',
+    age:n.age||null,advancement:n.advancement||'',
+    connections:JSON.stringify(n.connections||[]),appearances:JSON.stringify(n.appearances||[]),
+    foreshadowing:JSON.stringify(n.foreshadowing||[]),
     refCode:n.refCode||'',concept:n.concept||'',ancestry:n.ancestry||'Human',
     region:n.region||'Ammaria',tier:n.tier||'Wild Card',rank:n.rank||'Novice',category:n.category||'NPC'
   };
@@ -635,12 +653,16 @@ function getCharDiff(name){
   if(old.startingFunds!==cur.startingFunds) changes.push({type:'changed',text:`Starting Funds: ${old.startingFunds}₡→${cur.startingFunds}₡`});
   if(old.gearCost!==cur.gearCost) changes.push({type:'changed',text:`Gear Cost: ${old.gearCost}₡→${cur.gearCost}₡`});
   // Narrative
-  const narrativeFields=[{key:'description',label:'Description'},{key:'background',label:'Background'},{key:'motivation',label:'Motivation'},{key:'secret',label:'Secret'},{key:'services',label:'Services'},{key:'adventureHook',label:'Adventure Hook'},{key:'tactics',label:'Tactics'},{key:'notes',label:'Notes'},{key:'quote',label:'Quote'}];
+  const narrativeFields=[{key:'description',label:'Description'},{key:'background',label:'Background'},{key:'motivation',label:'Motivation'},{key:'secret',label:'Secret'},{key:'services',label:'Services'},{key:'adventureHook',label:'Adventure Hook'},{key:'tactics',label:'Tactics'},{key:'notes',label:'Notes'},{key:'quote',label:'Quote'},{key:'personality',label:'Personality'},{key:'physicalDescription',label:'Physical Description'},{key:'advancement',label:'Advancement'},{key:'age',label:'Age'}];
   narrativeFields.forEach(f=>{if(old[f.key]!==cur[f.key]){
     if(!old[f.key]&&cur[f.key]) changes.push({type:'added',text:f.label+' added'});
     else if(old[f.key]&&!cur[f.key]) changes.push({type:'removed',text:f.label+' removed'});
     else changes.push({type:'changed',text:f.label+' updated'});
   }});
+  // Structured array fields (compared as JSON strings)
+  if(old.connections!==cur.connections) changes.push({type:'changed',text:'Connections updated'});
+  if(old.appearances!==cur.appearances) changes.push({type:'changed',text:'Appearances updated'});
+  if(old.foreshadowing!==cur.foreshadowing) changes.push({type:'changed',text:'Foreshadowing updated'});
   return changes;
 }
 
@@ -892,7 +914,10 @@ async function pushToGist(){console.log("☁️ pushToGist firing...");
         secret:n.secret||'',services:n.services||'',adventureHook:n.adventureHook||'',tactics:n.tactics||'',
         abName:n.abName||'',abSkill:n.abSkill||'',pp:n.pp||0,startingFunds:n.startingFunds||500,gearCost:n.gearCost||0,
         statComplete:n.statComplete||false,narrativeComplete:n.narrativeComplete||false,fgReady:n.fgReady||false,
-        overrideLog:n.overrideLog||[]
+        overrideLog:n.overrideLog||[],
+        personality:n.personality||'',physicalDescription:n.physicalDescription||'',age:n.age||null,
+        advancement:n.advancement||'',
+        connections:n.connections||[],appearances:n.appearances||[],foreshadowing:n.foreshadowing||[]
       })),
       canonCommitted:_canonSnapshots,
       canonLog:_canonLog
@@ -941,6 +966,14 @@ function normaliseChar(c,moduleId){
     else if(narr.length===1) n.description=narr[0];
   }
   calcDerived(n);
+  // v2.0 narrative fields
+  n.personality=c.personality||'';
+  n.physicalDescription=c.physicalDescription||'';
+  n.age=c.age||null;
+  n.advancement=c.advancement||'';
+  n.connections=JSON.parse(JSON.stringify(c.connections||[]));
+  n.appearances=JSON.parse(JSON.stringify(c.appearances||[]));
+  n.foreshadowing=JSON.parse(JSON.stringify(c.foreshadowing||[]));
   n.statComplete=n.agility>0&&Object.keys(n.skills).length>0;
   n.narrativeComplete=!!(n.description||n.quote);
   return n;
@@ -1180,6 +1213,7 @@ function updateHeaderStats(){
 }
 
 function selectNPC(name){flushSave();currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;currentNPC._lockAcknowledged=false;_undoStack=[];_redoStack=[];_lastSnapshot=_snap(currentNPC);if(!activePanel)activePanel='audit';renderDetail();filterNPCs();navPush({type:'character',name:name});updateBreadcrumb();}
+function selectByRef(ref){const n=allNPCs.find(c=>c.refCode===ref);if(n)selectNPC(n.name);}
 
 function renderDetail(){
   const n=currentNPC;if(!n)return;
@@ -1329,8 +1363,17 @@ function closePanel(){activePanel=null;if(currentNPC)renderDetail();updateBreadc
 function renderNarrativeColumn(n){
   const el=document.getElementById('colNarrative');
   const quote=n.quote?`<div class="npc-quote">"${esc(n.quote)}"</div>`:'';
-  const desc=n.description?`<div class="narrative-section"><h4 onclick="showPanel('narrative')">Description <span class="edit-icon">✎</span></h4><p>${esc(n.description)}</p></div>`:'';
+  // Physical description and age
+  let physLine='';
+  if(n.physicalDescription||n.age){
+    const agePart=n.age?`<span class="char-age">(Age ${n.age})</span>`:'';
+    physLine=`<div class="phys-desc">${esc(n.physicalDescription||'')} ${agePart}</div>`;
+  }
+  const desc=n.description?`<div class="narrative-section"><h4 onclick="showPanel('narrative')">Description <span class="edit-icon">✎</span></h4><p>${esc(n.description)}</p>${physLine}</div>`:(physLine?`<div class="narrative-section">${physLine}</div>`:'');
   const bg=n.background?`<div class="narrative-section"><h4 onclick="showPanel('narrative')">Background <span class="edit-icon">✎</span></h4><p>${esc(n.background)}</p></div>`:'';
+  // Personality
+  const pers=n.personality?`<div class="narrative-section"><h4 onclick="showPanel('narrative')">Personality <span class="edit-icon">✎</span></h4><p>${esc(n.personality)}</p></div>`:'';
+  // Story parts
   let storyParts=[];
   if(n.motivation)storyParts.push(`<p><strong>What They Want:</strong> ${esc(n.motivation)}</p>`);
   if(n.secret)storyParts.push(`<p><strong>Their Secret:</strong> ${esc(n.secret)}</p>`);
@@ -1338,7 +1381,36 @@ function renderNarrativeColumn(n){
   if(n.adventureHook)storyParts.push(`<p><strong>Adventure Hook:</strong> ${esc(n.adventureHook)}</p>`);
   if(n.tactics)storyParts.push(`<p><strong>Tactics:</strong> ${esc(n.tactics)}</p>`);
   const story=storyParts.length?`<div class="narrative-section"><h4 onclick="showPanel('narrative')">Story <span class="edit-icon">✎</span></h4>${storyParts.join('')}</div>`:'';
-  el.innerHTML=`<div class="portrait-box">No portrait</div><div class="portrait-actions"><a>✦ Generate</a> <a>Upload</a></div>${quote}${desc}${bg}${story}`;
+  // Advancement (pre-gens mainly)
+  const adv=n.advancement?`<div class="narrative-section"><h4 onclick="showPanel('narrative')">Advancement <span class="edit-icon">✎</span></h4><p>${esc(n.advancement)}</p></div>`:'';
+  // Connections
+  let connHtml='';
+  if(n.connections&&n.connections.length){
+    const items=n.connections.map(c=>{
+      const rel=c.relationship?`<span class="conn-rel">(${esc(c.relationship)})</span>`:'';
+      const note=c.notes?` — ${esc(c.notes)}`:'';
+      return `<li onclick="selectByRef('${esc(c.refCode)}')" title="Go to ${esc(c.name)}">${esc(c.name)} ${rel}${note}</li>`;
+    }).join('');
+    connHtml=`<div class="narrative-section"><h4 onclick="showPanel('narrative')">Connections <span class="edit-icon">✎</span></h4><ul class="conn-list">${items}</ul></div>`;
+  }
+  // Appearances
+  let appearHtml='';
+  if(n.appearances&&n.appearances.length){
+    const items=n.appearances.map(a=>{
+      const role=a.role?`<span class="appear-role">${esc(a.role)}</span>`:'';
+      return `<li><span class="appear-code">${esc(a.product)}</span>${esc(a.title||'')} ${role}</li>`;
+    }).join('');
+    appearHtml=`<div class="narrative-section"><h4 onclick="showPanel('narrative')">Appearances <span class="edit-icon">✎</span></h4><ul class="appear-list">${items}</ul></div>`;
+  }
+  // Foreshadowing
+  let fsHtml='';
+  if(n.foreshadowing&&n.foreshadowing.length){
+    const items=n.foreshadowing.map(f=>{
+      return `<li><span class="fs-link">${esc(f.planted)}</span> → <span class="fs-seed">${esc(f.seed)}</span> → <span class="fs-link">${esc(f.paysOff)}</span></li>`;
+    }).join('');
+    fsHtml=`<div class="narrative-section"><h4 onclick="showPanel('narrative')">Foreshadowing <span class="edit-icon">✎</span></h4><ul class="foreshadow-list">${items}</ul></div>`;
+  }
+  el.innerHTML=`<div class="portrait-box">No portrait</div><div class="portrait-actions"><a>✦ Generate</a> <a>Upload</a></div>${quote}${desc}${pers}${bg}${story}${adv}${connHtml}${appearHtml}${fsHtml}`;
 }
 
 // ═══ EDITOR PANELS ═══
@@ -2008,17 +2080,85 @@ function removePower(idx){currentNPC.powers.splice(idx,1);saveCharacter(currentN
 function savePowerSettings(){currentNPC.abName=document.getElementById('pow_ab').value.trim();currentNPC.pp=parseInt(document.getElementById('pow_pp').value)||0;saveCharacter(currentNPC);renderStatColumn(currentNPC);}
 
 function renderNarrativePanel(n){
+  // Build connections editor rows
+  const connRows=(n.connections||[]).map((c,i)=>`<div class="form-row" style="align-items:end;gap:4px"><div class="form-group" style="flex:1"><input id="conn_ref_${i}" value="${esc(c.refCode)}" placeholder="AM-C019" style="font-family:monospace;font-size:12px"></div><div class="form-group" style="flex:2"><input id="conn_name_${i}" value="${esc(c.name)}" placeholder="Name"></div><div class="form-group" style="flex:1.5"><input id="conn_rel_${i}" value="${esc(c.relationship)}" placeholder="Relationship"></div><div class="form-group" style="flex:2"><input id="conn_note_${i}" value="${esc(c.notes||'')}" placeholder="Notes"></div><button class="btn sm" onclick="removeNarRow('conn',${i})" style="margin-bottom:8px;color:var(--red)">✕</button></div>`).join('');
+  // Build appearances editor rows
+  const appearRows=(n.appearances||[]).map((a,i)=>`<div class="form-row" style="align-items:end;gap:4px"><div class="form-group" style="flex:1"><input id="app_prod_${i}" value="${esc(a.product)}" placeholder="AM-W01" style="font-family:monospace;font-size:12px"></div><div class="form-group" style="flex:2"><input id="app_title_${i}" value="${esc(a.title||'')}" placeholder="Product Title"></div><div class="form-group" style="flex:1"><input id="app_role_${i}" value="${esc(a.role||'')}" placeholder="Role"></div><button class="btn sm" onclick="removeNarRow('app',${i})" style="margin-bottom:8px;color:var(--red)">✕</button></div>`).join('');
+  // Build foreshadowing editor rows
+  const fsRows=(n.foreshadowing||[]).map((f,i)=>`<div class="form-row" style="align-items:end;gap:4px"><div class="form-group" style="flex:1"><input id="fs_planted_${i}" value="${esc(f.planted)}" placeholder="AM-W01" style="font-family:monospace;font-size:12px"></div><div class="form-group" style="flex:3"><input id="fs_seed_${i}" value="${esc(f.seed)}" placeholder="Seed planted"></div><div class="form-group" style="flex:1"><input id="fs_pays_${i}" value="${esc(f.paysOff)}" placeholder="AM-W05" style="font-family:monospace;font-size:12px"></div><button class="btn sm" onclick="removeNarRow('fs',${i})" style="margin-bottom:8px;color:var(--red)">✕</button></div>`).join('');
+
   document.getElementById('panelContent').innerHTML=`
     <div class="form-group"><label>Description</label><textarea id="nar_desc" rows="3">${esc(n.description)}</textarea></div>
+    <div class="form-group"><label>Personality</label><textarea id="nar_pers" rows="2">${esc(n.personality||'')}</textarea></div>
+    <div class="form-row"><div class="form-group" style="flex:3"><label>Physical Description</label><input id="nar_phys" value="${esc(n.physicalDescription||'')}"></div><div class="form-group" style="flex:1"><label>Age</label><input id="nar_age" type="number" value="${n.age||''}"></div></div>
     <div class="form-group"><label>Background</label><textarea id="nar_bg" rows="3">${esc(n.background)}</textarea></div>
     <div class="form-group"><label>What They Want</label><textarea id="nar_mot" rows="2">${esc(n.motivation)}</textarea></div>
     <div class="form-group"><label>Their Secret</label><textarea id="nar_sec" rows="2">${esc(n.secret)}</textarea></div>
     <div class="form-group"><label>Services</label><input id="nar_svc" value="${esc(n.services)}"></div>
     <div class="form-group"><label>Adventure Hook</label><textarea id="nar_hook" rows="2">${esc(n.adventureHook)}</textarea></div>
     <div class="form-group"><label>Tactics</label><textarea id="nar_tac" rows="2">${esc(n.tactics)}</textarea></div>
+    <div class="form-group"><label>Advancement Path</label><textarea id="nar_adv" rows="2">${esc(n.advancement||'')}</textarea></div>
+    <div class="form-group"><label>Connections</label><div id="connRows">${connRows}</div><button class="btn sm" onclick="addNarRow('conn')" style="margin-top:4px">+ Connection</button></div>
+    <div class="form-group"><label>Appearances</label><div id="appRows">${appearRows}</div><button class="btn sm" onclick="addNarRow('app')" style="margin-top:4px">+ Appearance</button></div>
+    <div class="form-group"><label>Foreshadowing</label><div id="fsRows">${fsRows}</div><button class="btn sm" onclick="addNarRow('fs')" style="margin-top:4px">+ Foreshadowing</button></div>
     <div class="form-actions"><button class="btn" onclick="closePanel()">Cancel</button><button class="btn primary" onclick="saveNarrative()">Save Narrative</button></div>`;
 }
-function saveNarrative(){const n=currentNPC;n.description=document.getElementById('nar_desc').value.trim();n.background=document.getElementById('nar_bg').value.trim();n.motivation=document.getElementById('nar_mot').value.trim();n.secret=document.getElementById('nar_sec').value.trim();n.services=document.getElementById('nar_svc').value.trim();n.adventureHook=document.getElementById('nar_hook').value.trim();n.tactics=document.getElementById('nar_tac').value.trim();saveCharacter(n);closePanel();}
+function saveNarrative(){
+  const n=currentNPC;
+  n.description=document.getElementById('nar_desc').value.trim();
+  n.personality=(document.getElementById('nar_pers')||{}).value?.trim()||'';
+  n.physicalDescription=(document.getElementById('nar_phys')||{}).value?.trim()||'';
+  const ageVal=parseInt((document.getElementById('nar_age')||{}).value);
+  n.age=isNaN(ageVal)?null:ageVal;
+  n.background=document.getElementById('nar_bg').value.trim();
+  n.motivation=document.getElementById('nar_mot').value.trim();
+  n.secret=document.getElementById('nar_sec').value.trim();
+  n.services=document.getElementById('nar_svc').value.trim();
+  n.adventureHook=document.getElementById('nar_hook').value.trim();
+  n.tactics=document.getElementById('nar_tac').value.trim();
+  n.advancement=(document.getElementById('nar_adv')||{}).value?.trim()||'';
+  // Collect connections
+  n.connections=[];
+  let ci=0;
+  while(document.getElementById('conn_ref_'+ci)){
+    const ref=document.getElementById('conn_ref_'+ci).value.trim();
+    const name=document.getElementById('conn_name_'+ci).value.trim();
+    if(ref||name) n.connections.push({refCode:ref,name:name,relationship:document.getElementById('conn_rel_'+ci).value.trim(),notes:document.getElementById('conn_note_'+ci).value.trim()});
+    ci++;
+  }
+  // Collect appearances
+  n.appearances=[];
+  let ai=0;
+  while(document.getElementById('app_prod_'+ai)){
+    const prod=document.getElementById('app_prod_'+ai).value.trim();
+    if(prod) n.appearances.push({product:prod,title:document.getElementById('app_title_'+ai).value.trim(),role:document.getElementById('app_role_'+ai).value.trim()});
+    ai++;
+  }
+  // Collect foreshadowing
+  n.foreshadowing=[];
+  let fi=0;
+  while(document.getElementById('fs_planted_'+fi)){
+    const planted=document.getElementById('fs_planted_'+fi).value.trim();
+    const seed=document.getElementById('fs_seed_'+fi).value.trim();
+    if(planted||seed) n.foreshadowing.push({planted:planted,seed:seed,paysOff:document.getElementById('fs_pays_'+fi).value.trim()});
+    fi++;
+  }
+  saveCharacter(n);closePanel();
+}
+function addNarRow(type){
+  const n=currentNPC;
+  if(type==='conn')(n.connections=n.connections||[]).push({refCode:'',name:'',relationship:'',notes:''});
+  else if(type==='app')(n.appearances=n.appearances||[]).push({product:'',title:'',role:''});
+  else if(type==='fs')(n.foreshadowing=n.foreshadowing||[]).push({planted:'',seed:'',paysOff:''});
+  renderNarrativePanel(n);
+}
+function removeNarRow(type,idx){
+  const n=currentNPC;
+  if(type==='conn')n.connections.splice(idx,1);
+  else if(type==='app')n.appearances.splice(idx,1);
+  else if(type==='fs')n.foreshadowing.splice(idx,1);
+  renderNarrativePanel(n);
+}
 
 function renderStatBlockPanel(n){
   const skillStr=Object.entries(n.skills).map(([k,v])=>`${k} ${d(v)}`).join(', ');
@@ -3162,6 +3302,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 </body>
 </html>
+
 
 
 
