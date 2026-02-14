@@ -149,9 +149,11 @@ header .subtitle { font-size: 11px; color: var(--text-dim); letter-spacing: 2px;
 .middle-default .quick-links { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
 .middle-default .quick-links a { color: var(--accent); font-size: 13px; cursor: pointer; text-decoration: none; }
 .middle-default .quick-links a:hover { text-decoration: underline; }
-.portrait-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; width: 100%; aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 13px; margin-bottom: 6px; }
+.portrait-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; width: 100%; aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 13px; margin-bottom: 6px; overflow: hidden; position: relative; }
+.portrait-box img { width: 100%; height: 100%; object-fit: cover; }
 .portrait-actions { text-align: right; margin-bottom: 10px; font-size: 12px; }
 .portrait-actions a { color: var(--accent); cursor: pointer; text-decoration: none; margin-left: 8px; }
+.portrait-actions a:hover { text-decoration: underline; }
 .npc-quote { font-style: italic; color: var(--accent); margin: 12px 0; padding-left: 12px; border-left: 2px solid var(--accent-dim); font-size: 14px; line-height: 1.5; }
 .narrative-section { margin-top: 12px; }
 .narrative-section h4 { font-size: 13px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; cursor: pointer; font-weight: 600; }
@@ -917,7 +919,8 @@ async function pushToGist(){console.log("☁️ pushToGist firing...");
         overrideLog:n.overrideLog||[],
         personality:n.personality||'',physicalDescription:n.physicalDescription||'',age:n.age||null,
         advancement:n.advancement||'',
-        connections:n.connections||[],appearances:n.appearances||[],foreshadowing:n.foreshadowing||[]
+        connections:n.connections||[],appearances:n.appearances||[],foreshadowing:n.foreshadowing||[],
+        portrait:n.portrait||''
       })),
       canonCommitted:_canonSnapshots,
       canonLog:_canonLog
@@ -974,6 +977,7 @@ function normaliseChar(c,moduleId){
   n.connections=JSON.parse(JSON.stringify(c.connections||[]));
   n.appearances=JSON.parse(JSON.stringify(c.appearances||[]));
   n.foreshadowing=JSON.parse(JSON.stringify(c.foreshadowing||[]));
+  n.portrait=c.portrait||'';
   n.statComplete=n.agility>0&&Object.keys(n.skills).length>0;
   n.narrativeComplete=!!(n.description||n.quote);
   return n;
@@ -1410,7 +1414,11 @@ function renderNarrativeColumn(n){
     }).join('');
     fsHtml=`<div class="narrative-section"><h4 onclick="showPanel('narrative')">Foreshadowing <span class="edit-icon">✎</span></h4><ul class="foreshadow-list">${items}</ul></div>`;
   }
-  el.innerHTML=`<div class="portrait-box">No portrait</div><div class="portrait-actions"><a>✦ Generate</a> <a>Upload</a></div>${quote}${desc}${pers}${bg}${story}${adv}${connHtml}${appearHtml}${fsHtml}`;
+  const portraitImg=n.portrait?`<div class="portrait-box"><img src="${n.portrait}" alt="${esc(n.name)}"></div>`:`<div class="portrait-box">No portrait</div>`;
+  const portraitActions=n.portrait
+    ?`<div class="portrait-actions"><a onclick="uploadPortrait()">Replace</a> <a onclick="removePortrait()">Remove</a></div>`
+    :`<div class="portrait-actions"><a onclick="uploadPortrait()">Upload</a></div>`;
+  el.innerHTML=`${portraitImg}${portraitActions}<input type="file" id="portraitInput" accept="image/*" style="display:none" onchange="handlePortraitUpload(this)">${quote}${desc}${pers}${bg}${story}${adv}${connHtml}${appearHtml}${fsHtml}`;
 }
 
 // ═══ EDITOR PANELS ═══
@@ -2143,7 +2151,69 @@ function saveNarrative(){
     if(planted||seed) n.foreshadowing.push({planted:planted,seed:seed,paysOff:document.getElementById('fs_pays_'+fi).value.trim()});
     fi++;
   }
+  syncReciprocalConnections(n);
   saveCharacter(n);closePanel();
+}
+function syncReciprocalConnections(source){
+  // For each connection on this character, ensure the target has a link back
+  (source.connections||[]).forEach(conn=>{
+    if(!conn.refCode) return;
+    const target=allNPCs.find(c=>c.refCode===conn.refCode);
+    if(!target) return;
+    if(!target.connections) target.connections=[];
+    // Check if target already links back to source
+    const hasReverse=target.connections.some(c=>c.refCode===source.refCode);
+    if(!hasReverse){
+      const reverseRel=invertRelationship(conn.relationship);
+      target.connections.push({refCode:source.refCode,name:source.name,relationship:reverseRel,notes:conn.notes||''});
+      saveCharacter(target);
+      console.log(`🔗 Auto-linked ${target.name} → ${source.name} (${reverseRel})`);
+    }
+  });
+}
+function invertRelationship(rel){
+  if(!rel) return '';
+  const map={'Brother of':'Brother of','Sister of':'Sister of','Parent of':'Child of','Child of':'Parent of',
+    'Employer of':'Employed by','Employed by':'Employer of','Mentor of':'Student of','Student of':'Mentor of',
+    'Held by':'Holds','Holds':'Held by','Reports to':'Supervises','Supervises':'Reports to',
+    'Ally of':'Ally of','Rival of':'Rival of','Friend of':'Friend of','Enemy of':'Enemy of',
+    'Former colleague':'Former colleague','Married to':'Married to','Partner of':'Partner of'};
+  return map[rel]||rel;
+}
+function uploadPortrait(){document.getElementById('portraitInput').click();}
+function handlePortraitUpload(input){
+  const file=input.files[0];if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const img=new Image();
+    img.onload=function(){
+      // Resize to 300px wide, maintain 3:4 aspect ratio
+      const canvas=document.createElement('canvas');
+      const targetW=300,targetH=400;
+      canvas.width=targetW;canvas.height=targetH;
+      const ctx=canvas.getContext('2d');
+      // Cover-crop: fill the canvas, cropping excess
+      const srcRatio=img.width/img.height;
+      const tgtRatio=targetW/targetH;
+      let sx=0,sy=0,sw=img.width,sh=img.height;
+      if(srcRatio>tgtRatio){sw=img.height*tgtRatio;sx=(img.width-sw)/2;}
+      else{sh=img.width/tgtRatio;sy=(img.height-sh)/2;}
+      ctx.drawImage(img,sx,sy,sw,sh,0,0,targetW,targetH);
+      const dataUrl=canvas.toDataURL('image/jpeg',0.8);
+      currentNPC.portrait=dataUrl;
+      saveCharacter(currentNPC);
+      renderNarrativeColumn(currentNPC);
+      console.log('📷 Portrait saved:',Math.round(dataUrl.length/1024)+'KB');
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function removePortrait(){
+  if(!confirm('Remove portrait for '+currentNPC.name+'?')) return;
+  currentNPC.portrait='';
+  saveCharacter(currentNPC);
+  renderNarrativeColumn(currentNPC);
 }
 function addNarRow(type){
   const n=currentNPC;
@@ -3302,6 +3372,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 </body>
 </html>
+
 
 
 
