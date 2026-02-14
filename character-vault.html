@@ -438,6 +438,51 @@ function toggleShortcutHelp(){
   overlay.innerHTML='<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:24px 32px;max-width:480px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h3 style="margin:0;color:var(--accent)">⌨ Keyboard Shortcuts</h3><button class="btn sm" onclick="document.getElementById(\'shortcutOverlay\').remove()">✕</button></div><table style="width:100%">'+rows+'</table><div style="margin-top:16px;font-size:11px;color:var(--text-dim);text-align:center">Press <kbd style="background:var(--bg-input);border:1px solid var(--border);border-radius:2px;padding:1px 5px;font-family:monospace;font-size:11px">?</kbd> or click anywhere to close</div></div>';
   document.body.appendChild(overlay);
 }
+function showCommitHelp(){
+  let ov=document.getElementById('commitHelpOverlay');
+  if(ov){ov.remove();return;}
+  ov=document.createElement('div');
+  ov.id='commitHelpOverlay';
+  ov.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:300;display:flex;align-items:center;justify-content:center';
+  ov.onclick=e=>{if(e.target===ov)ov.remove();};
+  ov.innerHTML=`<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:24px 32px;max-width:560px;max-height:90vh;overflow-y:auto;line-height:1.7">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="margin:0;color:var(--accent)">📦 Canon Commit Workflow</h3>
+      <button class="btn sm" onclick="document.getElementById('commitHelpOverlay').remove()">✕</button>
+    </div>
+    <div style="font-size:13px;color:var(--text)">
+      <p style="margin:0 0 12px"><strong>Characters move through three lifecycle stages:</strong></p>
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;font-size:14px">
+        <span style="color:var(--text-dim)">📝 Draft</span> → <span style="color:#e8b84e">📦 Committed</span> → <span style="color:var(--green)">🔒 Published</span>
+      </div>
+      <p style="margin:0 0 10px"><strong style="color:var(--text-dim)">📝 DRAFT</strong> — Character exists but hasn't been approved. Edit freely. The sidebar shows no special badge.</p>
+      <p style="margin:0 0 10px"><strong style="color:#e8b84e">📦 COMMITTED</strong> — Stats are locked as the canonical version. The header shows <span style="color:var(--green)">📦 In Canon</span>. If you edit a committed character, the sidebar shows <span style="color:#e8b84e">EDITED</span> until you commit again.</p>
+      <p style="margin:0 0 10px"><strong style="color:var(--green)">🔒 PUBLISHED</strong> — Character is assigned to a released product. Edits require an errata reason and create an audit trail.</p>
+      <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+      <p style="margin:0 0 10px"><strong>How to commit a character:</strong></p>
+      <p style="margin:0 0 6px">1. Open a character and scroll to the <strong>Build Audit</strong></p>
+      <p style="margin:0 0 6px">2. Review the build — green ✓ means legal, amber ⚠ is a warning</p>
+      <p style="margin:0 0 6px">3. At the bottom, click <strong style="color:var(--accent)">📦 Commit to Canon</strong></p>
+      <p style="margin:0 0 6px">4. The button immediately greys to <strong>✓ Canon Up to Date</strong></p>
+      <p style="margin:0 0 6px">5. Make any edit → the button reactivates as <strong style="color:var(--accent)">🔄 Update Canon</strong></p>
+      <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+      <p style="margin:0 0 10px"><strong>What each UI element tells you:</strong></p>
+      <table style="width:100%;font-size:12px;border-collapse:collapse">
+        <tr><td style="padding:4px 8px;border-bottom:1px solid var(--border)"><strong>Header badge</strong></td><td style="padding:4px;border-bottom:1px solid var(--border)">📦 In Canon / Not in Canon + ✏️ Edited if changes pending</td></tr>
+        <tr><td style="padding:4px 8px;border-bottom:1px solid var(--border)"><strong>Sidebar badge</strong></td><td style="padding:4px;border-bottom:1px solid var(--border)">📦 = committed, EDITED/ERRATA = changes pending</td></tr>
+        <tr><td style="padding:4px 8px;border-bottom:1px solid var(--border)"><strong>Bottom bar</strong></td><td style="padding:4px;border-bottom:1px solid var(--border)">Green button = action needed, grey = up to date</td></tr>
+        <tr><td style="padding:4px 8px;border-bottom:1px solid var(--border)"><strong>Audit panel</strong></td><td style="padding:4px;border-bottom:1px solid var(--border)">Lifecycle status, last commit timestamp, pending changes list</td></tr>
+        <tr><td style="padding:4px 8px"><strong>Changelog</strong></td><td style="padding:4px">📋 in sidebar footer — full history of all commits</td></tr>
+      </table>
+      <hr style="border:none;border-top:1px solid var(--border);margin:16px 0">
+      <p style="margin:0 0 10px"><strong>Batch operations:</strong></p>
+      <p style="margin:0 0 4px">• <strong>Review Pending Changes</strong> (✏️ in sidebar footer) — all characters with uncommitted edits</p>
+      <p style="margin:0">• <strong>Canon Changelog</strong> (📋 in sidebar footer) — full audit trail with change IDs</p>
+    </div>
+    <div style="margin-top:16px;text-align:center"><button class="btn primary sm" onclick="document.getElementById('commitHelpOverlay').remove()">Got it</button></div>
+  </div>`;
+  document.body.appendChild(ov);
+}
 /* ═══ UNDO / REDO ═══ */
 const UNDO_CAP=40;
 let _undoStack=[], _redoStack=[], _lastSnapshot=null;
@@ -492,14 +537,7 @@ function isCharDirty(name){
   if(!n)return false;
   const baseline=_baselines[name];
   if(!baseline)return true;
-  // Compare using the compare-only serialisation (names not objects) for stable comparison
-  const oldFull=JSON.parse(baseline);
-  // Re-normalise baseline through compare path (strips weapon/armour objects to sorted names)
-  const oldCompare={...oldFull,
-    weapons:(oldFull.weapons||[]).map(w=>typeof w==='string'?w:w.name).sort(),
-    armour:(oldFull.armour||[]).map(a=>typeof a==='string'?a:a.name).sort()
-  };
-  return JSON.stringify(serialiseForCompare(n))!==JSON.stringify(oldCompare);
+  return JSON.stringify(serialiseForBaseline(n))!==baseline;
 }
 function getAllDirty(){return allNPCs.filter(n=>isCharDirty(n.name));}
 function getDirtyCount(){return getAllDirty().length;}
@@ -1226,7 +1264,8 @@ function renderBottomBar(n){
   const commitLabel=inCanon?(dirty?'🔄 Update Canon':'✓ Canon Up to Date'):'📦 Commit to Canon';
   const commitBtnClass=needsCommit?'btn primary':'btn';
   const commitBtnStyle=needsCommit?'':'opacity:0.4;cursor:default';
-  const commitAction=needsCommit?`showPanel('audit');setTimeout(doCommitFromAudit,200)`:'';
+  const commitAction=needsCommit?`doCommitFromAudit().then(()=>{if(activePanel!=='audit')showPanel('audit')})`:'';
+  const commitTitle=needsCommit?(inCanon?'Update canonical data — opens audit panel':'Commit to canon — opens audit panel'):'Canon is up to date';
   const legalLabel=legal?'<span style="color:var(--green)">✅ Build legal</span>':'<span style="color:var(--red)">❌ Build issues</span>';
   bar.style.display='';
   bar.innerHTML=`<div class="status-bar"><div class="status-row">
@@ -1234,7 +1273,7 @@ function renderBottomBar(n){
     <label><input type="checkbox" ${n.narrativeComplete?'checked':''} onchange="toggleStatus('narrativeComplete',this.checked)"> Narrative</label>
     <label><input type="checkbox" ${n.fgReady?'checked':''} onchange="toggleStatus('fgReady',this.checked)"> FG Ready</label></div>
     <div class="action-btns"><button class="btn sm" onclick="showPanel('edit')">Edit</button><button class="btn sm" onclick="showPanel('statblock')">Stat Block</button><button class="btn sm" onclick="showPanel('audit')">Audit</button><button class="btn sm" onclick="showPanel('transfer')" style="color:var(--accent)">Import / Export</button><button class="btn sm danger" onclick="deleteNPC()">Delete</button></div>
-    <div class="commit-area"><button class="${commitBtnClass}" onclick="${commitAction}" style="${commitBtnStyle}" title="${needsCommit?(inCanon?'Update canonical data':'Commit to canon'):'Canon is up to date'}">${commitLabel}</button>${legalLabel}</div>
+    <div class="commit-area"><button class="${commitBtnClass}" onclick="${commitAction}" style="${commitBtnStyle}" title="${commitTitle}">${commitLabel}</button>${legalLabel}</div>
   </div>`;
 }
 function hideBottomBar(){const bar=document.getElementById('charBottomBar');if(bar)bar.style.display='none';}
@@ -2080,23 +2119,27 @@ function renderAuditPanel(n){
   if(fundsWarn) html+='<div class="audit-line audit-warn">⚠ '+remaining+'₡ unspent — consider additional gear</div>';
   html+='</div></div>';
   const inCanon=canonCommitted.has(n.name);
-  const commitLabel=inCanon?'🔄 Update Canon':'📦 Commit to Canon';
   const removeBtn=inCanon?'<button class="btn" onclick="removeFromCanon()" style="color:var(--red);border-color:var(--red)" title="Remove this character from canonical data">🗑 Remove from Canon</button>':'';
   // Lifecycle info
   const lc=getLifecycle(n.name);
   const dirty=isCharDirty(n.name);
   const pubProds=getPublishedProducts(n.name);
-  html+='<div class="audit-block"><div class="audit-section"><h4>Release Lifecycle</h4>';
+  const snap=_canonSnapshots[n.name];
+  html+='<div class="audit-block"><div class="audit-section"><h4>Release Lifecycle <span style="font-size:11px;font-weight:normal;color:var(--text-dim);cursor:pointer;text-decoration:underline" onclick="showCommitHelp()" title="How does the commit workflow work?">ⓘ help</span></h4>';
   const lcColour=lc==='published'?'var(--green)':lc==='committed'?'#e8b84e':'var(--text-dim)';
   const lcIcon=lc==='published'?'🔒':lc==='committed'?'📦':'📝';
   html+=`<div class="audit-line audit-pass">${lcIcon} Status: <span style="color:${lcColour};text-transform:uppercase">${lc}</span></div>`;
+  if(snap){
+    const commitDate=new Date(snap.committedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    html+=`<div class="audit-line audit-pass" style="font-size:12px">Last committed: ${commitDate} · ${esc(snap.changeId)}</div>`;
+  }
   if(pubProds.length) html+=`<div class="audit-line audit-pass">Published in: ${pubProds.map(p=>esc(p.code)+' — '+esc(p.title)+' ('+new Date(p.releasedAt).toLocaleDateString()+')').join(', ')}</div>`;
   if(dirty){
     const diff=getCharDiff(n.name);
-    html+=`<div class="audit-line audit-warn">✏️ ${diff.length} pending change${diff.length===1?'':'s'} since last approval</div>`;
+    html+=`<div class="audit-line audit-warn">✏️ ${diff.length} pending change${diff.length===1?'':'s'} since last ${inCanon?'commit':'baseline'}</div>`;
     diff.forEach(d=>html+=`<div class="audit-line" style="padding-left:20px;font-size:11px;color:${d.type==='added'?'var(--green)':d.type==='removed'?'var(--red)':'var(--accent)'}">${d.type==='added'?'+':d.type==='removed'?'−':'~'} ${esc(d.text)}</div>`);
   }else{
-    html+='<div class="audit-line audit-pass">✓ No pending changes — matches baseline</div>';
+    html+='<div class="audit-line audit-pass">✓ No pending changes — matches '+(inCanon?'committed version':'baseline')+'</div>';
   }
   // Override log
   if(n.overrideLog&&n.overrideLog.length){
@@ -2113,14 +2156,22 @@ function renderAuditPanel(n){
   const needsCommit=!inCanon||dirty;
   const commitBtnClass=needsCommit?'btn primary':'btn';
   const commitBtnStyle=needsCommit?'':'opacity:0.4;cursor:default;pointer-events:none';
-  const commitStatus=inCanon?(dirty?'<span style="color:#e8b84e">⚠ Changes pending — commit to update canon</span>':'<span style="color:var(--green)">✓ Canon is up to date</span>'):'<span style="color:var(--text-dim)">Not yet committed to canon</span>';
+  const commitLabel=needsCommit?(inCanon?'🔄 Update Canon':'📦 Commit to Canon'):'✓ Canon Up to Date';
+  const commitHint=needsCommit?(inCanon?'Changes detected — click to save the new canonical version':'Click to lock this character into the canonical record'):'All changes saved. Edit the character to enable commits.';
+  // Show last commit result if it was for this character
+  let resultMsg='';
+  if(_lastCommitResult&&_lastCommitResult.name===n.name){
+    if(_lastCommitResult.ok) resultMsg=`<div style="margin-top:6px;padding:6px 10px;background:rgba(80,200,80,0.1);border:1px solid rgba(80,200,80,0.3);border-radius:4px;font-size:12px;color:var(--green)">✅ Committed as <strong>${esc(_lastCommitResult.changeId)}</strong> — canon updated</div>`;
+    else resultMsg=`<div style="margin-top:6px;padding:6px 10px;background:rgba(200,50,50,0.1);border:1px solid rgba(200,50,50,0.3);border-radius:4px;font-size:12px;color:var(--red)">❌ Commit failed: ${esc(_lastCommitResult.error||'Unknown error')}</div>`;
+  }
   html+=`<div id="commitArea" style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <button id="auditCommitBtn" class="${commitBtnClass}" onclick="doCommitFromAudit()" style="${commitBtnStyle}" title="${inCanon?'Update canonical data':'Commit current state to canon'}">${commitLabel}</button>
+      <button id="auditCommitBtn" class="${commitBtnClass}" onclick="doCommitFromAudit()" style="${commitBtnStyle}" title="${commitHint}">${commitLabel}</button>
       ${removeBtn}
-      <span style="font-size:12px">${commitStatus}</span>
     </div>
-    <div id="commitFeedback" style="margin-top:8px;font-size:13px"></div>
+    <div style="margin-top:6px;font-size:12px;color:var(--text-dim)">${commitHint}</div>
+    ${resultMsg}
+    <div id="commitFeedback" style="margin-top:6px;font-size:13px"></div>
   </div>`;
   document.getElementById('panelContent').innerHTML=html;
 }
@@ -2611,7 +2662,7 @@ function showStatusView(){
 }
 
 // ── CANON COMMIT SYSTEM ──
-const CANON_API='/api/commit';
+// Canon system — all data stored in gist, no external API needed
 
 function buildCanonCharacter(n){
   return {
@@ -2641,92 +2692,34 @@ async function doCommitFromAudit(){
   if(!currentNPC)return;
   const inCanon=canonCommitted.has(currentNPC.name);
   const dirty=isCharDirty(currentNPC.name);
-  if(inCanon&&!dirty)return; // nothing to commit
+  if(inCanon&&!dirty)return;
   const btn=document.getElementById('auditCommitBtn');
   const fb=document.getElementById('commitFeedback');
-  if(btn){btn.disabled=true;btn.textContent='⏳ Committing...';}
+  if(btn){btn.disabled=true;btn.textContent='\u23f3 Committing...';}
   if(fb)fb.innerHTML='<span style="color:var(--accent)">Saving to canon...</span>';
   try{
     await flushSave();
     const canon=buildCanonCharacter(currentNPC);
     const changeId='CV-'+(++_canonSeq).toString().padStart(4,'0');
-    const prev=_canonSnapshots[currentNPC.name]?.snapshot;
+    const prevSnap=_canonSnapshots[currentNPC.name]?.snapshot;
     const diff={};
-    if(prev){['attrs','skills','edges','hindrances','powers','weapons','armour','pace','parry','toughness'].forEach(k=>{if(JSON.stringify(prev[k])!==JSON.stringify(canon[k]))diff[k]=true;});}else{diff.added=true;}
+    if(prevSnap){['attrs','skills','edges','hindrances','powers','weapons','armour','pace','parry','toughness'].forEach(k=>{if(JSON.stringify(prevSnap[k])!==JSON.stringify(canon[k]))diff[k]=true;});}else{diff.added=true;}
     _canonSnapshots[currentNPC.name]={snapshot:canon,committedAt:new Date().toISOString(),changeId:changeId};
     _canonLog.push({id:changeId,action:inCanon?'update':'commit',target:currentNPC.name,region:currentNPC.region||'Ammaria',timestamp:new Date().toISOString(),summary:(inCanon?'Updated ':'Committed ')+currentNPC.name,diff:diff});
     canonCommitted.add(currentNPC.name);
     captureBaseline(currentNPC.name);
+    _lastCommitResult={changeId:changeId,name:currentNPC.name,ok:true};
     await pushToGist();
-    if(fb)fb.innerHTML=`<span style="color:var(--green)">✅ Committed as <strong>${changeId}</strong> — canon updated</span>`;
-    // Re-render after short delay so user sees the success message
-    setTimeout(()=>{filterNPCs();updateHeaderStats();if(activePanel==='audit')renderMiddleColumn(currentNPC);renderBottomBar(currentNPC);},800);
-  }catch(err){
-    if(fb)fb.innerHTML=`<span style="color:var(--red)">❌ Failed: ${esc(err.message)}</span>`;
-    if(btn){btn.disabled=false;btn.textContent=inCanon?'🔄 Update Canon':'📦 Commit to Canon';}
-  }
-}
-async function flushSave(){if(saveTimer){clearTimeout(saveTimer);saveTimer=null;await pushToGist();}}
-async function prepareCommit(){await flushSave();
-  if(!currentNPC)return;
-  const inCanon=canonCommitted.has(currentNPC.name);
-  const canon=buildCanonCharacter(currentNPC);
-  const path=canonFilePath(currentNPC);
-  const preview=document.getElementById('commitPreview');if(!preview)return;
-  preview.innerHTML=`<div style="background:var(--bg-body);border:1px solid var(--border);border-radius:4px;padding:10px;font-size:12px;line-height:1.7;margin-bottom:8px">
-    <div style="color:var(--accent);font-weight:bold;margin-bottom:4px">${esc(currentNPC.name)} → <code style="color:var(--text-dim);font-size:11px">${esc(path)}</code></div>
-    <div><strong>Attributes:</strong> Agi d${canon.attrs.agility}, Sma d${canon.attrs.smarts}, Spi d${canon.attrs.spirit}, Str d${canon.attrs.strength}, Vig d${canon.attrs.vigor}</div>
-    <div><strong>Skills:</strong> ${Object.entries(canon.skills).map(([k,v])=>k+' d'+v).join(', ')}</div>
-    <div><strong>Edges:</strong> ${canon.edges.join(', ')||'None'}</div>
-    <div><strong>Hindrances:</strong> ${canon.hindrances.join(', ')||'None'}</div>
-    <div><strong>Powers:</strong> ${canon.powers.join(', ')||'None'}</div>
-    <div><strong>Weapons:</strong> ${canon.weapons.map(w=>w.name).join(', ')||'None'}</div>
-    <div><strong>Armour:</strong> ${canon.armour.map(a=>a.name+' (+'+a.armor+')').join(', ')||'None'}</div>
-    <div><strong>Gear:</strong> ${canon.gearText||canon.gear.map(g=>typeof g==='string'?g:g.name).join(', ')||'None'}</div>
-    <div><strong>Derived:</strong> Pace ${canon.pace}, Parry ${canon.parry}, Toughness ${canon.toughness}${canon.toughnessArmor?' ('+canon.toughnessArmor+')':''}</div>
-    <div><strong>Funds:</strong> ${canon.startingFunds}₡ starting, ${canon.gearCost}₡ spent</div>
-  </div>
-  <div style="display:flex;gap:8px;align-items:center">
-    <button class="btn primary" id="commitBtn" onclick="executeCommit()">${inCanon?'🔄 Confirm Update':'🔒 Confirm Commit'}</button>
-    <button class="btn" onclick="document.getElementById('commitPreview').innerHTML=''">Cancel</button>
-  </div>
-  <div id="commitStatus" style="margin-top:6px;font-size:13px"></div>`;
-}
-function openCommitModal(){prepareCommit();}
-function closeCommitModal(){const p=document.getElementById('commitPreview');if(p)p.innerHTML='';}
-
-async function executeCommit(){
-  const statusEl=document.getElementById('commitStatus');
-  document.getElementById('commitBtn').disabled=true;
-  statusEl.innerHTML='<span style="color:var(--accent)">⏳ Committing to canon...</span>';
-  try{
-    const canon=buildCanonCharacter(currentNPC);
-    const changeId='CV-'+(++_canonSeq).toString().padStart(4,'0');
-    const inCanon=canonCommitted.has(currentNPC.name);
-    // Build diff against previous snapshot
-    const prev=_canonSnapshots[currentNPC.name]?.snapshot;
-    const diff={};
-    if(prev){
-      ['attrs','skills','edges','hindrances','powers','weapons','armour','pace','parry','toughness'].forEach(k=>{
-        if(JSON.stringify(prev[k])!==JSON.stringify(canon[k])) diff[k]=true;
-      });
-    } else { diff.added=true; }
-    // Store snapshot
-    _canonSnapshots[currentNPC.name]={snapshot:canon,committedAt:new Date().toISOString(),changeId:changeId};
-    // Log entry
-    _canonLog.push({id:changeId,action:inCanon?'update':'commit',target:currentNPC.name,region:currentNPC.region||'Ammaria',timestamp:new Date().toISOString(),summary:(inCanon?'Updated ':'Committed ')+currentNPC.name,diff:diff});
-    canonCommitted.add(currentNPC.name);
-    captureBaseline(currentNPC.name);
-    // Save everything to gist
-    await pushToGist();
-    statusEl.innerHTML=`<span style="color:var(--green)">✅ Committed as <strong>${esc(changeId)}</strong></span>`;
+    // Full immediate refresh — header, sidebar, audit, bottom bar all update
     filterNPCs();updateHeaderStats();renderDetail();
   }catch(err){
-    statusEl.innerHTML=`<span style="color:var(--red)">❌ Save failed: ${esc(err.message)}</span>`;
-    document.getElementById('commitBtn').disabled=false;
+    _lastCommitResult={name:currentNPC.name,ok:false,error:err.message};
+    if(fb)fb.innerHTML='<span style="color:var(--red)">\u274c Failed: '+esc(err.message)+'</span>';
+    if(btn){btn.disabled=false;btn.textContent=inCanon?'\ud83d\udd04 Update Canon':'\ud83d\udce6 Commit to Canon';}
   }
 }
-
+var _lastCommitResult=null;
+async function flushSave(){if(saveTimer){clearTimeout(saveTimer);saveTimer=null;await pushToGist();}}
 // ── REMOVE FROM CANON ──
 async function removeFromCanon(){
   if(!currentNPC||!canonCommitted.has(currentNPC.name))return;
@@ -2887,26 +2880,24 @@ async function reviewApproveAndCommit(name){
     if(!reason){alert('An errata reason is required for published characters.');if(reasonEl)reasonEl.focus();return;}
     logOverride(name,reason);
   }
-  // Approve baseline first
   approveCharacter(name);
-  // Then fire canon commit
-  const prev=currentNPC;
+  const savedNPC=currentNPC;
   currentNPC=allNPCs.find(n=>n.name===name);
-  if(!currentNPC){currentNPC=prev;return;}
+  if(!currentNPC){currentNPC=savedNPC;return;}
   try{
     await flushSave();
     const canon=buildCanonCharacter(currentNPC);
     const changeId='CV-'+(++_canonSeq).toString().padStart(4,'0');
-    const prev=_canonSnapshots[name]?.snapshot;
+    const prevSnap=_canonSnapshots[name]?.snapshot;
     const diff={};
-    if(prev){['attrs','skills','edges','hindrances','powers','weapons','armour'].forEach(k=>{if(JSON.stringify(prev[k])!==JSON.stringify(canon[k]))diff[k]=true;});}else{diff.added=true;}
+    if(prevSnap){['attrs','skills','edges','hindrances','powers','weapons','armour'].forEach(k=>{if(JSON.stringify(prevSnap[k])!==JSON.stringify(canon[k]))diff[k]=true;});}else{diff.added=true;}
     _canonSnapshots[name]={snapshot:canon,committedAt:new Date().toISOString(),changeId:changeId};
-    _canonLog.push({id:changeId,action:prev?'update':'commit',target:name,region:currentNPC.region||'Ammaria',timestamp:new Date().toISOString(),summary:'Approved & committed '+name,diff:diff});
+    _canonLog.push({id:changeId,action:prevSnap?'update':'commit',target:name,region:currentNPC.region||'Ammaria',timestamp:new Date().toISOString(),summary:'Approved & committed '+name,diff:diff});
     canonCommitted.add(name);
     captureBaseline(name);
     await pushToGist();
   }catch(e){/* canon commit is best-effort from review panel */}
-  currentNPC=prev;
+  currentNPC=savedNPC;
   filterNPCs();updateHeaderStats();renderReviewContent();
 }
 
