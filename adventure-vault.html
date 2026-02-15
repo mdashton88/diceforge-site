@@ -850,7 +850,7 @@ header .subtitle {
 </div>
 
 <div class="container">
-  <div class="sidebar">
+  <div class="sidebar" style="visibility: hidden;" id="adventureSidebar">
     <div class="sidebar-controls">
       <input type="text" id="searchInput" placeholder="Search adventures..." oninput="filterAdventures()">
       <div class="filter-row">
@@ -1174,6 +1174,10 @@ function updateHeaderStats() {
 }
 
 function filterAdventures() {
+  // Show sidebar now that we have data
+  const sidebar = document.getElementById('adventureSidebar');
+  if (sidebar) sidebar.style.visibility = 'visible';
+  
   renderAdventureList();
 }
 
