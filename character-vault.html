@@ -2552,19 +2552,25 @@ function switchExportTab(el,tab){document.querySelectorAll('.export-tab').forEac
 function copyStatBlockExport(type){
   try {
     if(type==='html'){
-      // Copy as rich text — wraps the HTML so it pastes with bold/italic into Word/Docs
-      const wrapper='<html><body><div style="font-family:Georgia,serif;font-size:13px;line-height:1.6">'+window._sbFmt.replace(/\n/g,'<br>')+'</div></body></html>';
-      const plain=window._sbFmt.replace(/<strong>|<\/strong>/g,'').replace(/<em>|<\/em>/g,'').replace(/<span[^>]*>|<\/span>/g,'').replace(/&amp;/g,'&').replace(/\n\n+/g,'\n');
-      const htmlBlob=new Blob([wrapper],{type:'text/html'});
-      const textBlob=new Blob([plain],{type:'text/plain'});
-      navigator.clipboard.write([new ClipboardItem({'text/html':htmlBlob,'text/plain':textBlob})])
-        .then(()=>showCopyToast('Formatted stat block copied — paste into Word or Docs'))
-        .catch(()=>{navigator.clipboard.writeText(plain).then(()=>showCopyToast('Copied as plain text'));});
+      // Create a temporary off-screen div with rendered HTML, select it, copy it
+      // This preserves bold/italic formatting when pasting into Word/Docs
+      const tmp=document.createElement('div');
+      tmp.style.cssText='position:fixed;left:-9999px;top:0;opacity:0;';
+      tmp.innerHTML='<div style="font-family:Georgia,serif;font-size:13px;line-height:1.8">'+window._sbFmt.replace(/\n/g,'<br>')+'</div>';
+      document.body.appendChild(tmp);
+      const range=document.createRange();
+      range.selectNodeContents(tmp);
+      const sel=window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      document.execCommand('copy');
+      sel.removeAllRanges();
+      document.body.removeChild(tmp);
+      showCopyToast('Formatted stat block copied — paste into Word or Docs');
     }else if(type==='md'){
       navigator.clipboard.writeText(window._sbMd)
         .then(()=>showCopyToast('Markdown copied to clipboard'));
     }else if(type==='rtf'){
-      // Plain text with clean labels — most useful for general pasting
       const plain=window._sbFmt.replace(/<strong>|<\/strong>/g,'').replace(/<em>|<\/em>/g,'').replace(/<span[^>]*>|<\/span>/g,'').replace(/&amp;/g,'&').replace(/\n\n+/g,'\n');
       navigator.clipboard.writeText(plain)
         .then(()=>showCopyToast('Plain text copied to clipboard'));
