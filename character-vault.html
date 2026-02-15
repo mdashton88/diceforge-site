@@ -85,7 +85,7 @@ var DICEFORGE_AUTH=false;
     <div id="welcomeGate" style="text-align:center;max-width:400px">
       <h2 style="color:var(--accent);margin-bottom:6px;font-size:22px">TRIBUTE LANDS</h2>
       <div style="color:var(--text-dim);font-size:13px;margin-bottom:24px;letter-spacing:1px">CHARACTER VAULT — DICEFORGE STUDIOS</div>
-      <div id="pinForm">
+      <div id="pinForm" style="display:none">
         <input id="pinInput" type="password" placeholder="Enter PIN" style="width:200px;text-align:center;padding:10px 14px;font-size:16px;letter-spacing:4px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--text);margin-bottom:12px" onkeydown="if(event.key==='Enter')checkPin()">
         <br><button class="btn primary" onclick="checkPin()" style="padding:8px 28px">Enter</button>
         <button class="btn" onclick="skipPinAndLoadLocal()" style="padding:8px 28px;margin-left:10px">Skip / Use Local Data</button>
@@ -3357,12 +3357,17 @@ async function unlockApp(){
 window.addEventListener('beforeunload',(e)=>{if(saveTimer){clearTimeout(saveTimer);saveTimer=null;pushToGist();e.returnValue='Save in progress...';}});
 document.addEventListener('DOMContentLoaded',()=>{
   addToolNavigation('character-vault');
-  document.getElementById('sidebarInner').style.display=DICEFORGE_AUTH?'':'none';
-  if(DICEFORGE_AUTH){
-    const check=setInterval(()=>{if(window.CharacterForge){clearInterval(check);unlockApp();}},50);
-  } else {
-    document.getElementById('pinInput').focus();
-  }
+  // Skip PIN - always load in local mode
+  DICEFORGE_AUTH = false;
+  window.GIST_ID = null;
+  window.GIST_TOKEN = null;
+  document.getElementById('sidebarInner').style.display = '';
+  const check = setInterval(() => {
+    if (window.CharacterForge) {
+      clearInterval(check);
+      unlockApp();
+    }
+  }, 50);
 });
   // ═══ VAULT INTEGRATION ═══
 (function initVaultIntegration() {
