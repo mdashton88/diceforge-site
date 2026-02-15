@@ -7,69 +7,7 @@
   <link rel="stylesheet" href="tribute-lands.css">
   <script src="tool-navigation.js"></script>
   <style>
-    /* Task Vault specific layout - override tribute-lands.css */
-    body {
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-    }
-
-    .container {
-      max-width: 100%;
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .header {
-      flex-shrink: 0;
-    }
-
-    .main-content {
-      display: flex !important;
-      gap: 0 !important;
-      padding: 0 !important;
-      max-width: 100% !important;
-      min-height: calc(100vh - 200px) !important;
-      flex: 1 !important;
-    }
-
-    .sidebar {
-      width: 240px;
-      background: var(--bg-secondary);
-      border-right: 1px solid var(--border-color);
-      padding: 16px;
-      flex-shrink: 0;
-      height: 100%;
-    }
-
-    .content-area {
-      flex: 1;
-      padding: 24px;
-      overflow-y: auto;
-      min-height: 500px;
-      background: var(--bg-primary);
-    }
-
-    #taskList {
-      width: 100%;
-    }
-
-    .sidebar-section {
-      margin-bottom: 20px;
-    }
-
-    .sidebar-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      font-weight: 600;
-      margin-bottom: 8px;
-      letter-spacing: 0.5px;
-    }
-
+    /* Task Vault specific styles only */
     .task-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -337,29 +275,33 @@
       </div>
     </header>
 
+    <div id="breadcrumb">
+      <span class="bc-current">Task Vault</span>
+    </div>
+
     <!-- Main Content -->
-    <main class="main-content">
-      <!-- Left Sidebar -->
-      <aside class="sidebar">
-        <div class="sidebar-section">
-          <div class="sidebar-label">Priority</div>
-          <select class="form-select" id="filterPriority" onchange="applyFilters()">
-            <option value="all">All Priorities</option>
-            <option value="critical">🔴 Critical</option>
-            <option value="high">🟡 High</option>
-            <option value="normal">⚪ Normal</option>
-          </select>
+    <div class="container">
+      <div class="sidebar" id="taskSidebar">
+        <div class="sidebar-controls">
+          <input type="text" id="searchInput" placeholder="Search tasks..." oninput="applyFilters()">
+          <div class="filter-row">
+            <select id="filterPriority" onchange="applyFilters()">
+              <option value="all">All Priorities</option>
+              <option value="critical">🔴 Critical</option>
+              <option value="high">🟡 High</option>
+              <option value="normal">⚪ Normal</option>
+            </select>
+          </div>
         </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-label">Search</div>
-          <input type="text" class="form-input" id="searchInput" placeholder="Search..." 
-                 onkeyup="applyFilters()">
+        
+        <div class="sidebar-footer">
+          <button class="btn primary" style="flex: 1;" onclick="openTaskModal()">+ New Task</button>
+          <button class="btn sm" onclick="exportTasks()">📋 Export</button>
+          <button class="btn sm" onclick="showHelp()">❓ Help</button>
         </div>
-      </aside>
-
-      <!-- Main Task List Area -->
-      <div class="content-area">
+      </div>
+      
+      <div class="main" id="mainContent">
         <!-- Task List -->
         <div id="taskList"></div>
 
@@ -370,8 +312,7 @@
           <p>Create your first task to get started!</p>
         </div>
       </div>
-    </main>
-  </div>
+    </div>
 
   <!-- Task Modal -->
   <div class="modal-overlay" id="taskModal">
