@@ -1027,6 +1027,16 @@ function renderAdventureList() {
   });
 }
 
+function updateHeaderStats() {
+  const total = allAdventures.length;
+  const complete = allAdventures.filter(a => a.phase === 'complete').length;
+  const pct = total > 0 ? Math.round((complete / total) * 100) : 0;
+  
+  document.getElementById('totalAdventures').textContent = total;
+  document.getElementById('completeAdventures').textContent = complete;
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
 function filterAdventures() {
   renderAdventureList();
 }
