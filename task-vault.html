@@ -567,6 +567,13 @@
       const priorityFilter = document.getElementById('filterPriority').value;
       const searchTerm = document.getElementById('searchInput').value.toLowerCase();
 
+      console.log('applyFilters called:', {
+        priorityFilter,
+        searchTerm,
+        allTasksCount: allTasks.length,
+        sampleTask: allTasks[0]
+      });
+
       filteredTasks = allTasks.filter(task => {
         // Always exclude completed tasks
         if (task.completed) return false;
@@ -579,6 +586,8 @@
         return true;
       });
 
+      console.log('Filtered tasks:', filteredTasks.length);
+
       renderTasks();
     }
 
@@ -587,9 +596,17 @@
       const taskList = document.getElementById('taskList');
       const emptyState = document.getElementById('emptyState');
 
+      console.log('renderTasks called:', {
+        filteredCount: filteredTasks.length,
+        allCount: allTasks.length,
+        taskListElement: taskList,
+        emptyStateElement: emptyState
+      });
+
       if (filteredTasks.length === 0) {
         taskList.innerHTML = '';
         emptyState.style.display = 'block';
+        console.log('Showing empty state');
         return;
       }
 
@@ -601,6 +618,8 @@
         const priorityOrder = { critical: 0, high: 1, normal: 2 };
         return priorityOrder[a.priority] - priorityOrder[b.priority];
       });
+
+      console.log('Rendering tasks:', sortedTasks.length);
 
       taskList.innerHTML = sortedTasks.map(task => `
         <div class="task-card ${task.completed ? 'completed' : ''} priority-${task.priority}">
