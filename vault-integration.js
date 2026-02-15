@@ -126,19 +126,20 @@ window.VaultIntegration = (function() {
   
   // ═══ UI COMPONENTS ═══
   
-  function createVaultNavigationButton(targetVault) {
+  function createVaultNavigationButton(currentVault) {
     const btn = document.createElement('button');
     btn.className = 'btn sm';
     btn.style.cssText = 'font-size:10px;padding:1px 6px;background:none;border:1px solid var(--border);color:var(--text-dim);border-radius:3px;cursor:pointer;margin-left:8px';
     
-    if (targetVault === 'character') {
-      btn.innerHTML = '👤 Character Vault';
-      btn.title = 'Open Character Vault';
-      btn.onclick = () => navigateToCharacterVault();
-    } else if (targetVault === 'adventure') {
+    // If we're in Character Vault, create button to Adventure Vault (and vice versa)
+    if (currentVault === 'character') {
       btn.innerHTML = '🎭 Adventure Vault';
       btn.title = 'Open Adventure Vault';
       btn.onclick = () => navigateToAdventureVault();
+    } else if (currentVault === 'adventure') {
+      btn.innerHTML = '👤 Character Vault';
+      btn.title = 'Open Character Vault';
+      btn.onclick = () => navigateToCharacterVault();
     }
     
     return btn;
