@@ -254,6 +254,24 @@
       outline: none;
       border-color: var(--accent-primary);
     }
+
+    /* Sync status indicators */
+    .sync-indicator {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+
+    .sync-idle { background: var(--success-color); }
+    .sync-saving { background: var(--warning-color); animation: pulse 1s infinite; }
+    .sync-error { background: var(--danger-color); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
   </style>
 </head>
 <body>
@@ -274,11 +292,15 @@
         </div>
       </div>
       <div class="header-stats" id="headerStats"></div>
+      <div id="syncIndicator" style="text-align:right;padding:2px 10px;display:flex;align-items:center;justify-content:flex-end;gap:8px">
+        <span id="syncLabel" style="font-size:11px;font-family:monospace;color:var(--text-dim)">●</span>
+        <button onclick="forceRefresh()" style="font-size:10px;padding:1px 6px;background:none;border:1px solid var(--border);color:var(--text-dim);border-radius:3px;cursor:pointer" title="Reload from remote">↻ Refresh</button>
+        <button onclick="promptForToken()" id="tokenBtn" style="font-size:10px;padding:1px 6px;background:none;border:1px solid var(--border);color:var(--text-dim);border-radius:3px;cursor:pointer" title="Set GitHub token">🔑 Token</button>
+      </div>
     </header>
 
     <!-- Main Content -->
     <main class="main-content">
-
       <!-- Filters -->
       <div class="filters-bar">
         <div class="filter-group">
@@ -380,46 +402,177 @@
   </div>
 
   <script>
+    // Gist configuration (shared Gist with Character Vault)
+    const GIST_ID = '7fa2d50c458ed95c21a3c6d283f863d6';
+    const GIST_TOKEN = localStorage.getItem('diceforge_gist_token') || '';
+    const GIST_FILENAME = 'diceforge-tasks.json';
+    const CACHE_KEY = 'diceforge_tasks_cache';
+
     // Task data store
     let allTasks = [];
     let filteredTasks = [];
     let editingTaskId = null;
+    let syncStatus = 'idle';
+    let saveTimer = null;
 
-    // Load tasks from localStorage first, fallback to JSON file
+    // Sync status management
+    function setSyncStatus(status, label) {
+      syncStatus = status;
+      const indicator = document.getElementById('syncLabel');
+      const classes = { idle: 'sync-idle', saving: 'sync-saving', error: 'sync-error' };
+      indicator.className = `sync-indicator ${classes[status] || 'sync-idle'}`;
+      indicator.textContent = label || '●';
+      
+      // Show/hide token button
+      document.getElementById('tokenBtn').style.display = GIST_TOKEN ? 'none' : 'inline-block';
+    }
+
+    // Load tasks from Gist (with localStorage cache fallback)
     async function loadTasks() {
-      // Try localStorage first
-      const savedData = localStorage.getItem('taskVaultData');
-      if (savedData) {
+      // Try cache first for instant load
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
         try {
-          const data = JSON.parse(savedData);
+          const data = JSON.parse(cached);
           allTasks = data.tasks || [];
-          console.log('Loaded tasks from localStorage');
-        } catch (error) {
-          console.error('Error parsing localStorage:', error);
-          allTasks = [];
-        }
-      } else {
-        // Fallback to JSON file for initial load
-        try {
-          const response = await fetch('task-vault-data.json');
-          if (response.ok) {
-            const data = await response.json();
-            allTasks = data.tasks || [];
-            // Save to localStorage for next time
-            saveTasks();
-            console.log('Loaded tasks from JSON file and saved to localStorage');
-          } else {
-            allTasks = [];
-          }
-        } catch (error) {
-          console.error('Error loading tasks:', error);
-          allTasks = [];
+          applyFilters();
+          updateStats();
+          populateCategoryFilter();
+        } catch (e) {
+          console.error('Cache parse error:', e);
         }
       }
-      
+
+      // Then fetch from Gist if we have credentials
+      if (GIST_ID && GIST_TOKEN) {
+        try {
+          setSyncStatus('saving', 'Loading...');
+          const resp = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+            headers: {
+              'Authorization': `token ${GIST_TOKEN}`,
+              'Accept': 'application/vnd.github.v3+json'
+            }
+          });
+
+          if (!resp.ok) throw new Error(`GitHub ${resp.status}`);
+
+          const gist = await resp.json();
+          const raw = gist.files[GIST_FILENAME]?.content;
+          
+          if (raw) {
+            const data = JSON.parse(raw);
+            allTasks = data.tasks || [];
+            localStorage.setItem(CACHE_KEY, raw);
+            console.log('✅ Loaded from Gist:', allTasks.length, 'tasks');
+          }
+          
+          setSyncStatus('idle', `${allTasks.length} tasks`);
+        } catch (err) {
+          console.error('❌ Gist load failed:', err);
+          setSyncStatus('error', 'Load failed');
+          // Fall back to cache
+          if (!cached) allTasks = loadFromLocalBackup();
+        }
+      } else {
+        // No Gist credentials - use local backup
+        if (!cached) allTasks = loadFromLocalBackup();
+        setSyncStatus('idle', 'Offline mode');
+      }
+
       applyFilters();
       updateStats();
       populateCategoryFilter();
+    }
+
+    // Load from local backup (fallback when no Gist)
+    function loadFromLocalBackup() {
+      const backup = localStorage.getItem('tasks_local_backup');
+      if (backup) {
+        try {
+          const data = JSON.parse(backup);
+          return data.tasks || [];
+        } catch (e) {
+          return [];
+        }
+      }
+      return [];
+    }
+
+    // Save tasks to Gist
+    async function pushToGist() {
+      console.log('☁️ pushToGist firing...');
+      
+      // Always save local backup
+      const data = {
+        version: '1.0',
+        lastModified: new Date().toISOString(),
+        lastModifiedBy: 'task-vault',
+        taskCount: allTasks.length,
+        tasks: allTasks
+      };
+      localStorage.setItem('tasks_local_backup', JSON.stringify(data));
+
+      if (!GIST_ID || !GIST_TOKEN) {
+        console.log('No Gist credentials - saved locally only');
+        return;
+      }
+
+      setSyncStatus('saving', 'Saving...');
+      
+      try {
+        const raw = JSON.stringify(data, null, 2);
+        const resp = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `token ${GIST_TOKEN}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            files: {
+              [GIST_FILENAME]: { content: raw }
+            }
+          })
+        });
+
+        if (!resp.ok) throw new Error(`GitHub ${resp.status}: ${resp.statusText}`);
+
+        // Update cache
+        localStorage.setItem(CACHE_KEY, raw);
+        console.log('✅ Gist save success:', allTasks.length, 'tasks');
+        setSyncStatus('idle', `Saved — ${allTasks.length} tasks`);
+      } catch (err) {
+        console.error('❌ Gist save FAILED:', err);
+        setSyncStatus('error', 'Save failed — will retry');
+        // Retry once after 5 seconds
+        setTimeout(() => {
+          if (syncStatus === 'error') pushToGist();
+        }, 5000);
+      }
+    }
+
+    // Queue save (debounced)
+    function queueSave() {
+      if (saveTimer) clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        pushToGist();
+        saveTimer = null;
+      }, 2000);
+    }
+
+    // Force refresh from Gist
+    async function forceRefresh() {
+      localStorage.removeItem(CACHE_KEY);
+      await loadTasks();
+    }
+
+    // Prompt for GitHub token
+    function promptForToken() {
+      const token = prompt('Enter your GitHub Personal Access Token (with Gist permissions):');
+      if (token) {
+        localStorage.setItem('diceforge_gist_token', token);
+        location.reload();
+      }
     }
 
     // Populate category filter dropdown
@@ -523,7 +676,6 @@
         <span><span class="stat-num">${high}</span> 🟡 High</span>
       `;
     }
-    }
 
     // Toggle task completion
     function toggleComplete(id) {
@@ -531,7 +683,7 @@
       if (task) {
         task.completed = !task.completed;
         task.completedDate = task.completed ? new Date().toISOString() : null;
-        saveTasks();
+        queueSave();
         applyFilters();
         updateStats();
       }
@@ -605,7 +757,7 @@
         allTasks.unshift(taskData);
       }
 
-      saveTasks();
+      queueSave();
       closeTaskModal();
       applyFilters();
       updateStats();
@@ -619,43 +771,15 @@
       const id = document.getElementById('taskId').value;
       allTasks = allTasks.filter(t => t.id !== id);
       
-      saveTasks();
+      queueSave();
       closeTaskModal();
       applyFilters();
       updateStats();
       populateCategoryFilter();
     }
 
-    // Save tasks to JSON (downloads file)
-    // Save tasks to localStorage (auto-persist)
-    function saveTasks() {
-      localStorage.setItem('taskVaultData', JSON.stringify({ tasks: allTasks }));
-    }
-
-    // Export tasks as JSON file (manual download when user clicks Export)
-    function exportTasksJSON() {
-      const dataStr = JSON.stringify({ tasks: allTasks }, null, 2);
-      const blob = new Blob([dataStr], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'task-vault-data.json';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    // Export menu
-    function exportTasks() {
-      const choice = confirm('Export as Markdown checklist?\n\nOK = Markdown (.md)\nCancel = JSON data (.json)');
-      if (choice) {
-        exportTasksMarkdown();
-      } else {
-        exportTasksJSON();
-      }
-    }
-
     // Export tasks as markdown
-    function exportTasksMarkdown() {
+    function exportTasks() {
       const categories = {};
       
       allTasks.forEach(task => {
@@ -715,15 +839,17 @@
             '• Click on task titles to edit\n' +
             '• Use checkboxes to mark complete\n' +
             '• Filter by category, priority, or search\n' +
-            '• Export: Choose Markdown (.md) or JSON (.json)\n' +
-            '• Tasks auto-save to browser storage\n' +
-            '• Data persists across sessions');
+            '• Export creates markdown checklist\n' +
+            '• Tasks sync to GitHub Gist (cloud storage)\n' +
+            '• Click 🔑 Token to set GitHub credentials\n' +
+            '• Data persists across devices');
     }
 
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
       addToolNavigation('task-vault');
       loadTasks();
+      setSyncStatus('idle');
     });
 
     // Close modal on escape key
