@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tribute Lands — Character Vault</title>
+<script src="vault-integration.js"></script>
 <style>
 :root {
   --bg-dark: #1a1a1a;
@@ -244,7 +245,10 @@ var DICEFORGE_AUTH=false;
 })();
 </script>
 <header>
-  <div><h1>TRIBUTE LANDS — CHARACTER VAULT</h1><div class="subtitle">DiceForge Studios Ltd <a href="adventure-forge.html" style="margin-left:10px;font-size:10px;color:var(--text-dim);letter-spacing:1px;text-decoration:none;border:1px solid var(--border);padding:1px 7px;border-radius:3px" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--text-dim)';this.style.borderColor='var(--border)'">⚒ Adventure Forge</a> <a href="vault-help.html" target="_blank" style="margin-left:10px;font-size:10px;color:var(--text-dim);letter-spacing:1px;text-decoration:none;border:1px solid var(--border);padding:1px 7px;border-radius:3px">? Help</a></div></div>
+  <div><h1>TRIBUTE LANDS — CHARACTER VAULT</h1><div class="subtitle">DiceForge Studios Ltd</div></div>
+  <div id="headerButtons" style="display:flex;align-items:center;gap:8px;">
+    <!-- Populated by integration script -->
+  </div>
   <div id="navButtons" style="display:flex;gap:4px;align-items:center">
     <button id="navBack" class="btn sm" onclick="navBack()" style="font-size:14px;padding:2px 8px;opacity:0.3;cursor:default" title="Back (Alt+←)">◀</button>
     <button id="navFwd" class="btn sm" onclick="navForward()" style="font-size:14px;padding:2px 8px;opacity:0.3;cursor:default" title="Forward (Alt+→)">▶</button>
@@ -3572,11 +3576,78 @@ document.addEventListener('DOMContentLoaded',()=>{
     document.getElementById('pinInput').focus();
   }
 });
+  // ═══ VAULT INTEGRATION ═══
+(function initVaultIntegration() {
+  // Add navigation buttons to header
+  const headerButtons = document.getElementById('headerButtons');
+  if (headerButtons && window.VaultIntegration) {
+    headerButtons.appendChild(VaultIntegration.createVaultNavigationButton('adventure'));
+    headerButtons.appendChild(VaultIntegration.createHelpButton('character'));
+  }
+  
+  // Sync NPCs to storage whenever they change
+  function syncToStorage() {
+    if (window.VaultIntegration && allNPCs) {
+      VaultIntegration.syncNPCsToStorage(allNPCs);
+    }
+  }
+  
+  // Sync on init and periodically
+  setTimeout(syncToStorage, 1000);
+  setInterval(syncToStorage, 5000);
+  
+  // Check for URL parameter to auto-select character
+  const charParam = window.VaultIntegration.getURLParam('char');
+  if (charParam) {
+    setTimeout(() => {
+      const npc = allNPCs.find(n => n.name === charParam);
+      if (npc) selectNPC(charParam);
+    }, 500);
+  }
+  
+  // Add adventure appearances to character detail
+  const originalRenderDetail = window.renderDetail;
+  if (originalRenderDetail) {
+    window.renderDetail = function() {
+      originalRenderDetail();
+      
+      if (window.VaultIntegration && currentNPC) {
+        const adventures = VaultIntegration.getAdventuresForNPC(currentNPC.name);
+        
+        if (adventures.length > 0) {
+          const narrativeCol = document.querySelector('.col-narrative');
+          if (narrativeCol) {
+            const advSection = document.createElement('div');
+            advSection.className = 'section-box';
+            advSection.innerHTML = `
+              <h3>ADVENTURE APPEARANCES</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
+                ${adventures.map(adv => `
+                  <span class="week-link" data-week="${adv.week}" style="display:inline-block;padding:4px 10px;background:rgba(196,154,74,0.2);border:1px solid rgba(196,154,74,0.5);border-radius:3px;font-size:11px;color:var(--accent);cursor:pointer;">
+                    Week ${adv.week}: ${adv.title}
+                  </span>
+                `).join('')}
+              </div>
+            `;
+            
+            const firstSection = narrativeCol.querySelector('.section-box');
+            if (firstSection) {
+              firstSection.parentNode.insertBefore(advSection, firstSection.nextSibling);
+            } else {
+              narrativeCol.insertBefore(advSection, narrativeCol.firstChild);
+            }
+            
+            advSection.querySelectorAll('.week-link').forEach(link => {
+              const week = parseInt(link.dataset.week);
+              VaultIntegration.makeWeekLinkClickable(link, week);
+            });
+          }
+        }
+      }
+    };
+  }
+})();
+</script>
 </script>
 </body>
 </html>
-
-
-
-
-
