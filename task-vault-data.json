@@ -1,0 +1,134 @@
+{
+  "tasks": [
+    {
+      "id": "task_001",
+      "title": "Complete Vinlands regional supplement",
+      "description": "Finish writing the Vinlands module to match Ammaria and Saltlands completion levels. Focus on Appendix F: Adventure Sites following 'show don't tell' principle.",
+      "category": "Content",
+      "priority": "critical",
+      "notes": "Currently at 75-80% completion. Appendix F should be built after regional lore is complete.",
+      "completed": false,
+      "created": "2026-02-15T00:00:00Z"
+    },
+    {
+      "id": "task_002",
+      "title": "Write Concordium regional supplement",
+      "description": "Create the floating sky-cities regional module. Need to establish signature mechanics and character options.",
+      "category": "Content",
+      "priority": "high",
+      "notes": "One of the final two regional modules needed before launch.",
+      "completed": false,
+      "created": "2026-02-15T00:00:00Z"
+    },
+    {
+      "id": "task_003",
+      "title": "Write Glasrya regional supplement",
+      "description": "Create the Imperial City module - the heart of the demon-blooded oppressor empire. Should strongly echo Moorcock's Melnibone.",
+      "category": "Content",
+      "priority": "high",
+      "notes": "Final regional module. Launches after all others are complete.",
+      "completed": false,
+      "created": "2026-02-15T00:00:00Z"
+    },
+    {
+      "id": "task_004",
+      "title": "Produce weekly one-sheet adventures",
+      "description": "Maintain algorithm visibility on DriveThruRPG with weekly releases. Use adventure pipeline dashboard.",
+      "category": "Content",
+      "priority": "normal",
+      "notes": "30-minute production time per adventure. Essential for platform algorithm.",
+      "completed": false,
+      "created": "2026-02-15T00:00:00Z"
+    },
+    {
+      "id": "task_005",
+      "title": "Complete systematic quality audit",
+      "description": "Run comprehensive quality checks across all regional modules against industry benchmarks.",
+      "category": "Content",
+      "priority": "high",
+      "notes": "Target scores: 8.9-9.5 out of 10 against PEG/Cubicle 7/Free League standards.",
+      "completed": false,
+      "created": "2026-02-15T00:00:00Z"
+    },
+    {
+      "id": "task_006",
+      "title": "Verify SWADE compliance across all content",
+      "description": "Ensure all mechanical content follows Fast! Furious! Fun! philosophy and core SWADE standards.",
+      "category": "Technical",
+      "priority": "high",
+      "notes": "Check edges are portable and competitive with core options.",
+      "completed": false,
+      "created": "2026-02-15T00:00:00Z"
+    },
+    {
+      "id": "task_007",
+      "title": "Establish VTT licensing partnerships",
+      "description": "Set up licensing deals for Fantasy Grounds, Foundry, and Roll20 conversions.",
+      "category": "Business",
+      "priority": "normal",
+      "notes": "Zero hours investment from Mike - all work done by partners, royalties only.",
+      "completed": false,
+      "created": "2026-02-15T00:00:00Z"
+    },
+    {
+      "id": "task_008",
+      "title": "Set up DriveThruRPG publisher account",
+      "description": "Create publisher profile and prepare for first module launch.",
+      "category": "Business",
+      "priority": "high",
+      "notes": "Required before any products can be sold.",
+      "completed": false,
+      "created": "2026-02-15T00:00:00Z"
+    },
+    {
+      "id": "task_009",
+      "title": "Commission professional cartography",
+      "description": "Get professional maps for regional supplements once revenue validates market demand.",
+      "category": "Marketing",
+      "priority": "normal",
+      "notes": "Defer until founding editions show sales traction. Use Inkarnate initially.",
+      "completed": false,
+      "created": "2026-02-15T00:00:00Z"
+    },
+    {
+      "id": "task_010",
+      "title": "Verify IP compliance for all content",
+      "description": "Check all materials against Pinnacle Fan License, SWAG requirements, and distributor rules.",
+      "category": "Technical",
+      "priority": "critical",
+      "notes": "Mandatory before any product release. Avoid protected terminology.",
+      "completed": false,
+      "created": "2026-02-15T00:00:00Z"
+    },
+    {
+      "id": "task_011",
+      "title": "Populate Character Vault with all NPCs",
+      "description": "Complete NPC rosters for all five regions in the Character Vault database.",
+      "category": "Development",
+      "priority": "normal",
+      "notes": "Currently have 46 characters. Need comprehensive coverage across all regions.",
+      "completed": false,
+      "created": "2026-02-15T00:00:00Z"
+    },
+    {
+      "id": "task_012",
+      "title": "Test Fantasy Grounds module export",
+      "description": "Validate XML export pipeline from Character Vault before committing to FG development.",
+      "category": "Technical",
+      "priority": "normal",
+      "notes": "Deferred to Year 2 for proper technical focus.",
+      "completed": false,
+      "created": "2026-02-15T00:00:00Z"
+    },
+    {
+      "id": "task_013",
+      "title": "Establish consistent version control",
+      "description": "Implement proper version numbering (v1_0, v1_1, v2_0) across all documents.",
+      "category": "Technical",
+      "priority": "normal",
+      "notes": "Avoid descriptive suffixes. Use consistent format.",
+      "completed": false,
+      "created": "2026-02-15T00:00:00Z"
+    }
+  ]
+}
