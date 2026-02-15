@@ -3362,6 +3362,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   window.GIST_ID = null;
   window.GIST_TOKEN = null;
   document.getElementById('sidebarInner').style.display = '';
+  // Hide PIN screen
+  const pinForm = document.getElementById('pinForm');
+  if(pinForm) pinForm.style.display = 'none';
   const check = setInterval(() => {
     if (window.CharacterForge) {
       clearInterval(check);
