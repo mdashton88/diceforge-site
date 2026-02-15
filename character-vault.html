@@ -1486,7 +1486,7 @@ function saveEdit(){
   n.agility=parseInt(document.getElementById('ed_agility').dataset.val);n.smarts=parseInt(document.getElementById('ed_smarts').dataset.val);n.spirit=parseInt(document.getElementById('ed_spirit').dataset.val);n.strength=parseInt(document.getElementById('ed_strength').dataset.val);n.vigor=parseInt(document.getElementById('ed_vigor').dataset.val);
   n.pace=parseInt(document.getElementById('ed_pace').value);n.parry=parseInt(document.getElementById('ed_parry').value);n.toughness=parseInt(document.getElementById('ed_toughness').value);n.toughnessArmor=parseInt(document.getElementById('ed_tougharmor').value);n.bennies=parseInt(document.getElementById('ed_bennies').value);n.startingFunds=parseInt(document.getElementById('ed_startFunds').value)||500;recalcGearCost(n);
   n.edges=csvToList(document.getElementById('ed_edges').value);n.hindrances=csvToList(document.getElementById('ed_hindrances').value);n.gearText=document.getElementById('ed_gear').value.trim();
-  saveCharacter(n);closePanel();updateHeaderStats();
+  saveCharacter(n);closePanel();filterNPCs();updateHeaderStats();
 }
 
 function renderHindrancesPanel(n){
