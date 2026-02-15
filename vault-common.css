@@ -1,0 +1,177 @@
+/* ═══════════════════════════════════════════════════════════
+   VAULT COMMON STYLES
+   Shared styling for Character/Adventure/Task Vaults
+   
+   SAFETY: Only ADDS rules, never modifies tribute-lands.css
+   Load AFTER tribute-lands.css to override/extend
+   ═══════════════════════════════════════════════════════════ */
+
+/* Header - consistent across all vaults */
+header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+header > div:first-child {
+  flex: 0 0 auto;
+}
+
+header h1 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+header .subtitle {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+/* Header stats - consistent positioning and styling */
+.header-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-left: auto;
+  padding-right: 12px;
+}
+
+.header-stats > span:hover {
+  color: var(--accent);
+}
+
+.header-stats .stat-num {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Breadcrumb - consistent across all vaults */
+#breadcrumb {
+  padding: 8px 20px;
+  font-size: 12px;
+  color: var(--text-dim);
+  background: var(--bg-dark);
+  border-bottom: 1px solid var(--border);
+}
+
+.bc-current {
+  color: var(--text-bright);
+}
+
+/* Sidebar list items - unified styling */
+.npc-item,
+.adventure-item,
+.task-item {
+  padding: 8px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  margin-bottom: 2px;
+}
+
+.npc-item:hover,
+.adventure-item:hover,
+.task-item:hover {
+  background: var(--bg-hover);
+}
+
+.npc-item.active,
+.adventure-item.active,
+.task-item.active {
+  background: var(--bg-hover);
+  border-color: var(--accent-dim);
+}
+
+/* Item names - consistent font treatment */
+.npc-name,
+.adv-title,
+.task-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-bright);
+}
+
+/* Item metadata - consistent styling */
+.npc-meta,
+.adv-meta,
+.task-meta {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 1px;
+}
+
+/* List containers - consistent scrolling */
+.npc-list,
+.adventure-list,
+.task-list {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: scroll;
+  padding: 4px;
+  scrollbar-width: auto;
+  scrollbar-color: var(--accent-dim) var(--bg-dark);
+}
+
+.npc-list::-webkit-scrollbar,
+.adventure-list::-webkit-scrollbar,
+.task-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.npc-list::-webkit-scrollbar-track,
+.adventure-list::-webkit-scrollbar-track,
+.task-list::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+.npc-list::-webkit-scrollbar-thumb,
+.adventure-list::-webkit-scrollbar-thumb,
+.task-list::-webkit-scrollbar-thumb {
+  background: var(--accent-dim);
+  border-radius: 5px;
+  border: 2px solid var(--bg-dark);
+}
+
+.npc-list::-webkit-scrollbar-thumb:hover,
+.adventure-list::-webkit-scrollbar-thumb:hover,
+.task-list::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Sidebar footer - consistent across all vaults */
+.sidebar-footer {
+  padding: 8px 10px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* Main content area - consistent treatment */
+.main {
+  flex: 1;
+  overflow: hidden;
+  padding: 20px 28px 52px 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.main.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  font-size: 15px;
+}
