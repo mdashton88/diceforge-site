@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adventure Forge — Tribute Lands Production</title>
+<style>
+:root {
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --bg-card: #0f3460;
+  --bg-input: #1a1a3e;
+  --text-primary: #e8e8e8;
+  --text-secondary: #a0a0b8;
+  --text-muted: #6a6a80;
+  --accent-gold: #c8a84e;
+  --accent-blue: #4a9eff;
+  --accent-green: #4ecdc4;
+  --accent-red: #e74c3c;
+  --accent-orange: #f39c12;
+  --accent-purple: #9b59b6;
+  --border: #2a2a4e;
+  --status-catalogue: #555;
+  --status-outline: #8e44ad;
+  --status-draft: #e67e22;
+  --status-review: #3498db;
+  --status-complete: #27ae60;
+  --status-published: #c8a84e;
+  --phase-1: #e74c3c; --phase-2: #e67e22; --phase-3: #f1c40f;
+  --phase-4: #2ecc71; --phase-5: #1abc9c; --phase-6: #3498db;
+  --phase-7: #9b59b6; --phase-8: #8e44ad; --phase-9: #c0392b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+a { color: var(--accent-blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Header */
+.header { background: var(--bg-secondary); border-bottom: 2px solid var(--accent-gold); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.header h1 { font-size: 1.3rem; color: var(--accent-gold); letter-spacing: 1px; }
+.header h1 span { color: var(--text-secondary); font-weight: 400; font-size: 0.9rem; margin-left: 8px; }
+.header-controls { display: flex; gap: 8px; align-items: center; }
+.header-controls button { background: var(--bg-card); border: 1px solid var(--border); color: var(--text-primary); padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+.header-controls button:hover { border-color: var(--accent-gold); }
+.header-controls button.active { border-color: var(--accent-gold); color: var(--accent-gold); }
+
+/* Status bar */
+.status-bar { background: var(--bg-secondary); padding: 8px 24px; border-bottom: 1px solid var(--border); display: flex; gap: 16px; align-items: center; font-size: 0.8rem; color: var(--text-secondary); }
+.stat { display: flex; align-items: center; gap: 4px; }
+.stat-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.progress-bar-bg { flex: 1; height: 6px; background: var(--bg-card); border-radius: 3px; max-width: 200px; }
+.progress-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent-green), var(--accent-gold)); transition: width 0.3s; }
+
+/* Views */
+.view { display: none; padding: 20px 24px; }
+.view.active { display: block; }
+
+/* Dashboard Grid */
+.phase-group { margin-bottom: 24px; }
+.phase-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.phase-badge { padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; color: #fff; }
+.phase-title { font-size: 1.05rem; font-weight: 600; }
+.phase-meta { font-size: 0.8rem; color: var(--text-muted); }
+.week-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+.week-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 12px; cursor: pointer; transition: border-color 0.2s, transform 0.1s; position: relative; }
+.week-card:hover { border-color: var(--accent-gold); transform: translateY(-1px); }
+.week-card .wk-num { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.week-card .wk-title { font-size: 0.95rem; font-weight: 600; margin: 4px 0; }
+.week-card .wk-showcase { font-size: 0.8rem; color: var(--text-secondary); }
+.week-card .wk-status { position: absolute; top: 8px; right: 8px; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+.week-card .wk-npcs { font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; }
+.week-card .wk-foreshadow { font-size: 0.75rem; color: var(--accent-purple); margin-top: 4px; font-style: italic; }
+
+/* Status colours */
+.st-catalogue { background: var(--status-catalogue); color: #ccc; }
+.st-outline { background: var(--status-outline); color: #fff; }
+.st-draft { background: var(--status-draft); color: #fff; }
+.st-review { background: var(--status-review); color: #fff; }
+.st-complete { background: var(--status-complete); color: #fff; }
+.st-published { background: var(--status-published); color: #1a1a2e; }
+
+/* Detail View */
+.detail-back { display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary); cursor: pointer; font-size: 0.85rem; margin-bottom: 16px; }
+.detail-back:hover { color: var(--accent-gold); }
+.detail-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+.detail-title { font-size: 1.5rem; font-weight: 700; }
+.detail-subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px; }
+.detail-status-select { padding: 6px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-input); color: var(--text-primary); font-size: 0.9rem; cursor: pointer; }
+
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+@media (max-width: 800px) { .detail-grid { grid-template-columns: 1fr; } }
+.detail-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 14px; }
+.detail-panel h3 { font-size: 0.85rem; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+.detail-panel .field { margin-bottom: 8px; }
+.detail-panel .field-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.detail-panel .field-value { font-size: 0.9rem; color: var(--text-primary); margin-top: 2px; }
+.detail-panel .field-value.muted { color: var(--text-muted); font-style: italic; }
+
+.detail-full { grid-column: 1 / -1; }
+textarea.detail-textarea { width: 100%; min-height: 80px; background: var(--bg-input); border: 1px solid var(--border); color: var(--text-primary); padding: 8px; border-radius: 4px; font-family: inherit; font-size: 0.85rem; resize: vertical; }
+textarea.detail-textarea:focus { border-color: var(--accent-gold); outline: none; }
+
+/* Bundle panel */
+.bundle-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.bundle-item { background: var(--bg-input); border: 1px solid var(--border); border-radius: 4px; padding: 8px; text-align: center; }
+.bundle-item .bi-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
+.bundle-item .bi-title { font-size: 0.85rem; font-weight: 600; margin-top: 2px; }
+.bundle-item .bi-code { font-size: 0.7rem; color: var(--text-muted); font-family: monospace; margin-top: 2px; }
+.bundle-item.free { border-color: var(--accent-green); }
+.bundle-item.paid { border-color: var(--accent-gold); }
+
+/* NPC Assignments */
+.npc-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.npc-tag { background: var(--bg-input); border: 1px solid var(--border); border-radius: 12px; padding: 3px 10px; font-size: 0.8rem; display: flex; align-items: center; gap: 4px; }
+.npc-tag .npc-remove { cursor: pointer; color: var(--accent-red); font-weight: 700; }
+.npc-tag .npc-remove:hover { color: #ff6b6b; }
+.npc-add-row { display: flex; gap: 6px; margin-top: 8px; }
+.npc-add-row input { flex: 1; background: var(--bg-input); border: 1px solid var(--border); color: var(--text-primary); padding: 6px 10px; border-radius: 4px; font-size: 0.85rem; }
+.npc-add-row button { background: var(--accent-gold); color: #1a1a2e; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+
+/* Foreshadowing View */
+.thread-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 14px; margin-bottom: 10px; }
+.thread-card h4 { color: var(--accent-purple); margin-bottom: 6px; }
+.thread-card .thread-desc { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 8px; }
+.thread-weeks { display: flex; gap: 4px; flex-wrap: wrap; }
+.thread-week { padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; cursor: pointer; }
+.thread-week.planted { background: var(--status-outline); color: #fff; }
+.thread-week.payoff { background: var(--accent-gold); color: #1a1a2e; font-weight: 700; }
+
+/* Pipeline View */
+.pipeline { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 12px; }
+@media (max-width: 900px) { .pipeline { grid-template-columns: repeat(3, 1fr); } }
+.pipeline-col { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; min-height: 200px; }
+.pipeline-col-header { padding: 8px; text-align: center; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
+.pipeline-col-body { padding: 6px; }
+.pipeline-item { background: var(--bg-input); border: 1px solid var(--border); border-radius: 4px; padding: 6px 8px; margin-bottom: 4px; cursor: pointer; font-size: 0.8rem; }
+.pipeline-item:hover { border-color: var(--accent-gold); }
+.pipeline-item .pi-wk { color: var(--text-muted); font-size: 0.7rem; }
+
+/* Saved indicator */
+.save-indicator { font-size: 0.8rem; padding: 4px 10px; border-radius: 4px; }
+.save-indicator.saved { color: var(--accent-green); }
+.save-indicator.unsaved { color: var(--accent-orange); }
+.save-indicator.saving { color: var(--accent-blue); }
+
+/* Search */
+.search-box { background: var(--bg-input); border: 1px solid var(--border); color: var(--text-primary); padding: 6px 12px; border-radius: 4px; font-size: 0.85rem; width: 220px; }
+.search-box:focus { border-color: var(--accent-gold); outline: none; }
+
+/* Toast */
+.toast { position: fixed; bottom: 20px; right: 20px; background: var(--bg-card); border: 1px solid var(--accent-gold); color: var(--text-primary); padding: 10px 20px; border-radius: 6px; font-size: 0.85rem; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+.toast.show { opacity: 1; }
+
+/* Vault link */
+.vault-link { font-size: 0.8rem; color: var(--accent-blue); cursor: pointer; }
+.vault-link:hover { color: var(--accent-gold); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>ADVENTURE FORGE <span>Tribute Lands — Ammaria</span></h1>
+  <div class="header-controls">
+    <input type="text" class="search-box" id="searchBox" placeholder="Search adventures..." oninput="filterAdventures()">
+    <button id="btnDashboard" class="active" onclick="showView('dashboard')">Dashboard</button>
+    <button id="btnPipeline" onclick="showView('pipeline')">Pipeline</button>
+    <button id="btnThreads" onclick="showView('threads')">Threads</button>
+    <button id="btnStats" onclick="showView('stats')">Stats</button>
+    <span id="saveIndicator" class="save-indicator saved">✓ synced</span>
+    <button onclick="syncToGist()" title="Push to Gist">⬆ Save</button>
+    <button onclick="syncFromGist()" title="Pull from Gist">⬇ Load</button>
+  </div>
+</div>
+
+<div class="status-bar">
+  <span class="stat"><span class="stat-dot" style="background:var(--status-published)"></span> <span id="statPublished">0</span> published</span>
+  <span class="stat"><span class="stat-dot" style="background:var(--status-complete)"></span> <span id="statComplete">0</span> complete</span>
+  <span class="stat"><span class="stat-dot" style="background:var(--status-draft)"></span> <span id="statDraft">0</span> in progress</span>
+  <span class="stat"><span class="stat-dot" style="background:var(--status-catalogue)"></span> <span id="statCatalogue">0</span> catalogue</span>
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:10%"></div></div>
+  <span id="progressLabel" class="stat">10% complete</span>
+</div>
+
+<!-- DASHBOARD VIEW -->
+<div class="view active" id="viewDashboard"></div>
+
+<!-- DETAIL VIEW -->
+<div class="view" id="viewDetail"></div>
+
+<!-- PIPELINE VIEW -->
+<div class="view" id="viewPipeline"></div>
+
+<!-- FORESHADOWING THREADS VIEW -->
+<div class="view" id="viewThreads"></div>
+
+<!-- STATS VIEW -->
+<div class="view" id="viewStats"></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+const FORGE_GIST_ID = null; // Will be set after first Gist creation
+const VAULT_GIST_ID = '7fa2d50c458ed95c21a3c6d283f863d6';
+let DATA = null;
+let VAULT_CHARS = [];
+let dirty = false;
+let currentWeek = null;
+
+const STATUS_ORDER = ['catalogue','outline','draft','review','complete','published'];
+const STATUS_LABELS = { catalogue:'Catalogue', outline:'Outline', draft:'Draft', review:'Review', complete:'Complete', published:'Published' };
+const PHASE_COLORS = ['','#e74c3c','#e67e22','#f1c40f','#2ecc71','#1abc9c','#3498db','#9b59b6','#8e44ad','#c0392b'];
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+async function init() {
+  // Try loading from localStorage first, then Gist
+  const stored = localStorage.getItem('forge-data');
+  if (stored) {
+    try { DATA = JSON.parse(stored); } catch(e) {}
+  }
+  if (!DATA) {
+    // Load seed data (embedded below)
+    DATA = SEED_DATA;
+    localStorage.setItem('forge-data', JSON.stringify(DATA));
+  }
+  // Load Vault characters for NPC lookups
+  await loadVaultChars();
+  renderDashboard();
+  updateStatusBar();
+}
+
+async function loadVaultChars() {
+  try {
+    const resp = await fetch(`https://api.github.com/gists/${VAULT_GIST_ID}`);
+    if (resp.ok) {
+      const gist = await resp.json();
+      const file = gist.files['ammaria-characters.json'];
+      if (file) {
+        const vaultData = JSON.parse(file.content);
+        VAULT_CHARS = vaultData.characters || [];
+        console.log('Vault loaded:', VAULT_CHARS.length, 'characters');
+      }
+    }
+  } catch(e) { console.log('Vault load failed:', e.message); }
+}
+
+// ═══════════════════════════════════════════════════
+// VIEWS
+// ═══════════════════════════════════════════════════
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.header-controls button').forEach(b => b.classList.remove('active'));
+  document.getElementById('view' + name.charAt(0).toUpperCase() + name.slice(1)).classList.add('active');
+  const btn = document.getElementById('btn' + name.charAt(0).toUpperCase() + name.slice(1));
+  if (btn) btn.classList.add('active');
+
+  if (name === 'dashboard') renderDashboard();
+  else if (name === 'pipeline') renderPipeline();
+  else if (name === 'threads') renderThreads();
+  else if (name === 'stats') renderStats();
+}
+
+function showDetail(weekNum) {
+  currentWeek = weekNum;
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.header-controls button').forEach(b => b.classList.remove('active'));
+  document.getElementById('viewDetail').classList.add('active');
+  renderDetail(weekNum);
+}
+
+// ═══════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════
+function renderDashboard() {
+  const el = document.getElementById('viewDashboard');
+  const filter = (document.getElementById('searchBox').value || '').toLowerCase();
+  let html = '';
+
+  DATA.phases.forEach(phase => {
+    const adventures = DATA.adventures.filter(a => a.phase === phase.num);
+    const filtered = filter ? adventures.filter(a =>
+      a.title.toLowerCase().includes(filter) ||
+      a.primaryShowcase.toLowerCase().includes(filter) ||
+      a.hook.toLowerCase().includes(filter) ||
+      a.environment.toLowerCase().includes(filter) ||
+      a.npcPackTitle.toLowerCase().includes(filter)
+    ) : adventures;
+
+    if (filter && filtered.length === 0) return;
+
+    const done = adventures.filter(a => a.status === 'complete' || a.status === 'published').length;
+    html += `<div class="phase-group">
+      <div class="phase-header">
+        <span class="phase-badge" style="background:${PHASE_COLORS[phase.num]}">Phase ${phase.num}</span>
+        <span class="phase-title">${phase.name}</span>
+        <span class="phase-meta">${phase.rank} · ${phase.location} · ${done}/${adventures.length} done</span>
+      </div>
+      <div class="week-grid">`;
+
+    filtered.forEach(a => {
+      const npcCount = a.npcs.length;
+      html += `<div class="week-card" onclick="showDetail(${a.weekNumber})">
+        <span class="wk-status st-${a.status}">${STATUS_LABELS[a.status]}</span>
+        <div class="wk-num">Week ${String(a.weekNumber).padStart(2,'0')}</div>
+        <div class="wk-title">${a.title}</div>
+        <div class="wk-showcase">${a.primaryShowcase}</div>
+        ${npcCount ? `<div class="wk-npcs">👥 ${npcCount} NPC${npcCount>1?'s':''} assigned</div>` : ''}
+        ${a.foreshadowing ? `<div class="wk-foreshadow">🌱 ${truncate(a.foreshadowing, 60)}</div>` : ''}
+      </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+function filterAdventures() { renderDashboard(); }
+
+// ═══════════════════════════════════════════════════
+// DETAIL VIEW
+// ═══════════════════════════════════════════════════
+function renderDetail(weekNum) {
+  const a = DATA.adventures.find(x => x.weekNumber === weekNum);
+  if (!a) return;
+  const el = document.getElementById('viewDetail');
+
+  const npcTags = a.npcs.map((ref, i) => {
+    const vc = VAULT_CHARS.find(c => c.refCode === ref);
+    const name = vc ? vc.name : ref;
+    return `<span class="npc-tag">${ref} ${name} <span class="npc-remove" onclick="removeNpc(${weekNum},${i})">×</span></span>`;
+  }).join('');
+
+  // Build vault character datalist
+  const datalistOpts = VAULT_CHARS.map(c => `<option value="${c.refCode}">${c.refCode} — ${c.name}</option>`).join('');
+
+  el.innerHTML = `
+    <div class="detail-back" onclick="showView('dashboard')">← Back to Dashboard</div>
+
+    <div class="detail-header">
+      <div>
+        <div class="detail-title">Week ${String(a.weekNumber).padStart(2,'0')}: ${a.title}</div>
+        <div class="detail-subtitle">Phase ${a.phase}: ${a.phaseName} · ${a.rank} · ${a.location}</div>
+      </div>
+      <select class="detail-status-select" onchange="setStatus(${weekNum}, this.value)">
+        ${STATUS_ORDER.map(s => `<option value="${s}" ${a.status===s?'selected':''}>${STATUS_LABELS[s]}</option>`).join('')}
+      </select>
+    </div>
+
+    <!-- Bundle Components -->
+    <div class="detail-panel detail-full" style="margin-bottom:16px">
+      <h3>Weekly Bundle</h3>
+      <div class="bundle-row">
+        <div class="bundle-item free">
+          <div class="bi-label">Vignette (Free)</div>
+          <div class="bi-title">${a.vignetteTitle}</div>
+          <div class="bi-code">${a.vignetteCode}</div>
+        </div>
+        <div class="bundle-item paid">
+          <div class="bi-label">Adventure (£3.99)</div>
+          <div class="bi-title">${a.title}</div>
+          <div class="bi-code">${a.advCode}</div>
+        </div>
+        <div class="bundle-item paid">
+          <div class="bi-label">NPC Pack (£0.99)</div>
+          <div class="bi-title">${a.npcPackTitle}</div>
+          <div class="bi-code">${a.npcPackCode}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      <!-- Design Column -->
+      <div class="detail-panel">
+        <h3>Adventure Design</h3>
+        <div class="field"><div class="field-label">Environment</div><div class="field-value">${a.environment}</div></div>
+        <div class="field"><div class="field-label">Primary Showcase</div><div class="field-value">${a.primaryShowcase}</div></div>
+        <div class="field"><div class="field-label">Secondary Mechanics</div><div class="field-value">${a.secondaryMechanics}</div></div>
+      </div>
+
+      <!-- Narrative Column -->
+      <div class="detail-panel">
+        <h3>Narrative</h3>
+        <div class="field"><div class="field-label">Hook</div><div class="field-value">${a.hook}</div></div>
+        <div class="field"><div class="field-label">Success Condition</div><div class="field-value" style="color:var(--accent-green)">${a.successCondition}</div></div>
+        <div class="field"><div class="field-label">Depth Note</div><div class="field-value" style="color:var(--accent-orange)">${a.depthNote}</div></div>
+      </div>
+
+      <!-- Foreshadowing -->
+      <div class="detail-panel">
+        <h3>Foreshadowing</h3>
+        <div class="field"><div class="field-label">Seeds & Connections</div><div class="field-value" style="color:var(--accent-purple)">${a.foreshadowing || '<span class="muted">None recorded</span>'}</div></div>
+        <div class="field" style="margin-top:8px"><div class="field-label">Threads Planted Here</div>
+          <div class="field-value">${getThreadsForWeek(weekNum, 'planted').map(t => `<span style="color:var(--accent-purple)">🌱 ${t.name}</span>`).join('<br>') || '<span class="muted">None</span>'}</div>
+        </div>
+        <div class="field"><div class="field-label">Threads Paid Off Here</div>
+          <div class="field-value">${getThreadsForWeek(weekNum, 'payoff').map(t => `<span style="color:var(--accent-gold)">⚡ ${t.name}</span>`).join('<br>') || '<span class="muted">None</span>'}</div>
+        </div>
+      </div>
+
+      <!-- NPC Assignments -->
+      <div class="detail-panel">
+        <h3>NPC Assignments</h3>
+        <div class="npc-list">${npcTags || '<span class="field-value muted">No NPCs assigned</span>'}</div>
+        <div class="npc-add-row">
+          <input type="text" id="npcInput" list="vaultChars" placeholder="Type refCode or name..." onkeydown="if(event.key==='Enter')addNpc(${weekNum})">
+          <datalist id="vaultChars">${datalistOpts}</datalist>
+          <button onclick="addNpc(${weekNum})">+ Add</button>
+        </div>
+        <div style="margin-top:6px;font-size:0.75rem;color:var(--text-muted)">${VAULT_CHARS.length} characters available from Vault</div>
+      </div>
+
+      <!-- Production Notes -->
+      <div class="detail-panel detail-full">
+        <h3>Production Notes</h3>
+        <textarea class="detail-textarea" id="notesArea" onblur="saveNotes(${weekNum})" placeholder="Working notes, decisions, issues...">${a.notes || ''}</textarea>
+      </div>
+
+      <!-- Word Counts -->
+      <div class="detail-panel">
+        <h3>Word Counts</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+          <div>
+            <div class="field-label">Adventure</div>
+            <input type="number" style="width:80px;background:var(--bg-input);border:1px solid var(--border);color:var(--text-primary);padding:4px;border-radius:4px;text-align:center" value="${a.wordCounts.adventure}" onchange="setWordCount(${weekNum},'adventure',this.value)">
+          </div>
+          <div>
+            <div class="field-label">NPC Pack</div>
+            <input type="number" style="width:80px;background:var(--bg-input);border:1px solid var(--border);color:var(--text-primary);padding:4px;border-radius:4px;text-align:center" value="${a.wordCounts.npcPack}" onchange="setWordCount(${weekNum},'npcPack',this.value)">
+          </div>
+          <div>
+            <div class="field-label">Vignette</div>
+            <input type="number" style="width:80px;background:var(--bg-input);border:1px solid var(--border);color:var(--text-primary);padding:4px;border-radius:4px;text-align:center" value="${a.wordCounts.vignette}" onchange="setWordCount(${weekNum},'vignette',this.value)">
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:8px;font-size:0.85rem;color:var(--text-secondary)">
+          Total: ${(a.wordCounts.adventure + a.wordCounts.npcPack + a.wordCounts.vignette).toLocaleString()} words
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="detail-panel" style="display:flex;justify-content:space-between;align-items:center">
+        <h3 style="border:none;padding:0;margin:0">Navigate</h3>
+        <div style="display:flex;gap:8px">
+          ${weekNum > 1 ? `<button onclick="showDetail(${weekNum-1})" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text-primary);padding:6px 14px;border-radius:4px;cursor:pointer">← Week ${String(weekNum-1).padStart(2,'0')}</button>` : ''}
+          ${weekNum < 50 ? `<button onclick="showDetail(${weekNum+1})" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text-primary);padding:6px 14px;border-radius:4px;cursor:pointer">Week ${String(weekNum+1).padStart(2,'0')} →</button>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════
+// PIPELINE VIEW
+// ═══════════════════════════════════════════════════
+function renderPipeline() {
+  const el = document.getElementById('viewPipeline');
+  let html = '<h2 style="margin-bottom:12px;color:var(--accent-gold)">Production Pipeline</h2><div class="pipeline">';
+
+  STATUS_ORDER.forEach(status => {
+    const items = DATA.adventures.filter(a => a.status === status);
+    html += `<div class="pipeline-col">
+      <div class="pipeline-col-header st-${status}">${STATUS_LABELS[status]} (${items.length})</div>
+      <div class="pipeline-col-body">`;
+    items.forEach(a => {
+      html += `<div class="pipeline-item" onclick="showDetail(${a.weekNumber})">
+        <div class="pi-wk">W${String(a.weekNumber).padStart(2,'0')}</div>
+        ${a.title}
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════
+// FORESHADOWING THREADS VIEW
+// ═══════════════════════════════════════════════════
+function renderThreads() {
+  const el = document.getElementById('viewThreads');
+  let html = '<h2 style="margin-bottom:12px;color:var(--accent-purple)">Foreshadowing Web</h2>';
+
+  DATA.foreshadowingThreads.forEach(thread => {
+    html += `<div class="thread-card">
+      <h4>${thread.name}</h4>
+      <div class="thread-desc">${thread.description}</div>
+      <div class="thread-weeks">`;
+    // Show all weeks 1-50, highlight planted and payoff
+    for (let w = 1; w <= 50; w++) {
+      const isPlanted = thread.planted.includes(w);
+      const isPayoff = w === thread.payoff;
+      if (isPlanted || isPayoff) {
+        html += `<span class="thread-week ${isPayoff ? 'payoff' : 'planted'}" onclick="showDetail(${w})">W${String(w).padStart(2,'0')}${isPayoff ? ' ⚡' : ''}</span>`;
+      }
+    }
+    html += `</div></div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════
+// STATS VIEW
+// ═══════════════════════════════════════════════════
+function renderStats() {
+  const el = document.getElementById('viewStats');
+  const totalWords = DATA.adventures.reduce((s,a) => s + a.wordCounts.adventure + a.wordCounts.npcPack + a.wordCounts.vignette, 0);
+  const totalNpcs = new Set(DATA.adventures.flatMap(a => a.npcs)).size;
+  const byPhase = DATA.phases.map(p => {
+    const advs = DATA.adventures.filter(a => a.phase === p.num);
+    const done = advs.filter(a => a.status === 'complete' || a.status === 'published').length;
+    return { ...p, total: advs.length, done };
+  });
+
+  // Showcase coverage
+  const showcases = {};
+  DATA.adventures.forEach(a => {
+    const key = a.primaryShowcase.split('(')[0].trim();
+    if (!showcases[key]) showcases[key] = [];
+    showcases[key].push(a.weekNumber);
+  });
+
+  let html = `<h2 style="margin-bottom:16px;color:var(--accent-gold)">Production Statistics</h2>
+    <div class="detail-grid">
+      <div class="detail-panel">
+        <h3>Overview</h3>
+        <div class="field"><div class="field-label">Total Adventures</div><div class="field-value">50 (across 9 phases)</div></div>
+        <div class="field"><div class="field-label">Total Products</div><div class="field-value">150 (50 adventures + 50 NPC packs + 50 vignettes)</div></div>
+        <div class="field"><div class="field-label">Total Words Written</div><div class="field-value">${totalWords.toLocaleString()}</div></div>
+        <div class="field"><div class="field-label">Unique NPCs Assigned</div><div class="field-value">${totalNpcs}</div></div>
+        <div class="field"><div class="field-label">Foreshadowing Threads</div><div class="field-value">${DATA.foreshadowingThreads.length}</div></div>
+      </div>
+      <div class="detail-panel">
+        <h3>Phase Progress</h3>
+        ${byPhase.map(p => `<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="phase-badge" style="background:${PHASE_COLORS[p.num]};font-size:0.7rem;min-width:20px;text-align:center">${p.num}</span>
+          <span style="flex:1;font-size:0.85rem">${p.name}</span>
+          <span style="font-size:0.8rem;color:var(--text-muted)">${p.done}/${p.total}</span>
+          <div style="width:60px;height:4px;background:var(--bg-input);border-radius:2px"><div style="width:${p.total?Math.round(p.done/p.total*100):0}%;height:100%;background:var(--accent-green);border-radius:2px"></div></div>
+        </div>`).join('')}
+      </div>
+      <div class="detail-panel detail-full">
+        <h3>SWADE Showcase Coverage</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          ${Object.entries(showcases).sort((a,b) => b[1].length - a[1].length).map(([k,v]) =>
+            `<span style="background:var(--bg-input);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:0.8rem">${k} <span style="color:var(--accent-gold)">(${v.length})</span></span>`
+          ).join('')}
+        </div>
+      </div>
+    </div>`;
+
+  el.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════
+// DATA OPERATIONS
+// ═══════════════════════════════════════════════════
+function setStatus(weekNum, status) {
+  const a = DATA.adventures.find(x => x.weekNumber === weekNum);
+  if (a) { a.status = status; markDirty(); updateStatusBar(); }
+}
+
+function saveNotes(weekNum) {
+  const a = DATA.adventures.find(x => x.weekNumber === weekNum);
+  const area = document.getElementById('notesArea');
+  if (a && area) { a.notes = area.value; markDirty(); }
+}
+
+function setWordCount(weekNum, field, val) {
+  const a = DATA.adventures.find(x => x.weekNumber === weekNum);
+  if (a) { a.wordCounts[field] = parseInt(val) || 0; markDirty(); }
+}
+
+function addNpc(weekNum) {
+  const input = document.getElementById('npcInput');
+  const ref = input.value.trim().split(' ')[0]; // Take first word (the refCode)
+  if (!ref) return;
+  const a = DATA.adventures.find(x => x.weekNumber === weekNum);
+  if (a && !a.npcs.includes(ref)) {
+    a.npcs.push(ref);
+    markDirty();
+    renderDetail(weekNum);
+  }
+  input.value = '';
+}
+
+function removeNpc(weekNum, idx) {
+  const a = DATA.adventures.find(x => x.weekNumber === weekNum);
+  if (a) { a.npcs.splice(idx, 1); markDirty(); renderDetail(weekNum); }
+}
+
+function getThreadsForWeek(weekNum, type) {
+  return DATA.foreshadowingThreads.filter(t =>
+    type === 'planted' ? t.planted.includes(weekNum) : t.payoff === weekNum
+  );
+}
+
+// ═══════════════════════════════════════════════════
+// PERSISTENCE
+// ═══════════════════════════════════════════════════
+function markDirty() {
+  dirty = true;
+  DATA.lastModified = new Date().toISOString();
+  localStorage.setItem('forge-data', JSON.stringify(DATA));
+  document.getElementById('saveIndicator').className = 'save-indicator unsaved';
+  document.getElementById('saveIndicator').textContent = '● unsaved';
+}
+
+async function syncToGist() {
+  const indicator = document.getElementById('saveIndicator');
+  indicator.className = 'save-indicator saving';
+  indicator.textContent = '⟳ saving...';
+
+  const token = getGistToken();
+  if (!token) { toast('Set GitHub token first (Settings)'); return; }
+
+  const content = JSON.stringify(DATA, null, 2);
+  const payload = { files: { 'ammaria-adventures.json': { content } } };
+
+  try {
+    let gistId = localStorage.getItem('forge-gist-id');
+    let resp;
+    if (gistId) {
+      resp = await fetch(`https://api.github.com/gists/${gistId}`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } else {
+      resp = await fetch('https://api.github.com/gists', {
+        method: 'POST',
+        headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description: 'Adventure Forge — Ammaria Weekly Bundles', public: false, ...payload })
+      });
+    }
+    const data = await resp.json();
+    if (data.id) {
+      localStorage.setItem('forge-gist-id', data.id);
+      dirty = false;
+      indicator.className = 'save-indicator saved';
+      indicator.textContent = '✓ synced';
+      toast('Saved to Gist: ' + data.id.slice(0,8) + '...');
+    } else {
+      throw new Error(data.message || 'Unknown error');
+    }
+  } catch(e) {
+    indicator.className = 'save-indicator unsaved';
+    indicator.textContent = '✗ error';
+    toast('Save failed: ' + e.message);
+  }
+}
+
+async function syncFromGist() {
+  const gistId = localStorage.getItem('forge-gist-id');
+  if (!gistId) { toast('No Gist ID stored. Save first to create one.'); return; }
+
+  try {
+    const resp = await fetch(`https://api.github.com/gists/${gistId}`);
+    const data = await resp.json();
+    const file = data.files['ammaria-adventures.json'];
+    if (file) {
+      DATA = JSON.parse(file.content);
+      localStorage.setItem('forge-data', JSON.stringify(DATA));
+      dirty = false;
+      document.getElementById('saveIndicator').className = 'save-indicator saved';
+      document.getElementById('saveIndicator').textContent = '✓ synced';
+      renderDashboard();
+      updateStatusBar();
+      toast('Loaded from Gist');
+    }
+  } catch(e) { toast('Load failed: ' + e.message); }
+}
+
+function getGistToken() {
+  let token = localStorage.getItem('forge-github-token');
+  if (!token) {
+    token = prompt('GitHub Personal Access Token (needs gist scope):');
+    if (token) localStorage.setItem('forge-github-token', token);
+  }
+  return token;
+}
+
+// ═══════════════════════════════════════════════════
+// UI HELPERS
+// ═══════════════════════════════════════════════════
+function updateStatusBar() {
+  const counts = {};
+  STATUS_ORDER.forEach(s => counts[s] = 0);
+  DATA.adventures.forEach(a => counts[a.status]++);
+
+  document.getElementById('statPublished').textContent = counts.published;
+  document.getElementById('statComplete').textContent = counts.complete;
+  document.getElementById('statDraft').textContent = counts.outline + counts.draft + counts.review;
+  document.getElementById('statCatalogue').textContent = counts.catalogue;
+
+  const done = counts.complete + counts.published;
+  const pct = Math.round(done / 50 * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = pct + '% complete';
+}
+
+function truncate(s, n) { return s.length > n ? s.slice(0, n) + '…' : s; }
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('viewDetail').classList.contains('active')) showView('dashboard');
+  }
+  if (e.key === 'ArrowLeft' && currentWeek && document.getElementById('viewDetail').classList.contains('active')) {
+    if (currentWeek > 1) showDetail(currentWeek - 1);
+  }
+  if (e.key === 'ArrowRight' && currentWeek && document.getElementById('viewDetail').classList.contains('active')) {
+    if (currentWeek < 50) showDetail(currentWeek + 1);
+  }
+});
+
+// ═══════════════════════════════════════════════════
+// SEED DATA (embedded)
+// ═══════════════════════════════════════════════════
+const PLACEHOLDER_SEED = {"version":"1.0","region":"Ammaria","regionCode":"AM","lastModified":"2026-02-14T21:03:03.026Z","lastModifiedBy":"forge-seed","phases":[{"num":1,"name":"Streets of Mottgorte","rank":"Novice","location":"Mottgorte","theme":"Guild politics, street-level survival","weeks":[1,6]},{"num":2,"name":"The Guild Wars","rank":"Novice → Seasoned","location":"Mottgorte expanding to Aldmoor","theme":"Guild politics escalate; reputation matters","weeks":[7,12]},{"num":3,"name":"The Aldmoor Connection","rank":"Seasoned","location":"Aldmoor","theme":"Academic intrigue, military power","weeks":[13,18]},{"num":4,"name":"Wilderness & Rivers","rank":"Seasoned","location":"Rural Ammaria","theme":"Exploration, trade routes, natural threats","weeks":[19,24]},{"num":5,"name":"The Kesswick Crisis","rank":"Seasoned → Veteran","location":"Kesswick","theme":"Tribute resistance, moral complexity","weeks":[25,30]},{"num":6,"name":"The Blackmere Darkness","rank":"Veteran","location":"Blackmere","theme":"Supernatural horror, ancient secrets","weeks":[31,36]},{"num":7,"name":"The Grimhollow Operation","rank":"Veteran","location":"Grimhollow with Thornvale","theme":"Smuggling networks, organised crime","weeks":[37,42]},{"num":8,"name":"Port Thrane & The Sea","rank":"Veteran → Heroic","location":"Port Thrane","theme":"Naval power, Saltlands connections","weeks":[43,48]},{"num":9,"name":"The Reckoning","rank":"Heroic","location":"Campaign-dependent","theme":"Consequences arrive","weeks":[49,50]}],"adventures":[{"weekNumber":1,"phase":1,"phaseName":"Streets of Mottgorte","rank":"Novice","location":"Mottgorte","title":"The Broken Seal","advCode":"DFS-AM-A001-3F8N","environment":"Urban (guild quarter) with rooftop elements","primaryShowcase":"Social Conflict (networking, reputation)","secondaryMechanics":"Tests (Intimidation vs Spirit), Notice for investigation","hook":"A merchant's seal has been counterfeited. The forgery is good enough to fool casual inspection, but something feels wrong about a shipment cleared under his name.","successCondition":"Identify and stop the forgery operation. Recover evidence for Valdric.","depthNote":"The forgers are small fish working for larger interests. What the heroes do with that information shapes their reputation.","foreshadowing":"The forgers mention 'the Thornvale shipment' — seeds Week 41's dragon reveal","npcPackTitle":"Guild Factors","npcPackCode":"DFS-AM-N001-P2TX","vignetteTitle":"The Counting Quarter","vignetteCode":"DFS-AM-V001-H5MJ","status":"complete","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":2,"phase":1,"phaseName":"Streets of Mottgorte","rank":"Novice","location":"Mottgorte","title":"The Flooded Warren","advCode":"DFS-AM-A002-7K4R","environment":"Underground (sewers) with water hazards","primaryShowcase":"Hazards/Survival (drowning, disease, blindsight)","secondaryMechanics":"Swarm Combat, Constrict escape, Support rolls","hook":"Children have gone missing from the Dockside District. The Watch claims ratlings are responsible, but the warrens have been quiet for months. Something else hunts the tunnels.","successCondition":"Rescue the surviving children and neutralise the immediate threat.","depthNote":"The Sewer Wyrm can be killed, driven off, or contained through alliance with the Ratlings. Each approach has different long-term consequences.","foreshadowing":"Ratling elder mentions 'the deep places are restless' — seeds Shadow of the Throne thread","npcPackTitle":"Canal Workers","npcPackCode":"DFS-AM-N002-W9BL","vignetteTitle":"Canal Junction","vignetteCode":"DFS-AM-V002-D3GV","status":"complete","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":3,"phase":1,"phaseName":"Streets of Mottgorte","rank":"Novice","location":"Mottgorte","title":"The Tallyman's Ledger","advCode":"DFS-AM-A003-B6PH","environment":"Urban (debt quarter) with canal escape","primaryShowcase":"Dramatic Task (rescue under time pressure)","secondaryMechanics":"Grappling/Restraint (manacles, escape), Chase (canal pursuit)","hook":"A craftsman's family has been seized by Brotherhood debt collectors — the notorious Tallymen. The father has three days to pay an impossible sum or watch his family sold.","successCondition":"Extract the family from the holding house before the auction.","depthNote":"A fourth prisoner has no one coming for them. The ledger contains information that could be valuable — or dangerous.","foreshadowing":"Ledger shows payments to 'K.F.' in Grimhollow — seeds Week 37's smuggling plot","npcPackTitle":"Brotherhood Enforcers","npcPackCode":"DFS-AM-N003-F8CZ","vignetteTitle":"The Drowned Anchor","vignetteCode":"DFS-AM-V003-M2KN","status":"complete","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":4,"phase":1,"phaseName":"Streets of Mottgorte","rank":"Novice","location":"Mottgorte","title":"The Crimson Invitation","advCode":"DFS-AM-A004-N2WF","environment":"Urban (noble quarter) with garden/courtyard","primaryShowcase":"Social Conflict (infiltration, deception)","secondaryMechanics":"Tests/Taunts (social humiliation), Stealth","hook":"A merchant has received intelligence that someone will attempt to assassinate Consortium Factor Aldric Thorne at the Crimson Ball. The heroes must identify the assassin without causing a scandal.","successCondition":"Prevent the assassination. Thorne survives the evening.","depthNote":"Thorne is corrupt and cruel; the assassin has legitimate grievances. What happens to the assassin is where moral complexity lives.","foreshadowing":"Assassin's employer mentions 'the Kesswick problem' — seeds Phase 5 content","npcPackTitle":"Night's Whisper Operatives","npcPackCode":"DFS-AM-N004-J5RP","vignetteTitle":"The Merchant's Ball","vignetteCode":"DFS-AM-V004-T7AX","status":"complete","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":5,"phase":1,"phaseName":"Streets of Mottgorte","rank":"Novice","location":"Mottgorte","title":"The Sealed Tower","advCode":"DFS-AM-A005-Q8DM","environment":"Urban (academy quarter) with vertical elements","primaryShowcase":"Investigation (Research, Academics)","secondaryMechanics":"Powers (counterspelling, wards), Dramatic Task (disarming trap)","hook":"A junior wizard of the Covenant of Letters has barricaded himself inside a tower laboratory. The Academy wants him extracted quietly.","successCondition":"Extract Marcus Thane alive and resolve the situation without Academy scandal.","depthNote":"The evidence Thane discovered implicates the Academy in historical atrocities.","foreshadowing":"Research mentions 'the Thornvale Incident' — seeds dragon reveal; documents reference 'S.O.T.' (Shadow of the Throne)","npcPackTitle":"Keepers of the Sacred Flame","npcPackCode":"DFS-AM-N005-V4HW","vignetteTitle":"The Hidden Clinic","vignetteCode":"DFS-AM-V005-K9BF","status":"complete","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":6,"phase":1,"phaseName":"Streets of Mottgorte","rank":"Novice","location":"Mottgorte","title":"Blood in the Canals","advCode":"DFS-AM-A006-G3TL","environment":"Waterway (canals) with dockside urban","primaryShowcase":"Chase Sequence (vehicle/boat)","secondaryMechanics":"Mass Battle (gang skirmish), Environmental hazards","hook":"Two gangs are about to go to war over canal territory. The Dockside community will suffer regardless of who wins.","successCondition":"Prevent the gang war from devastating the district.","depthNote":"Both gang leaders have legitimate grievances. A third party is manipulating events for profit.","foreshadowing":"The third party profiting is connected to Brotherhood's Port Thrane operations — seeds Phase 8","npcPackTitle":"The Absolution","npcPackCode":"DFS-AM-N006-R6NP","vignetteTitle":"The Bone Mask","vignetteCode":"DFS-AM-V006-A8CJ","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":7,"phase":2,"phaseName":"The Guild Wars","rank":"Novice → Seasoned","location":"Mottgorte expanding to Aldmoor","title":"The Shipwright's Secret","advCode":"DFS-AM-A007-L5KR","environment":"Dockyard (urban/waterway hybrid) with drydock","primaryShowcase":"Investigation with Combat escalation","secondaryMechanics":"Repair (sabotage detection), Boating","hook":"Ships from the Shipwrights' Coalition keep failing at sea. Someone is sabotaging Mottgorte's maritime lifeline.","successCondition":"Identify and stop the saboteur. Protect the Coalition's ships.","depthNote":"The saboteur is a desperate man whose family was ruined by Coalition practices.","foreshadowing":"Sabotage orders came from Aldmoor — introduces Phase 2's secondary city","npcPackTitle":"Marismund Dockers","npcPackCode":"DFS-AM-N007-H2FW","vignetteTitle":"The Shipyard Gates","vignetteCode":"DFS-AM-V007-P4MX","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":8,"phase":2,"phaseName":"The Guild Wars","rank":"Novice → Seasoned","location":"Mottgorte expanding to Aldmoor","title":"The Midnight Market","advCode":"DFS-AM-A008-W7BN","environment":"Urban (warehouse district) nocturnal","primaryShowcase":"Stealth/Infiltration","secondaryMechanics":"Tests (bargaining), Notice (detection)","hook":"The Midnight Market appears once a month in a different location. It sells things that can't be sold elsewhere.","successCondition":"Acquire the item and deliver it to the patron without being identified.","depthNote":"The Market sells many questionable goods. What else the heroes see tests their priorities.","foreshadowing":"Vendor mentions increased demand for 'Kesswick specialties' — seeds Phase 5","npcPackTitle":"Night Market Vendors","npcPackCode":"DFS-AM-N008-C9GL","vignetteTitle":"After Hours","vignetteCode":"DFS-AM-V008-F3TV","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":9,"phase":2,"phaseName":"The Guild Wars","rank":"Novice → Seasoned","location":"Mottgorte expanding to Aldmoor","title":"The Guildmaster's Gambit","advCode":"DFS-AM-A009-T4PZ","environment":"Urban (guild halls) with political tension","primaryShowcase":"Social Conflict (formal debate/negotiation)","secondaryMechanics":"Mass Battle potential if negotiations collapse","hook":"Two guilds are on the verge of open conflict over trade rights. The heroes are hired as neutral arbitrators.","successCondition":"Broker an agreement that both guilds accept. Prevent violence.","depthNote":"Neither guild is entirely in the right. The 'fair' solution may not be the stable one.","foreshadowing":"One guildmaster has Glasryan connections that become relevant later","npcPackTitle":"Guild Council","npcPackCode":"DFS-AM-N009-D7KR","vignetteTitle":"The Council Chamber","vignetteCode":"DFS-AM-V009-N6AH","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":10,"phase":2,"phaseName":"The Guild Wars","rank":"Novice → Seasoned","location":"Mottgorte expanding to Aldmoor","title":"The Ratcatcher's Debt","advCode":"DFS-AM-A010-J9WC","environment":"Underground (warrens) with urban connections","primaryShowcase":"Grappling/Restraint (capture, not kill)","secondaryMechanics":"Stealth, Tracking, Social (Ratling negotiation)","hook":"A professional ratcatcher has gone missing in the warrens. His guild wants him found.","successCondition":"Find the ratcatcher and resolve the situation.","depthNote":"The ratcatcher discovered something in the deep warrens. The Ratlings have their own perspective.","foreshadowing":"Seeds Ratling Alliance thread — payoff in Week 40","npcPackTitle":"Ratfolk Contacts","npcPackCode":"DFS-AM-N010-B5MF","vignetteTitle":"The Undercity","vignetteCode":"DFS-AM-V010-G8DP","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":11,"phase":2,"phaseName":"The Guild Wars","rank":"Novice → Seasoned","location":"Mottgorte expanding to Aldmoor","title":"The Counterfeit Cure","advCode":"DFS-AM-A011-R2HK","environment":"Urban (apothecary quarter) with sick-house","primaryShowcase":"Investigation (medical/alchemical)","secondaryMechanics":"Social (interviewing the sick), Academics","hook":"A plague remedy is being sold in the Dockmaw district. It works — too well. The Apothecaries' Guild wants to know why.","successCondition":"Identify the source and nature of the counterfeit cure.","depthNote":"The cure works but has side effects the seller may not know about.","foreshadowing":"Ingredients trace to sources outside normal supply chains","npcPackTitle":"Apothecaries","npcPackCode":"DFS-AM-N011-L4NW","vignetteTitle":"The Plague Cart","vignetteCode":"DFS-AM-V011-V7BT","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":12,"phase":2,"phaseName":"The Guild Wars","rank":"Novice → Seasoned","location":"Mottgorte expanding to Aldmoor","title":"The Aldmoor Express","advCode":"DFS-AM-A012-F6CP","environment":"River journey (barge) with urban bookends","primaryShowcase":"Interludes (journey/downtime)","secondaryMechanics":"Social (fellow passengers), Combat (river pirates)","hook":"A package must reach Aldmoor within five days. The roads are watched. The river is faster.","successCondition":"Deliver the package to Aldmoor on time.","depthNote":"Fellow passengers have their own secrets. The journey reveals character.","foreshadowing":"Introduces Aldmoor as location; connects to Phase 3","npcPackTitle":"Road Wardens","npcPackCode":"DFS-AM-N012-Q3GX","vignetteTitle":"The Milestone","vignetteCode":"DFS-AM-V012-K8RJ","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":13,"phase":3,"phaseName":"The Aldmoor Connection","rank":"Seasoned","location":"Aldmoor","title":"The Academy's Shadow","advCode":"DFS-AM-A013-M8TV","environment":"Urban (Aldmoor academy district)","primaryShowcase":"Investigation (academic intrigue)","secondaryMechanics":"Powers (magical surveillance), Social","hook":"Students at Aldmoor's lesser academy are disappearing. The faculty claims transfers. The parents disagree.","successCondition":"Discover what happened to the missing students.","depthNote":"The academy's research programme has crossed ethical lines.","foreshadowing":"Seeds Academy Secrets thread","npcPackTitle":"Academy Scholars","npcPackCode":"DFS-AM-N013-W5AH","vignetteTitle":"The Lecture Hall","vignetteCode":"DFS-AM-V013-B2FP","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":14,"phase":3,"phaseName":"The Aldmoor Connection","rank":"Seasoned","location":"Aldmoor","title":"The Steel Brotherhood","advCode":"DFS-AM-A014-H3KZ","environment":"Military compound with training grounds","primaryShowcase":"Combat Variations (formation, cavalry)","secondaryMechanics":"Riding (War Boar), Tests (Intimidation)","hook":"The Steel Brotherhood — Ammaria's elite mercenary force — is recruiting. The trials are dangerous. The reward is connections.","successCondition":"Complete the Brotherhood trials and earn recognition.","depthNote":"The Brotherhood's commander has his own agenda for recruiting outsiders.","foreshadowing":"Brotherhood commander mentions 'Kesswick situation'","npcPackTitle":"Ironweld Smiths","npcPackCode":"DFS-AM-N014-T9CM","vignetteTitle":"The Forge Floor","vignetteCode":"DFS-AM-V014-D6NR","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":15,"phase":3,"phaseName":"The Aldmoor Connection","rank":"Seasoned","location":"Aldmoor","title":"The Caravan Contract","advCode":"DFS-AM-A015-P7BW","environment":"Wilderness (trade roads) with way-stations","primaryShowcase":"Dramatic Task (protect moving target)","secondaryMechanics":"Combat (bandit ambush), Survival","hook":"A merchant caravan needs guards for the overland route. The pay is good. The route is not.","successCondition":"Deliver the caravan safely to its destination.","depthNote":"The cargo includes items with troubling implications.","foreshadowing":"Cargo includes items bound for 'the Thornvale estate'","npcPackTitle":"Caravan Guards","npcPackCode":"DFS-AM-N015-J4GL","vignetteTitle":"The Waystation","vignetteCode":"DFS-AM-V015-R8TX","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":16,"phase":3,"phaseName":"The Aldmoor Connection","rank":"Seasoned","location":"Aldmoor","title":"The River Border","advCode":"DFS-AM-A016-C2FN","environment":"Waterway (border crossing) with wilderness","primaryShowcase":"Interludes (journey complications)","secondaryMechanics":"Chase (river pursuit), Social (border officials)","hook":"Passage up the River Thrane requires navigating checkpoints, bribes, and territorial waters.","successCondition":"Navigate the border crossing successfully.","depthNote":"The border guards are human — some corrupt, some principled, all under pressure.","foreshadowing":"Seeds Glasryan Interest thread","npcPackTitle":"River Folk","npcPackCode":"DFS-AM-N016-A7KP","vignetteTitle":"The Crossing","vignetteCode":"DFS-AM-V016-H5MW","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":17,"phase":3,"phaseName":"The Aldmoor Connection","rank":"Seasoned","location":"Aldmoor","title":"The Thornvale Road","advCode":"DFS-AM-A017-V9DH","environment":"Wilderness (forest road) with ruins","primaryShowcase":"Interludes (flashback, campfire)","secondaryMechanics":"Exploration (ancient site), Hazards","hook":"The road through Thornvale forest is faster but avoided by locals for reasons they won't discuss clearly.","successCondition":"Traverse Thornvale safely and reach the destination.","depthNote":"The forest contains remnants of pre-Glasryan civilisation.","foreshadowing":"Major seeds for Week 41's dragon reveal","npcPackTitle":"Thornvale Settlers","npcPackCode":"DFS-AM-N017-G3BZ","vignetteTitle":"The Forest Edge","vignetteCode":"DFS-AM-V017-L6CJ","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":18,"phase":3,"phaseName":"The Aldmoor Connection","rank":"Seasoned","location":"Aldmoor","title":"The Aldmoor Uprising","advCode":"DFS-AM-A018-K4RP","environment":"Urban (Aldmoor) with street conflict","primaryShowcase":"Social Conflict (crowd dynamics)","secondaryMechanics":"Mass Battle potential, Tests","hook":"Labour unrest in Aldmoor's textile district is turning violent. Both sides claim legitimate grievances.","successCondition":"Prevent the uprising from becoming a massacre.","depthNote":"The unrest is being manipulated by outside interests.","foreshadowing":"Seeds Shadow of the Throne thread; reveals Glasryan interest in Aldmoor","npcPackTitle":"Aldmoor Militia","npcPackCode":"DFS-AM-N018-N8FX","vignetteTitle":"The Market Square","vignetteCode":"DFS-AM-V018-W2GT","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":19,"phase":4,"phaseName":"Wilderness & Rivers","rank":"Seasoned","location":"Rural Ammaria","title":"The Lost Expedition","advCode":"DFS-AM-A019-B7MZ","environment":"Wilderness (deep forest) with river","primaryShowcase":"Survival (tracking, navigation)","secondaryMechanics":"Combat (wildlife), Social (survivors)","hook":"A survey expedition into the eastern forests hasn't reported in three weeks.","successCondition":"Find the expedition and determine what happened.","depthNote":"The expedition found something they weren't looking for.","foreshadowing":"Seeds multiple threads depending on discovery","npcPackTitle":"Expedition Survivors","npcPackCode":"DFS-AM-N019-F5HK","vignetteTitle":"The Empty Camp","vignetteCode":"DFS-AM-V019-T3AW","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":20,"phase":4,"phaseName":"Wilderness & Rivers","rank":"Seasoned","location":"Rural Ammaria","title":"The Ferryman's Price","advCode":"DFS-AM-A020-G5NR","environment":"Waterway (river crossing) with isolated settlement","primaryShowcase":"Grappling/Restraint (monster)","secondaryMechanics":"Social (village politics), Investigation","hook":"A remote river crossing has stopped operating. Travellers are going missing.","successCondition":"Restore safe passage at the crossing.","depthNote":"The ferryman's disappearance connects to something ancient.","foreshadowing":"Connects to ancient sites thread","npcPackTitle":"River Traders","npcPackCode":"DFS-AM-N020-P2CL","vignetteTitle":"The River Dock","vignetteCode":"DFS-AM-V020-D9BF","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":21,"phase":4,"phaseName":"Wilderness & Rivers","rank":"Seasoned","location":"Rural Ammaria","title":"The Hunter's Lodge","advCode":"DFS-AM-A021-W3TK","environment":"Wilderness (hunting grounds) with lodge","primaryShowcase":"Tracking and Ambush tactics","secondaryMechanics":"Social (nobility), Combat (dangerous game)","hook":"A noble hunting party has requested professional guides for dangerous quarry.","successCondition":"Ensure a successful and safe hunt.","depthNote":"The nobles discuss politics casually that reveal disturbing plans.","foreshadowing":"Nobles discuss 'the Kesswick situation' casually","npcPackTitle":"Forest Hunters","npcPackCode":"DFS-AM-N021-H8GP","vignetteTitle":"The Trophy Room","vignetteCode":"DFS-AM-V021-M4NX","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":22,"phase":4,"phaseName":"Wilderness & Rivers","rank":"Seasoned","location":"Rural Ammaria","title":"The River Drake's Toll","advCode":"DFS-AM-A022-N6AJ","environment":"River (barge) with shoreline","primaryShowcase":"Combat (aquatic, creature abilities)","secondaryMechanics":"Boating, Environmental hazards (drowning)","hook":"Something has been attacking barges on the middle Thrane.","successCondition":"Neutralise the river drake threat.","depthNote":"The drake's lair contains wreckage bearing Glasryan markings.","foreshadowing":"Drake's lair contains wreckage bearing Glasryan markings","npcPackTitle":"Drake Hunters","npcPackCode":"DFS-AM-N022-V7RW","vignetteTitle":"The Scorched Bank","vignetteCode":"DFS-AM-V022-K2FH","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":23,"phase":4,"phaseName":"Wilderness & Rivers","rank":"Seasoned","location":"Rural Ammaria","title":"The Dyer's Quarter","advCode":"DFS-AM-A023-R9CW","environment":"Urban (industrial district) with canal pollution","primaryShowcase":"Investigation (industrial espionage)","secondaryMechanics":"Hazards (chemical), Social (workers)","hook":"The Textiles Guild's dye formula has been stolen.","successCondition":"Recover the stolen formula and identify the thief.","depthNote":"Industrial processes connect to wider supply chains.","foreshadowing":"Industrial processes connect to wider supply chains","npcPackTitle":"Textile Workers","npcPackCode":"DFS-AM-N023-B4KN","vignetteTitle":"The Colour Vats","vignetteCode":"DFS-AM-V023-J7MP","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":24,"phase":4,"phaseName":"Wilderness & Rivers","rank":"Seasoned","location":"Rural Ammaria","title":"The Apothecary's Secret","advCode":"DFS-AM-A024-L3GF","environment":"Urban (guild quarter) with underground laboratory","primaryShowcase":"Investigation (alchemical mystery)","secondaryMechanics":"Powers (detect poison), Social","hook":"A respected Compound Master has died under mysterious circumstances.","successCondition":"Determine the cause of death and identify the responsible party.","depthNote":"The research connects to 'treatments' being developed for Phase 6.","foreshadowing":"Research connects to 'treatments' being developed — seeds Phase 6","npcPackTitle":"Alchemists","npcPackCode":"DFS-AM-N024-T6AX","vignetteTitle":"The Distillery","vignetteCode":"DFS-AM-V024-G2HR","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":25,"phase":5,"phaseName":"The Kesswick Crisis","rank":"Seasoned → Veteran","location":"Kesswick","title":"The Kesswick Summons","advCode":"DFS-AM-A025-F8NV","environment":"Urban (Kesswick) with merchant quarter","primaryShowcase":"Social Conflict (political manoeuvring)","secondaryMechanics":"Investigation, Tests","hook":"Kesswick's tribute assessment has been increased dramatically. The town council is in crisis.","successCondition":"Navigate Kesswick's political crisis and establish a viable position.","depthNote":"Opens Phase 5's sustained Kesswick crisis arc.","foreshadowing":"Opens Phase 5's sustained Kesswick crisis arc","npcPackTitle":"Kesswick Gentry","npcPackCode":"DFS-AM-N025-C5BW","vignetteTitle":"The Manor Gates","vignetteCode":"DFS-AM-V025-P9DL","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":26,"phase":5,"phaseName":"The Kesswick Crisis","rank":"Seasoned → Veteran","location":"Kesswick","title":"The Covenant's Price","advCode":"DFS-AM-A026-H2TJ","environment":"Urban (Kesswick academy quarter) with underground vault","primaryShowcase":"Powers (ritual magic, counterspelling)","secondaryMechanics":"Dramatic Task (ritual completion), Investigation","hook":"Kesswick's Covenant chapter offers a solution to the tribute crisis. The price is knowledge.","successCondition":"Complete the Covenant's task and secure their assistance.","depthNote":"The Covenant's interest isn't purely academic.","foreshadowing":"Deepens Academy Secrets thread","npcPackTitle":"Covenant Agents","npcPackCode":"DFS-AM-N026-R7KP","vignetteTitle":"The Sealed Room","vignetteCode":"DFS-AM-V026-W4FZ","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":27,"phase":5,"phaseName":"The Kesswick Crisis","rank":"Seasoned → Veteran","location":"Kesswick","title":"The Smuggler's Run","advCode":"DFS-AM-A027-D7BK","environment":"Waterway/underground (smuggling tunnels)","primaryShowcase":"Stealth/Infiltration","secondaryMechanics":"Chase, Combat (guards)","hook":"Kesswick's official channels are watched. Supplies need alternative routes.","successCondition":"Establish a working smuggling route.","depthNote":"Connects to Brotherhood Politics thread.","foreshadowing":"Connects to Brotherhood Politics thread","npcPackTitle":"Smuggler Crews","npcPackCode":"DFS-AM-N027-L3MH","vignetteTitle":"The Hidden Berth","vignetteCode":"DFS-AM-V027-N6CX","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":28,"phase":5,"phaseName":"The Kesswick Crisis","rank":"Seasoned → Veteran","location":"Kesswick","title":"The Inquisitor's Visit","advCode":"DFS-AM-A028-V4RP","environment":"Urban (Kesswick) with administrative quarter","primaryShowcase":"Social Conflict (interrogation, deception)","secondaryMechanics":"Investigation (counter-intelligence), Stealth","hook":"A Glasryan assessor has arrived to 'verify' Kesswick's tribute compliance.","successCondition":"Survive the Inquisitor's investigation without exposing the resistance.","depthNote":"Major seeds for Glasryan Interest thread.","foreshadowing":"Major seeds for Glasryan Interest thread","npcPackTitle":"Glasryan Officials","npcPackCode":"DFS-AM-N028-F9GW","vignetteTitle":"The Imperial Banner","vignetteCode":"DFS-AM-V028-T2AL","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":29,"phase":5,"phaseName":"The Kesswick Crisis","rank":"Seasoned → Veteran","location":"Kesswick","title":"The Underground Railroad","advCode":"DFS-AM-A029-K8CZ","environment":"Wilderness/underground (escape routes)","primaryShowcase":"Dramatic Task (escort under pressure)","secondaryMechanics":"Survival, Combat (pursuit), Social","hook":"Families marked for 'tribute adjustment' need to disappear before the assessor's deadline.","successCondition":"Get the families to safety.","depthNote":"Establishes escape networks for later use.","foreshadowing":"Establishes escape networks for later use","npcPackTitle":"Resistance Contacts","npcPackCode":"DFS-AM-N029-H5NJ","vignetteTitle":"The Safe House","vignetteCode":"DFS-AM-V029-B3TX","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":30,"phase":5,"phaseName":"The Kesswick Crisis","rank":"Seasoned → Veteran","location":"Kesswick","title":"The Kesswick Decision","advCode":"DFS-AM-A030-Q5FH","environment":"Urban (Kesswick) with multiple locations","primaryShowcase":"Mass Battle (urban resistance)","secondaryMechanics":"All previous mechanics potentially relevant","hook":"The crisis reaches its peak. Kesswick must submit, resist, or find a third path.","successCondition":"Resolve the Kesswick crisis in a way the heroes can live with.","depthNote":"Every solution costs something irreplaceable.","foreshadowing":"Consequences ripple through remaining phases","npcPackTitle":"Kesswick Factions","npcPackCode":"DFS-AM-N030-W8DP","vignetteTitle":"The Council Fire","vignetteCode":"DFS-AM-V030-M7KR","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":31,"phase":6,"phaseName":"The Blackmere Darkness","rank":"Veteran","location":"Blackmere","title":"The Blackmere Contract","advCode":"DFS-AM-A031-A3GN","environment":"Urban (Blackmere) with mining district","primaryShowcase":"Investigation (horror elements)","secondaryMechanics":"Hazards (mine), Social (miners)","hook":"Blackmere's mines have always been dangerous, but something new is killing miners in the deep shafts.","successCondition":"Identify the new threat in the mines.","depthNote":"Opens Phase 6's supernatural horror arc.","foreshadowing":"Opens Phase 6's supernatural horror arc","npcPackTitle":"Blackmere Miners","npcPackCode":"DFS-AM-N031-J6BV","vignetteTitle":"The Pit Head","vignetteCode":"DFS-AM-V031-R4CW","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":32,"phase":6,"phaseName":"The Blackmere Darkness","rank":"Veteran","location":"Blackmere","title":"The Deep Shaft","advCode":"DFS-AM-A032-T9KW","environment":"Underground (deep mines) with water intrusion","primaryShowcase":"Hazards/Survival (underground)","secondaryMechanics":"Combat (creatures), Exploration","hook":"The deepest shaft in Blackmere has been sealed for decades. Someone has opened it.","successCondition":"Explore the deep shaft and neutralise the immediate threat.","depthNote":"Major Shadow of the Throne development.","foreshadowing":"Major Shadow of the Throne development","npcPackTitle":"Deep Workers","npcPackCode":"DFS-AM-N032-P2FX","vignetteTitle":"The Descent","vignetteCode":"DFS-AM-V032-L8AH","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":33,"phase":6,"phaseName":"The Blackmere Darkness","rank":"Veteran","location":"Blackmere","title":"The Pale Sickness","advCode":"DFS-AM-A033-N4BL","environment":"Urban (Blackmere) with hospital/quarantine","primaryShowcase":"Powers (healing, diagnosis)","secondaryMechanics":"Social (panic management), Investigation","hook":"A strange ailment is spreading through Blackmere's mining families. It's not contagious, but it's not natural.","successCondition":"Identify the cause and develop a treatment or cure.","depthNote":"The 'sick' are changing, not just dying.","foreshadowing":"Connects to powers/substances from below","npcPackTitle":"Plague Responders","npcPackCode":"DFS-AM-N033-G7MR","vignetteTitle":"The Quarantine","vignetteCode":"DFS-AM-V033-D5KJ","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":34,"phase":6,"phaseName":"The Blackmere Darkness","rank":"Veteran","location":"Blackmere","title":"The Archive Below","advCode":"DFS-AM-A034-F7NR","environment":"Underground (pre-Glasryan ruins) with library","primaryShowcase":"Investigation (ancient knowledge)","secondaryMechanics":"Traps, Powers (wards), Exploration","hook":"Miners broke through into an ancient archive — something from before the Glasryans came.","successCondition":"Retrieve the specified documents and escape safely.","depthNote":"The documents reveal truths about Glasryan history that could be revolutionary.","foreshadowing":"Major Academy Secrets payoff","npcPackTitle":"Archive Keepers","npcPackCode":"DFS-AM-N034-V3CZ","vignetteTitle":"The Locked Door","vignetteCode":"DFS-AM-V034-H9BW","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":35,"phase":6,"phaseName":"The Blackmere Darkness","rank":"Veteran","location":"Blackmere","title":"The Shadow Under Blackmere","advCode":"DFS-AM-A035-M2TP","environment":"Underground (deep) with horror elements","primaryShowcase":"Horror (Fear checks, sanity pressure)","secondaryMechanics":"Environmental hazards, Interludes (flashback)","hook":"Something from the deep places has begun emerging at night. Miners disappear. Sentries report impossible sightings.","successCondition":"Confront and defeat (or contain) the entity from beneath Blackmere.","depthNote":"The entity was imprisoned long ago for reasons. Its 'defeat' may not be permanent.","foreshadowing":"Shadow of the Throne climax for Phase 6","npcPackTitle":"Shadow Hunters","npcPackCode":"DFS-AM-N035-K6FH","vignetteTitle":"The Tremor","vignetteCode":"DFS-AM-V035-W4GL","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":36,"phase":6,"phaseName":"The Blackmere Darkness","rank":"Veteran","location":"Blackmere","title":"The Blackmere Reckoning","advCode":"DFS-AM-A036-C8AJ","environment":"Urban/underground (Blackmere) multiple locations","primaryShowcase":"Dramatic Task (sealing ritual)","secondaryMechanics":"Mass Battle potential, Powers","hook":"The threat from below must be addressed permanently — or Blackmere evacuated.","successCondition":"Resolve the Blackmere crisis. The city survives — or doesn't.","depthNote":"Every solution costs something irreplaceable. Some residents have adapted to the darkness.","foreshadowing":"Sets up consequences for Phase 9","npcPackTitle":"Blackmere Leaders","npcPackCode":"DFS-AM-N036-B5NX","vignetteTitle":"The Cave-In","vignetteCode":"DFS-AM-V036-T3RP","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":37,"phase":7,"phaseName":"The Grimhollow Operation","rank":"Veteran","location":"Grimhollow with Thornvale","title":"The Grimhollow Pipeline","advCode":"DFS-AM-A037-J4CK","environment":"Urban (Grimhollow) with tunnel network","primaryShowcase":"Heist (multi-stage infiltration)","secondaryMechanics":"Stealth, Dramatic Task, Social (underworld)","hook":"The Brotherhood's smuggling operation through Grimhollow has become too successful — attracting official attention.","successCondition":"Map the pipeline's vulnerabilities and report.","depthNote":"The pipeline moves people and information, not just goods.","foreshadowing":"Grimhollow Pipeline payoff begins","npcPackTitle":"Pipeline Workers","npcPackCode":"DFS-AM-N037-R8GV","vignetteTitle":"The Supply Line","vignetteCode":"DFS-AM-V037-N2FH","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":38,"phase":7,"phaseName":"The Grimhollow Operation","rank":"Veteran","location":"Grimhollow with Thornvale","title":"The Alchemist's Garden","advCode":"DFS-AM-A038-G7NP","environment":"Rural/wilderness (hidden compound)","primaryShowcase":"Powers (alchemical magic)","secondaryMechanics":"Investigation, Combat (constructs)","hook":"A rogue alchemist has established an illegal laboratory. The Guild wants it shut down. The Brotherhood wants its output.","successCondition":"Locate the laboratory and resolve the situation.","depthNote":"The alchemist is creating treatments the Guild refuses to produce.","foreshadowing":"Products connect to Phase 8 developments","npcPackTitle":"Herbalists","npcPackCode":"DFS-AM-N038-L5BZ","vignetteTitle":"The Greenhouse","vignetteCode":"DFS-AM-V038-D9KW","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":39,"phase":7,"phaseName":"The Grimhollow Operation","rank":"Veteran","location":"Grimhollow with Thornvale","title":"The Border Crossing","advCode":"DFS-AM-A039-W5TH","environment":"Wilderness (border region) with checkpoint","primaryShowcase":"Social (deception, bribery)","secondaryMechanics":"Grappling (capture scenario), Stealth","hook":"A high-value package needs to cross the border into Glasryan-controlled territory.","successCondition":"Get the package across the border successfully.","depthNote":"The package is a person with crucial information and their own agenda.","foreshadowing":"Connects to Glasryan Interest thread","npcPackTitle":"Border Guards","npcPackCode":"DFS-AM-N039-H3MJ","vignetteTitle":"The Checkpoint","vignetteCode":"DFS-AM-V039-P6AX","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":40,"phase":7,"phaseName":"The Grimhollow Operation","rank":"Veteran","location":"Grimhollow with Thornvale","title":"The Ratling Compact","advCode":"DFS-AM-A040-B2FK","environment":"Underground (deep warrens) with negotiation chamber","primaryShowcase":"Social Conflict (diplomatic mission)","secondaryMechanics":"Exploration, Combat (potential)","hook":"The Ratling communities have information crucial to upcoming operations. A formal compact must be negotiated.","successCondition":"Negotiate a formal alliance that serves both parties.","depthNote":"True alliance requires genuine respect, not just transaction.","foreshadowing":"Ratling Alliance thread payoff","npcPackTitle":"Ratling Envoys","npcPackCode":"DFS-AM-N040-T7CR","vignetteTitle":"The Sewer Gate","vignetteCode":"DFS-AM-V040-K4NL","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":41,"phase":7,"phaseName":"The Grimhollow Operation","rank":"Veteran","location":"Grimhollow with Thornvale","title":"The Thornvale Shipment","advCode":"DFS-AM-A041-P9AW","environment":"Wilderness (Thornvale forest) with underground lair","primaryShowcase":"Combat (dragon encounter)","secondaryMechanics":"Fear, Mass Battle (if allies recruited), Hazards","hook":"The 'shipment' everyone's been whispering about since Week 01 finally arrives. It's not goods. It's a dragon egg — and it's hatching.","successCondition":"Prevent the dragon from devastating the region.","depthNote":"The dragon can potentially be reasoned with. Who brought the egg here reveals disturbing plans.","foreshadowing":"Thornvale Shipment thread PAYOFF","npcPackTitle":"Thornvale Merchants","npcPackCode":"DFS-AM-N041-F2GH","vignetteTitle":"The Loaded Wagon","vignetteCode":"DFS-AM-V041-V8BN","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":42,"phase":7,"phaseName":"The Grimhollow Operation","rank":"Veteran","location":"Grimhollow with Thornvale","title":"The Grimhollow Reckoning","advCode":"DFS-AM-A042-L6KZ","environment":"Urban (Grimhollow) with multiple locations","primaryShowcase":"Mass Battle (criminal war)","secondaryMechanics":"Social, Stealth, all previous skills","hook":"Power in Grimhollow's underworld is shifting. The heroes' actions have created this moment.","successCondition":"Ensure favourable parties control Grimhollow's underworld. Survive.","depthNote":"No faction is clean. The heroes may have created the very crisis they must resolve.","foreshadowing":"Sets up Phase 8 transitions","npcPackTitle":"Grimhollow Factions","npcPackCode":"DFS-AM-N042-C4DP","vignetteTitle":"The Furnace","vignetteCode":"DFS-AM-V042-M3TX","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":43,"phase":8,"phaseName":"Port Thrane & The Sea","rank":"Veteran → Heroic","location":"Port Thrane","title":"The Port Thrane Introduction","advCode":"DFS-AM-A043-H8NF","environment":"Coastal urban (Port Thrane) with harbour","primaryShowcase":"Chase Sequence (naval/harbour)","secondaryMechanics":"Social (maritime culture), Combat","hook":"Port Thrane is Ammaria's gateway to the Saltlands. A contact needs extraction from a compromised position.","successCondition":"Extract the contact from Port Thrane safely.","depthNote":"The contact's information about Glasryan naval movements may not be entirely trustworthy.","foreshadowing":"Opens Phase 8's naval/Saltlands arc","npcPackTitle":"Port Thrane Locals","npcPackCode":"DFS-AM-N043-W5CK","vignetteTitle":"The Harbour Bell","vignetteCode":"DFS-AM-V043-R2GP","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":44,"phase":8,"phaseName":"Port Thrane & The Sea","rank":"Veteran → Heroic","location":"Port Thrane","title":"The Smuggler's Cove","advCode":"DFS-AM-A044-N3BV","environment":"Coastal (hidden harbour) with caves","primaryShowcase":"Boating/Naval combat","secondaryMechanics":"Stealth, Exploration, Social","hook":"The Saltlands corsairs maintain a secret resupply point. Access means resources beyond Glasryan control.","successCondition":"Establish working relations with the corsairs.","depthNote":"The corsairs have their own politics. What they want may conflict with other alliances.","foreshadowing":"Glasryan Interest thread major development","npcPackTitle":"Cove Smugglers","npcPackCode":"DFS-AM-N044-J7FZ","vignetteTitle":"The Hidden Inlet","vignetteCode":"DFS-AM-V044-A6KH","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":45,"phase":8,"phaseName":"Port Thrane & The Sea","rank":"Veteran → Heroic","location":"Port Thrane","title":"The Brotherhood's Choice","advCode":"DFS-AM-A045-T5MW","environment":"Urban (Port Thrane) with multiple locations","primaryShowcase":"Social Conflict (faction politics)","secondaryMechanics":"Combat (gang conflict), Investigation","hook":"The Brotherhood must decide its future. One faction wants accommodation. Another wants resistance.","successCondition":"Influence the Brotherhood's decision.","depthNote":"Neither faction is wholly right or wrong.","foreshadowing":"Brotherhood Politics thread PAYOFF","npcPackTitle":"Brotherhood Council","npcPackCode":"DFS-AM-N045-G4NR","vignetteTitle":"The Final Ledger","vignetteCode":"DFS-AM-V045-L9BX","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":46,"phase":8,"phaseName":"Port Thrane & The Sea","rank":"Veteran → Heroic","location":"Port Thrane","title":"The Naval Patrol","advCode":"DFS-AM-A046-K2CH","environment":"Open water with naval vessels","primaryShowcase":"Mass Battle (naval engagement)","secondaryMechanics":"Boating, Social (crew management)","hook":"Glasryan naval patrols have intensified. Someone needs to understand their patterns from sea level.","successCondition":"Gather intelligence on Glasryan naval operations.","depthNote":"Glasryan sailors aren't monsters — they're professionals. Engagement reveals human complexity.","foreshadowing":"Sets up Phase 9's larger conflict","npcPackTitle":"Imperial Navy","npcPackCode":"DFS-AM-N046-P8GJ","vignetteTitle":"The Signal Fire","vignetteCode":"DFS-AM-V046-D7AW","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":47,"phase":8,"phaseName":"Port Thrane & The Sea","rank":"Veteran → Heroic","location":"Port Thrane","title":"The Academy's Return","advCode":"DFS-AM-A047-V7FN","environment":"Coastal/urban (Port Thrane academy outpost)","primaryShowcase":"Powers (advanced magic)","secondaryMechanics":"Investigation, Social, Combat","hook":"The Covenant of Letters needs trusted agents to investigate an anomaly their own people can't approach.","successCondition":"Investigate the anomaly and report findings.","depthNote":"The anomaly connects to everything. The Covenant's interest isn't purely academic.","foreshadowing":"Academy Secrets thread PAYOFF","npcPackTitle":"Academy Alumni","npcPackCode":"DFS-AM-N047-B3KL","vignetteTitle":"The Graduation","vignetteCode":"DFS-AM-V047-T4MR","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":48,"phase":8,"phaseName":"Port Thrane & The Sea","rank":"Veteran → Heroic","location":"Port Thrane","title":"The Saltlands Gateway","advCode":"DFS-AM-A048-F4TP","environment":"Coastal/maritime (open water) with Saltlands elements","primaryShowcase":"Interludes (sea journey)","secondaryMechanics":"Naval combat, Social (corsair culture)","hook":"An opportunity arises to visit the Saltlands — the free territories beyond Glasryan reach.","successCondition":"Successfully reach the Saltlands and establish contact.","depthNote":"The Saltlands aren't paradise. 'Freedom' means something different than hoped.","foreshadowing":"Sets up campaign conclusion options","npcPackTitle":"Gateway Traders","npcPackCode":"DFS-AM-N048-H6CX","vignetteTitle":"The Horizon","vignetteCode":"DFS-AM-V048-W5NJ","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":49,"phase":9,"phaseName":"The Reckoning","rank":"Heroic","location":"Campaign-dependent","title":"The Tribute Comes Due","advCode":"DFS-AM-A049-D9KR","environment":"Multiple (campaign-dependent)","primaryShowcase":"Mass Battle (full scale)","secondaryMechanics":"All previous mechanics potentially relevant","hook":"Everything converges. The Glasryans have noticed. Every relationship, every enemy, every choice comes due.","successCondition":"Survive the Glasryan response. Protect what matters most.","depthNote":"This is not a 'win' scenario — it's a 'what can be saved' scenario.","foreshadowing":"Shadow of the Throne, Glasryan Interest — all threads converge","npcPackTitle":"Tribute Collectors","npcPackCode":"DFS-AM-N049-N2BV","vignetteTitle":"The Assessment","vignetteCode":"DFS-AM-V049-G8FP","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}},{"weekNumber":50,"phase":9,"phaseName":"The Reckoning","rank":"Heroic","location":"Campaign-dependent","title":"Paradise Lost","advCode":"DFS-AM-A050-R6AW","environment":"Campaign-dependent","primaryShowcase":"Dramatic Task (campaign resolution)","secondaryMechanics":"Full toolkit available","hook":"The dust settles. Ammaria has changed. What remains? What was built? What future exists?","successCondition":"Achieve the best possible resolution given everything that's happened.","depthNote":"There is no 'perfect' ending. The question isn't whether the heroes won — it's what kind of world they made.","foreshadowing":"The Coming Storm — whatever comes next","npcPackTitle":"The Reckoning","npcPackCode":"DFS-AM-N050-K4MH","vignetteTitle":"The Last Day","vignetteCode":"DFS-AM-V050-J3CZ","status":"catalogue","npcs":[],"scenes":[],"notes":"","seedsPlanted":[],"seedsPaidOff":[],"wordCounts":{"adventure":0,"npcPack":0,"vignette":0}}],"foreshadowingThreads":[{"id":"thornvale-shipment","name":"The Thornvale Shipment","planted":[1,5,15,17],"payoff":41,"description":"Dragon egg shipment whispered about from Week 01, hatching in Week 41"},{"id":"shadow-of-throne","name":"Shadow of the Throne","planted":[2,5,18],"payoff":35,"description":"Ancient darkness stirring beneath Ammaria, culminating in Blackmere"},{"id":"academy-secrets","name":"Academy Secrets","planted":[13,26],"payoff":47,"description":"Covenant of Letters hiding dangerous knowledge"},{"id":"kesswick-crisis","name":"The Kesswick Problem","planted":[4,8,14,21],"payoff":30,"description":"Tribute crisis building across phases to Kesswick Decision"},{"id":"ratling-alliance","name":"Ratling Alliance","planted":[2,10],"payoff":40,"description":"Relationship with underground ratling communities"},{"id":"brotherhood-politics","name":"Brotherhood Politics","planted":[3,6,27,37],"payoff":45,"description":"Brotherhood faction struggle over accommodation vs resistance"},{"id":"glasryan-interest","name":"Glasryan Interest","planted":[16,22,28,39,44],"payoff":49,"description":"Glasryan attention increasing as heroes' actions accumulate"},{"id":"grimhollow-pipeline","name":"Grimhollow Pipeline","planted":[3],"payoff":37,"description":"Smuggling network through Grimhollow"}]};
+const SEED_DATA = PLACEHOLDER_SEED;
+
+init();
+</script>
+</body>
+</html>
