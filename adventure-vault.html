@@ -821,6 +821,7 @@ header .subtitle {
   border-bottom-color: #d4af37;
 }
 </style>
+  <script src="encoding-fix.js"></script>
   <script src="marked.min.js"></script>
 </head>
 <body>
@@ -1329,21 +1330,9 @@ function renderMarkdownContent() {
   }
   
   // Fix common UTF-8 encoding issues before rendering
-  let cleanedContent = currentAdventure.content;
-  
-  // Common mojibake patterns
-  const encodingFixes = [
-    [/â€"/g, '—'],           // em dash
-    [/â€™/g, "'"],           // right single quote
-    [/â€œ/g, '"'],           // left double quote  
-    [/â€\x9d/g, '"'],        // right double quote
-    [/Â£/g, '£'],            // pound sign
-    [/â€"/g, '–'],           // en dash
-  ];
-  
-  encodingFixes.forEach(([pattern, replacement]) => {
-    cleanedContent = cleanedContent.replace(pattern, replacement);
-  });
+  let cleanedContent = window.EncodingFix ? 
+    window.EncodingFix.fix(currentAdventure.content) : 
+    currentAdventure.content;
   
   // Configure marked for better rendering
   if (typeof marked !== 'undefined') {
