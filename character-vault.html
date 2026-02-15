@@ -3065,14 +3065,18 @@ function showStatusView(){
   hideBottomBar();currentNPC=null;activePanel=null;navPush({type:'status'});updateBreadcrumb();
   const el=document.getElementById('mainContent');el.classList.remove('empty-state');el.style.overflowY='auto';
   const rows=allNPCs.map(n=>{
-    const audit=runBuildAudit(n);const legal=audit.every(r=>r.pass);
+    // NPCs don't need ancestry/edges/hindrances validation - just check they have stats
+    const hasStats = n.agility > 0 && Object.keys(n.skills).length > 0;
+    const legal = hasStats; // NPCs are "legal" if they have basic stats
     const inCanon=canonCommitted.has(n.name);
     const lc=getLifecycle(n.name);
     const dirty=isCharDirty(n.name);
     const lcColour=lc==='published'?'var(--green)':lc==='committed'?'#e8b84e':'var(--text-dim)';
     const lcIcon=lc==='published'?'🔒':lc==='committed'?'📦':'📝';
     const dirtyIcon=dirty?(lc==='published'?'<span style="color:#ee6666" title="Errata pending">⚠</span>':'<span style="color:#e8b84e" title="Edited">✏️</span>'):'';
-    return `<tr><td style="font-family:monospace;font-size:11px;color:var(--text-dim)">${esc(n.refCode||'—')}</td><td style="cursor:pointer;color:var(--accent)" onclick="selectNPC('${esc(n.name).replace(/'/g,"\\'")}')">${esc(n.name)}</td><td>${esc(n.category||'NPC')}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td>${legal?'✅':'❌'}</td><td style="color:${lcColour}">${lcIcon} ${lc}</td><td>${dirtyIcon}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">&#${n.statComplete?'10003':'8212'};</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">&#${n.narrativeComplete?'10003':'8212'};</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">&#${n.fgReady?'10003':'8212'};</td></tr>`;
+    // Don't show validation icon for NPCs - it's visual noise
+    const legalIcon = hasStats ? '' : '<span style="color:var(--red)" title="Missing stats">⚠️</span>';
+    return `<tr><td style="font-family:monospace;font-size:11px;color:var(--text-dim)">${esc(n.refCode||'—')}</td><td style="cursor:pointer;color:var(--accent)" onclick="selectNPC('${esc(n.name).replace(/'/g,"\\'")}')">${esc(n.name)}</td><td>${esc(n.category||'NPC')}</td><td>${esc(n.region)}</td><td>${esc(n.tier)}</td><td>${legalIcon}</td><td style="color:${lcColour}">${lcIcon} ${lc}</td><td>${dirtyIcon}</td><td style="color:${n.statComplete?'var(--green)':'var(--text-dim)'}">&#${n.statComplete?'10003':'8212'};</td><td style="color:${n.narrativeComplete?'var(--green)':'var(--text-dim)'}">&#${n.narrativeComplete?'10003':'8212'};</td><td style="color:${n.fgReady?'var(--green)':'var(--text-dim)'}">&#${n.fgReady?'10003':'8212'};</td></tr>`;
   }).join('');
   const prodSummary=_productRegistry.products.length?`<div style="margin-bottom:14px;font-size:13px;color:var(--text-dim)">Products: ${_productRegistry.products.map(p=>`<span style="color:${p.status==='released'?'var(--green)':p.status==='in-review'?'#e8b84e':'var(--text-dim)'}">${esc(p.code)}</span>`).join(', ')} · <a style="color:var(--accent);cursor:pointer" onclick="showProductsModal()">Manage</a></div>`:'';
   const coreNames=window.CharacterForge?.data?.coreSkills||['Athletics','Common Knowledge','Notice','Persuasion','Stealth'];
