@@ -1315,6 +1315,33 @@ function renderMarkdownContent() {
     return;
   }
   
+  // Fix common UTF-8 encoding issues before rendering
+  let cleanedContent = currentAdventure.content;
+  
+  // Common mojibake patterns (UTF-8 misinterpreted as other encodings)
+  const encodingFixes = [
+    [/â€"/g, '—'],           // em dash
+    [/â€™/g, '''],           // right single quote
+    [/â€œ/g, '"'],           // left double quote  
+    [/â€\x9d/g, '"'],        // right double quote
+    [/Â£/g, '£'],            // pound sign
+    [/â‚¡/g, '₡'],            // colon currency
+    [/â€"/g, '–'],           // en dash
+    [/Ã—/g, '×'],            // multiplication sign
+    [/Ã·/g, '÷'],            // division sign
+    [/Â°/g, '°'],            // degree sign
+    [/â€¢/g, '•'],           // bullet point
+    [/â€¦/g, '…'],           // ellipsis
+    [/Â±/g, '±'],            // plus-minus
+    [/Â½/g, '½'],            // one half
+    [/Â¼/g, '¼'],            // one quarter
+    [/Â¾/g, '¾'],            // three quarters
+  ];
+  
+  encodingFixes.forEach(([pattern, replacement]) => {
+    cleanedContent = cleanedContent.replace(pattern, replacement);
+  });
+  
   // Configure marked options for better rendering
   if (typeof marked !== 'undefined') {
     marked.setOptions({
@@ -1326,7 +1353,7 @@ function renderMarkdownContent() {
     
     // Render the markdown to HTML
     try {
-      const html = marked.parse(currentAdventure.content);
+      const html = marked.parse(cleanedContent);
       contentDisplay.innerHTML = html;
     } catch (err) {
       console.error('Markdown rendering failed:', err);
@@ -1335,7 +1362,7 @@ function renderMarkdownContent() {
   } else {
     // Fallback if marked.js didn't load
     contentDisplay.innerHTML = '<pre style="white-space: pre-wrap;">' + 
-      (currentAdventure.content || 'No content loaded') + 
+      (cleanedContent || 'No content loaded') + 
       '</pre>';
   }
 }
