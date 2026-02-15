@@ -265,6 +265,16 @@ var DICEFORGE_AUTH=false;
     <button onclick="manageOpenAIKey()" style="font-size:10px;padding:1px 6px;background:none;border:1px solid var(--border);color:var(--text-dim);border-radius:3px;cursor:pointer" title="Manage OpenAI API key for portrait generation">🎨 AI Key</button>
   </div>
 </header>
+
+<!-- Permanent Action Bar -->
+<div id="permanentActionBar" style="background:var(--bg-secondary);border-bottom:2px solid var(--accent);padding:8px 20px;display:flex;align-items:center;gap:12px;z-index:100;">
+  <button class="btn sm primary" onclick="if(currentNPC)showPanel('statblock');else alert('Please select a character first')" style="background:var(--accent);border-color:var(--accent);color:#000">📋 Export</button>
+  <button class="btn sm" onclick="if(currentNPC)showPanel('edit');else alert('Please select a character first')">✏️ Edit</button>
+  <button class="btn sm" onclick="if(currentNPC)showPanel('audit');else alert('Please select a character first')">🔍 Audit</button>
+  <button class="btn sm" onclick="window.location.href='#'" title="Create new character">+ New Character</button>
+  <div style="margin-left:auto;font-size:12px;color:var(--text-dim)" id="selectedCharName">No character selected</div>
+</div>
+
 <div id="breadcrumb"><span class="bc-current">Home</span></div>
 <div id="kbOverlay" onclick="if(event.target===this)toggleKBHelp()">
   <div class="kb-panel">
@@ -436,6 +446,9 @@ function clearView(){
   el.innerHTML='Select an NPC or create a new one';
   el.classList.add('empty-state');
   document.getElementById('categoryFilter').value='';
+  const nameDisplay=document.getElementById('selectedCharName');
+  if(nameDisplay)nameDisplay.textContent='No character selected';
+}
   document.getElementById('regionFilter').value='';
   document.getElementById('lifecycleFilter').value='';
   document.getElementById('searchInput').value='';
@@ -1234,7 +1247,7 @@ function updateHeaderStats(){
   document.getElementById("headerStats").innerHTML=`<span style="${hdrLink}" onclick="headerFilter('category','Pre-gen')" title="Filter to Pre-gens"><span class="stat-num">${pg}</span> Pre-gens</span><span style="${hdrLink}" onclick="headerFilter('category','NPC')" title="Filter to NPCs"><span class="stat-num">${np}</span> NPCs</span><span style="${hdrLink}" onclick="headerFilter('lifecycle','committed')" title="Filter to committed characters"><span class="stat-num">${cn}</span> 📦 Canon</span>${dirtySpan}<span style="${hdrLink}" onclick="showStatusView()" title="Open production status"><span class="stat-num">${c}</span> Complete</span><span style="${hdrLink}" onclick="showStatusView()" title="Open production status"><span class="stat-num">${f}</span> FG Ready</span>`;
 }
 
-function selectNPC(name){flushSave();currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;currentNPC._lockAcknowledged=false;_undoStack=[];_redoStack=[];_lastSnapshot=_snap(currentNPC);if(!activePanel)activePanel='audit';renderDetail();filterNPCs();navPush({type:'character',name:name});updateBreadcrumb();}
+function selectNPC(name){flushSave();currentNPC=allNPCs.find(n=>n.name===name);if(!currentNPC)return;currentNPC._lockAcknowledged=false;_undoStack=[];_redoStack=[];_lastSnapshot=_snap(currentNPC);if(!activePanel)activePanel='audit';renderDetail();filterNPCs();navPush({type:'character',name:name});updateBreadcrumb();const nameDisplay=document.getElementById('selectedCharName');if(nameDisplay)nameDisplay.textContent=`Selected: ${currentNPC.name}`;}
 function selectByRef(ref){const n=allNPCs.find(c=>c.refCode===ref);if(n)selectNPC(n.name);}
 
 function renderDetail(){
