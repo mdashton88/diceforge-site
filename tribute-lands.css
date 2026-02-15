@@ -60,7 +60,7 @@ a:hover {
 .container {
   display: grid;
   grid-template-columns: 280px 1fr;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto auto 1fr auto;
   height: 100vh;
   gap: 0;
 }
@@ -614,3 +614,133 @@ select {
 .flex-gap { gap: 10px; }
 .flex-between { justify-content: space-between; }
 .flex-center { align-items: center; }
+
+/* ═══ MARKDOWN CONTENT RENDERING (Adventure Vault) ═══ */
+.content-display h1 {
+  font-size: 2em;
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 10px;
+  margin: 30px 0 20px 0;
+}
+
+.content-display h2 {
+  font-size: 1.5em;
+  color: #d4af37;
+  margin: 25px 0 15px 0;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  padding-bottom: 5px;
+}
+
+.content-display h3 {
+  font-size: 1.2em;
+  color: #b8941f;
+  margin: 20px 0 10px 0;
+}
+
+.content-display h4 {
+  font-size: 1em;
+  color: #8b7220;
+  margin: 15px 0 8px 0;
+  font-weight: bold;
+}
+
+.content-display p {
+  margin: 12px 0;
+  color: #e0e0e0;
+}
+
+.content-display blockquote {
+  border-left: 4px solid var(--accent);
+  padding-left: 20px;
+  margin: 15px 0;
+  color: #b0b0b0;
+  font-style: italic;
+  background: rgba(196, 154, 74, 0.1);
+  padding: 15px 20px;
+  border-radius: 4px;
+}
+
+.content-display ul, .content-display ol {
+  margin: 12px 0 12px 25px;
+  color: #d0d0d0;
+}
+
+.content-display li {
+  margin: 6px 0;
+}
+
+.content-display table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 20px 0;
+  background: rgba(0,0,0,0.3);
+}
+
+.content-display th {
+  background: rgba(196, 154, 74, 0.3);
+  color: var(--accent);
+  padding: 12px;
+  text-align: left;
+  border: 1px solid var(--border);
+  font-weight: bold;
+}
+
+.content-display td {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  color: #d0d0d0;
+}
+
+.content-display tr:nth-child(even) {
+  background: rgba(255,255,255,0.02);
+}
+
+.content-display hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 30px 0;
+}
+
+.content-display code {
+  background: rgba(0,0,0,0.4);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  color: #e0e0e0;
+}
+
+.content-display pre {
+  background: rgba(0,0,0,0.4);
+  padding: 15px;
+  border-radius: 4px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+}
+
+.content-display pre code {
+  background: none;
+  padding: 0;
+}
+
+.content-display strong {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.content-display em {
+  color: #c0a060;
+  font-style: italic;
+}
+
+.content-display a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+}
+
+.content-display a:hover {
+  color: #d4af37;
+  border-bottom-color: #d4af37;
+}
