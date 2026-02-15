@@ -5,45 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Task Vault - DiceForge Studios</title>
   <link rel="stylesheet" href="tribute-lands.css">
+  <link rel="stylesheet" href="vault-common.css">
   <script src="tool-navigation.js"></script>
-  <style>
-    /* Task list styling - matching Character Vault's npc-item */
-    .task-list { 
-      flex: 1 1 0; 
-      min-height: 0; 
-      overflow-y: scroll; 
-      padding: 4px; 
-      scrollbar-width: auto; 
-      scrollbar-color: var(--accent-dim) var(--bg-dark); 
-    }
-    .task-list::-webkit-scrollbar { width: 10px; }
-    .task-list::-webkit-scrollbar-track { background: var(--bg-dark); }
-    .task-list::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 5px; border: 2px solid var(--bg-dark); }
-    .task-list::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-    
-    .task-item { 
-      padding: 8px 10px; 
-      border-radius: 4px; 
-      cursor: pointer; 
-      border: 1px solid transparent; 
-      margin-bottom: 2px; 
-    }
-    .task-item:hover { background: var(--bg-hover); }
-    .task-item.active { background: var(--bg-hover); border-color: var(--accent-dim); }
-    .task-item.priority-critical { border-left: 3px solid var(--danger-color); }
-    .task-item.priority-high { border-left: 3px solid var(--warning-color); }
-    
-    .task-item .task-name { 
-      font-size: 14px; 
-      font-weight: 600; 
-      color: var(--text-bright); 
-    }
-    .task-item .task-meta { 
-      font-size: 12px; 
-      color: var(--text-dim); 
-      margin-top: 1px; 
-    }
-  </style>
 </head>
 <body>
   <header>
