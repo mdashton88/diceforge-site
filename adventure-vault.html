@@ -821,7 +821,7 @@ header .subtitle {
   border-bottom-color: #d4af37;
 }
 </style>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="marked.min.js"></script>
 </head>
 <body>
 
@@ -1696,9 +1696,14 @@ updateBreadcrumb();
 
 </script>
 
+
+<script>
+// Initialize: Load adventures when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadAdventures);
+} else {
+  loadAdventures();
+}
+</script>
 </body>
 </html>
-<script>
-// Initialize: Load adventures when page is ready
-loadAdventures();
-</script>
