@@ -76,11 +76,6 @@
       white-space: nowrap;
     }
 
-    .badge-category {
-      background: var(--accent-primary);
-      color: var(--bg-primary);
-    }
-
     .badge-priority {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -304,12 +299,6 @@
       <!-- Filters -->
       <div class="filters-bar">
         <div class="filter-group">
-          <label class="filter-label">Category:</label>
-          <select class="form-select" id="filterCategory" onchange="applyFilters()" style="width: auto;">
-            <option value="all">All Categories</option>
-          </select>
-        </div>
-        <div class="filter-group">
           <label class="filter-label">Priority:</label>
           <select class="form-select" id="filterPriority" onchange="applyFilters()" style="width: auto;">
             <option value="all">All Priorities</option>
@@ -361,19 +350,6 @@
           <div class="form-group">
             <label class="form-label">Description</label>
             <textarea class="form-textarea" id="taskDescription"></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Category *</label>
-            <select class="form-select" id="taskCategory" required>
-              <option value="">Select category...</option>
-              <option value="Content">Content</option>
-              <option value="Development">Development</option>
-              <option value="Business">Business</option>
-              <option value="Marketing">Marketing</option>
-              <option value="Technical">Technical</option>
-              <option value="Planning">Planning</option>
-            </select>
           </div>
 
           <div class="form-group">
@@ -481,7 +457,6 @@
 
       applyFilters();
       updateStats();
-      populateCategoryFilter();
     }
 
     // Load from local backup (fallback when no Gist)
@@ -575,33 +550,14 @@
       }
     }
 
-    // Populate category filter dropdown
-    function populateCategoryFilter() {
-      const categories = [...new Set(allTasks.map(t => t.category))].sort();
-      const filterSelect = document.getElementById('filterCategory');
-      const currentValue = filterSelect.value;
-      
-      filterSelect.innerHTML = '<option value="all">All Categories</option>';
-      categories.forEach(cat => {
-        const option = document.createElement('option');
-        option.value = cat;
-        option.textContent = cat;
-        filterSelect.appendChild(option);
-      });
-      
-      filterSelect.value = currentValue;
-    }
-
     // Apply filters
     function applyFilters() {
-      const categoryFilter = document.getElementById('filterCategory').value;
       const priorityFilter = document.getElementById('filterPriority').value;
       const showCompleted = document.getElementById('filterCompleted').checked;
       const searchTerm = document.getElementById('searchInput').value.toLowerCase();
 
       filteredTasks = allTasks.filter(task => {
         if (!showCompleted && task.completed) return false;
-        if (categoryFilter !== 'all' && task.category !== categoryFilter) return false;
         if (priorityFilter !== 'all' && task.priority !== priorityFilter) return false;
         if (searchTerm && !task.title.toLowerCase().includes(searchTerm) && 
             !task.description.toLowerCase().includes(searchTerm)) return false;
@@ -644,7 +600,6 @@
                   ${task.title}
                 </div>
                 <div class="task-meta">
-                  <span class="task-badge badge-category">${task.category}</span>
                   <span class="task-badge badge-priority ${task.priority}">
                     ${task.priority === 'critical' ? '🔴' : task.priority === 'high' ? '🟡' : '⚪'} 
                     ${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
@@ -701,7 +656,6 @@
         document.getElementById('taskId').value = task.id;
         document.getElementById('taskTitle').value = task.title;
         document.getElementById('taskDescription').value = task.description || '';
-        document.getElementById('taskCategory').value = task.category;
         document.getElementById('taskPriority').value = task.priority;
         document.getElementById('taskNotes').value = task.notes || '';
         deleteBtn.style.display = 'block';
@@ -735,7 +689,6 @@
         id: id || `task_${Date.now()}`,
         title: document.getElementById('taskTitle').value,
         description: document.getElementById('taskDescription').value,
-        category: document.getElementById('taskCategory').value,
         priority: document.getElementById('taskPriority').value,
         notes: document.getElementById('taskNotes').value,
         completed: false,
@@ -761,7 +714,6 @@
       closeTaskModal();
       applyFilters();
       updateStats();
-      populateCategoryFilter();
     }
 
     // Delete task
@@ -775,19 +727,15 @@
       closeTaskModal();
       applyFilters();
       updateStats();
-      populateCategoryFilter();
     }
 
     // Export tasks as markdown
     function exportTasks() {
-      const categories = {};
-      
-      allTasks.forEach(task => {
-        if (!categories[task.category]) {
-          categories[task.category] = { critical: [], high: [], normal: [] };
-        }
-        categories[task.category][task.priority].push(task);
-      });
+      const byPriority = {
+        critical: allTasks.filter(t => t.priority === 'critical'),
+        high: allTasks.filter(t => t.priority === 'high'),
+        normal: allTasks.filter(t => t.priority === 'normal')
+      };
 
       let markdown = '# Task Vault Export\n';
       markdown += `Generated: ${new Date().toLocaleString()}\n\n`;
@@ -796,30 +744,23 @@
       markdown += `**Active:** ${allTasks.filter(t => !t.completed).length}\n\n`;
       markdown += '---\n\n';
 
-      Object.keys(categories).sort().forEach(category => {
-        const cat = categories[category];
-        const hasTasks = cat.critical.length + cat.high.length + cat.normal.length > 0;
-        if (!hasTasks) return;
+      ['critical', 'high', 'normal'].forEach(priority => {
+        const tasks = byPriority[priority];
+        if (tasks.length === 0) return;
 
-        markdown += `## ${category}\n\n`;
-
-        ['critical', 'high', 'normal'].forEach(priority => {
-          if (cat[priority].length > 0) {
-            const icon = priority === 'critical' ? '🔴' : priority === 'high' ? '🟡' : '⚪';
-            markdown += `### ${icon} ${priority.charAt(0).toUpperCase() + priority.slice(1)} Priority\n\n`;
-            
-            cat[priority].forEach(task => {
-              const checkbox = task.completed ? '[x]' : '[ ]';
-              markdown += `- ${checkbox} **${task.title}**\n`;
-              if (task.description) {
-                markdown += `  ${task.description}\n`;
-              }
-              if (task.notes) {
-                markdown += `  💡 _${task.notes}_\n`;
-              }
-              markdown += '\n';
-            });
+        const icon = priority === 'critical' ? '🔴' : priority === 'high' ? '🟡' : '⚪';
+        markdown += `## ${icon} ${priority.charAt(0).toUpperCase() + priority.slice(1)} Priority\n\n`;
+        
+        tasks.forEach(task => {
+          const checkbox = task.completed ? '[x]' : '[ ]';
+          markdown += `- ${checkbox} **${task.title}**\n`;
+          if (task.description) {
+            markdown += `  ${task.description}\n`;
           }
+          if (task.notes) {
+            markdown += `  💡 _${task.notes}_\n`;
+          }
+          markdown += '\n';
         });
       });
 
@@ -838,7 +779,7 @@
             '• Click "+ New Task" to create a task\n' +
             '• Click on task titles to edit\n' +
             '• Use checkboxes to mark complete\n' +
-            '• Filter by category, priority, or search\n' +
+            '• Filter by priority or search\n' +
             '• Export creates markdown checklist\n' +
             '• Tasks sync to GitHub Gist (cloud storage)\n' +
             '• Click 🔑 Token to set GitHub credentials\n' +
