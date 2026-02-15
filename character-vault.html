@@ -2543,38 +2543,35 @@ function renderStatBlockPanel(n){
   if(n.tactics) rtf += `{\\b Tactics:} ${rtfEsc(n.tactics)}\\par\n`;
   rtf += `}\n`;
   
-  document.getElementById('panelContent').innerHTML=`<div class="export-tabs"><div class="export-tab active" onclick="switchExportTab(this,'fmt')">Formatted</div><div class="export-tab" onclick="switchExportTab(this,'md')">Markdown</div><div class="export-tab" onclick="switchExportTab(this,'rtf')">RTF</div></div><div class="export-content" id="exportFmt">${fmt}</div><div class="export-content" id="exportMd" style="display:none">${esc(md)}</div><div class="export-content" id="exportRtf" style="display:none">${esc(rtf)}</div><div class="form-actions" style="margin-top:8px"><button class="btn" onclick="copyStatBlockExport('html')">Copy HTML</button><button class="btn" onclick="copyStatBlockExport('md')">Copy Markdown</button><button class="btn" onclick="copyStatBlockExport('rtf')">Copy RTF</button><button class="btn primary" onclick="downloadStatBlockExport('rtf')" style="background:var(--accent);border-color:var(--accent);color:#000">💾 Download RTF</button></div>`;
+  // Store raw strings for copy functions
+  window._sbFmt=fmt; window._sbMd=md; window._sbRtf=rtf;
+  
+  document.getElementById('panelContent').innerHTML=`<div class="export-tabs"><div class="export-tab active" onclick="switchExportTab(this,'fmt')">Formatted</div><div class="export-tab" onclick="switchExportTab(this,'md')">Markdown</div><div class="export-tab" onclick="switchExportTab(this,'rtf')">RTF</div></div><div class="export-content" id="exportFmt">${fmt}</div><div class="export-content" id="exportMd" style="display:none">${esc(md)}</div><div class="export-content" id="exportRtf" style="display:none">${esc(rtf)}</div><div class="form-actions" style="margin-top:8px"><button class="btn" onclick="copyStatBlockExport('html')">Copy Formatted</button><button class="btn" onclick="copyStatBlockExport('md')">Copy Markdown</button><button class="btn" onclick="copyStatBlockExport('rtf')">Copy RTF</button><button class="btn primary" onclick="downloadStatBlockExport('rtf')" style="background:var(--accent);border-color:var(--accent);color:#000">💾 Download RTF</button></div>`;
 }
 function switchExportTab(el,tab){document.querySelectorAll('.export-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('exportFmt').style.display=tab==='fmt'?'block':'none';document.getElementById('exportMd').style.display=tab==='md'?'block':'none';document.getElementById('exportRtf').style.display=tab==='rtf'?'block':'none';}
 function copyStatBlockExport(type){
   try {
-    let content;
     if(type==='html'){
-      // Get the HTML markup from the formatted div
-      const el=document.getElementById('exportFmt');
-      content=el.innerHTML.replace(/<br>/gi,'\n');
+      // Copy as rich text so it pastes formatted into Word/Docs
+      const htmlContent='<div style="font-family:Georgia,serif;font-size:14px;line-height:1.6">'+window._sbFmt.replace(/\n/g,'<br>')+'</div>';
+      const plainText=window._sbFmt.replace(/<[^>]*>/g,'').replace(/&amp;/g,'&');
+      const htmlBlob=new Blob([htmlContent],{type:'text/html'});
+      const textBlob=new Blob([plainText],{type:'text/plain'});
+      navigator.clipboard.write([new ClipboardItem({'text/html':htmlBlob,'text/plain':textBlob})])
+        .then(()=>showCopyToast('Formatted stat block copied — paste into Word or Docs'))
+        .catch(()=>{navigator.clipboard.writeText(plainText).then(()=>showCopyToast('Plain text copied to clipboard'));});
     }else if(type==='md'){
-      const el=document.getElementById('exportMd');
-      content=el.textContent || el.innerText;
+      navigator.clipboard.writeText(window._sbMd)
+        .then(()=>showCopyToast('Markdown copied to clipboard'));
     }else if(type==='rtf'){
-      const el=document.getElementById('exportRtf');
-      content=el.textContent || el.innerText;
+      navigator.clipboard.writeText(window._sbRtf)
+        .then(()=>showCopyToast('RTF copied to clipboard'));
     }
-    
-    if(!content){
-      alert('Nothing to copy!');
-      return;
-    }
-    
-    navigator.clipboard.writeText(content)
-      .then(()=>alert('✅ Copied to clipboard!'))
-      .catch(err=>{
-        console.error('Copy failed:',err);
-        alert('❌ Copy failed. Try selecting and copying manually.');
-      });
   } catch(err) {
     console.error('Copy error:',err);
-    alert('❌ Error: '+err.message);
+    // Fallback: try plain text
+    const plain=window._sbFmt?window._sbFmt.replace(/<[^>]*>/g,'').replace(/&amp;/g,'&'):'';
+    navigator.clipboard.writeText(plain).then(()=>showCopyToast('Copied as plain text'));
   }
 }
 function downloadStatBlockExport(type){const el=document.getElementById('exportRtf');const blob=new Blob([el.textContent],{type:'application/rtf'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=currentNPC.name.replace(/[^a-z0-9]/gi,'_')+'.rtf';a.click();URL.revokeObjectURL(url);}
