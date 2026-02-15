@@ -900,12 +900,13 @@ let allAdventures = [
     "threads": []
   }
 ];
-  
+
+// Initialize on page load
+window.addEventListener('DOMContentLoaded', function() {
   updateStats();
   captureBaselines();
   renderAdventureList();
-}
-
+});
 // Stats and progress
 function updateStats() {
   const total = allAdventures.length;
