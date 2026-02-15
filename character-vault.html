@@ -2500,8 +2500,38 @@ function renderStatBlockPanel(n){
   document.getElementById('panelContent').innerHTML=`<div class="export-tabs"><div class="export-tab active" onclick="switchExportTab(this,'fmt')">Formatted</div><div class="export-tab" onclick="switchExportTab(this,'md')">Markdown</div><div class="export-tab" onclick="switchExportTab(this,'rtf')">RTF</div></div><div class="export-content" id="exportFmt">${fmt}</div><div class="export-content" id="exportMd" style="display:none">${esc(md)}</div><div class="export-content" id="exportRtf" style="display:none">${esc(rtf)}</div><div class="form-actions" style="margin-top:8px"><button class="btn" onclick="copyExport('html')">Copy HTML</button><button class="btn" onclick="copyExport('md')">Copy Markdown</button><button class="btn" onclick="copyExport('rtf')">Copy RTF</button><button class="btn primary" onclick="downloadExport('rtf')" style="background:var(--accent);border-color:var(--accent);color:#000">💾 Download RTF</button></div>`;
 }
 function switchExportTab(el,tab){document.querySelectorAll('.export-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('exportFmt').style.display=tab==='fmt'?'block':'none';document.getElementById('exportMd').style.display=tab==='md'?'block':'none';document.getElementById('exportRtf').style.display=tab==='rtf'?'block':'none';}
-function copyExport(type){const el=type==='html'?document.getElementById('exportFmt'):type==='md'?document.getElementById('exportMd'):document.getElementById('exportRtf');navigator.clipboard.writeText(el.innerText).then(()=>alert('Copied to clipboard'));}
-function downloadExport(type){const el=document.getElementById('exportRtf');const blob=new Blob([el.innerText],{type:'application/rtf'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=currentNPC.name.replace(/[^a-z0-9]/gi,'_')+'.rtf';a.click();URL.revokeObjectURL(url);}
+function copyExport(type){
+  try {
+    let content;
+    if(type==='html'){
+      // Get the HTML markup from the formatted div
+      const el=document.getElementById('exportFmt');
+      content=el.innerHTML.replace(/<br>/gi,'\n');
+    }else if(type==='md'){
+      const el=document.getElementById('exportMd');
+      content=el.textContent || el.innerText;
+    }else if(type==='rtf'){
+      const el=document.getElementById('exportRtf');
+      content=el.textContent || el.innerText;
+    }
+    
+    if(!content){
+      alert('Nothing to copy!');
+      return;
+    }
+    
+    navigator.clipboard.writeText(content)
+      .then(()=>alert('✅ Copied to clipboard!'))
+      .catch(err=>{
+        console.error('Copy failed:',err);
+        alert('❌ Copy failed. Try selecting and copying manually.');
+      });
+  } catch(err) {
+    console.error('Copy error:',err);
+    alert('❌ Error: '+err.message);
+  }
+}
+function downloadExport(type){const el=document.getElementById('exportRtf');const blob=new Blob([el.textContent],{type:'application/rtf'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=currentNPC.name.replace(/[^a-z0-9]/gi,'_')+'.rtf';a.click();URL.revokeObjectURL(url);}
 
 function runBuildAudit(n){
   var CF=window.CharacterForge;
