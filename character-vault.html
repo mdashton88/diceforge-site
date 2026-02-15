@@ -2594,7 +2594,11 @@ function buildExportHTML(n){
   const tDisp=n.toughnessArmor>0?n.toughness+' ('+n.toughnessArmor+')':''+n.toughness;
   const wcStar=n.tier==='Wild Card'?' ★':'';
   let h='<!DOCTYPE html>\n<html><head><meta charset="utf-8"><title>'+esc(n.name)+'</title>\n';
-  h+='<link rel="stylesheet" href="tribute-lands.css">  <script src="tool-navigation.js"></script>
+  h+='<style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;padding:20px;color:#222;line-height:1.6}';
+  h+='h1{font-size:22px;margin-bottom:2px;color:#8b0000}h2{font-size:14px;color:#666;font-weight:normal;margin-top:0}';
+  h+='.quote{font-style:italic;color:#555;margin:12px 0;border-left:3px solid #8b0000;padding-left:12px}';
+  h+='.desc{margin:12px 0}.stat-label{font-weight:bold;color:#8b0000}.stat-line{margin:4px 0}';
+  h+='.section{margin:8px 0}.footer{margin-top:20px;padding-top:10px;border-top:1px solid #ccc;font-size:11px;color:#999}</style>  <script src="tool-navigation.js"></script>
 </head><body>\n';
   h+='<h1>'+esc(n.name)+wcStar+'</h1>\n';
   if(n.concept) h+='<h2>'+esc(n.concept)+'</h2>\n';
@@ -3258,7 +3262,7 @@ function exportProductStatBlocks(code){
   const separator='\n'+('═'.repeat(60))+'\n\n';
   const headerTxt=`STAT BLOCKS — ${p.code}: ${p.title}\nGenerated: ${new Date().toLocaleDateString()}\nCharacters: ${chars.length}\n`;
   const textBlocks=headerTxt+'\n'+separator+chars.map(n=>buildStatBlockText(n)).join(separator);
-  const htmlBlocks=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Stat Blocks — ${esc(p.code)}: ${esc(p.title)}</title><link rel="stylesheet" href="tribute-lands.css">  <script src="tool-navigation.js"></script>
+  const htmlBlocks=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Stat Blocks — ${esc(p.code)}: ${esc(p.title)}</title><style>body{font-family:Georgia,serif;max-width:700px;margin:20px auto;color:#222;background:#fff}h1{font-size:20px;border-bottom:2px solid #333;padding-bottom:6px}p.meta{font-size:12px;color:#888}</style>  <script src="tool-navigation.js"></script>
 </head><body><h1>${esc(p.code)}: ${esc(p.title)}</h1><p class="meta">Generated: ${new Date().toLocaleDateString()} · ${chars.length} character${chars.length===1?'':'s'}</p>${chars.map(n=>buildStatBlockHTML(n)).join('')}</body></html>`;
   // State
   let currentFmt='text';
@@ -3341,6 +3345,7 @@ async function unlockApp(){
 
 window.addEventListener('beforeunload',(e)=>{if(saveTimer){clearTimeout(saveTimer);saveTimer=null;pushToGist();e.returnValue='Save in progress...';}});
 document.addEventListener('DOMContentLoaded',()=>{
+  addToolNavigation('character-vault');
   document.getElementById('sidebarInner').style.display=DICEFORGE_AUTH?'':'none';
   if(DICEFORGE_AUTH){
     const check=setInterval(()=>{if(window.CharacterForge){clearInterval(check);unlockApp();}},50);
