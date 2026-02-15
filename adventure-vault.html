@@ -1325,7 +1325,7 @@ function renderMarkdownContent() {
   // Common mojibake patterns
   const encodingFixes = [
     [/â€"/g, '—'],           // em dash
-    [/â€™/g, '''],           // right single quote
+    [/â€™/g, "'"],           // right single quote
     [/â€œ/g, '"'],           // left double quote  
     [/â€\x9d/g, '"'],        // right double quote
     [/Â£/g, '£'],            // pound sign
@@ -1694,16 +1694,15 @@ updateBreadcrumb();
   };
 })();
 
-</script>
-
-
-<script>
 // Initialize: Load adventures when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', loadAdventures);
 } else {
   loadAdventures();
 }
+
 </script>
+
+
 </body>
 </html>
