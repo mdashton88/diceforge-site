@@ -323,13 +323,6 @@
         </div>
 
         <div class="sidebar-section">
-          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: var(--text-secondary);">
-            <input type="checkbox" id="filterCompleted" onchange="applyFilters()">
-            Show Completed
-          </label>
-        </div>
-
-        <div class="sidebar-section">
           <div class="sidebar-label">Search</div>
           <input type="text" class="form-input" id="searchInput" placeholder="Search..." 
                  onkeyup="applyFilters()">
@@ -569,14 +562,14 @@
       }
     }
 
-    // Apply filters
+    // Apply filters (always exclude completed tasks)
     function applyFilters() {
       const priorityFilter = document.getElementById('filterPriority').value;
-      const showCompleted = document.getElementById('filterCompleted').checked;
       const searchTerm = document.getElementById('searchInput').value.toLowerCase();
 
       filteredTasks = allTasks.filter(task => {
-        if (!showCompleted && task.completed) return false;
+        // Always exclude completed tasks
+        if (task.completed) return false;
         if (priorityFilter !== 'all' && task.priority !== priorityFilter) return false;
         if (searchTerm) {
           const title = (task.title || '').toLowerCase();
@@ -655,15 +648,14 @@
     }
 
     // Toggle task completion
+    // Toggle complete - delete completed tasks immediately
     function toggleComplete(id) {
-      const task = allTasks.find(t => t.id === id);
-      if (task) {
-        task.completed = !task.completed;
-        task.completedDate = task.completed ? new Date().toISOString() : null;
-        queueSave();
-        applyFilters();
-        updateStats();
-      }
+      if (!confirm('Delete this task?')) return;
+      
+      allTasks = allTasks.filter(t => t.id !== id);
+      queueSave();
+      applyFilters();
+      updateStats();
     }
 
     // Open task modal
