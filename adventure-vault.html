@@ -690,7 +690,138 @@ header .subtitle {
     max-height: none;
   }
 }
+
+/* Markdown content rendering */
+.content-display h1 {
+  font-size: 2em;
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 10px;
+  margin: 30px 0 20px 0;
+}
+
+.content-display h2 {
+  font-size: 1.5em;
+  color: #d4af37;
+  margin: 25px 0 15px 0;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  padding-bottom: 5px;
+}
+
+.content-display h3 {
+  font-size: 1.2em;
+  color: #b8941f;
+  margin: 20px 0 10px 0;
+}
+
+.content-display h4 {
+  font-size: 1em;
+  color: #8b7220;
+  margin: 15px 0 8px 0;
+  font-weight: bold;
+}
+
+.content-display p {
+  margin: 12px 0;
+  color: #e0e0e0;
+}
+
+.content-display blockquote {
+  border-left: 4px solid var(--accent);
+  padding-left: 20px;
+  margin: 15px 0;
+  color: #b0b0b0;
+  font-style: italic;
+  background: rgba(196, 154, 74, 0.1);
+  padding: 15px 20px;
+  border-radius: 4px;
+}
+
+.content-display ul, .content-display ol {
+  margin: 12px 0 12px 25px;
+  color: #d0d0d0;
+}
+
+.content-display li {
+  margin: 6px 0;
+}
+
+.content-display table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 20px 0;
+  background: rgba(0,0,0,0.3);
+}
+
+.content-display th {
+  background: rgba(196, 154, 74, 0.3);
+  color: var(--accent);
+  padding: 12px;
+  text-align: left;
+  border: 1px solid var(--border);
+  font-weight: bold;
+}
+
+.content-display td {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  color: #d0d0d0;
+}
+
+.content-display tr:nth-child(even) {
+  background: rgba(255,255,255,0.02);
+}
+
+.content-display hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 30px 0;
+}
+
+.content-display code {
+  background: rgba(0,0,0,0.4);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  color: #e0e0e0;
+}
+
+.content-display pre {
+  background: rgba(0,0,0,0.4);
+  padding: 15px;
+  border-radius: 4px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+}
+
+.content-display pre code {
+  background: none;
+  padding: 0;
+}
+
+.content-display strong {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.content-display em {
+  color: #c0a060;
+  font-style: italic;
+}
+
+.content-display a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+}
+
+.content-display a:hover {
+  color: #d4af37;
+  border-bottom-color: #d4af37;
+}
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 
@@ -1167,7 +1298,66 @@ function renderDetail() {
         </div>
       </div>
     </div>
+    
+    <!-- FULL ADVENTURE CONTENT -->
+    <div class="section-box" style="margin-top: 20px;">
+      <h3>FULL ADVENTURE CONTENT</h3>
+      <div class="content-display" id="contentDisplay" style="max-height: 800px; overflow-y: auto; padding: 30px; background: #1a1a1a; border: 1px solid var(--border); border-radius: 4px; line-height: 1.8;">
+        <!-- Rendered HTML content will be inserted here -->
+      </div>
+    </div>
   `;
+  
+  // Render markdown content as HTML
+  renderMarkdownContent();
+}
+
+// Render markdown content with encoding fixes
+function renderMarkdownContent() {
+  const contentDisplay = document.getElementById('contentDisplay');
+  if (!contentDisplay || !currentAdventure || !currentAdventure.content) {
+    return;
+  }
+  
+  // Fix common UTF-8 encoding issues before rendering
+  let cleanedContent = currentAdventure.content;
+  
+  // Common mojibake patterns
+  const encodingFixes = [
+    [/â€"/g, '—'],           // em dash
+    [/â€™/g, '''],           // right single quote
+    [/â€œ/g, '"'],           // left double quote  
+    [/â€\x9d/g, '"'],        // right double quote
+    [/Â£/g, '£'],            // pound sign
+    [/â€"/g, '–'],           // en dash
+  ];
+  
+  encodingFixes.forEach(([pattern, replacement]) => {
+    cleanedContent = cleanedContent.replace(pattern, replacement);
+  });
+  
+  // Configure marked for better rendering
+  if (typeof marked !== 'undefined') {
+    marked.setOptions({
+      breaks: true,
+      gfm: true,
+      headerIds: true,
+      mangle: false
+    });
+    
+    try {
+      const html = marked.parse(cleanedContent);
+      contentDisplay.innerHTML = html;
+    } catch (err) {
+      console.error('Markdown rendering failed:', err);
+      contentDisplay.innerHTML = '<p class="none-text">Failed to render content</p>';
+    }
+  } else {
+    // Fallback if marked.js didn't load
+    contentDisplay.innerHTML = '<pre style="white-space: pre-wrap;">' + 
+      (cleanedContent || 'No content loaded') + 
+      '</pre>';
+  }
 }
 
 // Bottom bar for commit/save
