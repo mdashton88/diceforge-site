@@ -1062,9 +1062,7 @@ The adventure showcases Investigation and Social systems as its primary Savage W
       npcs: ["Valdric Thornwood", "Morvek", "Three-Finger Ash", "Inspector Cole"],
       threads: [
         {id: "thornvale-weapons", type: "planted", description: "Weapons components moving east"},
-        {id: "grimhollow-network", type: "hint", description: "Corwynn's wider connections"},
-        {id: "grandmother-holst", type: "setup", description: "Empty market booth"},
-        {id: "scarface-tomas", type: "character", description: "Watching man with scar"}
+        {id: "grimhollow-network", type: "hint", description: "Corwynn's wider connections"}
       ]
     },
     {
@@ -1341,9 +1339,7 @@ The ratling alliance is the adventure's long-term investment. Players who take t
 `,
       npcs: ["Brother Aldric", "Elsbet Kohl", "Torvald Stone-Eyes", "Mara Fenn"],
       threads: [
-        {id: "pre-conquest-ruins", type: "planted", description: "Ancient tunnels beneath Mottgorte"},
-        {id: "black-iron-artifacts", type: "discovery", description: "Pre-Glasryan weapons"},
-        {id: "warren-gangs", type: "developed", description: "Underworld territorial disputes"}
+        {id: "pre-conquest-ruins", type: "planted", description: "Ancient tunnels beneath Mottgorte"}
       ]
     },
     {
@@ -1619,9 +1615,7 @@ The fourth prisonerâ€”Harvenâ€”is the heart of the adventure, and the 
 `,
       npcs: ["Grandmother Holst", "Tallyman Petyr", "Scarface Tomas", "Merchant Corwynn"],
       threads: [
-        {id: "grandmother-holst", type: "payoff", description: "Resolution of missing merchant"},
-        {id: "brotherhood-methods", type: "developed", description: "How the Brotherhood operates"},
-        {id: "scarface-tomas", type: "payoff", description: "Identity and role revealed"}
+        {id: "grandmother-holst", type: "payoff", description: "Resolution of missing merchant"}
       ]
     },
     {
@@ -1884,9 +1878,7 @@ Scarface Tomas is designed as a slow-burn recurring figureâ€”mysterious, co
 `,
       npcs: ["Lady Seraphine Delacroix", "Viktor Aldenberg", "Captain Roth", "Madame Silk"],
       threads: [
-        {id: "velvet-court", type: "planted", description: "Secret society of nobles"},
-        {id: "glasryan-sympathizers", type: "hint", description: "Collaborator network"},
-        {id: "aldenberg-ambitions", type: "character", description: "Viktor's political maneuvering"}
+        {id: "velvet-court", type: "planted", description: "Secret society of nobles"}
       ]
     },
     {
@@ -2151,107 +2143,8 @@ The moral dimension here is the strongest of the first five weeks. There is no c
 `,
       npcs: ["Marcus Vane", "Brother Aldric", "The Keeper (Spirit)"],
       threads: [
-        {id: "pre-conquest-magic", type: "discovery", description: "Ancient human sorcery"},
-        {id: "sealed-locations", type: "planted", description: "More warded sites across Ammaria"},
-        {id: "keeper-warnings", type: "prophecy", description: "Dark times ahead"}
+        {id: "pre-conquest-magic", type: "discovery", description: "Ancient human sorcery"}
       ]
-    }
-];
-let currentAdventure = null;
-let activePanel = null;
-
-// Canon/lifecycle management
-let canonCommitted = new Set();
-let _canonSnapshots = {}; // week → {snapshot, committedAt, changeId}
-let _canonLog = [];
-let _canonSeq = 0;
-
-// Baselines for dirty tracking
-let _baselines = {};
-
-// Navigation history
-let _navHistory = [];
-let _navFwdStack = [];
-let _navPushing = false;
-
-// Undo/redo
-const UNDO_CAP = 40;
-let _undoStack = [];
-let _redoStack = [];
-let _lastSnapshot = null;
-
-// Sample data for demonstration
-function initSampleData() {
-  allAdventures = [
-    {
-      week: 1,
-      title: "Shadow Over the Docks",
-      showcase: "Smugglers, missing cargo, warehouse investigation",
-      phase: "complete",
-      hook: "A prominent merchant's shipment vanishes from the docks overnight, and the Tally-men are asking questions.",
-      scenes: ["Docks investigation", "Warehouse infiltration", "Confrontation with smugglers"],
-      npcs: ["Marcus Vane", "Sister Elara", "Captain Roth"],
-      threads: [{id: "brotherhood-rise", type: "planted", description: "Evidence of Brotherhood expansion"}],
-      complications: ["City Watch arrives", "Fire breaks out"],
-      twists: ["The merchant is complicit"],
-      rewards: "100sp, merchant's favor",
-      notes: "First introduction to Brotherhood influence in Ammaria"
-    },
-    {
-      week: 2,
-      title: "The Gilded Conspiracy",
-      showcase: "Guild politics, poisoned wine, masked ball",
-      phase: "review",
-      hook: "An invitation arrives to a guild master's exclusive soirée—but danger lurks beneath the silk and gold.",
-      scenes: ["Masked ball", "Investigation", "Poisoner confrontation"],
-      npcs: ["Lord Cassius", "Madame Silk", "Inspector Vale"],
-      threads: [{id: "merchant-council", type: "planted", description: "Power struggles within Council"}],
-      complications: ["Guest list complications", "Political scandal"],
-      twists: ["The poison was meant for someone else"],
-      rewards: "Political favor, 150sp",
-      notes: "Introduces Merchant Council dynamics"
-    },
-    {
-      week: 3,
-      title: "Blood on the Cobblestones",
-      showcase: "Street gang warfare, protection rackets",
-      phase: "draft",
-      hook: "Gang violence erupts in the Trade Quarter, and the Brotherhood wants the heroes to restore order—their way.",
-      scenes: ["Gang meeting", "Street fight", "Negotiation"],
-      npcs: ["Razor Tom", "The Weeping Widow", "Sergeant Brass"],
-      threads: [{id: "brotherhood-rise", type: "developed", description: "Brotherhood expanding territory"}],
-      complications: ["Innocent casualties", "Watch intervention"],
-      twists: ["One gang leader is Brotherhood operative"],
-      rewards: "Gang alliance or Brotherhood favor",
-      notes: "Shows Brotherhood methods up close"
-    },
-    {
-      week: 4,
-      title: "Whispers in the Temple",
-      showcase: "Religious mystery, forbidden artifacts",
-      phase: "outline",
-      hook: "Strange symbols appear in the Temple of the Merchant Prince, and the priests fear Glasryan influence.",
-      scenes: ["Temple investigation", "Archive research", "Confrontation"],
-      npcs: ["High Priestess Maren", "Brother Aldric"],
-      threads: [{id: "glasryan-artifacts", type: "planted", description: "Ancient relics surfacing"}],
-      complications: ["Temple politics", "Zealot interference"],
-      twists: ["The symbols are protective, not hostile"],
-      rewards: "Religious favor, artifact",
-      notes: "First hints of deeper Glasryan history"
-    },
-    {
-      week: 5,
-      title: "The Tribute Collector's Game",
-      showcase: "Glasryan emissary arrives, political maneuvering",
-      phase: "catalogue",
-      hook: "A Glasryan Tribute Collector arrives for the annual assessment, and everyone has secrets to hide.",
-      scenes: [],
-      npcs: ["Emissary Khalon", "Councillor Darius"],
-      threads: [{id: "tribute-crisis", type: "planted", description: "Annual tribute complications"}],
-      complications: [],
-      twists: [],
-      rewards: "",
-      notes: "Major Glasryan interaction—sets tone for ongoing occupation tension"
     }
   ];
   
