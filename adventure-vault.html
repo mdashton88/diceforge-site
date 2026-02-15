@@ -833,7 +833,11 @@ header .subtitle {
   <div id="headerButtons" style="display:flex;align-items:center;gap:8px;">
     <!-- Populated by integration script -->
   </div>
-  <div class="header-stats">
+    <div style="display:flex;gap:8px;margin-right:20px;">
+    <button class="btn sm" onclick="window.location.href='foundry'" title="Production Dashboard">🏭 Foundry</button>
+    <button class="btn sm" onclick="window.location.href='character-vault'" title="Character Database">👤 Characters</button>
+  </div>
+<div class="header-stats">
     <span><span class="stat-num" id="totalAdventures">0</span> Adventures</span>
     <span><span class="stat-num" id="completeAdventures">0</span> Complete</span>
     <span title="Overall completion"><span class="stat-num" id="progressPct">0%</span></span>
