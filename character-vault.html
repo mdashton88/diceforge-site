@@ -2499,17 +2499,17 @@ function renderStatBlockPanel(n){
   const hindStr=fmtHindrances();
 
   // === FORMATTED (HTML) ===
-  let fmt=`<strong>${esc(n.name)}</strong>\n`;
-  if(n.quote)fmt+=`<em>"${esc(n.quote)}"</em>\n\n`;
+  let fmt=`<b>${esc(n.name)}</b>\n`;
+  if(n.quote)fmt+=`<i>"${esc(n.quote)}"</i>\n\n`;
   if(n.description)fmt+=`${esc(n.description)}\n\n`;
-  fmt+=`<span class="label">Attributes:</span> Agility ${d(n.agility)}, Smarts ${d(n.smarts)}, Spirit ${d(n.spirit)}, Strength ${d(n.strength)}, Vigor ${d(n.vigor)}\n`;
-  fmt+=`<span class="label">Skills:</span> ${esc(skillStr)}\n`;
-  fmt+=`<span class="label">Pace:</span> ${n.pace}; <span class="label">Parry:</span> ${n.parry}; <span class="label">Toughness:</span> ${toughDisp}\n`;
-  if(n.hindrances.length)fmt+=`<span class="label">Hindrances:</span> ${esc(hindStr)}\n`;
-  if(n.edges.length)fmt+=`<span class="label">Edges:</span> ${n.edges.join(', ')}\n`;
-  if(hasGear)fmt+=`<span class="label">Gear:</span> ${esc(gearLine)}\n`;
-  if(n.pp>0)fmt+=`<span class="label">Powers (${n.pp} PP):</span> ${n.powers.join(', ')}\n`;
-  if(n.tactics)fmt+=`\n<span class="label">Tactics:</span> ${esc(n.tactics)}\n`;
+  fmt+=`<b>Attributes:</b> Agility ${d(n.agility)}, Smarts ${d(n.smarts)}, Spirit ${d(n.spirit)}, Strength ${d(n.strength)}, Vigor ${d(n.vigor)}\n`;
+  fmt+=`<b>Skills:</b> ${esc(skillStr)}\n`;
+  fmt+=`<b>Pace:</b> ${n.pace}; <b>Parry:</b> ${n.parry}; <b>Toughness:</b> ${toughDisp}\n`;
+  if(n.hindrances.length)fmt+=`<b>Hindrances:</b> ${esc(hindStr)}\n`;
+  if(n.edges.length)fmt+=`<b>Edges:</b> ${n.edges.join(', ')}\n`;
+  if(hasGear)fmt+=`<b>Gear:</b> ${esc(gearLine)}\n`;
+  if(n.pp>0)fmt+=`<b>Powers (${n.pp} PP):</b> ${n.powers.join(', ')}\n`;
+  if(n.tactics)fmt+=`\n<b>Tactics:</b> ${esc(n.tactics)}\n`;
 
   // === MARKDOWN ===
   let md=`**${n.name}**\n`;
@@ -2571,7 +2571,7 @@ function copyStatBlockExport(type){
       navigator.clipboard.writeText(window._sbMd)
         .then(()=>showCopyToast('Markdown copied to clipboard'));
     }else if(type==='rtf'){
-      const plain=window._sbFmt.replace(/<strong>|<\/strong>/g,'').replace(/<em>|<\/em>/g,'').replace(/<span[^>]*>|<\/span>/g,'').replace(/&amp;/g,'&').replace(/\n\n+/g,'\n');
+      const plain=window._sbFmt.replace(/<\/?b>|<\/?i>|<\/?strong>|<\/?em>|<span[^>]*>|<\/span>/g,'').replace(/&amp;/g,'&').replace(/\n\n+/g,'\n');
       navigator.clipboard.writeText(plain)
         .then(()=>showCopyToast('Plain text copied to clipboard'));
     }
