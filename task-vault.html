@@ -385,20 +385,36 @@
     let filteredTasks = [];
     let editingTaskId = null;
 
-    // Load tasks from JSON file
+    // Load tasks from localStorage first, fallback to JSON file
     async function loadTasks() {
-      try {
-        const response = await fetch('task-vault-data.json');
-        if (response.ok) {
-          const data = await response.json();
+      // Try localStorage first
+      const savedData = localStorage.getItem('taskVaultData');
+      if (savedData) {
+        try {
+          const data = JSON.parse(savedData);
           allTasks = data.tasks || [];
-        } else {
-          // Initialize with empty array if file doesn't exist
+          console.log('Loaded tasks from localStorage');
+        } catch (error) {
+          console.error('Error parsing localStorage:', error);
           allTasks = [];
         }
-      } catch (error) {
-        console.error('Error loading tasks:', error);
-        allTasks = [];
+      } else {
+        // Fallback to JSON file for initial load
+        try {
+          const response = await fetch('task-vault-data.json');
+          if (response.ok) {
+            const data = await response.json();
+            allTasks = data.tasks || [];
+            // Save to localStorage for next time
+            saveTasks();
+            console.log('Loaded tasks from JSON file and saved to localStorage');
+          } else {
+            allTasks = [];
+          }
+        } catch (error) {
+          console.error('Error loading tasks:', error);
+          allTasks = [];
+        }
       }
       
       applyFilters();
@@ -611,7 +627,13 @@
     }
 
     // Save tasks to JSON (downloads file)
+    // Save tasks to localStorage (auto-persist)
     function saveTasks() {
+      localStorage.setItem('taskVaultData', JSON.stringify({ tasks: allTasks }));
+    }
+
+    // Export tasks as JSON file (manual download when user clicks Export)
+    function exportTasksJSON() {
       const dataStr = JSON.stringify({ tasks: allTasks }, null, 2);
       const blob = new Blob([dataStr], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -622,8 +644,18 @@
       URL.revokeObjectURL(url);
     }
 
-    // Export tasks as markdown
+    // Export menu
     function exportTasks() {
+      const choice = confirm('Export as Markdown checklist?\n\nOK = Markdown (.md)\nCancel = JSON data (.json)');
+      if (choice) {
+        exportTasksMarkdown();
+      } else {
+        exportTasksJSON();
+      }
+    }
+
+    // Export tasks as markdown
+    function exportTasksMarkdown() {
       const categories = {};
       
       allTasks.forEach(task => {
@@ -683,8 +715,9 @@
             '• Click on task titles to edit\n' +
             '• Use checkboxes to mark complete\n' +
             '• Filter by category, priority, or search\n' +
-            '• Export creates markdown checklist\n' +
-            '• Data stored in task-vault-data.json');
+            '• Export: Choose Markdown (.md) or JSON (.json)\n' +
+            '• Tasks auto-save to browser storage\n' +
+            '• Data persists across sessions');
     }
 
     // Initialize
