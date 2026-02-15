@@ -1331,7 +1331,7 @@ function renderBottomBar(n){
     <label><input type="checkbox" ${n.statComplete?'checked':''} onchange="toggleStatus('statComplete',this.checked)"> Stats</label>
     <label><input type="checkbox" ${n.narrativeComplete?'checked':''} onchange="toggleStatus('narrativeComplete',this.checked)"> Narrative</label>
     <label><input type="checkbox" ${n.fgReady?'checked':''} onchange="toggleStatus('fgReady',this.checked)"> FG Ready</label></div>
-    <div class="action-btns"><button class="btn sm" onclick="showPanel('edit')">Edit</button><button class="btn sm" onclick="showPanel('statblock')">Stat Block</button><button class="btn sm" onclick="showPanel('audit')">Audit</button><button class="btn sm" onclick="showPanel('transfer')" style="color:var(--accent)">Import / Export</button><button class="btn sm danger" onclick="deleteNPC()">Delete</button></div>
+    <div class="action-btns"><button class="btn sm" onclick="showPanel('edit')">Edit</button><button class="btn sm primary" onclick="showPanel('statblock')" style="background:var(--accent);border-color:var(--accent);color:#000">📋 Export</button><button class="btn sm" onclick="showPanel('audit')">Audit</button><button class="btn sm" onclick="showPanel('transfer')" style="color:var(--accent)">Import / Export</button><button class="btn sm danger" onclick="deleteNPC()">Delete</button></div>
     <div class="commit-area"><button class="${commitBtnClass}" onclick="${commitAction}" style="${commitBtnStyle}" title="${commitTitle}">${commitLabel}</button>${legalLabel}</div>
   </div>`;
 }
@@ -2465,10 +2465,30 @@ function renderStatBlockPanel(n){
   if(n.gearText)md+=`**Gear:** ${n.gearText}\n`;
   if(n.pp>0)md+=`**Powers (${n.pp} PP):** ${n.powers.join(', ')}\n`;
   if(n.tactics)md+=`**Tactics:** ${n.tactics}\n`;
-  document.getElementById('panelContent').innerHTML=`<div class="export-tabs"><div class="export-tab active" onclick="switchExportTab(this,'fmt')">Formatted</div><div class="export-tab" onclick="switchExportTab(this,'md')">Markdown</div></div><div class="export-content" id="exportFmt">${fmt}</div><div class="export-content" id="exportMd" style="display:none">${esc(md)}</div><div class="form-actions" style="margin-top:8px"><button class="btn" onclick="copyExport('html')">Copy HTML</button><button class="btn" onclick="copyExport('md')">Copy Markdown</button></div>`;
+  
+  // RTF format
+  let rtf = `{\\rtf1\\ansi\\deff0\n`;
+  rtf += `{\\fonttbl{\\f0\\fswiss Helvetica;}{\\f1\\fmodern Courier;}}\n`;
+  rtf += `{\\colortbl;\\red185\\green151\\blue91;\\red200\\green200\\blue200;}\n`;
+  rtf += `\\f0\\fs24\n`;
+  rtf += `{\\b ${n.name.replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}}\\par\n`;
+  if(n.quote) rtf += `{\\i "${n.quote.replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}"}\\par\\par\n`;
+  if(n.description) rtf += `${n.description.replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}\\par\\par\n`;
+  rtf += `{\\b Attributes:} Agility ${d(n.agility)}, Smarts ${d(n.smarts)}, Spirit ${d(n.spirit)}, Strength ${d(n.strength)}, Vigor ${d(n.vigor)}\\par\n`;
+  rtf += `{\\b Skills:} ${skillStr.replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}\\par\n`;
+  rtf += `{\\b Pace:} ${n.pace}; {\\b Parry:} ${n.parry}; {\\b Toughness:} ${toughDisp}\\par\n`;
+  if(n.edges.length) rtf += `{\\b Edges:} ${n.edges.join(', ').replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}\\par\n`;
+  if(n.hindrances.length) rtf += `{\\b Hindrances:} ${n.hindrances.join(', ').replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}\\par\n`;
+  if(n.gearText) rtf += `{\\b Gear:} ${n.gearText.replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}\\par\n`;
+  if(n.pp>0) rtf += `{\\b Powers (${n.pp} PP):} ${n.powers.join(', ').replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}\\par\n`;
+  if(n.tactics) rtf += `{\\b Tactics:} ${n.tactics.replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}\\par\n`;
+  rtf += `}\n`;
+  
+  document.getElementById('panelContent').innerHTML=`<div class="export-tabs"><div class="export-tab active" onclick="switchExportTab(this,'fmt')">Formatted</div><div class="export-tab" onclick="switchExportTab(this,'md')">Markdown</div><div class="export-tab" onclick="switchExportTab(this,'rtf')">RTF</div></div><div class="export-content" id="exportFmt">${fmt}</div><div class="export-content" id="exportMd" style="display:none">${esc(md)}</div><div class="export-content" id="exportRtf" style="display:none">${esc(rtf)}</div><div class="form-actions" style="margin-top:8px"><button class="btn" onclick="copyExport('html')">Copy HTML</button><button class="btn" onclick="copyExport('md')">Copy Markdown</button><button class="btn" onclick="copyExport('rtf')">Copy RTF</button><button class="btn primary" onclick="downloadExport('rtf')" style="background:var(--accent);border-color:var(--accent);color:#000">💾 Download RTF</button></div>`;
 }
-function switchExportTab(el,tab){document.querySelectorAll('.export-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('exportFmt').style.display=tab==='fmt'?'block':'none';document.getElementById('exportMd').style.display=tab==='md'?'block':'none';}
-function copyExport(type){const el=type==='html'?document.getElementById('exportFmt'):document.getElementById('exportMd');navigator.clipboard.writeText(el.innerText).then(()=>alert('Copied to clipboard'));}
+function switchExportTab(el,tab){document.querySelectorAll('.export-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('exportFmt').style.display=tab==='fmt'?'block':'none';document.getElementById('exportMd').style.display=tab==='md'?'block':'none';document.getElementById('exportRtf').style.display=tab==='rtf'?'block':'none';}
+function copyExport(type){const el=type==='html'?document.getElementById('exportFmt'):type==='md'?document.getElementById('exportMd'):document.getElementById('exportRtf');navigator.clipboard.writeText(el.innerText).then(()=>alert('Copied to clipboard'));}
+function downloadExport(type){const el=document.getElementById('exportRtf');const blob=new Blob([el.innerText],{type:'application/rtf'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=currentNPC.name.replace(/[^a-z0-9]/gi,'_')+'.rtf';a.click();URL.revokeObjectURL(url);}
 
 function runBuildAudit(n){
   var CF=window.CharacterForge;
