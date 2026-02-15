@@ -12,8 +12,11 @@
 
 <div class="header">
   <div style="display:flex;align-items:center;gap:16px">
-    <h1>ADVENTURE FORGE <span>Tribute Lands — Ammaria</span></h1>
-    <a href="character-vault.html" style="font-size:0.75rem;color:var(--text-muted);border:1px solid var(--border);padding:3px 10px;border-radius:3px;text-decoration:none;letter-spacing:0.5px;transition:all 0.2s" onmouseover="this.style.color='var(--accent-gold)';this.style.borderColor='var(--accent-gold)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'">⚔ CHARACTER VAULT</a>
+    <h1>THE FOUNDRY <span>Tribute Lands Production Dashboard</span></h1>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn sm" onclick="window.location.href='character-vault'" title="Character Database">👤 Characters</button>
+      <button class="btn sm" onclick="window.location.href='adventure-vault'" title="Adventure Content">🎭 Adventures</button>
+    </div>
     <a href="forge-help.html" target="_blank" style="font-size:0.75rem;color:var(--text-muted);border:1px solid var(--border);padding:3px 10px;border-radius:3px;text-decoration:none;letter-spacing:0.5px;transition:all 0.2s" onmouseover="this.style.color='var(--accent-gold)';this.style.borderColor='var(--accent-gold)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'">? HELP</a>
   </div>
   <div class="header-controls">
@@ -587,7 +590,7 @@ async function syncToGist() {
       resp = await fetch('https://api.github.com/gists', {
         method: 'POST',
         headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ description: 'Adventure Forge — Ammaria Weekly Bundles', public: false, ...payload })
+        body: JSON.stringify({ description: 'The Foundry — Ammaria Weekly Bundles', public: false, ...payload })
       });
     }
     const data = await resp.json();
