@@ -3139,7 +3139,8 @@ function parseImportStatBlock(raw){
 function showStatusView(){
   hideBottomBar();currentNPC=null;activePanel=null;navPush({type:'status'});updateBreadcrumb();
   const el=document.getElementById('mainContent');el.classList.remove('empty-state');el.style.overflowY='auto';
-  const rows=allNPCs.map(n=>{
+  const sortByRef=(a,b)=>{if(!a.refCode&&!b.refCode)return a.name.localeCompare(b.name);if(!a.refCode)return 1;if(!b.refCode)return -1;return a.refCode.localeCompare(b.refCode);};
+  const rows=[...allNPCs].sort(sortByRef).map(n=>{
     // NPCs don't need ancestry/edges/hindrances validation - just check they have stats
     const hasStats = n.agility > 0 && Object.keys(n.skills).length > 0;
     const legal = hasStats; // NPCs are "legal" if they have basic stats
