@@ -314,19 +314,20 @@
 <body>
   <div class="container">
     <!-- Header -->
-    <header class="header">
-      <div class="header-content">
-        <div class="header-left">
-          <h1 class="header-title">Task Vault</h1>
-          <p class="header-subtitle">DiceForge Studios Production Management</p>
-        </div>
-        <div class="header-actions">
-          <button class="btn" onclick="window.location.href='character-vault.html'" title="Character Vault">👤 Characters</button>
-          <button class="btn" onclick="window.location.href='adventure-vault.html'" title="Adventure Vault">🎭 Adventures</button>
-          <button class="btn btn-primary" onclick="openTaskModal()">+ New Task</button>
-          <button class="btn" onclick="exportTasks()">📋 Export</button>
-          <button class="btn" onclick="showHelp()">❓ Help</button>
-        </div>
+    <header>
+      <div>
+        <h1>TRIBUTE LANDS — TASK VAULT</h1>
+        <div class="subtitle">DiceForge Studios Production System</div>
+      </div>
+      <div id="headerButtons" style="display:flex;align-items:center;gap:8px;">
+        <button class="btn btn-primary" onclick="openTaskModal()">+ New Task</button>
+        <button class="btn" onclick="exportTasks()">📋 Export</button>
+        <button class="btn" onclick="showHelp()">❓ Help</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-right:20px;">
+        <button class="btn sm" onclick="window.location.href='foundry'" title="Production Dashboard">🏭 Foundry</button>
+        <button class="btn sm" onclick="window.location.href='character-vault'" title="Character Database">👤 Characters</button>
+        <button class="btn sm" onclick="window.location.href='adventure-vault'" title="Adventure Vault">🎭 Adventures</button>
       </div>
       <div class="header-stats" id="headerStats"></div>
       <div id="syncIndicator" style="text-align:right;padding:2px 10px;display:flex;align-items:center;justify-content:flex-end;gap:8px">
