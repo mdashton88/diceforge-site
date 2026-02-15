@@ -88,6 +88,7 @@ var DICEFORGE_AUTH=false;
       <div id="pinForm">
         <input id="pinInput" type="password" placeholder="Enter PIN" style="width:200px;text-align:center;padding:10px 14px;font-size:16px;letter-spacing:4px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--text);margin-bottom:12px" onkeydown="if(event.key==='Enter')checkPin()">
         <br><button class="btn primary" onclick="checkPin()" style="padding:8px 28px">Enter</button>
+        <button class="btn" onclick="skipPinAndLoadLocal()" style="padding:8px 28px;margin-left:10px">Skip / Use Local Data</button>
         <div id="pinError" style="color:var(--red);font-size:12px;margin-top:10px"></div>
       </div>
     </div>
@@ -2977,6 +2978,13 @@ function checkPin(){
     document.getElementById('pinInput').value='';
     document.getElementById('pinInput').focus();
   }
+}
+
+// Skip PIN and load with local data only
+function skipPinAndLoadLocal(){
+  DICEFORGE_AUTH=false; // No Gist access
+  localStorage.removeItem('diceforge_npcdb_auth'); // Clear any stored auth
+  unlockApp(); // Load the app with local data
 }
 
 /* ═══ REVIEW PANEL — batch review/approve/reject dirty characters ═══ */
