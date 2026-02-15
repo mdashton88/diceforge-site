@@ -2984,6 +2984,9 @@ function checkPin(){
 function skipPinAndLoadLocal(){
   DICEFORGE_AUTH=false; // No Gist access
   localStorage.removeItem('diceforge_npcdb_auth'); // Clear any stored auth
+  // Clear Gist credentials to force local-only mode
+  window.GIST_ID = null;
+  window.GIST_TOKEN = null;
   unlockApp(); // Load the app with local data
 }
 
