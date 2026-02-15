@@ -2456,44 +2456,91 @@ function removeNarRow(type,idx){
 function renderStatBlockPanel(n){
   const skillStr=Object.entries(n.skills).map(([k,v])=>`${k} ${d(v)}`).join(', ');
   const toughDisp=n.toughnessArmor>0?`${n.toughness} (${n.toughnessArmor})`:`${n.toughness}`;
+
+  // Build the Gear line: canonical Savage Worlds format
+  // Armour first with stats, then weapons with stats, then general gear
+  function buildGearLine(mode){
+    // mode: 'html','md','rtf','plain'
+    const b=mode==='html'?'<u>':'';const bEnd=mode==='html'?'</u>':'';
+    const parts=[];
+    // Armour items with stats inline
+    (n.armour||[]).forEach(a=>{
+      let s=a.name+' (+'+a.armor+')';
+      parts.push(s);
+    });
+    // Weapon items with full stats inline (Savage Worlds canonical format)
+    (n.weapons||[]).forEach(w=>{
+      let s=w.name;
+      const stats=[];
+      if(w.damage)stats.push(w.damage);
+      if(w.range)stats.push(w.range);
+      if(w.ap)stats.push('AP '+w.ap);
+      if(w.notes)stats.push(w.notes);
+      if(stats.length)s+=' ('+stats.join(', ')+')';
+      parts.push(s);
+    });
+    // General gear text items
+    if(n.gearText){
+      n.gearText.split(',').map(g=>g.trim()).filter(g=>g).forEach(g=>parts.push(g));
+    }
+    return parts.join(', ');
+  }
+  const gearLine=buildGearLine('plain');
+  const hasGear=gearLine.length>0;
+
+  // Hindrance formatting: include severity
+  function fmtHindrances(){
+    return (n.hindrances||[]).map(h=>{
+      if(typeof h==='object'&&h.name) return h.name+(h.severity?' ('+h.severity+')':'');
+      // Try to parse "Name (Minor)" format
+      return h;
+    }).join(', ');
+  }
+  const hindStr=fmtHindrances();
+
+  // === FORMATTED (HTML) ===
   let fmt=`<strong>${esc(n.name)}</strong>\n`;
   if(n.quote)fmt+=`<em>"${esc(n.quote)}"</em>\n\n`;
   if(n.description)fmt+=`${esc(n.description)}\n\n`;
   fmt+=`<span class="label">Attributes:</span> Agility ${d(n.agility)}, Smarts ${d(n.smarts)}, Spirit ${d(n.spirit)}, Strength ${d(n.strength)}, Vigor ${d(n.vigor)}\n`;
-  fmt+=`<span class="label">Skills:</span> ${skillStr}\n`;
+  fmt+=`<span class="label">Skills:</span> ${esc(skillStr)}\n`;
   fmt+=`<span class="label">Pace:</span> ${n.pace}; <span class="label">Parry:</span> ${n.parry}; <span class="label">Toughness:</span> ${toughDisp}\n`;
+  if(n.hindrances.length)fmt+=`<span class="label">Hindrances:</span> ${esc(hindStr)}\n`;
   if(n.edges.length)fmt+=`<span class="label">Edges:</span> ${n.edges.join(', ')}\n`;
-  if(n.hindrances.length)fmt+=`<span class="label">Hindrances:</span> ${n.hindrances.join(', ')}\n`;
-  if(n.gearText)fmt+=`<span class="label">Gear:</span> ${esc(n.gearText)}\n`;
+  if(hasGear)fmt+=`<span class="label">Gear:</span> ${esc(gearLine)}\n`;
   if(n.pp>0)fmt+=`<span class="label">Powers (${n.pp} PP):</span> ${n.powers.join(', ')}\n`;
-  if(n.tactics)fmt+=`<span class="label">Tactics:</span> ${esc(n.tactics)}\n`;
+  if(n.tactics)fmt+=`\n<span class="label">Tactics:</span> ${esc(n.tactics)}\n`;
+
+  // === MARKDOWN ===
   let md=`**${n.name}**\n`;
   if(n.quote)md+=`*"${n.quote}"*\n\n`;
   if(n.description)md+=`${n.description}\n\n`;
   md+=`**Attributes:** Agility ${d(n.agility)}, Smarts ${d(n.smarts)}, Spirit ${d(n.spirit)}, Strength ${d(n.strength)}, Vigor ${d(n.vigor)}\n`;
-  md+=`**Skills:** ${skillStr}\n**Pace:** ${n.pace}; **Parry:** ${n.parry}; **Toughness:** ${toughDisp}\n`;
+  md+=`**Skills:** ${skillStr}\n`;
+  md+=`**Pace:** ${n.pace}; **Parry:** ${n.parry}; **Toughness:** ${toughDisp}\n`;
+  if(n.hindrances.length)md+=`**Hindrances:** ${hindStr}\n`;
   if(n.edges.length)md+=`**Edges:** ${n.edges.join(', ')}\n`;
-  if(n.hindrances.length)md+=`**Hindrances:** ${n.hindrances.join(', ')}\n`;
-  if(n.gearText)md+=`**Gear:** ${n.gearText}\n`;
+  if(hasGear)md+=`**Gear:** ${gearLine}\n`;
   if(n.pp>0)md+=`**Powers (${n.pp} PP):** ${n.powers.join(', ')}\n`;
-  if(n.tactics)md+=`**Tactics:** ${n.tactics}\n`;
-  
-  // RTF format
+  if(n.tactics)md+=`\n**Tactics:** ${n.tactics}\n`;
+
+  // === RTF ===
+  function rtfEsc(s){return (s||'').replace(/\\/g,'\\\\').replace(/{/g,'\\{').replace(/}/g,'\\}');}
   let rtf = `{\\rtf1\\ansi\\deff0\n`;
   rtf += `{\\fonttbl{\\f0\\fswiss Helvetica;}{\\f1\\fmodern Courier;}}\n`;
   rtf += `{\\colortbl;\\red185\\green151\\blue91;\\red200\\green200\\blue200;}\n`;
   rtf += `\\f0\\fs24\n`;
-  rtf += `{\\b ${n.name.replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}}\\par\n`;
-  if(n.quote) rtf += `{\\i "${n.quote.replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}"}\\par\\par\n`;
-  if(n.description) rtf += `${n.description.replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}\\par\\par\n`;
+  rtf += `{\\b ${rtfEsc(n.name)}}\\par\n`;
+  if(n.quote) rtf += `{\\i "${rtfEsc(n.quote)}"}\\par\\par\n`;
+  if(n.description) rtf += `${rtfEsc(n.description)}\\par\\par\n`;
   rtf += `{\\b Attributes:} Agility ${d(n.agility)}, Smarts ${d(n.smarts)}, Spirit ${d(n.spirit)}, Strength ${d(n.strength)}, Vigor ${d(n.vigor)}\\par\n`;
-  rtf += `{\\b Skills:} ${skillStr.replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}\\par\n`;
+  rtf += `{\\b Skills:} ${rtfEsc(skillStr)}\\par\n`;
   rtf += `{\\b Pace:} ${n.pace}; {\\b Parry:} ${n.parry}; {\\b Toughness:} ${toughDisp}\\par\n`;
-  if(n.edges.length) rtf += `{\\b Edges:} ${n.edges.join(', ').replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}\\par\n`;
-  if(n.hindrances.length) rtf += `{\\b Hindrances:} ${n.hindrances.join(', ').replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}\\par\n`;
-  if(n.gearText) rtf += `{\\b Gear:} ${n.gearText.replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}\\par\n`;
-  if(n.pp>0) rtf += `{\\b Powers (${n.pp} PP):} ${n.powers.join(', ').replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}\\par\n`;
-  if(n.tactics) rtf += `{\\b Tactics:} ${n.tactics.replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}')}\\par\n`;
+  if(n.hindrances.length) rtf += `{\\b Hindrances:} ${rtfEsc(hindStr)}\\par\n`;
+  if(n.edges.length) rtf += `{\\b Edges:} ${rtfEsc(n.edges.join(', '))}\\par\n`;
+  if(hasGear) rtf += `{\\b Gear:} ${rtfEsc(gearLine)}\\par\n`;
+  if(n.pp>0) rtf += `{\\b Powers (${n.pp} PP):} ${rtfEsc(n.powers.join(', '))}\\par\n`;
+  if(n.tactics) rtf += `{\\b Tactics:} ${rtfEsc(n.tactics)}\\par\n`;
   rtf += `}\n`;
   
   document.getElementById('panelContent').innerHTML=`<div class="export-tabs"><div class="export-tab active" onclick="switchExportTab(this,'fmt')">Formatted</div><div class="export-tab" onclick="switchExportTab(this,'md')">Markdown</div><div class="export-tab" onclick="switchExportTab(this,'rtf')">RTF</div></div><div class="export-content" id="exportFmt">${fmt}</div><div class="export-content" id="exportMd" style="display:none">${esc(md)}</div><div class="export-content" id="exportRtf" style="display:none">${esc(rtf)}</div><div class="form-actions" style="margin-top:8px"><button class="btn" onclick="copyExport('html')">Copy HTML</button><button class="btn" onclick="copyExport('md')">Copy Markdown</button><button class="btn" onclick="copyExport('rtf')">Copy RTF</button><button class="btn primary" onclick="downloadExport('rtf')" style="background:var(--accent);border-color:var(--accent);color:#000">💾 Download RTF</button></div>`;
