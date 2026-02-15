@@ -794,7 +794,12 @@ header .subtitle {
 
 <script>
 // Core data structures matching Character Vault patterns
-let allAdventures = [
+let allAdventures = []
+let currentAdventure = null;
+let activePanel = null;
+let _baselines = {};
+
+allAdventures = [
   {
     "week": 1,
     "code": "AM-40",
@@ -1424,7 +1429,6 @@ document.addEventListener('keydown', e => {
 });
 
 // Initialize
-initSampleData();
 updateBreadcrumb();
 
 // ═══ VAULT INTEGRATION ═══
