@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Vault - DiceForge Studios</title>
+  <link rel="stylesheet" href="tribute-lands.css">
+  <script src="tool-navigation.js"></script>
+  <style>
+    /* Task-specific overrides */
+    .task-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+
+    .task-card:hover {
+      background: var(--card-hover-bg);
+      border-color: var(--accent-secondary);
+    }
+
+    .task-card.completed {
+      opacity: 0.6;
+      border-left: 3px solid var(--success-color);
+    }
+
+    .task-card.priority-critical {
+      border-left: 3px solid var(--danger-color);
+    }
+
+    .task-card.priority-high {
+      border-left: 3px solid var(--warning-color);
+    }
+
+    .task-card.priority-normal {
+      border-left: 3px solid var(--accent-secondary);
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+
+    .task-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .task-title.completed {
+      text-decoration: line-through;
+      color: var(--text-dim);
+    }
+
+    .task-meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-dim);
+      flex-wrap: wrap;
+    }
+
+    .task-badge {
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .badge-category {
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+    }
+
+    .badge-priority {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-dim);
+    }
+
+    .badge-priority.critical {
+      background: var(--danger-color);
+      color: white;
+      border: none;
+    }
+
+    .badge-priority.high {
+      background: var(--warning-color);
+      color: var(--bg-primary);
+      border: none;
+    }
+
+    .task-description {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .task-checkbox {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: var(--accent-primary);
+    }
+
+    .filters-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .filter-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    .stats-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--accent-primary);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-dim);
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="header-left">
+          <h1 class="header-title">Task Vault</h1>
+          <p class="header-subtitle">DiceForge Studios Production Management</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" onclick="openTaskModal()">+ New Task</button>
+          <button class="btn" onclick="exportTasks()">📋 Export</button>
+          <button class="btn" onclick="showHelp()">❓ Help</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Stats Summary -->
+      <div class="stats-summary" id="statsSummary"></div>
+
+      <!-- Filters -->
+      <div class="filters-bar">
+        <div class="filter-group">
+          <label class="filter-label">Category:</label>
+          <select class="form-select" id="filterCategory" onchange="applyFilters()" style="width: auto;">
+            <option value="all">All Categories</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Priority:</label>
+          <select class="form-select" id="filterPriority" onchange="applyFilters()" style="width: auto;">
+            <option value="all">All Priorities</option>
+            <option value="critical">🔴 Critical</option>
+            <option value="high">🟡 High</option>
+            <option value="normal">⚪ Normal</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">
+            <input type="checkbox" id="filterCompleted" onchange="applyFilters()">
+            Show Completed
+          </label>
+        </div>
+        <div class="filter-group" style="margin-left: auto;">
+          <input type="text" class="form-input" id="searchInput" placeholder="Search tasks..." 
+                 onkeyup="applyFilters()" style="width: 200px;">
+        </div>
+      </div>
+
+      <!-- Task List -->
+      <div id="taskList"></div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state" style="display: none;">
+        <div class="empty-state-icon">📋</div>
+        <h3>No tasks found</h3>
+        <p>Create your first task to get started!</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Task Modal -->
+  <div class="modal-overlay" id="taskModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">New Task</h2>
+        <button class="btn btn-text" onclick="closeTaskModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="taskForm" onsubmit="saveTask(event)">
+          <input type="hidden" id="taskId">
+          
+          <div class="form-group">
+            <label class="form-label">Title *</label>
+            <input type="text" class="form-input" id="taskTitle" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-textarea" id="taskDescription"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select class="form-select" id="taskCategory" required>
+              <option value="">Select category...</option>
+              <option value="Content">Content</option>
+              <option value="Development">Development</option>
+              <option value="Business">Business</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Technical">Technical</option>
+              <option value="Planning">Planning</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Priority *</label>
+            <select class="form-select" id="taskPriority" required>
+              <option value="normal">⚪ Normal</option>
+              <option value="high">🟡 High</option>
+              <option value="critical">🔴 Critical</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Notes</label>
+            <textarea class="form-textarea" id="taskNotes" style="min-height: 60px;"></textarea>
+          </div>
+
+          <div class="task-actions" style="border: none; padding: 0; margin-top: 24px;">
+            <button type="submit" class="btn btn-primary">Save Task</button>
+            <button type="button" class="btn" onclick="closeTaskModal()">Cancel</button>
+            <button type="button" class="btn btn-danger" id="deleteTaskBtn" 
+                    onclick="deleteTask()" style="margin-left: auto; display: none;">Delete</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Task data store
+    let allTasks = [];
+    let filteredTasks = [];
+    let editingTaskId = null;
+
+    // Load tasks from JSON file
+    async function loadTasks() {
+      try {
+        const response = await fetch('task-vault-data.json');
+        if (response.ok) {
+          const data = await response.json();
+          allTasks = data.tasks || [];
+        } else {
+          // Initialize with empty array if file doesn't exist
+          allTasks = [];
+        }
+      } catch (error) {
+        console.error('Error loading tasks:', error);
+        allTasks = [];
+      }
+      
+      applyFilters();
+      updateStats();
+      populateCategoryFilter();
+    }
+
+    // Populate category filter dropdown
+    function populateCategoryFilter() {
+      const categories = [...new Set(allTasks.map(t => t.category))].sort();
+      const filterSelect = document.getElementById('filterCategory');
+      const currentValue = filterSelect.value;
+      
+      filterSelect.innerHTML = '<option value="all">All Categories</option>';
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        filterSelect.appendChild(option);
+      });
+      
+      filterSelect.value = currentValue;
+    }
+
+    // Apply filters
+    function applyFilters() {
+      const categoryFilter = document.getElementById('filterCategory').value;
+      const priorityFilter = document.getElementById('filterPriority').value;
+      const showCompleted = document.getElementById('filterCompleted').checked;
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+      filteredTasks = allTasks.filter(task => {
+        if (!showCompleted && task.completed) return false;
+        if (categoryFilter !== 'all' && task.category !== categoryFilter) return false;
+        if (priorityFilter !== 'all' && task.priority !== priorityFilter) return false;
+        if (searchTerm && !task.title.toLowerCase().includes(searchTerm) && 
+            !task.description.toLowerCase().includes(searchTerm)) return false;
+        return true;
+      });
+
+      renderTasks();
+    }
+
+    // Render tasks
+    function renderTasks() {
+      const taskList = document.getElementById('taskList');
+      const emptyState = document.getElementById('emptyState');
+
+      if (filteredTasks.length === 0) {
+        taskList.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      
+      // Sort: incomplete first, then by priority
+      const sortedTasks = [...filteredTasks].sort((a, b) => {
+        if (a.completed !== b.completed) return a.completed ? 1 : -1;
+        const priorityOrder = { critical: 0, high: 1, normal: 2 };
+        return priorityOrder[a.priority] - priorityOrder[b.priority];
+      });
+
+      taskList.innerHTML = sortedTasks.map(task => `
+        <div class="task-card ${task.completed ? 'completed' : ''} priority-${task.priority}">
+          <div class="task-header">
+            <div style="display: flex; align-items: start; gap: 12px; flex: 1;">
+              <input type="checkbox" class="task-checkbox" 
+                     ${task.completed ? 'checked' : ''}
+                     onchange="toggleComplete('${task.id}')">
+              <div style="flex: 1;">
+                <div class="task-title ${task.completed ? 'completed' : ''}" 
+                     onclick="editTask('${task.id}')">
+                  ${task.title}
+                </div>
+                <div class="task-meta">
+                  <span class="task-badge badge-category">${task.category}</span>
+                  <span class="task-badge badge-priority ${task.priority}">
+                    ${task.priority === 'critical' ? '🔴' : task.priority === 'high' ? '🟡' : '⚪'} 
+                    ${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+                  </span>
+                  ${task.created ? `<span>Created: ${new Date(task.created).toLocaleDateString()}</span>` : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+          ${task.description ? `<div class="task-description">${task.description}</div>` : ''}
+          ${task.notes ? `<div class="task-description" style="font-style: italic; font-size: 13px;">💡 ${task.notes}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    // Update statistics
+    function updateStats() {
+      const total = allTasks.length;
+      const completed = allTasks.filter(t => t.completed).length;
+      const critical = allTasks.filter(t => !t.completed && t.priority === 'critical').length;
+      const high = allTasks.filter(t => !t.completed && t.priority === 'high').length;
+
+      document.getElementById('statsSummary').innerHTML = `
+        <div class="stat-card">
+          <div class="stat-value">${total}</div>
+          <div class="stat-label">Total Tasks</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${total - completed}</div>
+          <div class="stat-label">Active</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${completed}</div>
+          <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${critical}</div>
+          <div class="stat-label">🔴 Critical</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${high}</div>
+          <div class="stat-label">🟡 High Priority</div>
+        </div>
+      `;
+    }
+
+    // Toggle task completion
+    function toggleComplete(id) {
+      const task = allTasks.find(t => t.id === id);
+      if (task) {
+        task.completed = !task.completed;
+        task.completedDate = task.completed ? new Date().toISOString() : null;
+        saveTasks();
+        applyFilters();
+        updateStats();
+      }
+    }
+
+    // Open task modal
+    function openTaskModal(id = null) {
+      editingTaskId = id;
+      const modal = document.getElementById('taskModal');
+      const deleteBtn = document.getElementById('deleteTaskBtn');
+      
+      if (id) {
+        const task = allTasks.find(t => t.id === id);
+        document.getElementById('modalTitle').textContent = 'Edit Task';
+        document.getElementById('taskId').value = task.id;
+        document.getElementById('taskTitle').value = task.title;
+        document.getElementById('taskDescription').value = task.description || '';
+        document.getElementById('taskCategory').value = task.category;
+        document.getElementById('taskPriority').value = task.priority;
+        document.getElementById('taskNotes').value = task.notes || '';
+        deleteBtn.style.display = 'block';
+      } else {
+        document.getElementById('modalTitle').textContent = 'New Task';
+        document.getElementById('taskForm').reset();
+        document.getElementById('taskId').value = '';
+        deleteBtn.style.display = 'none';
+      }
+      
+      modal.classList.add('active');
+    }
+
+    // Close task modal
+    function closeTaskModal() {
+      document.getElementById('taskModal').classList.remove('active');
+      editingTaskId = null;
+    }
+
+    // Edit task
+    function editTask(id) {
+      openTaskModal(id);
+    }
+
+    // Save task
+    function saveTask(event) {
+      event.preventDefault();
+      
+      const id = document.getElementById('taskId').value;
+      const taskData = {
+        id: id || `task_${Date.now()}`,
+        title: document.getElementById('taskTitle').value,
+        description: document.getElementById('taskDescription').value,
+        category: document.getElementById('taskCategory').value,
+        priority: document.getElementById('taskPriority').value,
+        notes: document.getElementById('taskNotes').value,
+        completed: false,
+        created: new Date().toISOString()
+      };
+
+      if (id) {
+        // Update existing task
+        const index = allTasks.findIndex(t => t.id === id);
+        if (index !== -1) {
+          // Preserve completion status and dates
+          taskData.completed = allTasks[index].completed;
+          taskData.completedDate = allTasks[index].completedDate;
+          taskData.created = allTasks[index].created;
+          allTasks[index] = taskData;
+        }
+      } else {
+        // Add new task
+        allTasks.unshift(taskData);
+      }
+
+      saveTasks();
+      closeTaskModal();
+      applyFilters();
+      updateStats();
+      populateCategoryFilter();
+    }
+
+    // Delete task
+    function deleteTask() {
+      if (!confirm('Are you sure you want to delete this task?')) return;
+      
+      const id = document.getElementById('taskId').value;
+      allTasks = allTasks.filter(t => t.id !== id);
+      
+      saveTasks();
+      closeTaskModal();
+      applyFilters();
+      updateStats();
+      populateCategoryFilter();
+    }
+
+    // Save tasks to JSON (downloads file)
+    function saveTasks() {
+      const dataStr = JSON.stringify({ tasks: allTasks }, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'task-vault-data.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Export tasks as markdown
+    function exportTasks() {
+      const categories = {};
+      
+      allTasks.forEach(task => {
+        if (!categories[task.category]) {
+          categories[task.category] = { critical: [], high: [], normal: [] };
+        }
+        categories[task.category][task.priority].push(task);
+      });
+
+      let markdown = '# Task Vault Export\n';
+      markdown += `Generated: ${new Date().toLocaleString()}\n\n`;
+      markdown += `**Total Tasks:** ${allTasks.length}\n`;
+      markdown += `**Completed:** ${allTasks.filter(t => t.completed).length}\n`;
+      markdown += `**Active:** ${allTasks.filter(t => !t.completed).length}\n\n`;
+      markdown += '---\n\n';
+
+      Object.keys(categories).sort().forEach(category => {
+        const cat = categories[category];
+        const hasTasks = cat.critical.length + cat.high.length + cat.normal.length > 0;
+        if (!hasTasks) return;
+
+        markdown += `## ${category}\n\n`;
+
+        ['critical', 'high', 'normal'].forEach(priority => {
+          if (cat[priority].length > 0) {
+            const icon = priority === 'critical' ? '🔴' : priority === 'high' ? '🟡' : '⚪';
+            markdown += `### ${icon} ${priority.charAt(0).toUpperCase() + priority.slice(1)} Priority\n\n`;
+            
+            cat[priority].forEach(task => {
+              const checkbox = task.completed ? '[x]' : '[ ]';
+              markdown += `- ${checkbox} **${task.title}**\n`;
+              if (task.description) {
+                markdown += `  ${task.description}\n`;
+              }
+              if (task.notes) {
+                markdown += `  💡 _${task.notes}_\n`;
+              }
+              markdown += '\n';
+            });
+          }
+        });
+      });
+
+      const blob = new Blob([markdown], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'tasks.md';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Show help
+    function showHelp() {
+      alert('Task Vault Help\n\n' +
+            '• Click "+ New Task" to create a task\n' +
+            '• Click on task titles to edit\n' +
+            '• Use checkboxes to mark complete\n' +
+            '• Filter by category, priority, or search\n' +
+            '• Export creates markdown checklist\n' +
+            '• Data stored in task-vault-data.json');
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      addToolNavigation('task-vault');
+      loadTasks();
+    });
+
+    // Close modal on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeTaskModal();
+      }
+    });
+
+    // Close modal on background click
+    document.getElementById('taskModal').addEventListener('click', (e) => {
+      if (e.target.id === 'taskModal') {
+        closeTaskModal();
+      }
+    });
+  </script>
+</body>
+</html>
