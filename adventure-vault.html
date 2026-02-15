@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tribute Lands — Adventure Vault</title>
+<style>
+:root {
+  --bg-dark: #1a1a1a;
+  --bg-card: #242424;
+  --bg-input: #2e2e2e;
+  --bg-hover: #333;
+  --border: #444;
+  --text: #d4d0c8;
+  --text-dim: #888;
+  --text-bright: #f0ece0;
+  --accent: #c49a4a;
+  --accent-dim: #8a6d33;
+  --red: #a44;
+  --green: #5a5;
+  --blue: #4a7a9a;
+  --orange: #c96;
+  --purple: #9a6aa4;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+body { 
+  font-family: 'Segoe UI', Tahoma, Geneva, sans-serif; 
+  background: var(--bg-dark); 
+  color: var(--text); 
+  line-height: 1.5; 
+  margin: 0; 
+  padding: 0; 
+  overflow: hidden; 
+  height: 100%; 
+  display: flex; 
+  flex-direction: column; 
+}
+
+header { 
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2218 100%); 
+  border-bottom: 2px solid var(--accent-dim); 
+  padding: 16px 24px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  flex-shrink: 0; 
+}
+
+header h1 { 
+  font-size: 18px; 
+  color: var(--accent); 
+  font-weight: 600; 
+  letter-spacing: 1px; 
+}
+
+header .subtitle { 
+  font-size: 11px; 
+  color: var(--text-dim); 
+  letter-spacing: 2px; 
+  text-transform: uppercase; 
+}
+
+.header-stats { 
+  display: flex; 
+  gap: 16px; 
+  font-size: 13px; 
+  color: var(--text-dim); 
+}
+
+.header-stats > span:hover { 
+  color: var(--accent); 
+  cursor: pointer;
+}
+
+.header-stats .stat-num { 
+  color: var(--accent); 
+  font-weight: 600; 
+}
+
+#breadcrumb { 
+  background: var(--bg-dark); 
+  border-bottom: 1px solid var(--border); 
+  padding: 4px 24px 4px 324px; 
+  font-size: 11px; 
+  color: var(--text-dim); 
+  flex-shrink: 0; 
+  display: flex; 
+  align-items: center; 
+  gap: 6px; 
+  min-height: 22px; 
+}
+
+#breadcrumb .bc-sep { 
+  color: var(--border); 
+  margin: 0 2px; 
+}
+
+#breadcrumb .bc-link { 
+  color: var(--text-dim); 
+  cursor: pointer; 
+  text-decoration: none; 
+}
+
+#breadcrumb .bc-link:hover { 
+  color: var(--accent); 
+}
+
+#breadcrumb .bc-current { 
+  color: var(--accent); 
+  font-weight: 600; 
+}
+
+.container { 
+  display: flex; 
+  flex: 1; 
+  min-height: 0; 
+}
+
+.sidebar { 
+  width: 300px; 
+  min-width: 300px; 
+  background: var(--bg-card); 
+  border-right: 1px solid var(--border); 
+  display: flex; 
+  flex-direction: column; 
+  overflow: hidden; 
+}
+
+.sidebar-controls { 
+  padding: 10px; 
+  border-bottom: 1px solid var(--border); 
+  display: flex; 
+  flex-direction: column; 
+  gap: 6px; 
+  flex-shrink: 0; 
+}
+
+.filter-row { 
+  display: flex; 
+  gap: 6px; 
+}
+
+.sidebar-controls input,
+.sidebar-controls select { 
+  background: var(--bg-input); 
+  border: 1px solid var(--border); 
+  color: var(--text); 
+  padding: 6px 8px; 
+  border-radius: 3px; 
+  font-size: 13px; 
+}
+
+.sidebar-controls input {
+  flex: 1;
+}
+
+.sidebar-controls select {
+  min-width: 100px;
+}
+
+.adventure-list { 
+  flex: 1 1 0; 
+  min-height: 0; 
+  overflow-y: scroll; 
+  padding: 4px; 
+  scrollbar-width: auto; 
+  scrollbar-color: var(--accent-dim) var(--bg-dark); 
+}
+
+.adventure-list::-webkit-scrollbar { 
+  width: 10px; 
+}
+
+.adventure-list::-webkit-scrollbar-track { 
+  background: var(--bg-dark); 
+}
+
+.adventure-list::-webkit-scrollbar-thumb { 
+  background: var(--accent-dim); 
+  border-radius: 5px; 
+  border: 2px solid var(--bg-dark); 
+}
+
+.adventure-list::-webkit-scrollbar-thumb:hover { 
+  background: var(--accent); 
+}
+
+.adventure-item { 
+  padding: 10px 12px; 
+  border-radius: 4px; 
+  cursor: pointer; 
+  border: 1px solid transparent; 
+  margin-bottom: 3px; 
+}
+
+.adventure-item:hover { 
+  background: var(--bg-hover); 
+}
+
+.adventure-item.active { 
+  background: var(--bg-hover); 
+  border-color: var(--accent-dim); 
+}
+
+.adventure-item.dirty-draft { 
+  border-left: 3px solid #5588cc; 
+}
+
+.adventure-item.dirty-committed { 
+  background: rgba(200,150,30,0.08); 
+  border-left: 3px solid #c8961e; 
+}
+
+.adventure-item.dirty-published { 
+  background: rgba(200,50,50,0.1); 
+  border-left: 3px solid #cc3333; 
+}
+
+.adventure-item .dirty-badge { 
+  font-size: 9px; 
+  padding: 1px 5px; 
+  border-radius: 3px; 
+  margin-left: 4px; 
+  font-weight: 600; 
+  letter-spacing: 0.5px; 
+  vertical-align: middle; 
+}
+
+.adventure-item .dirty-badge.draft { 
+  background: #5588cc33; 
+  color: #88bbee; 
+}
+
+.adventure-item .dirty-badge.committed { 
+  background: #c8961e33; 
+  color: #e8b84e; 
+}
+
+.adventure-item .dirty-badge.published { 
+  background: #cc333333; 
+  color: #ee6666; 
+}
+
+.adventure-item .adv-num { 
+  font-size: 11px; 
+  color: var(--text-dim); 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px; 
+  margin-bottom: 2px;
+}
+
+.adventure-item .adv-title { 
+  font-size: 14px; 
+  font-weight: 600; 
+  color: var(--text-bright); 
+  margin-bottom: 3px;
+}
+
+.adventure-item .adv-meta { 
+  font-size: 12px; 
+  color: var(--text-dim); 
+}
+
+.status-tag { 
+  display: inline-block; 
+  padding: 0 6px; 
+  border-radius: 2px; 
+  font-size: 10px; 
+  font-weight: 600; 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px; 
+  vertical-align: middle; 
+  margin-left: 4px; 
+}
+
+.status-tag.catalogue { background: #555; color: #ccc; }
+.status-tag.outline { background: var(--purple); color: #fff; }
+.status-tag.draft { background: var(--orange); color: #fff; }
+.status-tag.review { background: var(--blue); color: #fff; }
+.status-tag.complete { background: var(--green); color: #fff; }
+.status-tag.published { background: var(--accent); color: #1a1a1a; }
+
+.sidebar-footer { 
+  padding: 8px 10px; 
+  border-top: 1px solid var(--border); 
+  display: flex; 
+  gap: 4px; 
+  flex-shrink: 0; 
+  flex-wrap: wrap; 
+}
+
+.main { 
+  flex: 1; 
+  overflow-y: auto; 
+  padding: 20px 28px; 
+  display: flex; 
+  flex-direction: column; 
+}
+
+.main.empty-state { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  color: var(--text-dim); 
+  font-size: 15px; 
+}
+
+.detail-header { 
+  margin-bottom: 20px; 
+  flex-shrink: 0; 
+}
+
+.detail-header h2 { 
+  font-size: 24px; 
+  color: var(--text-bright); 
+  font-weight: 600; 
+  margin-bottom: 6px;
+}
+
+.detail-header .subtitle-line { 
+  font-size: 15px; 
+  color: var(--accent); 
+}
+
+.detail-columns {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+}
+
+.col-left {
+  width: 400px;
+  min-width: 400px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.col-middle {
+  min-width: 380px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.col-right {
+  width: 360px;
+  min-width: 300px;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.section-box { 
+  background: var(--bg-card); 
+  border: 1px solid var(--border); 
+  border-radius: 4px; 
+  padding: 14px 16px; 
+  margin-bottom: 14px; 
+  font-size: 13px; 
+}
+
+.section-box h3 { 
+  font-size: 12px; 
+  color: var(--accent); 
+  text-transform: uppercase; 
+  letter-spacing: 1px; 
+  margin-bottom: 8px; 
+  font-weight: 600; 
+  cursor: pointer;
+}
+
+.section-box h3:hover {
+  text-decoration: underline;
+}
+
+.section-box h3 .edit-icon {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-left: 2px;
+}
+
+.section-box p { 
+  color: var(--text); 
+  line-height: 1.6; 
+  margin-bottom: 8px;
+}
+
+.section-box .item-entry { 
+  padding: 4px 0; 
+  border-bottom: 1px solid #2a2a2a; 
+  font-size: 13px; 
+}
+
+.section-box .item-entry:last-child { 
+  border-bottom: none; 
+}
+
+.section-box .none-text {
+  color: var(--text-dim);
+  font-size: 12px;
+  font-style: italic;
+}
+
+.meta-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.meta-item {
+  flex: 1;
+}
+
+.meta-label { 
+  font-size: 11px; 
+  color: var(--text-dim); 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px; 
+  margin-bottom: 4px;
+}
+
+.meta-value { 
+  font-size: 14px; 
+  color: var(--text-bright); 
+  font-weight: 600;
+}
+
+.npc-tag { 
+  display: inline-block; 
+  padding: 2px 8px; 
+  background: rgba(196, 154, 74, 0.2); 
+  border: 1px solid rgba(196, 154, 74, 0.5); 
+  border-radius: 3px; 
+  font-size: 11px; 
+  color: var(--accent); 
+  margin: 2px 4px 2px 0;
+  cursor: pointer;
+}
+
+.npc-tag:hover {
+  background: rgba(196, 154, 74, 0.3);
+}
+
+.thread-card { 
+  background: var(--bg-card); 
+  border: 1px solid var(--border); 
+  border-left: 3px solid var(--purple); 
+  border-radius: 4px; 
+  padding: 10px 12px; 
+  margin-bottom: 8px;
+}
+
+.thread-card h4 { 
+  color: var(--purple); 
+  margin-bottom: 4px; 
+  font-size: 13px;
+}
+
+.thread-card p { 
+  color: var(--text-dim); 
+  font-size: 12px; 
+  line-height: 1.5;
+}
+
+.thread-weeks {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.thread-week {
+  padding: 2px 6px;
+  background: rgba(154, 106, 164, 0.2);
+  border-radius: 10px;
+  font-size: 10px;
+  color: var(--purple);
+}
+
+.thread-week.planted {
+  background: rgba(74, 122, 154, 0.2);
+  color: var(--blue);
+}
+
+.thread-week.payoff {
+  background: rgba(196, 154, 74, 0.3);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.btn { 
+  background: var(--bg-input); 
+  border: 1px solid var(--border); 
+  color: var(--text); 
+  padding: 5px 12px; 
+  border-radius: 3px; 
+  cursor: pointer; 
+  font-size: 13px; 
+  font-family: inherit; 
+  transition: all 0.2s;
+}
+
+.btn:hover { 
+  background: var(--bg-hover); 
+  border-color: var(--accent-dim); 
+}
+
+.btn.primary { 
+  background: var(--accent-dim); 
+  color: var(--text-bright); 
+  border-color: var(--accent); 
+}
+
+.btn.primary:hover { 
+  background: var(--accent); 
+  color: #1a1a1a; 
+}
+
+.btn.sm { 
+  padding: 4px 10px; 
+  font-size: 11px; 
+}
+
+.btn.danger {
+  border-color: var(--red);
+}
+
+.btn.danger:hover {
+  background: var(--red);
+  color: #fff;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 8px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.6;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px;
+  width: 600px;
+  max-width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal h3 {
+  color: var(--accent);
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.form-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+#advBottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 300px;
+  right: 0;
+  z-index: 50;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  padding: 8px 20px;
+  display: none;
+}
+
+#advBottomBar .status-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+}
+
+#advBottomBar .action-btns {
+  display: flex;
+  gap: 6px;
+  margin-left: 20px;
+  padding-left: 20px;
+  border-left: 1px solid var(--border);
+}
+
+#advBottomBar .commit-area {
+  margin-left: auto;
+  padding-left: 20px;
+  border-left: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lifecycle-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.lifecycle-badge.draft {
+  background: rgba(85, 85, 85, 0.3);
+  color: var(--text-dim);
+}
+
+.lifecycle-badge.committed {
+  background: rgba(90, 165, 90, 0.2);
+  color: var(--green);
+}
+
+.lifecycle-badge.published {
+  background: rgba(196, 154, 74, 0.2);
+  color: var(--accent);
+}
+
+@media (max-width: 1200px) {
+  .detail-columns {
+    flex-direction: column;
+  }
+  
+  .col-left,
+  .col-middle,
+  .col-right {
+    width: 100%;
+    min-width: 0;
+    max-height: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>TRIBUTE LANDS — ADVENTURE VAULT</h1>
+    <div class="subtitle">DiceForge Studios Production System</div>
+  </div>
+  <div class="header-stats">
+    <span><span class="stat-num" id="totalAdventures">0</span> Adventures</span>
+    <span><span class="stat-num" id="completeAdventures">0</span> Complete</span>
+    <span title="Overall completion"><span class="stat-num" id="progressPct">0%</span></span>
+  </div>
+</header>
+
+<div id="breadcrumb">
+  <span class="bc-current">Adventure Vault</span>
+</div>
+
+<div class="container">
+  <div class="sidebar">
+    <div class="sidebar-controls">
+      <input type="text" id="searchInput" placeholder="Search adventures..." oninput="filterAdventures()">
+      <div class="filter-row">
+        <select id="phaseFilter" onchange="filterAdventures()">
+          <option value="">All Phases</option>
+          <option value="catalogue">Catalogue</option>
+          <option value="outline">Outline</option>
+          <option value="draft">Draft</option>
+          <option value="review">Review</option>
+          <option value="complete">Complete</option>
+        </select>
+        <select id="lifecycleFilter" onchange="filterAdventures()" title="Filter by lifecycle state">
+          <option value="">All States</option>
+          <option value="draft">📝 Draft</option>
+          <option value="committed">📦 Committed</option>
+          <option value="published">🔒 Published</option>
+          <option value="dirty">✏️ Pending Edits</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="adventure-list" id="adventureList">
+      <!-- Populated by JavaScript -->
+    </div>
+    
+    <div class="sidebar-footer">
+      <button class="btn primary" style="flex: 1;" onclick="openNewAdventureModal()">+ New Adventure</button>
+      <button class="btn sm" onclick="showReviewPanel()">Review</button>
+      <button class="btn sm" onclick="showBundles()">Bundles</button>
+      <button class="btn sm" onclick="showStats()">Stats</button>
+    </div>
+  </div>
+  
+  <div class="main empty-state" id="mainContent">
+    Select an adventure or create a new one
+  </div>
+</div>
+
+<div id="advBottomBar" style="display: none;">
+  <!-- Populated when adventure is selected -->
+</div>
+
+<!-- New Adventure Modal -->
+<div class="modal-overlay" id="newAdventureModal">
+  <div class="modal">
+    <h3>New Adventure</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Week Number *</label>
+        <input type="number" id="new_week" min="1" max="50" placeholder="1-50">
+      </div>
+      <div class="form-group">
+        <label>Phase *</label>
+        <select id="new_phase">
+          <option value="catalogue">Catalogue</option>
+          <option value="outline">Outline</option>
+          <option value="draft">Draft</option>
+          <option value="review">Review</option>
+          <option value="complete">Complete</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Title *</label>
+      <input id="new_title" placeholder="e.g. Shadow Over the Docks">
+    </div>
+    <div class="form-group">
+      <label>Showcase Elements</label>
+      <input id="new_showcase" placeholder="e.g. Smugglers, missing cargo, warehouse investigation">
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="closeNewAdventureModal()">Cancel</button>
+      <button class="btn primary" onclick="createAdventure()">Create Adventure</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Core data structures matching Character Vault patterns
+let allAdventures = [];
+let currentAdventure = null;
+let activePanel = null;
+
+// Canon/lifecycle management
+let canonCommitted = new Set();
+let _canonSnapshots = {}; // week → {snapshot, committedAt, changeId}
+let _canonLog = [];
+let _canonSeq = 0;
+
+// Baselines for dirty tracking
+let _baselines = {};
+
+// Navigation history
+let _navHistory = [];
+let _navFwdStack = [];
+let _navPushing = false;
+
+// Undo/redo
+const UNDO_CAP = 40;
+let _undoStack = [];
+let _redoStack = [];
+let _lastSnapshot = null;
+
+// Sample data for demonstration
+function initSampleData() {
+  allAdventures = [
+    {
+      week: 1,
+      title: "Shadow Over the Docks",
+      showcase: "Smugglers, missing cargo, warehouse investigation",
+      phase: "complete",
+      hook: "A prominent merchant's shipment vanishes from the docks overnight, and the Tally-men are asking questions.",
+      scenes: ["Docks investigation", "Warehouse infiltration", "Confrontation with smugglers"],
+      npcs: ["Marcus Vane", "Sister Elara", "Captain Roth"],
+      threads: [{id: "brotherhood-rise", type: "planted", description: "Evidence of Brotherhood expansion"}],
+      complications: ["City Watch arrives", "Fire breaks out"],
+      twists: ["The merchant is complicit"],
+      rewards: "100sp, merchant's favor",
+      notes: "First introduction to Brotherhood influence in Ammaria"
+    },
+    {
+      week: 2,
+      title: "The Gilded Conspiracy",
+      showcase: "Guild politics, poisoned wine, masked ball",
+      phase: "review",
+      hook: "An invitation arrives to a guild master's exclusive soirée—but danger lurks beneath the silk and gold.",
+      scenes: ["Masked ball", "Investigation", "Poisoner confrontation"],
+      npcs: ["Lord Cassius", "Madame Silk", "Inspector Vale"],
+      threads: [{id: "merchant-council", type: "planted", description: "Power struggles within Council"}],
+      complications: ["Guest list complications", "Political scandal"],
+      twists: ["The poison was meant for someone else"],
+      rewards: "Political favor, 150sp",
+      notes: "Introduces Merchant Council dynamics"
+    },
+    {
+      week: 3,
+      title: "Blood on the Cobblestones",
+      showcase: "Street gang warfare, protection rackets",
+      phase: "draft",
+      hook: "Gang violence erupts in the Trade Quarter, and the Brotherhood wants the heroes to restore order—their way.",
+      scenes: ["Gang meeting", "Street fight", "Negotiation"],
+      npcs: ["Razor Tom", "The Weeping Widow", "Sergeant Brass"],
+      threads: [{id: "brotherhood-rise", type: "developed", description: "Brotherhood expanding territory"}],
+      complications: ["Innocent casualties", "Watch intervention"],
+      twists: ["One gang leader is Brotherhood operative"],
+      rewards: "Gang alliance or Brotherhood favor",
+      notes: "Shows Brotherhood methods up close"
+    },
+    {
+      week: 4,
+      title: "Whispers in the Temple",
+      showcase: "Religious mystery, forbidden artifacts",
+      phase: "outline",
+      hook: "Strange symbols appear in the Temple of the Merchant Prince, and the priests fear Glasryan influence.",
+      scenes: ["Temple investigation", "Archive research", "Confrontation"],
+      npcs: ["High Priestess Maren", "Brother Aldric"],
+      threads: [{id: "glasryan-artifacts", type: "planted", description: "Ancient relics surfacing"}],
+      complications: ["Temple politics", "Zealot interference"],
+      twists: ["The symbols are protective, not hostile"],
+      rewards: "Religious favor, artifact",
+      notes: "First hints of deeper Glasryan history"
+    },
+    {
+      week: 5,
+      title: "The Tribute Collector's Game",
+      showcase: "Glasryan emissary arrives, political maneuvering",
+      phase: "catalogue",
+      hook: "A Glasryan Tribute Collector arrives for the annual assessment, and everyone has secrets to hide.",
+      scenes: [],
+      npcs: ["Emissary Khalon", "Councillor Darius"],
+      threads: [{id: "tribute-crisis", type: "planted", description: "Annual tribute complications"}],
+      complications: [],
+      twists: [],
+      rewards: "",
+      notes: "Major Glasryan interaction—sets tone for ongoing occupation tension"
+    }
+  ];
+  
+  updateStats();
+  captureBaselines();
+  renderAdventureList();
+}
+
+// Stats and progress
+function updateStats() {
+  const total = allAdventures.length;
+  const complete = allAdventures.filter(a => a.phase === 'complete').length;
+  const pct = total > 0 ? Math.round((complete / total) * 100) : 0;
+  
+  document.getElementById('totalAdventures').textContent = total;
+  document.getElementById('completeAdventures').textContent = complete;
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+// Breadcrumb
+function updateBreadcrumb() {
+  const el = document.getElementById('breadcrumb');
+  if (!el) return;
+  
+  const sep = '<span class="bc-sep">›</span>';
+  const home = '<span class="bc-link" onclick="clearView()">Adventure Vault</span>';
+  let trail = home;
+  
+  if (currentAdventure) {
+    trail += sep + '<span class="bc-current">Week ' + currentAdventure.week + ': ' + currentAdventure.title + '</span>';
+    
+    if (activePanel) {
+      const panelNames = {
+        edit: 'Edit',
+        scenes: 'Scenes',
+        npcs: 'NPCs',
+        threads: 'Threads',
+        export: 'Export'
+      };
+      trail += sep + '<span class="bc-current" style="font-weight:normal">' + (panelNames[activePanel] || activePanel) + '</span>';
+    }
+  }
+  
+  el.innerHTML = trail;
+}
+
+function clearView() {
+  currentAdventure = null;
+  activePanel = null;
+  document.getElementById('mainContent').innerHTML = 'Select an adventure or create a new one';
+  document.getElementById('mainContent').classList.add('empty-state');
+  document.getElementById('advBottomBar').style.display = 'none';
+  renderAdventureList();
+  updateBreadcrumb();
+}
+
+// Render adventure list
+function renderAdventureList() {
+  const list = document.getElementById('adventureList');
+  list.innerHTML = '';
+  
+  const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+  const phaseFilter = document.getElementById('phaseFilter').value;
+  const lifecycleFilter = document.getElementById('lifecycleFilter').value;
+  
+  let filtered = allAdventures;
+  
+  if (searchTerm) {
+    filtered = filtered.filter(a => 
+      a.title.toLowerCase().includes(searchTerm) ||
+      a.showcase.toLowerCase().includes(searchTerm) ||
+      ('week ' + a.week).includes(searchTerm)
+    );
+  }
+  
+  if (phaseFilter) {
+    filtered = filtered.filter(a => a.phase === phaseFilter);
+  }
+  
+  if (lifecycleFilter) {
+    filtered = filtered.filter(a => {
+      const lifecycle = getLifecycle(a.week);
+      if (lifecycleFilter === 'dirty') {
+        return isAdventureDirty(a.week);
+      }
+      return lifecycle === lifecycleFilter;
+    });
+  }
+  
+  // Sort by week number
+  filtered.sort((a, b) => a.week - b.week);
+  
+  filtered.forEach(adv => {
+    const item = document.createElement('div');
+    item.className = 'adventure-item';
+    
+    if (currentAdventure && currentAdventure.week === adv.week) {
+      item.classList.add('active');
+    }
+    
+    // Add dirty class
+    const lifecycle = getLifecycle(adv.week);
+    if (isAdventureDirty(adv.week)) {
+      item.classList.add('dirty-' + lifecycle);
+    }
+    
+    let badges = '';
+    if (isAdventureDirty(adv.week)) {
+      badges = '<span class="dirty-badge ' + lifecycle + '">EDITED</span>';
+    }
+    
+    item.innerHTML = `
+      <div class="adv-num">Week ${adv.week} <span class="status-tag ${adv.phase}">${adv.phase}</span>${badges}</div>
+      <div class="adv-title">${adv.title}</div>
+      <div class="adv-meta">${adv.showcase || '(no showcase)'}</div>
+    `;
+    
+    item.onclick = () => selectAdventure(adv.week);
+    list.appendChild(item);
+  });
+}
+
+function filterAdventures() {
+  renderAdventureList();
+}
+
+// Select adventure
+function selectAdventure(weekNum) {
+  const adv = allAdventures.find(a => a.week === weekNum);
+  if (!adv) return;
+  
+  currentAdventure = adv;
+  activePanel = null;
+  
+  renderDetail();
+  renderBottomBar();
+  updateBreadcrumb();
+  renderAdventureList(); // Update active state
+  
+  // Push to navigation history
+  if (!_navPushing) {
+    navPush({type: 'adventure', week: weekNum});
+  }
+}
+
+// Render detail view
+function renderDetail() {
+  if (!currentAdventure) return;
+  
+  const main = document.getElementById('mainContent');
+  main.classList.remove('empty-state');
+  
+  const lifecycle = getLifecycle(currentAdventure.week);
+  let lifecycleBadge = '';
+  if (lifecycle === 'draft') {
+    lifecycleBadge = '<span class="lifecycle-badge draft">📝 Not in Canon</span>';
+  } else if (lifecycle === 'committed') {
+    lifecycleBadge = '<span class="lifecycle-badge committed">📦 In Canon</span>';
+  } else if (lifecycle === 'published') {
+    lifecycleBadge = '<span class="lifecycle-badge published">🔒 Published</span>';
+  }
+  
+  main.innerHTML = `
+    <div class="detail-header">
+      <h2>${currentAdventure.title} ${lifecycleBadge}</h2>
+      <div class="subtitle-line">Week ${currentAdventure.week} — ${currentAdventure.phase.toUpperCase()}</div>
+    </div>
+    
+    <div class="detail-columns">
+      <div class="col-left">
+        <div class="section-box">
+          <h3 onclick="editField('meta')">METADATA ✎</h3>
+          <div class="meta-row">
+            <div class="meta-item">
+              <div class="meta-label">Week</div>
+              <div class="meta-value">${currentAdventure.week}</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">Phase</div>
+              <div class="meta-value"><span class="status-tag ${currentAdventure.phase}">${currentAdventure.phase}</span></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="section-box">
+          <h3 onclick="editField('showcase')">SHOWCASE ELEMENTS ✎</h3>
+          <p>${currentAdventure.showcase || '<span class="none-text">No showcase elements defined</span>'}</p>
+        </div>
+        
+        <div class="section-box">
+          <h3 onclick="editField('hook')">ADVENTURE HOOK ✎</h3>
+          <p>${currentAdventure.hook || '<span class="none-text">No hook defined</span>'}</p>
+        </div>
+        
+        <div class="section-box">
+          <h3 onclick="editField('rewards')">REWARDS ✎</h3>
+          <p>${currentAdventure.rewards || '<span class="none-text">No rewards defined</span>'}</p>
+        </div>
+      </div>
+      
+      <div class="col-middle">
+        <div class="section-box">
+          <h3 onclick="editField('scenes')">SCENES ✎</h3>
+          ${currentAdventure.scenes && currentAdventure.scenes.length > 0 
+            ? currentAdventure.scenes.map(s => `<div class="item-entry">${s}</div>`).join('')
+            : '<p class="none-text">No scenes defined</p>'}
+        </div>
+        
+        <div class="section-box">
+          <h3 onclick="editField('complications')">COMPLICATIONS ✎</h3>
+          ${currentAdventure.complications && currentAdventure.complications.length > 0
+            ? currentAdventure.complications.map(c => `<div class="item-entry">${c}</div>`).join('')
+            : '<p class="none-text">No complications defined</p>'}
+        </div>
+        
+        <div class="section-box">
+          <h3 onclick="editField('twists')">TWISTS ✎</h3>
+          ${currentAdventure.twists && currentAdventure.twists.length > 0
+            ? currentAdventure.twists.map(t => `<div class="item-entry">${t}</div>`).join('')
+            : '<p class="none-text">No twists defined</p>'}
+        </div>
+      </div>
+      
+      <div class="col-right">
+        <div class="section-box">
+          <h3 onclick="editField('npcs')">KEY NPCs ✎</h3>
+          ${currentAdventure.npcs && currentAdventure.npcs.length > 0
+            ? currentAdventure.npcs.map(npc => `<span class="npc-tag" title="View in Character Vault">${npc}</span>`).join('')
+            : '<p class="none-text">No NPCs assigned</p>'}
+        </div>
+        
+        <div class="section-box">
+          <h3 onclick="editField('threads')">FORESHADOWING THREADS ✎</h3>
+          ${currentAdventure.threads && currentAdventure.threads.length > 0
+            ? currentAdventure.threads.map(t => `
+              <div class="thread-card">
+                <h4>${t.id}</h4>
+                <p>${t.description}</p>
+                <div class="thread-weeks">
+                  <span class="thread-week ${t.type}">${t.type}</span>
+                </div>
+              </div>
+            `).join('')
+            : '<p class="none-text">No threads defined</p>'}
+        </div>
+        
+        <div class="section-box">
+          <h3 onclick="editField('notes')">NOTES ✎</h3>
+          <p>${currentAdventure.notes || '<span class="none-text">No notes</span>'}</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Bottom bar for commit/save
+function renderBottomBar() {
+  if (!currentAdventure) {
+    document.getElementById('advBottomBar').style.display = 'none';
+    return;
+  }
+  
+  const bar = document.getElementById('advBottomBar');
+  bar.style.display = 'block';
+  
+  const lifecycle = getLifecycle(currentAdventure.week);
+  const dirty = isAdventureDirty(currentAdventure.week);
+  
+  let commitBtn = '';
+  if (lifecycle === 'draft') {
+    commitBtn = '<button class="btn primary" onclick="commitToCanon()">📦 Commit to Canon</button>';
+  } else if (dirty) {
+    commitBtn = '<button class="btn primary" onclick="updateCanon()">🔄 Update Canon</button>';
+  } else {
+    commitBtn = '<button class="btn" disabled style="opacity: 0.5;">✓ Canon Up to Date</button>';
+  }
+  
+  bar.innerHTML = `
+    <div class="status-row">
+      <span>Week ${currentAdventure.week}: ${currentAdventure.title}</span>
+      <span class="status-tag ${currentAdventure.phase}">${currentAdventure.phase}</span>
+      <div class="action-btns">
+        <button class="btn sm" onclick="exportAdventure()">Export</button>
+        <button class="btn sm danger" onclick="deleteAdventure()">Delete</button>
+      </div>
+      <div class="commit-area">
+        ${commitBtn}
+      </div>
+    </div>
+  `;
+}
+
+// Lifecycle management
+function getLifecycle(weekNum) {
+  const adv = allAdventures.find(a => a.week === weekNum);
+  if (!adv) return 'draft';
+  
+  // TODO: Check if published in product registry
+  if (canonCommitted.has(weekNum)) return 'committed';
+  return 'draft';
+}
+
+function isAdventureDirty(weekNum) {
+  const adv = allAdventures.find(a => a.week === weekNum);
+  if (!adv) return false;
+  
+  const baseline = _baselines['week_' + weekNum];
+  if (!baseline) return true; // No baseline = dirty
+  
+  return JSON.stringify(serialiseForBaseline(adv)) !== baseline;
+}
+
+function serialiseForBaseline(adv) {
+  return {
+    week: adv.week,
+    title: adv.title,
+    showcase: adv.showcase || '',
+    phase: adv.phase,
+    hook: adv.hook || '',
+    scenes: adv.scenes || [],
+    npcs: adv.npcs || [],
+    threads: adv.threads || [],
+    complications: adv.complications || [],
+    twists: adv.twists || [],
+    rewards: adv.rewards || '',
+    notes: adv.notes || ''
+  };
+}
+
+function captureBaselines() {
+  allAdventures.forEach(adv => {
+    _baselines['week_' + adv.week] = JSON.stringify(serialiseForBaseline(adv));
+  });
+  console.log('📸 Baselines captured for', allAdventures.length, 'adventures');
+}
+
+function captureBaseline(weekNum) {
+  const adv = allAdventures.find(a => a.week === weekNum);
+  if (adv) {
+    _baselines['week_' + weekNum] = JSON.stringify(serialiseForBaseline(adv));
+  }
+}
+
+function commitToCanon() {
+  if (!currentAdventure) return;
+  
+  canonCommitted.add(currentAdventure.week);
+  captureBaseline(currentAdventure.week);
+  
+  _canonSnapshots['week_' + currentAdventure.week] = {
+    snapshot: JSON.stringify(serialiseForBaseline(currentAdventure)),
+    committedAt: new Date().toISOString(),
+    changeId: ++_canonSeq
+  };
+  
+  _canonLog.push({
+    action: 'commit',
+    target: 'Week ' + currentAdventure.week + ': ' + currentAdventure.title,
+    changeId: _canonSeq,
+    date: new Date().toISOString(),
+    summary: 'Committed to canon'
+  });
+  
+  console.log('📦 Week', currentAdventure.week, 'committed to canon');
+  renderBottomBar();
+  renderDetail();
+  renderAdventureList();
+}
+
+function updateCanon() {
+  if (!currentAdventure) return;
+  
+  captureBaseline(currentAdventure.week);
+  
+  _canonSnapshots['week_' + currentAdventure.week] = {
+    snapshot: JSON.stringify(serialiseForBaseline(currentAdventure)),
+    committedAt: new Date().toISOString(),
+    changeId: ++_canonSeq
+  };
+  
+  _canonLog.push({
+    action: 'update',
+    target: 'Week ' + currentAdventure.week + ': ' + currentAdventure.title,
+    changeId: _canonSeq,
+    date: new Date().toISOString(),
+    summary: 'Canon updated'
+  });
+  
+  console.log('🔄 Week', currentAdventure.week, 'canon updated');
+  renderBottomBar();
+  renderDetail();
+  renderAdventureList();
+}
+
+// Edit field (placeholder - would open edit modal)
+function editField(fieldName) {
+  alert('Edit ' + fieldName + ' - this would open an edit modal');
+  // TODO: Implement edit modals for each field type
+}
+
+// Export adventure
+function exportAdventure() {
+  if (!currentAdventure) return;
+  alert('Export Week ' + currentAdventure.week + ' - integrate with export system');
+  // TODO: Implement export to Markdown, PDF, FG module
+}
+
+// Delete adventure
+function deleteAdventure() {
+  if (!currentAdventure) return;
+  
+  if (!confirm('Delete Week ' + currentAdventure.week + ': ' + currentAdventure.title + '?')) {
+    return;
+  }
+  
+  const idx = allAdventures.findIndex(a => a.week === currentAdventure.week);
+  if (idx >= 0) {
+    allAdventures.splice(idx, 1);
+  }
+  
+  clearView();
+  updateStats();
+}
+
+// Modal management
+function openNewAdventureModal() {
+  document.getElementById('newAdventureModal').classList.add('active');
+}
+
+function closeNewAdventureModal() {
+  document.getElementById('newAdventureModal').classList.remove('active');
+  document.getElementById('new_week').value = '';
+  document.getElementById('new_title').value = '';
+  document.getElementById('new_showcase').value = '';
+  document.getElementById('new_phase').value = 'catalogue';
+}
+
+function createAdventure() {
+  const week = parseInt(document.getElementById('new_week').value);
+  const title = document.getElementById('new_title').value.trim();
+  const showcase = document.getElementById('new_showcase').value.trim();
+  const phase = document.getElementById('new_phase').value;
+  
+  if (!week || week < 1 || week > 50) {
+    alert('Please enter a week number between 1 and 50');
+    return;
+  }
+  
+  if (!title) {
+    alert('Please enter a title');
+    return;
+  }
+  
+  // Check if week already exists
+  if (allAdventures.find(a => a.week === week)) {
+    alert('Week ' + week + ' already exists');
+    return;
+  }
+  
+  const newAdv = {
+    week: week,
+    title: title,
+    showcase: showcase,
+    phase: phase,
+    hook: '',
+    scenes: [],
+    npcs: [],
+    threads: [],
+    complications: [],
+    twists: [],
+    rewards: '',
+    notes: ''
+  };
+  
+  allAdventures.push(newAdv);
+  updateStats();
+  captureBaseline(week);
+  
+  closeNewAdventureModal();
+  selectAdventure(week);
+}
+
+// Navigation
+function navPush(view) {
+  if (_navPushing) return;
+  _navHistory.push(view);
+  _navFwdStack = [];
+}
+
+// Placeholder functions
+function showReviewPanel() {
+  alert('Review Panel - show all dirty/pending adventures');
+}
+
+function showBundles() {
+  alert('Bundle Management - organize 5-week bundles');
+}
+
+function showStats() {
+  alert('Statistics - production velocity, completion rates, etc.');
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  const tag = document.activeElement?.tagName;
+  
+  // Close modal on Escape
+  if (e.key === 'Escape') {
+    const modals = document.querySelectorAll('.modal-overlay.active');
+    modals.forEach(m => m.classList.remove('active'));
+  }
+  
+  // Prevent shortcuts when typing
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') {
+    return;
+  }
+  
+  // Arrow keys for navigation
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+    e.preventDefault();
+    // TODO: Navigate through adventure list
+  }
+});
+
+// Initialize
+initSampleData();
+updateBreadcrumb();
+</script>
+
+</body>
+</html>
