@@ -578,8 +578,11 @@
       filteredTasks = allTasks.filter(task => {
         if (!showCompleted && task.completed) return false;
         if (priorityFilter !== 'all' && task.priority !== priorityFilter) return false;
-        if (searchTerm && !task.title.toLowerCase().includes(searchTerm) && 
-            !task.description.toLowerCase().includes(searchTerm)) return false;
+        if (searchTerm) {
+          const title = (task.title || '').toLowerCase();
+          const desc = (task.description || '').toLowerCase();
+          if (!title.includes(searchTerm) && !desc.includes(searchTerm)) return false;
+        }
         return true;
       });
 
