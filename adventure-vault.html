@@ -1157,6 +1157,18 @@ function renderDetail() {
         </div>
       </div>
     </div>
+    
+    <!-- FULL CONTENT PANEL -->
+    <div class="section-box content-panel" style="margin-top: 20px;">
+      <h3>FULL ADVENTURE CONTENT</h3>
+      <div class="content-display" style="max-height: 600px; overflow-y: auto; padding: 20px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 4px; font-family: monospace; white-space: pre-wrap; line-height: 1.6;">
+        ${currentAdventure.content || '<span class="none-text">No content loaded</span>'}
+      </div>
+      <div style="margin-top: 10px; display: flex; gap: 10px;">
+        <button class="btn sm" onclick="copyContent()">📋 Copy to Clipboard</button>
+        <button class="btn sm" onclick="downloadContent()">💾 Download Markdown</button>
+      </div>
+    </div>
   `;
 }
 
@@ -1310,6 +1322,38 @@ function exportAdventure() {
   if (!currentAdventure) return;
   alert('Export Week ' + currentAdventure.week + ' - integrate with export system');
   // TODO: Implement export to Markdown, PDF, FG module
+}
+
+// Copy adventure content to clipboard
+function copyContent() {
+  if (!currentAdventure || !currentAdventure.content) {
+    alert('No content to copy');
+    return;
+  }
+  
+  navigator.clipboard.writeText(currentAdventure.content).then(() => {
+    alert('✓ Adventure content copied to clipboard!');
+  }).catch(err => {
+    console.error('Failed to copy:', err);
+    alert('Failed to copy content');
+  });
+}
+
+// Download adventure as markdown file
+function downloadContent() {
+  if (!currentAdventure || !currentAdventure.content) {
+    alert('No content to download');
+    return;
+  }
+  
+  const filename = `${currentAdventure.code || 'AM-' + currentAdventure.week.toString().padStart(2, '0')}_${currentAdventure.title.replace(/[^a-zA-Z0-9]/g, '_')}.md`;
+  const blob = new Blob([currentAdventure.content], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 // Delete adventure
