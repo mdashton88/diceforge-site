@@ -7,41 +7,41 @@
   <link rel="stylesheet" href="tribute-lands.css">
   <script src="tool-navigation.js"></script>
   <style>
-    /* Task-specific card styling */
-    .task-item {
-      padding: 8px 12px;
-      margin-bottom: 4px;
-      border-left: 3px solid var(--border-color);
-      cursor: pointer;
-      transition: all 0.2s;
+    /* Task list styling - matching Character Vault's npc-item */
+    .task-list { 
+      flex: 1 1 0; 
+      min-height: 0; 
+      overflow-y: scroll; 
+      padding: 4px; 
+      scrollbar-width: auto; 
+      scrollbar-color: var(--accent-dim) var(--bg-dark); 
     }
+    .task-list::-webkit-scrollbar { width: 10px; }
+    .task-list::-webkit-scrollbar-track { background: var(--bg-dark); }
+    .task-list::-webkit-scrollbar-thumb { background: var(--accent-dim); border-radius: 5px; border: 2px solid var(--bg-dark); }
+    .task-list::-webkit-scrollbar-thumb:hover { background: var(--accent); }
     
-    .task-item:hover {
-      background: var(--card-hover-bg);
+    .task-item { 
+      padding: 8px 10px; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      border: 1px solid transparent; 
+      margin-bottom: 2px; 
     }
+    .task-item:hover { background: var(--bg-hover); }
+    .task-item.active { background: var(--bg-hover); border-color: var(--accent-dim); }
+    .task-item.priority-critical { border-left: 3px solid var(--danger-color); }
+    .task-item.priority-high { border-left: 3px solid var(--warning-color); }
     
-    .task-item.selected {
-      background: var(--card-hover-bg);
-      border-left-color: var(--accent-primary);
+    .task-item .task-name { 
+      font-size: 14px; 
+      font-weight: 600; 
+      color: var(--text-bright); 
     }
-    
-    .task-item.priority-critical {
-      border-left-color: var(--danger-color);
-    }
-    
-    .task-item.priority-high {
-      border-left-color: var(--warning-color);
-    }
-    
-    .task-item-title {
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 4px;
-    }
-    
-    .task-item-meta {
-      font-size: 11px;
-      color: var(--text-dim);
+    .task-item .task-meta { 
+      font-size: 12px; 
+      color: var(--text-dim); 
+      margin-top: 1px; 
     }
   </style>
 </head>
@@ -278,13 +278,13 @@
       });
 
       container.innerHTML = sorted.map(task => {
-        const selected = currentTask && currentTask.id === task.id ? 'selected' : '';
+        const selected = currentTask && currentTask.id === task.id ? 'active' : '';
         const priorityIcon = task.priority === 'critical' ? '🔴' : task.priority === 'high' ? '🟡' : '⚪';
         
         return `
           <div class="task-item priority-${task.priority} ${selected}" onclick="selectTask('${task.id}')">
-            <div class="task-item-title">${task.title}</div>
-            <div class="task-item-meta">${priorityIcon} ${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}</div>
+            <div class="task-name">${task.title}</div>
+            <div class="task-meta">${priorityIcon} ${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}</div>
           </div>
         `;
       }).join('');
