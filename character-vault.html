@@ -1258,7 +1258,7 @@ function renderDetail(){
     const icon=p.status==='released'?'🔒':p.status==='in-review'?'⏳':'📝';
     return '<span style="margin-right:10px;color:'+col+'">'+icon+' '+esc(p.code)+' — '+esc(p.title)+'</span>';
   }).join('')}</div>`:'';
-  el.innerHTML=`<div class="npc-header"><h2>${refBadge}${esc(n.name)}${catBadge}${tierBadge}${canonBadge}${pubBadge}${dirtyBadge}</h2>${titleLine}${prodLine}</div><div class="detail-columns"><div class="col-stats" id="colStats"></div><div class="col-middle" id="colMiddle"></div><div class="col-narrative" id="colNarrative"></div></div>`;
+  el.innerHTML=`<div class="npc-header"><h2>${refBadge}${esc(n.name)}${catBadge}${tierBadge}${canonBadge}${pubBadge}${dirtyBadge}<button class="btn sm primary" onclick="showPanel('statblock')" style="background:var(--accent);border-color:var(--accent);color:#000;margin-left:12px;font-size:12px">📋 Export</button></h2>${titleLine}${prodLine}</div><div class="detail-columns"><div class="col-stats" id="colStats"></div><div class="col-middle" id="colMiddle"></div><div class="col-narrative" id="colNarrative"></div></div>`;
   renderStatColumn(n);renderMiddleColumn(n);renderNarrativeColumn(n);
 }
 
