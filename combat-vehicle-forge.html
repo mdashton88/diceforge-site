@@ -167,6 +167,29 @@ remove:function(){this.init();var c=this.ctx,n=c.currentTime;var o=c.createOscil
 // Huge (8-11): Hand -1, Tough 15 (max 40), Wounds 5, Crew 5, Energy 15, Mods Size×3, Cost $50K×Size
 // Gargantuan (12-20): Hand -2, Tough 20 (max 50), Wounds 6, Crew 50, Energy 30, Mods Size×4, Cost $1M×Size
 // Note: Top Speed comes from locomotion type, not frame
+// Approximate dimensions and weight by Size (SFC frame notes + vehicle examples)
+var SIZE_REF={
+  1:{len:"6'",ex:'Drone, motorcycle',wt:'200 lbs'},
+  2:{len:"8'",ex:'Compact car, hover bike',wt:'1,500 lbs'},
+  3:{len:"12'",ex:'Sports car, light APC',wt:'3,000 lbs'},
+  4:{len:"15'",ex:'SUV, light truck, scout walker',wt:'2 tons'},
+  5:{len:"18'",ex:'Truck, gunboat, light mech',wt:'5 tons'},
+  6:{len:"22'",ex:'APC, attack helicopter',wt:'10 tons'},
+  7:{len:"28'",ex:'Heavy tank, assault mech',wt:'15 tons'},
+  8:{len:"36'",ex:'Patrol boat, heavy walker',wt:'40 tons'},
+  9:{len:"42'",ex:'Airliner, corvette',wt:'65 tons'},
+  10:{len:"50'",ex:'Train car, gunship',wt:'120 tons'},
+  11:{len:"63'",ex:'Large ship, assault walker',wt:'250 tons'},
+  12:{len:"75'",ex:'Frigate, walking fortress',wt:'500 tons'},
+  13:{len:"100'",ex:'Small destroyer',wt:'1,000 tons'},
+  14:{len:"125'",ex:'Landing craft',wt:'2,000 tons'},
+  15:{len:"150'",ex:'Large warship',wt:'4,000 tons'},
+  16:{len:"200'",ex:'Heavy destroyer',wt:'8,000 tons'},
+  17:{len:"250'",ex:'Battlecruiser',wt:'16,000 tons'},
+  18:{len:"300'",ex:'Carrier',wt:'32,000 tons'},
+  19:{len:"400'",ex:'Supercarrier',wt:'64,000 tons'},
+  20:{len:"500'",ex:'Mega-platform',wt:'125,000 tons'}
+};
 function getFrame(sz){
   if(sz<=3)return{cat:'Normal',hand:1,baseTough:5,maxArmor:20,wounds:3,crew:1,energy:3,modMult:3,costMult:10000};
   if(sz<=7)return{cat:'Large',hand:0,baseTough:10,maxArmor:30,wounds:4,crew:3,energy:5,modMult:3,costMult:30000};
@@ -333,7 +356,8 @@ function renderLocoGrid(){var el=document.getElementById('locoGrid');
 function setLoco(id){S.loco=id;Audio.click();renderLocoGrid();renderStats();renderOutput();renderModCatalogue()}
 function setSize(sz){S.size=sz;S.mods={};S.weapons=[];document.getElementById('sizeVal').textContent=sz;document.getElementById('sizeClass').textContent=getFrame(sz).cat;renderFrameInfo();renderLocoGrid();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderStats();renderOutput()}
 function renderFrameInfo(){var f=getFrame(S.size);document.getElementById('sizeVal').textContent=S.size;document.getElementById('sizeClass').textContent=f.cat;
-  document.getElementById('frameInfo').innerHTML='<div class="frame-stats">'
+  var ref=SIZE_REF[S.size]||{len:'?',ex:'—',wt:'?'};
+  document.getElementById('frameInfo').innerHTML='<div style="font-size:12px;color:var(--text-dim);font-style:italic;margin-bottom:6px;line-height:1.4">~'+ref.len+' long, ~'+ref.wt+' — <span style="color:var(--text)">'+ref.ex+'</span></div><div class="frame-stats">'
     +'<div class="frame-stat"><div class="fs-label">Base Tough</div><div class="fs-value">'+f.baseTough+' ('+f.maxArmor+')</div></div>'
     +'<div class="frame-stat"><div class="fs-label">Wounds</div><div class="fs-value">'+f.wounds+'</div></div>'
     +'<div class="frame-stat"><div class="fs-label">Crew</div><div class="fs-value">'+f.crew+'</div></div>'
