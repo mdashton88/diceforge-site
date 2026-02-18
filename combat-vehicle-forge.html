@@ -13,20 +13,23 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
 .tool-nav-item{background:transparent;border:none;color:#8A7A60;padding:8px 14px;font-size:10px;letter-spacing:1.5px;cursor:pointer;font-family:'Cinzel',serif;text-transform:uppercase;transition:all .15s}
 .tool-nav-item:hover{color:#D4C8B0}.tool-nav-item.active{color:#C4A44A;border-bottom:2px solid #C4A44A}
 .app{display:flex;height:calc(100vh - 38px);overflow:hidden}
-.sidebar{width:360px;min-width:360px;background:var(--bg-dark);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
+.sidebar{width:380px;min-width:380px;background:var(--bg-dark);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.header{background:var(--bg-dark);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;gap:16px}
+.header{background:var(--bg-dark);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .header-brand{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase}
 .header-title{font-family:'Cinzel',serif;font-size:18px;color:var(--accent);letter-spacing:2px}
 .header-spacer{flex:1}
-.header-btn{background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:6px 14px;font-family:'Crimson Pro',serif;font-size:13px;cursor:pointer;transition:all .15s}
+.header-btn{background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:6px 14px;font-family:'Crimson Pro',serif;font-size:13px;cursor:pointer;transition:all .15s;white-space:nowrap}
 .header-btn:hover{border-color:var(--accent);color:var(--accent)}
 .header-btn.primary{background:var(--accent);color:var(--bg-deep);border-color:var(--accent);font-weight:700}
 .header-btn.primary:hover{background:#D4B45A}
 .sidebar-section{padding:12px 16px;border-bottom:1px solid var(--border)}
 .sidebar-section h3{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px}
-.field-row input[type="text"]{background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:5px 10px;font-family:'Crimson Pro',serif;font-size:14px;width:100%}
-.field-row input[type="text"]:focus{outline:none;border-color:var(--accent)}
+.field-row{margin-bottom:6px}
+.field-row input[type="text"],.field-row textarea,.field-row select{background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:5px 10px;font-family:'Crimson Pro',serif;font-size:14px;width:100%}
+.field-row input:focus,.field-row textarea:focus,.field-row select:focus{outline:none;border-color:var(--accent)}
+.field-row textarea{resize:vertical;min-height:60px;line-height:1.5}
+.field-row label{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;font-family:'Cinzel',serif;display:block;margin-bottom:3px}
 .size-picker{display:flex;align-items:center;gap:10px;margin-bottom:6px}
 .size-picker input[type="range"]{flex:1;accent-color:var(--accent);cursor:pointer}
 .size-picker .size-val{font-family:'Cinzel',serif;font-size:24px;color:var(--accent);font-weight:700;min-width:36px;text-align:center}
@@ -40,164 +43,184 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
 .frame-stat{background:var(--bg-deep);border:1px solid var(--border);padding:6px 8px;text-align:center}
 .frame-stat .fs-label{font-size:9px;letter-spacing:1.5px;color:var(--text-dim);text-transform:uppercase;font-family:'Cinzel',serif}
 .frame-stat .fs-value{font-size:14px;font-weight:700;color:var(--text-bright);margin-top:1px}
-.frame-stat .fs-value.danger{color:var(--red-bright)}
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .stat-box{background:var(--bg-deep);border:1px solid var(--border);padding:8px 10px;text-align:center}
 .stat-box .stat-label{font-size:10px;letter-spacing:1.5px;color:var(--text-dim);text-transform:uppercase;font-family:'Cinzel',serif}
 .stat-box .stat-value{font-size:16px;font-weight:700;color:var(--text-bright);margin-top:2px}
-.stat-box .stat-value.danger{color:var(--red-bright)}
 .mods-remaining{background:var(--bg-deep);border:1px solid var(--border);padding:10px;text-align:center;margin-top:8px}
 .mods-remaining .big-num{font-size:28px;font-weight:700;font-family:'Cinzel',serif}
-.mods-remaining .big-num.ok{color:var(--green)}.mods-remaining .big-num.low{color:var(--orange)}.mods-remaining .big-num.over{color:var(--red-bright)}
-.mods-remaining .sub{font-size:11px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase}
-.cost-display{background:var(--bg-deep);border:1px solid var(--accent-dim);padding:10px;text-align:center;margin-top:6px}
-.cost-display .cost-val{font-size:18px;font-weight:700;color:var(--accent);font-family:'Cinzel',serif}
-.cost-display .cost-label{font-size:10px;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase}
-.content{flex:1;overflow-y:auto;padding:20px}
-.content::-webkit-scrollbar{width:6px}.content::-webkit-scrollbar-track{background:var(--bg-dark)}.content::-webkit-scrollbar-thumb{background:var(--border)}
-.tab-bar{display:flex;gap:0;border-bottom:1px solid var(--border)}
-.tab{padding:10px 20px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.5px;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;text-transform:uppercase;transition:all .15s}
+.big-num.ok{color:var(--green)}.big-num.low{color:var(--orange)}.big-num.over{color:var(--red-bright)}
+.cost-display{background:var(--bg-deep);border:1px solid var(--border);padding:10px;text-align:center;margin-top:6px}
+.cost-val{font-size:20px;font-weight:700;color:var(--accent);font-family:'Cinzel',serif}
+.cost-label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px}
+.tabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg-dark);overflow-x:auto}
+.tab{padding:8px 16px;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-family:'Cinzel',serif;color:var(--text-dim);cursor:pointer;transition:all .15s;border-bottom:2px solid transparent;white-space:nowrap}
 .tab:hover{color:var(--text)}.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
-.panel{display:none}.panel.active{display:block}
-.dnd-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;min-height:400px}
-.dnd-column h3{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px}
-.drag-item{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:5px;background:var(--bg-card);border:1px solid var(--border);cursor:grab;transition:transform .15s,box-shadow .15s,border-color .15s;user-select:none;touch-action:none;-webkit-user-select:none}
-.drag-item:hover{border-color:var(--border-light)}.drag-item:active{cursor:grabbing}.drag-item.dragging{opacity:.5;transform:scale(.97)}
-.drag-item .drag-handle{color:var(--text-dim);font-size:14px;opacity:.4}
-.drag-item .di-info{flex:1;min-width:0}.drag-item .di-name{font-weight:600;color:var(--text-bright);font-size:13px}
-.drag-item .di-desc{font-size:11px;color:var(--text-dim);font-style:italic;line-height:1.3;margin-top:1px}
-.drag-item .di-meta{text-align:right;min-width:55px}.drag-item .di-mods{font-weight:700;color:var(--accent);font-size:12px}
-.drag-item .di-price{font-size:10px;color:var(--text-dim)}
-.drag-ghost{position:fixed;pointer-events:none;z-index:1000;padding:8px 14px;background:var(--bg-panel);border:1px solid var(--accent);box-shadow:0 8px 32px rgba(196,164,74,.3),0 0 12px rgba(196,164,74,.15);font-family:'Cinzel',serif;font-size:13px;color:var(--accent);letter-spacing:1px;white-space:nowrap}
-.drag-ghost.near-target{box-shadow:0 12px 48px rgba(196,164,74,.5),0 0 20px rgba(196,164,74,.25);transform:scale(1.05)}
-.drop-bay{min-height:120px;padding:8px;background:var(--bg-deep);border:2px dashed var(--border);transition:border-color .2s,background .2s,box-shadow .2s}
-.drop-bay.drag-over{border-color:var(--accent);border-style:solid;background:var(--accent-glow);box-shadow:inset 0 0 30px rgba(196,164,74,.08)}
-.drop-bay .empty-bay{text-align:center;padding:30px 16px;color:var(--text-dim);font-style:italic;font-size:13px}
-.bay-item{display:flex;align-items:center;gap:8px;padding:8px 12px;margin-bottom:4px;background:var(--bg-card);border:1px solid var(--accent-dim)}
-.bay-item .bi-info{flex:1}.bay-item .bi-name{font-weight:600;color:var(--accent);font-size:13px}
-.bay-item .bi-detail{font-size:11px;color:var(--text-dim)}
-.bay-item .bi-count{font-family:'Cinzel',serif;font-size:14px;color:var(--text-bright);font-weight:700;min-width:24px;text-align:center}
-.bay-item .bi-controls{display:flex;gap:3px}
-.bay-item .bi-controls button{width:24px;height:24px;background:var(--bg-deep);border:1px solid var(--border);color:var(--text-dim);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Crimson Pro',serif;transition:all .1s}
-.bay-item .bi-controls button:hover{border-color:var(--accent);color:var(--accent)}
-.bay-item .bi-remove{background:transparent;border:none;color:var(--text-dim);cursor:pointer;font-size:13px;padding:2px 6px;margin-left:4px}
-.bay-item .bi-remove:hover{color:var(--red-bright)}
-@keyframes snapIn{0%{transform:translateY(-8px) scale(1.03);opacity:.6}40%{transform:translateY(2px) scale(.98);opacity:1}70%{transform:translateY(-1px) scale(1.005)}100%{transform:translateY(0) scale(1)}}
-.bay-item.snap-in,.weapon-bay-item.snap-in{animation:snapIn .3s ease-out}
-@keyframes impactFlash{0%{box-shadow:inset 0 0 20px rgba(196,164,74,.4)}100%{box-shadow:inset 0 0 0 rgba(196,164,74,0)}}
-.drop-bay.impact{animation:impactFlash .35s ease-out}
-.cat-header{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;padding:8px 0 4px;margin-top:8px}.cat-header:first-child{margin-top:0}
-.weapon-drag-item{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:5px;background:var(--bg-card);border:1px solid var(--border);cursor:grab;transition:transform .15s,box-shadow .15s,border-color .15s;user-select:none;touch-action:none;-webkit-user-select:none}
-.weapon-drag-item:hover{border-color:var(--border-light)}.weapon-drag-item:active{cursor:grabbing}.weapon-drag-item.dragging{opacity:.5;transform:scale(.97)}
-.weapon-drag-item .wdi-info{flex:1}.weapon-drag-item .wdi-name{font-weight:600;color:var(--text-bright);font-size:13px}
-.weapon-drag-item .wdi-stats{font-size:11px;color:var(--text-dim)}
-.weapon-drag-item .wdi-meta{text-align:right;min-width:55px}.weapon-drag-item .wdi-mods{font-weight:700;color:var(--accent);font-size:12px}
-.weapon-drag-item .wdi-price{font-size:10px;color:var(--text-dim)}
-.weapon-bay-item{display:flex;align-items:center;gap:8px;padding:10px 12px;margin-bottom:4px;background:var(--bg-card);border:1px solid var(--accent-dim)}
-.weapon-bay-item .wbi-info{flex:1}.weapon-bay-item .wbi-name{font-weight:600;color:var(--accent);font-size:13px}
-.weapon-bay-item .wbi-stats{font-size:11px;color:var(--text-dim)}
-.weapon-bay-item .wbi-mount{font-size:10px;color:var(--text-dim);font-style:italic}
-.weapon-bay-item .wbi-remove{background:transparent;border:none;color:var(--text-dim);cursor:pointer;font-size:13px;padding:2px 6px}
-.weapon-bay-item .wbi-remove:hover{color:var(--red-bright)}
-.mount-tabs{display:flex;gap:0;margin-bottom:10px}
-.mount-tab{padding:6px 14px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;color:var(--text-dim);cursor:pointer;border:1px solid var(--border);background:transparent;text-transform:uppercase;transition:all .15s}
-.mount-tab:first-child{border-radius:3px 0 0 3px}.mount-tab:last-child{border-radius:0 3px 3px 0}
-.mount-tab:not(:first-child){border-left:none}
-.mount-tab:hover{color:var(--text)}.mount-tab.active{background:var(--accent-glow);color:var(--accent);border-color:var(--accent)}
-.stat-block{background:var(--bg-deep);border:1px solid var(--accent-dim);padding:24px;font-size:14px;line-height:1.8;max-width:700px}
-.stat-block .sb-name{font-family:'Cinzel',serif;font-size:22px;color:var(--accent);letter-spacing:3px;text-align:center;margin-bottom:2px}
-.stat-block .sb-type{text-align:center;color:var(--text-dim);font-style:italic;font-size:13px;margin-bottom:14px}
-.stat-block .sb-divider{border:none;border-top:1px solid var(--accent-dim);margin:10px 0}
-.stat-block .sb-line{margin-bottom:2px}.stat-block .sb-label{color:var(--accent);font-weight:700}
-.stat-block .sb-notes{color:var(--text-dim);font-style:italic;margin-top:8px;font-size:13px;line-height:1.5}
-.saved-list{display:flex;flex-direction:column;gap:4px}
-.saved-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);cursor:pointer;transition:all .15s}
-.saved-item:hover{border-color:var(--accent)}
-.saved-item .si-name{flex:1;font-weight:600;color:var(--text-bright);font-size:14px}
-.saved-item .si-chassis{font-size:12px;color:var(--text-dim)}
-.saved-item .si-delete{background:transparent;border:none;color:var(--text-dim);cursor:pointer;font-size:14px;padding:2px 6px}
-.saved-item .si-delete:hover{color:var(--red-bright)}
-.empty-state{text-align:center;padding:40px 20px;color:var(--text-dim)}.empty-state p{font-size:13px;font-style:italic}
-.sidebar-footer{margin-top:auto;padding:10px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--text-dim);text-align:center;font-style:italic}
-.rules-ref{max-width:700px}.rules-ref h3{font-family:'Cinzel',serif;font-size:14px;color:var(--accent);letter-spacing:1.5px;margin:16px 0 8px}
-.rules-ref h3:first-child{margin-top:0}.rules-ref p{margin-bottom:8px;font-size:14px;color:var(--text)}
-.rules-ref .rule-key{color:var(--accent);font-weight:700}.rules-ref .rule-note{color:var(--text-dim);font-style:italic;font-size:13px}
+.panel{display:none;flex:1;overflow-y:auto;padding:16px 20px}.panel.active{display:block}
+.dnd-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;height:100%}
+.dnd-column{overflow-y:auto}
+.dnd-column h3{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px}
+.cat-header{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;padding:8px 0 4px;border-bottom:1px solid var(--border);margin-top:8px}
+.drag-item,.weapon-drag-item{display:flex;align-items:flex-start;gap:8px;padding:6px 8px;background:var(--bg-deep);border:1px solid var(--border);margin:3px 0;cursor:grab;transition:all .15s;-webkit-user-select:none;user-select:none}
+.drag-item:hover,.weapon-drag-item:hover{border-color:var(--accent-dim);background:var(--bg-card)}
+.drag-item.dragging,.weapon-drag-item.dragging{opacity:.3}
+.drag-handle{color:var(--text-dim);font-size:14px;opacity:.4;cursor:grab;flex-shrink:0;padding-top:2px}
+.di-info,.wdi-info{flex:1;min-width:0}
+.di-name,.wdi-name{font-size:13px;font-weight:600;color:var(--text-bright)}
+.di-desc{font-size:11px;color:var(--text-dim);line-height:1.3}
+.wdi-stats{font-size:11px;color:var(--text-dim);line-height:1.3}
+.di-meta,.wdi-meta{text-align:right;flex-shrink:0}
+.di-mods,.wdi-mods{font-size:11px;color:var(--blue);font-weight:600}
+.di-price,.wdi-price{font-size:11px;color:var(--text-dim)}
+.drop-bay{min-height:120px;border:2px dashed var(--border);padding:8px;transition:all .3s}
+.drop-bay.drag-over{border-color:var(--accent);background:var(--accent-glow)}
+.drop-bay.impact{animation:bay-flash .3s ease}
+@keyframes bay-flash{0%{border-color:var(--accent);box-shadow:0 0 20px var(--accent-glow)}100%{border-color:var(--border);box-shadow:none}}
+.empty-bay{text-align:center;color:var(--text-dim);font-style:italic;padding:40px 20px;font-size:13px}
+.bay-item,.weapon-bay-item{display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--bg-card);border:1px solid var(--border);margin:3px 0}
+.bay-item.snap-in,.weapon-bay-item.snap-in{animation:snap .2s ease}
+@keyframes snap{0%{transform:translateY(-6px);opacity:.5}100%{transform:translateY(0);opacity:1}}
+.bi-info,.wbi-info{flex:1}.bi-name,.wbi-name{font-size:13px;font-weight:600;color:var(--text-bright)}
+.bi-detail,.wbi-stats,.wbi-mount{font-size:11px;color:var(--text-dim)}
+.bi-controls{display:flex;align-items:center;gap:6px}
+.bi-controls button{background:var(--bg-deep);border:1px solid var(--border);color:var(--text);width:24px;height:24px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.bi-controls button:hover{border-color:var(--accent);color:var(--accent)}
+.bi-count{font-weight:700;color:var(--accent);min-width:16px;text-align:center}
+.bi-remove,.wbi-remove{cursor:pointer;color:var(--text-dim);font-size:16px;opacity:.5}.bi-remove:hover,.wbi-remove:hover{color:var(--red-bright);opacity:1}
+.mount-tabs{display:flex;gap:4px;margin-bottom:8px}
+.mount-tab{padding:5px 12px;font-size:11px;background:var(--bg-deep);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;font-family:'Crimson Pro',serif}
+.mount-tab:hover{border-color:var(--accent-dim)}.mount-tab.active{background:var(--accent-glow);border-color:var(--accent);color:var(--accent)}
+.drag-ghost{position:fixed;z-index:9999;pointer-events:none;background:var(--accent);color:var(--bg-deep);padding:4px 12px;font-size:12px;font-weight:700;font-family:'Crimson Pro',serif;transform:translate(-50%,-50%);opacity:.9;box-shadow:0 4px 16px rgba(0,0,0,.5)}
+.drag-ghost.near-target{opacity:1;transform:translate(-50%,-50%) scale(1.05);box-shadow:0 0 20px var(--accent-glow)}
+.saved-item{display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg-deep);border:1px solid var(--border);margin:4px 0;cursor:pointer}
+.saved-item:hover{border-color:var(--accent-dim)}.si-name{font-weight:600;color:var(--text-bright);flex:1}
+.si-chassis{font-size:12px;color:var(--text-dim)}.si-delete{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:14px;padding:4px 8px}
+.si-delete:hover{color:var(--red-bright)}
+.empty-state{text-align:center;color:var(--text-dim);padding:20px;font-style:italic}
+.stat-block{background:var(--bg-dark);border:2px solid var(--accent-dim);padding:16px;font-size:14px;line-height:1.5}
+.sb-name{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--accent);letter-spacing:1px}
+.sb-type{font-size:12px;color:var(--text-dim);font-style:italic;margin-bottom:4px}
+.sb-divider{border:none;border-top:1px solid var(--accent-dim);margin:6px 0}
+.sb-line{font-size:13px;margin:2px 0}.sb-label{font-weight:700;color:var(--text-bright)}
+.sb-notes{font-size:12px;font-style:italic;color:var(--text-dim)}
+.sb-watermark{font-size:9px;color:var(--text-dim);text-align:right;margin-top:8px;font-style:italic;opacity:.5}
+/* Search bars */
+.search-bar{background:var(--bg-deep);border:1px solid var(--border);color:var(--text);padding:5px 10px;font-family:'Crimson Pro',serif;font-size:13px;width:100%;margin-bottom:6px}
+.search-bar:focus{outline:none;border-color:var(--accent)}
+.search-bar::placeholder{color:var(--text-dim);font-style:italic}
+/* Help panel */
+.help-section{margin-bottom:20px}
+.help-section h3{font-family:'Cinzel',serif;font-size:13px;color:var(--accent);letter-spacing:1px;margin-bottom:6px;border-bottom:1px solid var(--accent-dim);padding-bottom:4px}
+.help-section h4{font-size:13px;color:var(--text-bright);font-weight:700;margin:8px 0 4px}
+.help-section p{font-size:13px;color:var(--text);margin:4px 0;line-height:1.5}
+.help-section table{width:100%;border-collapse:collapse;font-size:12px;margin:6px 0}
+.help-section th{text-align:left;color:var(--accent);border-bottom:1px solid var(--border);padding:4px 6px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.help-section td{padding:4px 6px;border-bottom:1px solid var(--bg-deep);color:var(--text)}
+.help-search{margin-bottom:12px}
+.rule-key{font-weight:700;color:var(--accent)}
+.rule-note{font-size:11px;font-style:italic;color:var(--text-dim);margin-top:12px}
+/* Image upload */
+.img-upload-zone{border:2px dashed var(--border);padding:20px;text-align:center;cursor:pointer;transition:all .2s;margin:6px 0}
+.img-upload-zone:hover{border-color:var(--accent-dim)}
+.img-upload-zone.has-img{border-style:solid;padding:4px}
+.img-upload-zone img{max-width:100%;max-height:200px;display:block;margin:0 auto}
+/* Import/Export */
+.io-buttons{display:flex;gap:6px;margin-top:8px}
+.io-buttons .header-btn{flex:1;text-align:center;font-size:12px}
+/* Responsive */
+@media(max-width:900px){.app{flex-direction:column;height:auto}.sidebar{width:100%;min-width:0;max-height:50vh}.main{min-height:50vh}.dnd-layout{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div id="toolNavContainer"></div>
 <div class="app">
   <div class="sidebar">
-    <div class="sidebar-section"><h3>Combat Vehicle Forge</h3><div class="field-row"><input type="text" id="vName" placeholder="Name your vehicle..." value="Untitled Vehicle"></div></div>
-    <div class="sidebar-section"><h3>Size</h3>
-      <div class="size-picker"><input type="range" id="sizeSlider" min="1" max="20" value="6" oninput="setSize(+this.value)"><div><div class="size-val" id="sizeVal">6</div><div class="size-class" id="sizeClass">Large</div></div></div>
+    <div class="sidebar-section">
+      <h3>Vehicle Identity</h3>
+      <div class="field-row"><label>Name</label><input type="text" id="vName" value="Untitled Vehicle" placeholder="Vehicle name"></div>
+      <div class="field-row"><label>Description</label><textarea id="vDesc" placeholder="A brief description of your vehicle..." rows="3"></textarea></div>
+      <div class="field-row"><label>Notes</label><textarea id="vNotes" placeholder="GM notes, special rules, campaign info..." rows="2"></textarea></div>
+      <div class="field-row"><label>Image</label>
+        <div class="img-upload-zone" id="imgZone" onclick="document.getElementById('imgInput').click()">
+          <span id="imgPlaceholder" style="font-size:12px;color:var(--text-dim)">Click to upload vehicle image</span>
+          <img id="imgPreview" style="display:none">
+        </div>
+        <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="handleImage(event)">
+        <button class="header-btn" id="imgClearBtn" style="display:none;width:100%;text-align:center;margin-top:4px;font-size:11px" onclick="clearImage()">Remove Image</button>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Size &amp; Frame</h3>
+      <div class="size-picker"><span class="size-val" id="sizeVal">6</span><input type="range" id="sizeSlider" min="1" max="20" value="6" oninput="setSize(+this.value)"><span class="size-class" id="sizeClass">Large</span></div>
       <div id="frameInfo"></div>
     </div>
-    <div class="sidebar-section"><h3>Locomotion</h3><div class="loco-grid" id="locoGrid"></div></div>
-    <div class="sidebar-section"><h3>Current Stats</h3><div class="stats-grid" id="statsGrid"></div><div class="mods-remaining" id="modsRemaining"></div><div class="cost-display" id="costDisplay"></div></div>
-    <div class="sidebar-section"><h3>Saved Builds</h3><div class="saved-list" id="savedList"></div></div>
-    <div class="sidebar-footer">Savage Worlds &copy; Pinnacle Entertainment Group. &copy; DiceForge Studios Ltd.</div>
+    <div class="sidebar-section">
+      <h3>Locomotion</h3>
+      <div class="loco-grid" id="locoGrid"></div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Statistics</h3>
+      <div id="statsGrid" class="stats-grid"></div>
+      <div id="modsRemaining" class="mods-remaining"></div>
+      <div id="costDisplay" class="cost-display"></div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Save &amp; Load</h3>
+      <div style="display:flex;gap:4px;margin-bottom:8px">
+        <button class="header-btn primary" onclick="saveVehicle()" style="flex:1;text-align:center">Save</button>
+        <button class="header-btn" onclick="newVehicle()" style="flex:1;text-align:center">New</button>
+      </div>
+      <div class="io-buttons">
+        <button class="header-btn" onclick="exportJSON()">Export .json</button>
+        <button class="header-btn" onclick="document.getElementById('importInput').click()">Import .json</button>
+        <input type="file" id="importInput" accept=".json,.cvf.json" style="display:none" onchange="importJSON(event)">
+      </div>
+      <div id="savedList" style="margin-top:8px"></div>
+    </div>
   </div>
   <div class="main">
-    <div class="header"><div><div class="header-brand">DiceForge Studios</div><div class="header-title">Combat Vehicle Forge</div></div><div class="header-spacer"></div><button class="header-btn" onclick="newVehicle()">New</button><button class="header-btn" onclick="saveVehicle()">Save</button><button class="header-btn primary" onclick="switchTab('output')">Export</button></div>
-    <div class="tab-bar">
+    <div class="header">
+      <div><div class="header-brand">DiceForge Studios</div><div class="header-title">Combat Vehicle Forge</div></div>
+      <div class="header-spacer"></div>
+    </div>
+    <div class="tabs">
       <div class="tab active" data-tab="mods" onclick="switchTab('mods')">Modifications</div>
-      <div class="tab" data-tab="weapons" onclick="switchTab('weapons')">Weapon Systems</div>
+      <div class="tab" data-tab="weapons" onclick="switchTab('weapons')">Weapons</div>
       <div class="tab" data-tab="output" onclick="switchTab('output')">Stat Block</div>
-      <div class="tab" data-tab="rules" onclick="switchTab('rules')">Rules Reference</div>
+      <div class="tab" data-tab="help" onclick="switchTab('help')">Reference Guide</div>
     </div>
-    <div class="content">
-      <div class="panel active" id="panel-mods"><div class="dnd-layout"><div class="dnd-column"><h3>Available Modifications</h3><div id="modCatalogue"></div></div><div class="dnd-column"><h3>Installed Systems</h3><div class="drop-bay" id="modBay"><div class="empty-bay">Drag modifications here to install them</div></div></div></div></div>
-      <div class="panel" id="panel-weapons"><div class="dnd-layout"><div class="dnd-column"><h3>Vehicular Weapons</h3><div id="eraFilter" style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:10px"></div><div id="weaponCatalogue"></div><div style="margin-top:12px;padding-top:8px;border-top:1px solid var(--border)"><button class="header-btn" onclick="toggleCustomForm()" style="width:100%;text-align:center">+ Add Custom Weapon</button><div id="customForm" style="display:none;margin-top:8px"></div></div></div><div class="dnd-column"><h3>Weapon Hardpoints</h3><div class="mount-tabs"><div class="mount-tab active" data-mount="pintle" onclick="switchMount('pintle')">Pintle</div><div class="mount-tab" data-mount="fixed" onclick="switchMount('fixed')">Fixed (&frac12;)</div><div class="mount-tab" data-mount="turret" onclick="switchMount('turret')">Turret (&times;2)</div></div><div class="drop-bay" id="weaponBay"><div class="empty-bay">Drag weapons here to mount them</div></div></div></div></div>
-      <div class="panel" id="panel-output"></div>
-      <div class="panel" id="panel-rules"><div class="rules-ref" id="rulesContent"></div></div>
-    </div>
+    <div class="panel active" id="panel-mods"><div class="dnd-layout"><div class="dnd-column"><h3>Modifications Catalogue</h3><input type="text" class="search-bar" id="modSearch" placeholder="Search modifications..." oninput="renderModCatalogue()"><div id="modCatalogue"></div></div><div class="dnd-column"><h3>Installed Modifications</h3><div class="drop-bay" id="modBay"><div class="empty-bay">Drag modifications here to install them</div></div></div></div></div>
+    <div class="panel" id="panel-weapons"><div class="dnd-layout"><div class="dnd-column"><h3>Vehicular Weapons</h3><div id="eraFilter" style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px"></div><input type="text" class="search-bar" id="weaponSearch" placeholder="Search weapons..." oninput="renderWeaponCatalogue()"><div id="weaponCatalogue"></div><div style="margin-top:12px;padding-top:8px;border-top:1px solid var(--border)"><button class="header-btn" onclick="toggleCustomForm()" style="width:100%;text-align:center">+ Add Custom Weapon</button><div id="customForm" style="display:none;margin-top:8px"></div></div></div><div class="dnd-column"><h3>Weapon Hardpoints</h3><div class="mount-tabs"><div class="mount-tab active" data-mount="pintle" onclick="switchMount('pintle')">Pintle</div><div class="mount-tab" data-mount="fixed" onclick="switchMount('fixed')">Fixed (½)</div><div class="mount-tab" data-mount="turret" onclick="switchMount('turret')">Turret (×2)</div></div><div class="drop-bay" id="weaponBay"><div class="empty-bay">Drag weapons here to mount them</div></div></div></div></div>
+    <div class="panel" id="panel-output"><div id="outputContent"></div></div>
+    <div class="panel" id="panel-help"><input type="text" class="search-bar help-search" id="helpSearch" placeholder="Search reference guide..." oninput="filterHelp()"><div id="helpContent"></div></div>
   </div>
 </div>
 <script>
-// ═══ AUDIO ENGINE (shared across all Forges) ═══
+// ═══ AUDIO ENGINE ═══
 var Audio={ctx:null,init:function(){if(!this.ctx)this.ctx=new(window.AudioContext||window.webkitAudioContext)();if(this.ctx.state==='suspended')this.ctx.resume()},
 clunk:function(){this.init();var c=this.ctx,n=c.currentTime;var buf=c.createBuffer(1,c.sampleRate*.02,c.sampleRate);var d=buf.getChannelData(0);for(var i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,12);var ns=c.createBufferSource();ns.buffer=buf;var bp=c.createBiquadFilter();bp.type='bandpass';bp.frequency.value=4200;bp.Q.value=2;var o1=c.createOscillator();o1.type='sine';o1.frequency.value=820;var g1=c.createGain();g1.gain.setValueAtTime(.06,n);g1.gain.exponentialRampToValueAtTime(.001,n+.06);var o2=c.createOscillator();o2.type='sine';o2.frequency.value=2200;var g2=c.createGain();g2.gain.setValueAtTime(.02,n);g2.gain.exponentialRampToValueAtTime(.001,n+.03);var m=c.createGain();m.gain.value=.3;ns.connect(bp).connect(m);o1.connect(g1).connect(m);o2.connect(g2).connect(m);m.connect(c.destination);ns.start(n);ns.stop(n+.02);o1.start(n);o1.stop(n+.08);o2.start(n);o2.stop(n+.05)},
 click:function(){this.init();var c=this.ctx,n=c.currentTime;var o=c.createOscillator();o.type='sine';o.frequency.value=600;var g=c.createGain();g.gain.setValueAtTime(.08,n);g.gain.exponentialRampToValueAtTime(.001,n+.04);o.connect(g).connect(c.destination);o.start(n);o.stop(n+.05)},
 remove:function(){this.init();var c=this.ctx,n=c.currentTime;var o=c.createOscillator();o.type='triangle';o.frequency.setValueAtTime(500,n);o.frequency.exponentialRampToValueAtTime(200,n+.1);var g=c.createGain();g.gain.setValueAtTime(.1,n);g.gain.exponentialRampToValueAtTime(.001,n+.12);o.connect(g).connect(c.destination);o.start(n);o.stop(n+.15)}};
 
-// ═══ CANONICAL SFC DATA — Vehicle Frames (SFC p165) ═══
-// Normal (1-3): Hand +1, Tough 5 (max 20), Wounds 3, Crew 1, Energy 3, Mods Size×3, Cost $10K×Size
-// Large (4-7): Hand 0, Tough 10 (max 30), Wounds 4, Crew 3, Energy 5, Mods Size×3, Cost $30K×Size
-// Huge (8-11): Hand -1, Tough 15 (max 40), Wounds 5, Crew 5, Energy 15, Mods Size×3, Cost $50K×Size
-// Gargantuan (12-20): Hand -2, Tough 20 (max 50), Wounds 6, Crew 50, Energy 30, Mods Size×4, Cost $1M×Size
-// Note: Top Speed comes from locomotion type, not frame
-// Approximate dimensions and weight by Size (SFC frame notes + vehicle examples)
+// ═══ SIZE REFERENCE ═══
 var SIZE_REF={
-  1:{len:"6'",ex:'Drone, motorcycle',wt:'200 lbs'},
-  2:{len:"8'",ex:'Compact car, hover bike',wt:'1,500 lbs'},
-  3:{len:"12'",ex:'Sports car, light APC',wt:'3,000 lbs'},
-  4:{len:"15'",ex:'SUV, light truck, scout walker',wt:'2 tons'},
-  5:{len:"18'",ex:'Truck, gunboat, light mech',wt:'5 tons'},
-  6:{len:"22'",ex:'APC, attack helicopter',wt:'10 tons'},
-  7:{len:"28'",ex:'Heavy tank, assault mech',wt:'15 tons'},
-  8:{len:"36'",ex:'Patrol boat, heavy walker',wt:'40 tons'},
-  9:{len:"42'",ex:'Airliner, corvette',wt:'65 tons'},
-  10:{len:"50'",ex:'Train car, gunship',wt:'120 tons'},
-  11:{len:"63'",ex:'Large ship, assault walker',wt:'250 tons'},
-  12:{len:"75'",ex:'Frigate, walking fortress',wt:'500 tons'},
-  13:{len:"100'",ex:'Small destroyer',wt:'1,000 tons'},
-  14:{len:"125'",ex:'Landing craft',wt:'2,000 tons'},
-  15:{len:"150'",ex:'Large warship',wt:'4,000 tons'},
-  16:{len:"200'",ex:'Heavy destroyer',wt:'8,000 tons'},
-  17:{len:"250'",ex:'Battlecruiser',wt:'16,000 tons'},
-  18:{len:"300'",ex:'Carrier',wt:'32,000 tons'},
-  19:{len:"400'",ex:'Supercarrier',wt:'64,000 tons'},
-  20:{len:"500'",ex:'Mega-platform',wt:'125,000 tons'}
-};
+  1:{len:"6'",ex:'Drone, motorcycle',wt:'200 lbs'},2:{len:"8'",ex:'Compact car, hover bike',wt:'1,500 lbs'},
+  3:{len:"12'",ex:'Sports car, light APC',wt:'3,000 lbs'},4:{len:"15'",ex:'SUV, light truck, scout walker',wt:'2 tons'},
+  5:{len:"18'",ex:'Truck, gunboat, light mech',wt:'5 tons'},6:{len:"22'",ex:'APC, attack helicopter',wt:'10 tons'},
+  7:{len:"28'",ex:'Heavy tank, assault mech',wt:'15 tons'},8:{len:"36'",ex:'Patrol boat, heavy walker',wt:'40 tons'},
+  9:{len:"42'",ex:'Airliner, corvette',wt:'65 tons'},10:{len:"50'",ex:'Train car, gunship',wt:'120 tons'},
+  11:{len:"63'",ex:'Large ship, assault walker',wt:'250 tons'},12:{len:"75'",ex:'Frigate, walking fortress',wt:'500 tons'},
+  13:{len:"100'",ex:'Small destroyer',wt:'1,000 tons'},14:{len:"125'",ex:'Landing craft',wt:'2,000 tons'},
+  15:{len:"150'",ex:'Large warship',wt:'4,000 tons'},16:{len:"200'",ex:'Heavy destroyer',wt:'8,000 tons'},
+  17:{len:"250'",ex:'Battlecruiser',wt:'16,000 tons'},18:{len:"300'",ex:'Carrier',wt:'32,000 tons'},
+  19:{len:"400'",ex:'Supercarrier',wt:'64,000 tons'},20:{len:"500'",ex:'Mega-platform',wt:'125,000 tons'}};
+
 function getFrame(sz){
   if(sz<=3)return{cat:'Normal',hand:1,baseTough:5,maxArmor:20,wounds:3,crew:1,energy:3,modMult:3,costMult:10000};
   if(sz<=7)return{cat:'Large',hand:0,baseTough:10,maxArmor:30,wounds:4,crew:3,energy:5,modMult:3,costMult:30000};
   if(sz<=11)return{cat:'Huge',hand:-1,baseTough:15,maxArmor:40,wounds:5,crew:5,energy:15,modMult:3,costMult:50000};
-  return{cat:'Gargantuan',hand:-2,baseTough:20,maxArmor:50,wounds:6,crew:50,energy:30,modMult:4,costMult:1000000};
-}
+  return{cat:'Gargantuan',hand:-2,baseTough:20,maxArmor:50,wounds:6,crew:50,energy:30,modMult:4,costMult:1000000};}
 
-// ═══ LOCOMOTION TYPES (SFC p165) ═══
 var LOCOS=[
   {id:'wheeled',name:'Wheeled',speed:5,costMult:1000,notes:'Standard wheels.',group:'ground'},
   {id:'tracked',name:'Tracked',speed:4,costMult:5000,notes:'Ignores Difficult Ground.',group:'ground'},
@@ -205,17 +228,13 @@ var LOCOS=[
   {id:'vtol',name:'Aircraft, VTOL',speed:8,costMult:100000,notes:'VTOL, hover, or fly.',group:'air'},
   {id:'turboprop',name:'Aircraft, Turboprop',speed:11,costMult:100000,notes:'Min speed 60 MPH or Out of Control.',group:'air'},
   {id:'jet',name:'Aircraft, Jet',speed:13,costMult:500000,notes:'Min speed 120 MPH or Out of Control.',group:'air'},
-  {id:'water_turbo',name:'Water, Turboprop',speed:3,costMult:2000,notes:'Boat or ship, propeller driven.',group:'water'},
+  {id:'water_turbo',name:'Water, Turboprop',speed:3,costMult:2000,notes:'Boat or ship, propeller/oar driven.',group:'water'},
   {id:'water_jet',name:'Water, Jet',speed:5,costMult:5000,notes:'Boat or ship, jet driven.',group:'water'},
-  {id:'legs_biped',name:'Legs (Bipedal)',speed:8,costMult:50000,notes:'Walker rules apply. Fighting, Stomp, Death From Above.',group:'walker'},
-  {id:'legs_quad',name:'Legs (Quadruped)',speed:6,costMult:50000,notes:'Walker rules. Reroll failed Piloting vs Out of Control.',group:'walker'}
-];
+  {id:'legs_biped',name:'Legs (Bipedal)',speed:8,costMult:50000,notes:'Walker rules. Fighting, Stomp, Death From Above.',group:'walker'},
+  {id:'legs_quad',name:'Legs (Quadruped)',speed:6,costMult:50000,notes:'Walker rules. Reroll failed Piloting vs Out of Control.',group:'walker'}];
 
-// Speed Rating table (SFC p164)
 var SPD_TABLE={1:4,2:8,3:16,4:25,5:40,6:60,7:80,8:100,9:120,10:160,11:200,12:250,13:400,14:600,15:800,16:1000,17:1200,18:1600,19:2000,20:2500};
 function speedMPH(r){return SPD_TABLE[r]||(r+'?')}
-
-// ═══ VEHICLE MODIFICATIONS (SFC pp166-171) ═══
 var MODS=[
   // NEGATIVE QUALITIES
   {id:'battered',name:'Battered',cat:'Negative Qualities',max:2,mods:-2,costFn:function(s){return -10000*s},desc:'Reduce base Toughness by 2.'},
@@ -368,63 +387,72 @@ try{var cw=localStorage.getItem('diceforge-cvf-custom-weapons');if(cw)customWeap
 function getAllWeapons(){return WEAPONS.concat(customWeapons)}
 
 // ═══ STATE ═══
-var S={name:'Untitled Vehicle',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:[]};
+var customWeapons=[];
+try{var cw=localStorage.getItem('diceforge-cvf-custom-weapons');if(cw)customWeapons=JSON.parse(cw)}catch(e){}
+function getAllWeapons(){return WEAPONS.concat(customWeapons)}
 
-// ═══ MOD COST CALCULATIONS ═══
-function modSlots(m,sz){
-  if(m.mods==='half')return Math.ceil(sz/2);
-  if(m.mods==='halfneg')return -Math.ceil(sz/2);
-  if(m.mods==='size')return sz;
-  return m.mods;
-}
+// ═══ STATE ═══
+var S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:[]};
+
+// ═══ CALCULATIONS ═══
+function modSlots(m,sz){if(m.mods==='half')return Math.ceil(sz/2);if(m.mods==='halfneg')return -Math.ceil(sz/2);if(m.mods==='size')return sz;return m.mods}
 function weaponMountMods(w,mount){var mc=w.mods;if(mount==='fixed')mc=Math.ceil(mc/2);if(mount==='turret')mc=mc*2;return mc}
 function maxArmorTakes(){var f=getFrame(S.size);return Math.floor((f.maxArmor-f.baseTough)/2)}
-
-// ═══ STAT CALCULATIONS ═══
 function calcTough(){var f=getFrame(S.size),t=f.baseTough;if(S.mods.battered)t-=2*S.mods.battered;if(S.mods.toughness)t+=S.mods.toughness;return Math.max(0,t)}
 function calcArmor(){var f=getFrame(S.size),a=f.baseTough;if(S.mods.armor)a+=2*S.mods.armor;return Math.min(a,f.maxArmor)}
 function calcWounds(){var f=getFrame(S.size),w=f.wounds;if(S.mods.fragile)w-=S.mods.fragile;return Math.max(1,w)}
 function calcHand(){var f=getFrame(S.size),h=f.hand;if(S.mods.handling)h+=S.mods.handling;if(S.mods.reduced_hand)h-=S.mods.reduced_hand;return h}
 function calcSpeed(){var loco=LOCOS.find(function(l){return l.id===S.loco});var s=loco?loco.speed:5;if(S.mods.inc_speed)s+=S.mods.inc_speed;if(S.mods.reduced_speed)s-=S.mods.reduced_speed;return Math.max(1,s)}
 function calcEnergy(){var f=getFrame(S.size),e=f.energy;if(S.mods.reactor)e*=10;if(S.mods.energy_pod)e*=Math.pow(2,S.mods.energy_pod);return e}
-function calcModsUsed(){var t=0;for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});var ms=modSlots(m,S.size);if(ms>0)t+=ms*S.mods[id]}
+function calcModsUsed(){var t=0;for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});if(m){var ms=modSlots(m,S.size);if(ms>0)t+=ms*S.mods[id]}}
   S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp)t+=weaponMountMods(wp,w.mount)});return t}
-function calcModsGained(){var t=0;for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});var ms=modSlots(m,S.size);if(ms<0)t+=Math.abs(ms)*S.mods[id]}return t}
+function calcModsGained(){var t=0;for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});if(m){var ms=modSlots(m,S.size);if(ms<0)t+=Math.abs(ms)*S.mods[id]}}return t}
 function calcCost(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco});
   var cost=f.costMult*S.size+(loco?loco.costMult*S.size:0);
-  for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});cost+=m.costFn(S.size)*S.mods[id]}
+  for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});if(m)cost+=m.costFn(S.size)*S.mods[id]}
   S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp)cost+=wp.cost});return cost}
 function isWalker(){return S.loco==='legs_biped'||S.loco==='legs_quad'}
 function walkerStr(){return 'd12+'+S.size}
 function isHeavyArmor(){return S.size>=4||isWalker()}
+
+// ═══ IMAGE HANDLING ═══
+function handleImage(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){S.image=ev.target.result;showImage()};reader.readAsDataURL(file)}
+function showImage(){if(S.image){document.getElementById('imgPreview').src=S.image;document.getElementById('imgPreview').style.display='block';document.getElementById('imgPlaceholder').style.display='none';document.getElementById('imgClearBtn').style.display='block';document.getElementById('imgZone').classList.add('has-img')}
+  else{document.getElementById('imgPreview').style.display='none';document.getElementById('imgPlaceholder').style.display='block';document.getElementById('imgClearBtn').style.display='none';document.getElementById('imgZone').classList.remove('has-img')}}
+function clearImage(){S.image='';document.getElementById('imgInput').value='';showImage()}
+
+// ═══ IMPORT/EXPORT ═══
+function exportJSON(){var data={version:'1.0',tool:'DiceForge Combat Vehicle Forge',exported:new Date().toISOString(),
+  vehicle:{name:S.name,desc:S.desc,notes:S.notes,image:S.image,size:S.size,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons))}};
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=(S.name||'vehicle').replace(/[^a-zA-Z0-9_-]/g,'_')+'.cvf.json';a.click();URL.revokeObjectURL(url)}
+function importJSON(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){
+  try{var data=JSON.parse(ev.target.result);
+    if(data.vehicle){var v=data.vehicle;S.name=v.name||'Imported Vehicle';S.desc=v.desc||'';S.notes=v.notes||'';S.image=v.image||'';S.size=v.size||6;S.loco=v.loco||'wheeled';S.mods=v.mods||{};S.weapons=v.weapons||[];
+      document.getElementById('vName').value=S.name;document.getElementById('vDesc').value=S.desc;document.getElementById('vNotes').value=S.notes;document.getElementById('sizeSlider').value=S.size;
+      showImage();renderAll();Audio.clunk()}
+    else alert('Invalid .cvf.json file.')}catch(err){alert('Error reading file: '+err.message)}};reader.readAsText(file);e.target.value=''}
+
 // ═══ DRAG-DROP ENGINE ═══
 function getXY(e){if(e.touches&&e.touches.length)return{x:e.touches[0].clientX,y:e.touches[0].clientY};if(e.changedTouches&&e.changedTouches.length)return{x:e.changedTouches[0].clientX,y:e.changedTouches[0].clientY};return{x:e.clientX,y:e.clientY}}
 var drag={active:false,type:null,id:null,ghost:null};
 function startDrag(e,type,id,label){e.preventDefault();Audio.init();var pt=getXY(e);drag={active:true,type:type,id:id,ghost:null};var ghost=document.createElement('div');ghost.className='drag-ghost';ghost.textContent=label;ghost.style.left=pt.x+'px';ghost.style.top=pt.y+'px';document.body.appendChild(ghost);drag.ghost=ghost;var src=e.target.closest('.drag-item')||e.target.closest('.weapon-drag-item');if(src)src.classList.add('dragging');document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onEnd);document.addEventListener('touchmove',onMove,{passive:false});document.addEventListener('touchend',onEnd);document.addEventListener('touchcancel',onEnd)}
 function onMove(e){if(!drag.active||!drag.ghost)return;if(e.cancelable)e.preventDefault();var pt=getXY(e);var bay=document.getElementById(drag.type==='mod'?'modBay':'weaponBay');if(bay){var r=bay.getBoundingClientRect();var inside=pt.x>=r.left&&pt.x<=r.right&&pt.y>=r.top&&pt.y<=r.bottom;bay.classList.toggle('drag-over',inside);drag.ghost.classList.toggle('near-target',!inside&&pt.x>=r.left-80&&pt.x<=r.right+80&&pt.y>=r.top-80&&pt.y<=r.bottom+80)}drag.ghost.style.left=pt.x+'px';drag.ghost.style.top=pt.y+'px'}
 function onEnd(e){document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onEnd);document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onEnd);document.removeEventListener('touchcancel',onEnd);if(drag.ghost)drag.ghost.remove();document.querySelectorAll('.dragging').forEach(function(el){el.classList.remove('dragging')});var pt=getXY(e);var bay=document.getElementById(drag.type==='mod'?'modBay':'weaponBay');if(bay){var r=bay.getBoundingClientRect();if(pt.x>=r.left&&pt.x<=r.right&&pt.y>=r.top&&pt.y<=r.bottom){if(drag.type==='mod')dropMod(drag.id);else dropWeapon(drag.id);bay.classList.remove('impact');void bay.offsetWidth;bay.classList.add('impact')}bay.classList.remove('drag-over')}drag={active:false,type:null,id:null,ghost:null}}
-
-function dropMod(id){var m=MODS.find(function(x){return x.id===id});
-  var max=m.max==='U'?99:m.max==='frame'?maxArmorTakes():m.max;
-  var cur=S.mods[id]||0;
-  if(id==='inc_speed'&&S.mods.reduced_speed)return;
-  if(id==='reduced_speed'&&S.mods.inc_speed)return;
-  if(id==='handling'&&S.mods.reduced_hand)return;
-  if(id==='reduced_hand'&&S.mods.handling)return;
-  if(id==='exposed'&&S.mods.sealed)return;
-  if(id==='sealed'&&S.mods.exposed)return;
-  if(id==='fwd'&&S.loco!=='wheeled')return;
+function dropMod(id){var m=MODS.find(function(x){return x.id===id});var max=m.max==='U'?99:m.max==='frame'?maxArmorTakes():m.max;var cur=S.mods[id]||0;
+  if(id==='inc_speed'&&S.mods.reduced_speed)return;if(id==='reduced_speed'&&S.mods.inc_speed)return;
+  if(id==='exposed'&&S.mods.sealed)return;if(id==='sealed'&&S.mods.exposed)return;
+  if(id==='fwd'&&S.loco!=='wheeled')return;if(id==='jump_jets'&&!isWalker())return;if(id==='tandem_pilots'&&!isWalker())return;
   if(cur<max){S.mods[id]=cur+1;Audio.clunk();renderModBay(id);renderStats();renderOutput()}}
 function dropWeapon(id){var w=getAllWeapons().find(function(x){return x.id===id});if(!w||w.minSize>S.size)return;
   S.weapons.push({weaponId:id,mount:S.currentMount});Audio.clunk();renderWeaponBay(id);renderStats();renderOutput()}
-
 // ═══ RENDER FUNCTIONS ═══
 function renderLocoGrid(){var el=document.getElementById('locoGrid');
   el.innerHTML=LOCOS.map(function(l){return '<div class="loco-btn'+(S.loco===l.id?' active':'')+'" onclick="setLoco(\''+l.id+'\')"><span>'+l.name+'</span><span class="loco-speed">Spd '+l.speed+'</span></div>'}).join('')}
 function setLoco(id){S.loco=id;Audio.click();renderLocoGrid();renderStats();renderOutput();renderModCatalogue()}
 function setSize(sz){S.size=sz;S.mods={};S.weapons=[];document.getElementById('sizeVal').textContent=sz;document.getElementById('sizeClass').textContent=getFrame(sz).cat;renderFrameInfo();renderLocoGrid();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderStats();renderOutput()}
-function renderFrameInfo(){var f=getFrame(S.size);document.getElementById('sizeVal').textContent=S.size;document.getElementById('sizeClass').textContent=f.cat;
-  var ref=SIZE_REF[S.size]||{len:'?',ex:'—',wt:'?'};
+function renderFrameInfo(){var f=getFrame(S.size);var ref=SIZE_REF[S.size]||{len:'?',ex:'—',wt:'?'};
+  document.getElementById('sizeVal').textContent=S.size;document.getElementById('sizeClass').textContent=f.cat;
   document.getElementById('frameInfo').innerHTML='<div style="font-size:12px;color:var(--text-dim);font-style:italic;margin-bottom:6px;line-height:1.4">~'+ref.len+' long, ~'+ref.wt+' — <span style="color:var(--text)">'+ref.ex+'</span></div><div class="frame-stats">'
     +'<div class="frame-stat"><div class="fs-label">Base Tough</div><div class="fs-value">'+f.baseTough+' ('+f.maxArmor+')</div></div>'
     +'<div class="frame-stat"><div class="fs-label">Wounds</div><div class="fs-value">'+f.wounds+'</div></div>'
@@ -434,10 +462,10 @@ function renderFrameInfo(){var f=getFrame(S.size);document.getElementById('sizeV
     +'<div class="frame-stat"><div class="fs-label">Frame Cost</div><div class="fs-value">$'+fmtC(f.costMult*S.size)+'</div></div></div>'}
 
 function renderModCatalogue(){var el=document.getElementById('modCatalogue'),cats={};
+  var q=(document.getElementById('modSearch').value||'').toLowerCase();
   MODS.forEach(function(m){
-    if(m.id==='fwd'&&S.loco!=='wheeled')return;
-    if(m.id==='jump_jets'&&!isWalker())return;
-    if(m.id==='tandem_pilots'&&!isWalker())return;
+    if(m.id==='fwd'&&S.loco!=='wheeled')return;if(m.id==='jump_jets'&&!isWalker())return;if(m.id==='tandem_pilots'&&!isWalker())return;
+    if(q&&m.name.toLowerCase().indexOf(q)===-1&&m.desc.toLowerCase().indexOf(q)===-1&&m.cat.toLowerCase().indexOf(q)===-1)return;
     if(!cats[m.cat])cats[m.cat]=[];cats[m.cat].push(m)});
   var h='';for(var cat in cats){h+='<div class="cat-header">'+cat+'</div>';
     cats[cat].forEach(function(m){var ms=modSlots(m,S.size);var price=m.costFn(S.size);
@@ -446,12 +474,13 @@ function renderModCatalogue(){var el=document.getElementById('modCatalogue'),cat
         +'<div class="di-info"><div class="di-name">'+m.name+'</div><div class="di-desc">'+m.desc+'</div></div>'
         +'<div class="di-meta"><div class="di-mods">'+(ms>0?ms+' mod'+(ms>1?'s':''):ms<0?'+'+Math.abs(ms)+' mod'+(Math.abs(ms)>1?'s':''):'—')+'</div>'
         +'<div class="di-price">'+(price>=0?'$'+fmtN(price):'-$'+fmtN(Math.abs(price)))+'</div></div></div>'})}
+  if(!h)h='<div class="empty-state"><p>No modifications match your search.</p></div>';
   el.innerHTML=h}
 
 function renderModBay(animId){var bay=document.getElementById('modBay');
   var inst=[];for(var k in S.mods){if(S.mods[k]>0)inst.push([k,S.mods[k]])}
   if(!inst.length){bay.innerHTML='<div class="empty-bay">Drag modifications here to install them</div>';return}
-  bay.innerHTML=inst.map(function(p){var id=p[0],ct=p[1];var m=MODS.find(function(x){return x.id===id});var ms=modSlots(m,S.size)*ct;var tp=m.costFn(S.size)*ct;
+  bay.innerHTML=inst.map(function(p){var id=p[0],ct=p[1];var m=MODS.find(function(x){return x.id===id});if(!m)return '';var ms=modSlots(m,S.size)*ct;var tp=m.costFn(S.size)*ct;
     return '<div class="bay-item '+(id===animId?'snap-in':'')+'">'
       +'<div class="bi-info"><div class="bi-name">'+m.name+'</div>'
       +'<div class="bi-detail">'+(ms>0?ms+' mods':ms<0?'Grants '+Math.abs(ms)+' mods':'0 mods')+' · '+(tp>=0?'$'+fmtN(tp):'-$'+fmtN(Math.abs(tp)))+'</div></div>'
@@ -468,46 +497,22 @@ function renderEraFilter(){var el=document.getElementById('eraFilter');
 function setEra(e){currentEra=e;renderEraFilter();renderWeaponCatalogue()}
 
 function renderWeaponCatalogue(){var cats={};
+  var q=(document.getElementById('weaponSearch').value||'').toLowerCase();
   var wpns=currentEra==='all'?getAllWeapons():currentEra==='custom'?customWeapons:getAllWeapons().filter(function(w){return w.era===currentEra});
-  wpns.forEach(function(w){if(!cats[w.cat])cats[w.cat]=[];cats[w.cat].push(w)});
+  wpns.forEach(function(w){
+    if(q&&w.name.toLowerCase().indexOf(q)===-1&&w.cat.toLowerCase().indexOf(q)===-1&&w.notes.toLowerCase().indexOf(q)===-1)return;
+    if(!cats[w.cat])cats[w.cat]=[];cats[w.cat].push(w)});
   var h='';for(var cat in cats){h+='<div class="cat-header">'+cat+'</div>';
     cats[cat].forEach(function(w){var ok=w.minSize<=S.size;
       h+='<div class="weapon-drag-item" style="'+(ok?'':'opacity:.4;pointer-events:none')+'" onmousedown="startDrag(event,\'weapon\',\''+w.id+'\',\''+w.name+'\')" ontouchstart="startDrag(event,\'weapon\',\''+w.id+'\',\''+w.name+'\')">'
         +'<span class="drag-handle" style="color:var(--text-dim);font-size:14px;opacity:.4">&#x2807;</span>'
-        +'<div class="wdi-info"><div class="wdi-name">'+w.name+(ok?'':' (Min Size '+w.minSize+')')+(w.era?'<span style="font-size:10px;color:var(--text-dim);font-weight:400"> — '+ERA_LABELS[w.era]+'</span>':'')+'</div>'
+        +'<div class="wdi-info"><div class="wdi-name">'+w.name+(ok?'':' (Min Size '+w.minSize+')')+(w.era&&currentEra==='all'?'<span style="font-size:10px;color:var(--text-dim);font-weight:400"> — '+(ERA_LABELS[w.era]||'Custom')+'</span>':'')+'</div>'
         +'<div class="wdi-stats">'+w.range+' · '+w.damage+' · AP '+w.ap+' · RoF '+w.rof+'</div>'
         +'<div class="wdi-stats">'+w.notes+'</div></div>'
         +'<div class="wdi-meta"><div class="wdi-mods">'+w.mods+' mod'+(w.mods!==1?'s':'')+'</div>'
         +'<div class="wdi-price">$'+fmtN(w.cost)+'</div></div></div>'})}
-  if(!h)h='<div class="empty-state"><p>No weapons in this era for Size '+S.size+'.</p></div>';
+  if(!h)h='<div class="empty-state"><p>No weapons match your search.</p></div>';
   document.getElementById('weaponCatalogue').innerHTML=h}
-
-function toggleCustomForm(){var el=document.getElementById('customForm');
-  if(el.style.display==='none'){el.style.display='block';
-    el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'
-      +'<input type="text" id="cw_name" placeholder="Name" style="grid-column:1/3;background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
-      +'<input type="text" id="cw_cat" placeholder="Category" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
-      +'<input type="text" id="cw_range" placeholder="Range (e.g. 50/100/200)" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
-      +'<input type="text" id="cw_damage" placeholder="Damage (e.g. 3d10)" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
-      +'<input type="number" id="cw_ap" placeholder="AP" value="0" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
-      +'<input type="number" id="cw_rof" placeholder="RoF" value="1" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
-      +'<input type="number" id="cw_shots" placeholder="Shots" value="20" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
-      +'<input type="number" id="cw_minsize" placeholder="Min Size" value="1" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
-      +'<input type="number" id="cw_mods" placeholder="Mods" value="1" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
-      +'<input type="number" id="cw_cost" placeholder="Cost" value="5000" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
-      +'<input type="text" id="cw_notes" placeholder="Notes (e.g. HW, SBT)" style="grid-column:1/3;background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
-      +'</div><button class="header-btn" onclick="addCustomWeapon()" style="width:100%;margin-top:6px;text-align:center">Add Weapon</button>'}
-  else{el.style.display='none'}}
-
-function addCustomWeapon(){var n=document.getElementById('cw_name').value.trim();if(!n)return;
-  var w={id:'custom_'+Date.now(),name:n,cat:document.getElementById('cw_cat').value.trim()||'Custom',era:'custom',
-    range:document.getElementById('cw_range').value.trim()||'—',damage:document.getElementById('cw_damage').value.trim()||'—',
-    ap:+(document.getElementById('cw_ap').value)||0,rof:+(document.getElementById('cw_rof').value)||1,
-    shots:+(document.getElementById('cw_shots').value)||0,minSize:+(document.getElementById('cw_minsize').value)||1,
-    mods:+(document.getElementById('cw_mods').value)||1,cost:+(document.getElementById('cw_cost').value)||0,
-    notes:document.getElementById('cw_notes').value.trim()||''};
-  customWeapons.push(w);localStorage.setItem('diceforge-cvf-custom-weapons',JSON.stringify(customWeapons));
-  Audio.clunk();document.getElementById('customForm').style.display='none';renderEraFilter();renderWeaponCatalogue()}
 
 function renderWeaponBay(animId){var bay=document.getElementById('weaponBay');
   if(!S.weapons.length){bay.innerHTML='<div class="empty-bay">Drag weapons here to mount them</div>';return}
@@ -520,7 +525,32 @@ function renderWeaponBay(animId){var bay=document.getElementById('weaponBay');
       +'<span class="wbi-remove" onclick="removeWeapon('+i+')">&times;</span></div>'}).join('')}
 function switchMount(m){S.currentMount=m;document.querySelectorAll('.mount-tab').forEach(function(t){t.classList.toggle('active',t.dataset.mount===m)})}
 function removeWeapon(i){S.weapons.splice(i,1);Audio.remove();renderWeaponBay();renderStats();renderOutput()}
-// ═══ STATS PANEL ═══
+function toggleCustomForm(){var el=document.getElementById('customForm');
+  if(el.style.display==='none'){el.style.display='block';
+    el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'
+      +'<input type="text" id="cw_name" placeholder="Name" style="grid-column:1/3;background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="text" id="cw_cat" placeholder="Category" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="text" id="cw_range" placeholder="Range" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="text" id="cw_damage" placeholder="Damage" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="number" id="cw_ap" placeholder="AP" value="0" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="number" id="cw_rof" placeholder="RoF" value="1" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="number" id="cw_shots" placeholder="Shots" value="20" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="number" id="cw_minsize" placeholder="Min Size" value="1" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="number" id="cw_mods" placeholder="Mods" value="1" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="number" id="cw_cost" placeholder="Cost" value="5000" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="text" id="cw_notes" placeholder="Notes (e.g. HW, SBT)" style="grid-column:1/3;background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'</div><button class="header-btn" onclick="addCustomWeapon()" style="width:100%;margin-top:6px;text-align:center">Add Weapon</button>'}
+  else{el.style.display='none'}}
+function addCustomWeapon(){var n=document.getElementById('cw_name').value.trim();if(!n)return;
+  var w={id:'custom_'+Date.now(),name:n,cat:document.getElementById('cw_cat').value.trim()||'Custom',era:'custom',
+    range:document.getElementById('cw_range').value.trim()||'—',damage:document.getElementById('cw_damage').value.trim()||'—',
+    ap:+(document.getElementById('cw_ap').value)||0,rof:+(document.getElementById('cw_rof').value)||1,
+    shots:+(document.getElementById('cw_shots').value)||0,minSize:+(document.getElementById('cw_minsize').value)||1,
+    mods:+(document.getElementById('cw_mods').value)||1,cost:+(document.getElementById('cw_cost').value)||0,
+    notes:document.getElementById('cw_notes').value.trim()||''};
+  customWeapons.push(w);localStorage.setItem('diceforge-cvf-custom-weapons',JSON.stringify(customWeapons));
+  Audio.clunk();document.getElementById('customForm').style.display='none';renderEraFilter();renderWeaponCatalogue()}
+// ═══ STATS & OUTPUT ═══
 function renderStats(){var f=getFrame(S.size),used=calcModsUsed(),gained=calcModsGained(),total=S.size*f.modMult+gained,left=total-used;var spd=calcSpeed();
   document.getElementById('statsGrid').innerHTML=
     '<div class="stat-box"><div class="stat-label">Toughness</div><div class="stat-value">'+calcTough()+' ('+calcArmor()+')</div></div>'
@@ -534,8 +564,7 @@ function renderStats(){var f=getFrame(S.size),used=calcModsUsed(),gained=calcMod
   document.getElementById('modsRemaining').innerHTML='<div class="big-num '+cls+'">'+left+'</div><div class="sub">Mods Remaining</div>';
   document.getElementById('costDisplay').innerHTML='<div class="cost-val">$'+fmtC(calcCost())+'</div><div class="cost-label">Total Cost</div>'}
 
-// ═══ STAT BLOCK OUTPUT ═══
-function renderOutput(){var p=document.getElementById('panel-output'),f=getFrame(S.size);
+function renderOutput(){var p=document.getElementById('outputContent'),f=getFrame(S.size);
   var loco=LOCOS.find(function(l){return l.id===S.loco});var spd=calcSpeed();
   var used=calcModsUsed(),gained=calcModsGained(),left=(S.size*f.modMult+gained)-used;
   var notes=[];MODS.forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'× '+m.name:m.name)});
@@ -549,9 +578,15 @@ function renderOutput(){var p=document.getElementById('panel-output'),f=getFrame
   if(S.mods.reactor)special.push('Reactor: Energy ×10. Locomotion Crit on odd die = explosion.');
   if(S.mods.stabilizer)special.push('Stabilizer: No Unstable Platform penalty.');
   if(S.mods.targeting)special.push('Targeting: -2 Shooting penalties.');
+  if(S.mods.submersible)special.push('Submersible'+(S.mods.submersible>1?' (Deep Dive)':'')+': Submerge as action. -4 to detect when submerged.');
 
-  p.innerHTML='<div class="stat-block">'
+  var imgHtml=S.image?'<div style="text-align:center;margin-bottom:10px"><img src="'+S.image+'" style="max-width:100%;max-height:250px;border:1px solid var(--border)"></div>':'';
+  var descHtml=S.desc?'<div style="font-size:13px;font-style:italic;color:var(--text);margin-bottom:8px;line-height:1.4">'+esc(S.desc)+'</div>':'';
+  var notesHtml=S.notes?'<div style="font-size:12px;color:var(--text-dim);margin-top:8px;padding-top:6px;border-top:1px solid var(--border);line-height:1.4"><span class="sb-label">GM Notes:</span> '+esc(S.notes)+'</div>':'';
+
+  p.innerHTML=imgHtml+'<div class="stat-block">'
     +'<div class="sb-name">'+(S.name||'Untitled Vehicle')+'</div>'
+    +descHtml
     +'<div class="sb-type">Size '+S.size+' ('+f.cat+'), '+loco.name+', Handling '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)</div>'
     +'<hr class="sb-divider">'
     +'<div class="sb-line"><span class="sb-label">Toughness:</span> '+calcTough()+' ('+calcArmor()+')</div>'
@@ -564,61 +599,165 @@ function renderOutput(){var p=document.getElementById('panel-output'),f=getFrame
     +(notes.length?'<div class="sb-line"><span class="sb-label">Mods:</span> '+notes.join(', ')+'.</div>':'')
     +(wl.length?'<div class="sb-line"><span class="sb-label">Weapons:</span></div>'+wl.map(function(w){return '<div class="sb-line">&nbsp;&nbsp;• '+w+'</div>'}).join(''):'')
     +(special.length?'<hr class="sb-divider"><div class="sb-notes"><span class="sb-label">Special:</span> '+special.join(' ')+'</div>':'')
+    +notesHtml
+    +'<div class="sb-watermark">Built with DiceForge Combat Vehicle Forge · diceforgestudios.pages.dev</div>'
     +'</div>'
-    +'<div style="margin-top:16px"><button class="header-btn" onclick="copyBlock()">Copy to Clipboard</button></div>'}
+    +'<div style="margin-top:16px;display:flex;gap:8px"><button class="header-btn" onclick="copyBlock()">Copy to Clipboard</button><button class="header-btn" onclick="exportJSON()">Export .json</button></div>'}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}
 
 function copyBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco});var spd=calcSpeed();
   var left=(S.size*f.modMult+calcModsGained())-calcModsUsed();
   var notes=[],wl=[];
   MODS.forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'x '+m.name:m.name)});
   S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed':w.mount==='turret'?'Turret':'Pintle';wl.push('  * '+wp.name+' ('+ml+'): '+wp.range+', '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof)}});
-  var t=S.name+'\nSize '+S.size+' ('+f.cat+'), '+loco.name+', Hand '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)\nTough '+calcTough()+' ('+calcArmor()+'), Wounds '+calcWounds()+', Crew '+f.crew+(isWalker()?', Str '+walkerStr():'')+'\nEnergy '+calcEnergy()+' days, Cost $'+fmtC(calcCost())+', Mods '+left+' remaining\n';
+  var t=S.name+'\n';if(S.desc)t+=S.desc+'\n';
+  t+='Size '+S.size+' ('+f.cat+'), '+loco.name+', Hand '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)\nTough '+calcTough()+' ('+calcArmor()+'), Wounds '+calcWounds()+', Crew '+f.crew+(isWalker()?', Str '+walkerStr():'')+'\nEnergy '+calcEnergy()+' days, Cost $'+fmtC(calcCost())+', Mods '+left+' remaining\n';
   if(notes.length)t+='Mods: '+notes.join(', ')+'.\n';if(wl.length)t+='Weapons:\n'+wl.join('\n')+'\n';
   if(isHeavyArmor())t+='Special: Heavy Armor.';if(isWalker())t+=' Walker rules apply.';
+  t+='\n— Built with DiceForge Combat Vehicle Forge';
   navigator.clipboard.writeText(t).then(function(){var btn=event.target;btn.textContent='Copied!';btn.style.borderColor='var(--green)';btn.style.color='var(--green)';setTimeout(function(){btn.textContent='Copy to Clipboard';btn.style.borderColor='';btn.style.color=''},1500)})}
+// ═══ COMPREHENSIVE HELP/REFERENCE PANEL ═══
+function buildHelp(){
+  var h='';
+  // SECTION: Quick Start
+  h+='<div class="help-section" data-help="quick start overview how to use"><h3>Quick Start Guide</h3>';
+  h+='<p><span class="rule-key">1. Name your vehicle</span> in the sidebar — add a description, notes, and optionally upload an image.</p>';
+  h+='<p><span class="rule-key">2. Set Size</span> using the slider (1–20). This determines your frame category, base stats, and available Mods.</p>';
+  h+='<p><span class="rule-key">3. Choose Locomotion</span> — wheeled, tracked, hover, VTOL, jet, turboprop, water, or walker (bipedal/quadruped).</p>';
+  h+='<p><span class="rule-key">4. Install Modifications</span> by dragging them from the catalogue into the Installed bay. Negative Qualities give Mods back.</p>';
+  h+='<p><span class="rule-key">5. Mount Weapons</span> — select your mount type (Pintle, Fixed, Turret), then drag weapons into the Hardpoints bay.</p>';
+  h+='<p><span class="rule-key">6. Review your Stat Block</span> on the output tab. Copy to clipboard or export as .json to share.</p>';
+  h+='</div>';
 
-// ═══ RULES REFERENCE (dynamic based on locomotion) ═══
-function renderRules(){var el=document.getElementById('rulesContent');
-  var h='<h3>Vehicle Overview</h3><p>Vehicles use the Piloting or Driving skill depending on type. All vehicles Size 4+ have Heavy Armor. Unused Mod slots equal cargo space (125 cubic feet each).</p>';
-  h+='<p><span class="rule-key">Handling:</span> Modifier to Driving/Piloting rolls. Affects Parry for walkers.</p>';
-  h+='<p><span class="rule-key">Top Speed:</span> Rated by Speed Rating (see SFC p164). Used in Chases and Clashes.</p>';
-  h+='<p><span class="rule-key">Unstable Platform:</span> Shooting from a moving vehicle is at -2 (or -4 with Rough Ride).</p>';
-  if(isWalker()){
-    h+='<h3>Walker Combat Rules</h3>';
-    h+='<p><span class="rule-key">Fighting:</span> Use the lower of operator\'s Piloting or Fighting. Parry = 2 + half Piloting + Handling. Walkers are always considered armed (Strength damage, HW).</p>';
-    h+='<p><span class="rule-key">Running:</span> Piloting roll. Failure = Out of Control. Success = +1 Speed Rating. Raise = +2.</p>';
-    h+='<p><span class="rule-key">Stomp:</span> Gargantuan walkers use blast template. Ignores Scale. Opposed Athletics vs Agility. Damage = Strength.</p>';
-    h+='<p><span class="rule-key">Death From Above:</span> Opposed Piloting. Success = Ram + d6 per Scale category exceeding target. Failure = miss + Out of Control.</p>';
-    h+='<p><span class="rule-key">Prone:</span> Free action (Piloting roll). Stand up: success halves movement, raise retains full.</p>';
-    h+='<p><span class="rule-key">Critical Hits:</span> Called Shot to leg = Locomotion Crit (Speed -1). Called Shot to arm = System Crit. Nothing left = reactor breach: Xd10 in 10".</p>';
-  }
-  var loco=LOCOS.find(function(l){return l.id===S.loco});
-  if(loco&&loco.group==='air'){
-    h+='<h3>Aircraft Rules</h3>';
-    if(S.loco==='jet')h+='<p><span class="rule-key">Minimum Speed:</span> 120 MPH. Drop below = Out of Control.</p>';
-    if(S.loco==='turboprop')h+='<p><span class="rule-key">Minimum Speed:</span> 60 MPH. Drop below = Out of Control.</p>';
-    if(S.loco==='vtol')h+='<p><span class="rule-key">VTOL:</span> Can hover, perform vertical takeoff/landing.</p>';
-  }
-  h+='<h3>Weapon Mounts</h3>';
-  h+='<p><span class="rule-key">Pintle:</span> Standard mount, full Mod cost, 180° arc.</p>';
-  h+='<p><span class="rule-key">Fixed:</span> 45° arc. Half Mod cost (round up).</p>';
-  h+='<p><span class="rule-key">Turret:</span> 360° arc. Double Mod cost.</p>';
-  h+='<p><span class="rule-key">Linked:</span> Dual: +1 hit, +2 dmg, +1 Mod. Quad: +2 hit, +4 dmg, +3 Mods total.</p>';
-  h+='<h3>Multiple Locomotion</h3>';
-  h+='<p>A vehicle may have more than one locomotion type. Buy the cheapest first. Additional forms require Mods equal to half Size and cost double. Third form: same Mods, triple cost.</p>';
-  h+='<p class="rule-note">References the Savage Worlds Sci-Fi Companion. Always defer to your physical rulebook.</p>';
-  el.innerHTML=h}
+  // SECTION: Vehicle Frames
+  h+='<div class="help-section" data-help="frames size category normal large huge gargantuan toughness wounds crew energy mods cost"><h3>Vehicle Frames</h3>';
+  h+='<p>Every vehicle begins with a frame determined by its Size. The frame sets base Toughness, maximum Armor, Wounds, Crew capacity, Energy, available Mod slots, and base cost.</p>';
+  h+='<table><tr><th>Category</th><th>Size</th><th>Hand</th><th>Tough (Max)</th><th>Wounds</th><th>Crew</th><th>Energy</th><th>Mods</th><th>Cost</th></tr>';
+  h+='<tr><td>Normal</td><td>1–3</td><td>+1</td><td>5 (20)</td><td>3</td><td>1</td><td>3</td><td>Size×3</td><td>$10K×Size</td></tr>';
+  h+='<tr><td>Large</td><td>4–7</td><td>0</td><td>10 (30)</td><td>4</td><td>3</td><td>5</td><td>Size×3</td><td>$30K×Size</td></tr>';
+  h+='<tr><td>Huge</td><td>8–11</td><td>-1</td><td>15 (40)</td><td>5</td><td>5</td><td>15</td><td>Size×3</td><td>$50K×Size</td></tr>';
+  h+='<tr><td>Gargantuan</td><td>12–20</td><td>-2</td><td>20 (50)</td><td>6</td><td>50</td><td>30</td><td>Size×4</td><td>$1M×Size</td></tr>';
+  h+='</table><p><span class="rule-key">Heavy Armor:</span> All vehicles Size 4+ and all walkers have Heavy Armor — only Heavy Weapons can damage them.</p>';
+  h+='<p><span class="rule-key">Unused Mods</span> represent cargo space — approximately 125 cubic feet per unused slot.</p></div>';
+
+  // SECTION: Size Reference
+  h+='<div class="help-section" data-help="size reference length weight examples dimensions"><h3>Size Reference</h3>';
+  h+='<table><tr><th>Size</th><th>Length</th><th>Weight</th><th>Examples</th></tr>';
+  for(var i=1;i<=20;i++){var r=SIZE_REF[i];h+='<tr><td>'+i+'</td><td>~'+r.len+'</td><td>~'+r.wt+'</td><td>'+r.ex+'</td></tr>'}
+  h+='</table></div>';
+
+  // SECTION: Locomotion
+  h+='<div class="help-section" data-help="locomotion wheeled tracked hover vtol turboprop jet water walker legs bipedal quadruped speed"><h3>Locomotion Types</h3>';
+  h+='<table><tr><th>Type</th><th>Speed</th><th>Cost</th><th>Notes</th></tr>';
+  LOCOS.forEach(function(l){h+='<tr><td>'+l.name+'</td><td>'+l.speed+'</td><td>$'+fmtN(l.costMult)+'×Size</td><td>'+l.notes+'</td></tr>'});
+  h+='</table>';
+  h+='<h4>Multiple Locomotion</h4><p>A vehicle may have more than one locomotion type. Buy the cheapest first. Additional forms require Mods equal to half Size and cost double the second form\'s locomotion price. A third form costs the same Mods but triple the price.</p>';
+  h+='<h4>Minimum Speeds</h4><p><span class="rule-key">Turboprop:</span> Minimum 60 MPH or Out of Control. <span class="rule-key">Jet:</span> Minimum 120 MPH or Out of Control. <span class="rule-key">VTOL:</span> Can hover at 0 speed.</p></div>';
+
+  // SECTION: Speed Rating Table
+  h+='<div class="help-section" data-help="speed rating mph miles per hour chase"><h3>Speed Rating Table</h3>';
+  h+='<table><tr><th>Rating</th><th>MPH</th><th>Rating</th><th>MPH</th></tr>';
+  var sr=Object.keys(SPD_TABLE);for(var i=0;i<sr.length;i+=2){h+='<tr><td>'+sr[i]+'</td><td>'+SPD_TABLE[sr[i]]+'</td>'+(sr[i+1]?'<td>'+sr[i+1]+'</td><td>'+SPD_TABLE[sr[i+1]]+'</td>':'<td></td><td></td>')+'</tr>'}
+  h+='</table></div>';
+
+  // SECTION: Modifications Reference
+  h+='<div class="help-section" data-help="modifications mods negative qualities core defensive systems locomotion power offensive personnel structural"><h3>All Modifications</h3>';
+  var mcats={};MODS.forEach(function(m){if(!mcats[m.cat])mcats[m.cat]=[];mcats[m.cat].push(m)});
+  for(var cat in mcats){h+='<h4>'+cat+'</h4><table><tr><th>Name</th><th>Mods</th><th>Max</th><th>Cost</th><th>Description</th></tr>';
+    mcats[cat].forEach(function(m){var ms=modSlots(m,6);h+='<tr><td>'+m.name+'</td><td>'+(ms>0?ms:ms<0?ms:'0')+'</td><td>'+(m.max==='U'?'∞':m.max==='frame'?'Frame':m.max)+'</td><td>'+
+      (m.costFn(6)>=0?'$'+fmtN(m.costFn(6)):'-$'+fmtN(Math.abs(m.costFn(6))))+'*</td><td>'+m.desc+'</td></tr>'});
+    h+='</table>'}
+  h+='<p class="rule-note">* Costs shown at Size 6. Most scale with Size (×Size). Some are flat costs.</p></div>';
+
+  // SECTION: Weapons Reference
+  h+='<div class="help-section" data-help="weapons catalogue ancient medieval blackpowder industrial modern future advanced damage range ap rof"><h3>All Weapons by Era</h3>';
+  ERA_ORDER.forEach(function(era){
+    var ewpns=WEAPONS.filter(function(w){return w.era===era});if(!ewpns.length)return;
+    h+='<h4>'+ERA_LABELS[era]+'</h4><table><tr><th>Name</th><th>Range</th><th>Damage</th><th>AP</th><th>RoF</th><th>Mods</th><th>Cost</th><th>Notes</th></tr>';
+    ewpns.forEach(function(w){h+='<tr><td>'+w.name+'</td><td>'+w.range+'</td><td>'+w.damage+'</td><td>'+w.ap+'</td><td>'+w.rof+'</td><td>'+w.mods+'</td><td>$'+fmtN(w.cost)+'</td><td>'+w.notes+'</td></tr>'});
+    h+='</table>'});
+  h+='</div>';
+
+  // SECTION: Weapon Mounts
+  h+='<div class="help-section" data-help="weapon mounts pintle fixed turret linked arc fire"><h3>Weapon Mounts</h3>';
+  h+='<table><tr><th>Mount</th><th>Mod Cost</th><th>Arc</th><th>Notes</th></tr>';
+  h+='<tr><td>Pintle</td><td>Standard</td><td>180°</td><td>Default mount. Requires a crew member to operate.</td></tr>';
+  h+='<tr><td>Fixed</td><td>½ (round up)</td><td>45°</td><td>Forward-facing only. Pilot fires. Cheapest option.</td></tr>';
+  h+='<tr><td>Turret</td><td>×2</td><td>360°</td><td>Full rotation. Most expensive but most versatile.</td></tr>';
+  h+='</table>';
+  h+='<h4>Linked Weapons</h4><p><span class="rule-key">Dual Linked:</span> Two identical weapons fire as one. +1 to hit, +2 damage, +1 Mod over single. <span class="rule-key">Quad Linked:</span> Four identical weapons. +2 to hit, +4 damage, +3 Mods over single.</p></div>';
+
+  // SECTION: Walker Rules
+  h+='<div class="help-section" data-help="walker mech bipedal quadruped fighting parry stomp death from above strength prone critical hit"><h3>Walker Combat Rules</h3>';
+  h+='<p>Walkers (bipedal and quadruped) use Piloting skill for movement and follow special combat rules.</p>';
+  h+='<p><span class="rule-key">Strength:</span> d12 + Size. Used for melee damage. Walkers are always considered armed (Heavy Weapon).</p>';
+  h+='<p><span class="rule-key">Fighting:</span> Use the lower of operator\'s Piloting or Fighting. Parry = 2 + half Piloting die + Handling modifier.</p>';
+  h+='<p><span class="rule-key">Running:</span> Piloting roll each round. Failure = Out of Control. Success = +1 Speed Rating. Raise = +2 Speed Ratings.</p>';
+  h+='<p><span class="rule-key">Stomp:</span> Gargantuan walkers only. Use blast template matching Scale. Opposed Athletics vs target\'s Agility. Damage = Strength. Ignores Scale penalties.</p>';
+  h+='<p><span class="rule-key">Death From Above:</span> Opposed Piloting vs target. Success = Ram damage + d6 per Scale category exceeding target. Failure = miss + Out of Control.</p>';
+  h+='<p><span class="rule-key">Prone:</span> Free action requiring Piloting roll. Standing: success = half movement, raise = full movement retained.</p>';
+  h+='<p><span class="rule-key">Quadruped Advantage:</span> Reroll failed Piloting rolls to avoid Out of Control.</p>';
+  h+='<p><span class="rule-key">Critical Hits:</span> Called Shot to leg = Locomotion Crit (Speed -1). Called Shot to arm = System Crit. When nothing is left to destroy, reactor breach: Size × d10 damage in a 10" blast radius.</p></div>';
+
+  // SECTION: Vehicle Combat
+  h+='<div class="help-section" data-help="vehicle combat unstable platform shooting chase clash collision ram"><h3>Vehicle Combat Quick Reference</h3>';
+  h+='<p><span class="rule-key">Unstable Platform:</span> -2 to Shooting from a moving vehicle (-4 with Rough Ride). Negated by Stabilizer mod.</p>';
+  h+='<p><span class="rule-key">Evasion:</span> Handling modifier applies to avoiding attacks and maneuvers.</p>';
+  h+='<p><span class="rule-key">Scale:</span> Vehicles attacking smaller targets suffer Scale penalties (and vice versa). See Savage Worlds core rules.</p>';
+  h+='<p><span class="rule-key">Collision/Ram:</span> Damage = vehicle\'s base Toughness (plus Strength for walkers) as a melee attack. Both vehicles take damage.</p>';
+  h+='<p><span class="rule-key">Chase Rules:</span> Use Speed Ratings to determine chase positions. Piloting/Driving rolls each round to gain or lose ground.</p></div>';
+
+  // SECTION: Weapon Notes
+  h+='<div class="help-section" data-help="weapon notes abbreviations SBT MBT LBT guided cauterize overcharge incendiary point defense reaction fire reload heavy weapon"><h3>Weapon Notes Glossary</h3>';
+  h+='<table><tr><th>Abbreviation</th><th>Meaning</th></tr>';
+  h+='<tr><td>HW</td><td>Heavy Weapon — can damage Heavy Armor targets</td></tr>';
+  h+='<tr><td>SBT</td><td>Small Blast Template (2" radius)</td></tr>';
+  h+='<tr><td>MBT</td><td>Medium Blast Template (4" radius)</td></tr>';
+  h+='<tr><td>LBT</td><td>Large Blast Template (6" radius)</td></tr>';
+  h+='<tr><td>Cone</td><td>Cone Template (9" default or as noted)</td></tr>';
+  h+='<tr><td>Guided</td><td>Weapon tracks target. +2 Shooting. Can be jammed by AM/ECM.</td></tr>';
+  h+='<tr><td>Cauterize</td><td>Energy weapon. Seals wounds on contact.</td></tr>';
+  h+='<tr><td>Overcharge</td><td>Spend extra shot for +1d damage. Risk of burnout on 1.</td></tr>';
+  h+='<tr><td>Incendiary</td><td>Target catches fire on hit. See Fire rules.</td></tr>';
+  h+='<tr><td>Pt Def</td><td>Point Defense — can fire at incoming missiles/torpedoes.</td></tr>';
+  h+='<tr><td>Rxn Fire</td><td>Reaction Fire — can fire during enemy movement.</td></tr>';
+  h+='<tr><td>Reload X</td><td>Requires X actions to reload between shots.</td></tr>';
+  h+='<tr><td>Indirect</td><td>Can fire over obstacles without line of sight.</td></tr>';
+  h+='<tr><td>AP X</td><td>Armor Piercing — ignores X points of Armor.</td></tr>';
+  h+='<tr><td>(I)–(VI)</td><td>Sci-fi weapon class rating for compatibility.</td></tr>';
+  h+='</table></div>';
+
+  // SECTION: Import/Export
+  h+='<div class="help-section" data-help="import export json save load file share"><h3>Saving, Loading &amp; Sharing</h3>';
+  h+='<p><span class="rule-key">Save:</span> Stores the current vehicle in your browser\'s local storage. Saved vehicles appear in the sidebar list and persist between sessions.</p>';
+  h+='<p><span class="rule-key">Export .json:</span> Downloads a .cvf.json file containing the complete vehicle build, including image, description, and notes. Share this file with other users.</p>';
+  h+='<p><span class="rule-key">Import .json:</span> Load a previously exported .cvf.json file. Restores all settings, mods, weapons, image, and notes.</p>';
+  h+='<p><span class="rule-key">Custom Weapons:</span> Weapons you create via the "Add Custom Weapon" button are stored separately in your browser and appear across all vehicles.</p></div>';
+
+  // SECTION: About
+  h+='<div class="help-section" data-help="about credits diceforge studios savage worlds compatible"><h3>About Combat Vehicle Forge</h3>';
+  h+='<p>Combat Vehicle Forge is a universal vehicle construction toolkit fully compatible with Savage Worlds. It covers every vehicle type from ancient war chariots to far-future hover carriers — ground, air, water, and walker — in a single tool.</p>';
+  h+='<p>71 weapons across 7 historical eras (Ancient through Advanced), 40+ modifications, 10 locomotion types, and sizes from 1 (motorcycle) to 20 (mega-platform). Plus custom weapon entry for anything your setting needs.</p>';
+  h+='<p style="font-size:12px;color:var(--text-dim);margin-top:8px">This product is not affiliated with or endorsed by Pinnacle Entertainment Group. Savage Worlds and all related marks and logos are trademarks of Pinnacle Entertainment Group. Used with permission.</p></div>';
+
+  return h}
+
+function filterHelp(){var q=(document.getElementById('helpSearch').value||'').toLowerCase();
+  document.querySelectorAll('.help-section').forEach(function(s){
+    if(!q){s.style.display='';return}
+    var tags=(s.dataset.help||'')+' '+s.textContent.toLowerCase();
+    s.style.display=tags.indexOf(q)>=0?'':'none'})}
 
 // ═══ TABS, SAVE/LOAD, UTILS ═══
-function switchTab(tab){document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===tab)});document.querySelectorAll('.panel').forEach(function(p){p.classList.toggle('active',p.id==='panel-'+tab)});if(tab==='output')renderOutput();if(tab==='rules')renderRules()}
-function newVehicle(){S={name:'Untitled Vehicle',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:S.saved};document.getElementById('vName').value=S.name;document.getElementById('sizeSlider').value=6;renderAll()}
-function saveVehicle(){var d={name:S.name,size:S.size,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons))};var i=S.saved.findIndex(function(s){return s.name===S.name});if(i>=0)S.saved[i]=d;else S.saved.push(d);localStorage.setItem('diceforge-cvf',JSON.stringify(S.saved));renderSaved()}
-function loadVehicle(i){var d=S.saved[i];S.name=d.name;S.size=d.size;S.loco=d.loco;S.mods=JSON.parse(JSON.stringify(d.mods));S.weapons=JSON.parse(JSON.stringify(d.weapons));document.getElementById('vName').value=S.name;document.getElementById('sizeSlider').value=S.size;renderAll()}
+function switchTab(tab){document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===tab)});document.querySelectorAll('.panel').forEach(function(p){p.classList.toggle('active',p.id==='panel-'+tab)});if(tab==='output')renderOutput()}
+function newVehicle(){S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:S.saved};document.getElementById('vName').value=S.name;document.getElementById('vDesc').value='';document.getElementById('vNotes').value='';document.getElementById('sizeSlider').value=6;clearImage();renderAll()}
+function saveVehicle(){var d={name:S.name,desc:S.desc,notes:S.notes,image:S.image,size:S.size,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons))};var i=S.saved.findIndex(function(s){return s.name===S.name});if(i>=0)S.saved[i]=d;else S.saved.push(d);localStorage.setItem('diceforge-cvf',JSON.stringify(S.saved));renderSaved();Audio.click()}
+function loadVehicle(i){var d=S.saved[i];S.name=d.name;S.desc=d.desc||'';S.notes=d.notes||'';S.image=d.image||'';S.size=d.size;S.loco=d.loco;S.mods=JSON.parse(JSON.stringify(d.mods));S.weapons=JSON.parse(JSON.stringify(d.weapons));document.getElementById('vName').value=S.name;document.getElementById('vDesc').value=S.desc;document.getElementById('vNotes').value=S.notes;document.getElementById('sizeSlider').value=S.size;showImage();renderAll()}
 function deleteSaved(i){S.saved.splice(i,1);localStorage.setItem('diceforge-cvf',JSON.stringify(S.saved));renderSaved()}
 function renderSaved(){var list=document.getElementById('savedList');
   if(!S.saved.length){list.innerHTML='<div class="empty-state"><p>No saved builds yet.</p></div>';return}
   list.innerHTML=S.saved.map(function(s,i){var loco=LOCOS.find(function(l){return l.id===s.loco});
-    return '<div class="saved-item" onclick="loadVehicle('+i+')"><span class="si-name">'+s.name+'</span><span class="si-chassis">Size '+s.size+' '+loco.name+'</span><button class="si-delete" onclick="event.stopPropagation();deleteSaved('+i+')">&times;</button></div>'}).join('')}
+    return '<div class="saved-item" onclick="loadVehicle('+i+')"><span class="si-name">'+esc(s.name)+'</span><span class="si-chassis">Size '+s.size+' '+(loco?loco.name:'')+'</span><button class="si-delete" onclick="event.stopPropagation();deleteSaved('+i+')">&times;</button></div>'}).join('')}
 function fmtN(n){return n.toLocaleString()}
 function fmtC(n){if(n>=1e9)return(n/1e9).toFixed(2)+'B';if(n>=1e6)return(n/1e6).toFixed(n%1e6===0?0:2)+'M';if(n>=1e3)return(n/1e3).toFixed(n%1e3===0?0:1)+'K';return n.toString()}
 function renderAll(){renderFrameInfo();renderLocoGrid();renderEraFilter();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderStats();renderOutput();renderSaved()}
@@ -634,6 +773,9 @@ function renderAll(){renderFrameInfo();renderLocoGrid();renderEraFilter();render
   ['touchstart','touchend','mousedown','click'].forEach(function(e){document.addEventListener(e,unlock,true)})})();
 try{var sd=localStorage.getItem('diceforge-cvf');if(sd)S.saved=JSON.parse(sd)}catch(e){}
 document.getElementById('vName').addEventListener('input',function(e){S.name=e.target.value||'Untitled Vehicle'});
+document.getElementById('vDesc').addEventListener('input',function(e){S.desc=e.target.value||''});
+document.getElementById('vNotes').addEventListener('input',function(e){S.notes=e.target.value||''});
+document.getElementById('helpContent').innerHTML=buildHelp();
 renderAll();
 </script>
 </body>
