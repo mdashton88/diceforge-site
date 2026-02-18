@@ -274,7 +274,8 @@ var MODS=[
   {id:'jump_jets',name:'Jump Jets',cat:'Walker Systems',max:1,mods:1,costFn:function(s){return 10000*s},desc:'Move as VTOL once per encounter. Walker only.'},
   {id:'tandem_pilots',name:'Tandem Pilots',cat:'Negative Qualities',max:1,mods:-1,costFn:function(s){return -10000*s},desc:'Requires two pilots. Walker only.'},
   // MULTI-FORM
-  {id:'variable_form',name:'Variable Form',cat:'Locomotion & Power',max:1,mods:'half',costFn:function(s){return 20000*s},desc:'Switch between two locomotion types as an action. Choose second form at build.'}
+  {id:'variable_form',name:'Variable Form',cat:'Locomotion & Power',max:1,mods:'half',costFn:function(s){return 20000*s},desc:'Switch between two locomotion types as an action. Choose second form at build.'},
+  {id:'submersible',name:'Submersible',cat:'Locomotion & Power',max:2,mods:2,costFn:function(s){return 10000*s},desc:'Can submerge as action. -4 to detect when submerged. 2nd: deep dive, crush-proof.'}
 ];
 // ═══ WEAPON CATALOGUE — DiceForge originals by era, SW compatible ═══
 // Eras: ancient, medieval, blackpowder, industrial, modern, future, advanced
