@@ -148,7 +148,7 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
     </div>
     <div class="content">
       <div class="panel active" id="panel-mods"><div class="dnd-layout"><div class="dnd-column"><h3>Available Modifications</h3><div id="modCatalogue"></div></div><div class="dnd-column"><h3>Installed Systems</h3><div class="drop-bay" id="modBay"><div class="empty-bay">Drag modifications here to install them</div></div></div></div></div>
-      <div class="panel" id="panel-weapons"><div class="dnd-layout"><div class="dnd-column"><h3>Vehicular Weapons</h3><div id="weaponCatalogue"></div></div><div class="dnd-column"><h3>Weapon Hardpoints</h3><div class="mount-tabs"><div class="mount-tab active" data-mount="pintle" onclick="switchMount('pintle')">Pintle</div><div class="mount-tab" data-mount="fixed" onclick="switchMount('fixed')">Fixed (&frac12;)</div><div class="mount-tab" data-mount="turret" onclick="switchMount('turret')">Turret (&times;2)</div></div><div class="drop-bay" id="weaponBay"><div class="empty-bay">Drag weapons here to mount them</div></div></div></div></div>
+      <div class="panel" id="panel-weapons"><div class="dnd-layout"><div class="dnd-column"><h3>Vehicular Weapons</h3><div id="eraFilter" style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:10px"></div><div id="weaponCatalogue"></div><div style="margin-top:12px;padding-top:8px;border-top:1px solid var(--border)"><button class="header-btn" onclick="toggleCustomForm()" style="width:100%;text-align:center">+ Add Custom Weapon</button><div id="customForm" style="display:none;margin-top:8px"></div></div></div><div class="dnd-column"><h3>Weapon Hardpoints</h3><div class="mount-tabs"><div class="mount-tab active" data-mount="pintle" onclick="switchMount('pintle')">Pintle</div><div class="mount-tab" data-mount="fixed" onclick="switchMount('fixed')">Fixed (&frac12;)</div><div class="mount-tab" data-mount="turret" onclick="switchMount('turret')">Turret (&times;2)</div></div><div class="drop-bay" id="weaponBay"><div class="empty-bay">Drag weapons here to mount them</div></div></div></div></div>
       <div class="panel" id="panel-output"></div>
       <div class="panel" id="panel-rules"><div class="rules-ref" id="rulesContent"></div></div>
     </div>
@@ -271,34 +271,70 @@ var MODS=[
   // STRUCTURAL
   {id:'hangar',name:'Hangar',cat:'Structural',max:'U',mods:5,costFn:function(){return 500000},desc:'Carry up to 10 Size points of vehicles (max half your Size).'}
 ];
-// ═══ VEHICULAR WEAPONS (SFC pp58-64) ═══
+// ═══ WEAPON CATALOGUE — DiceForge originals by era, SW compatible ═══
+// Eras: medieval, blackpowder, industrial, modern, future, advanced
 var WEAPONS=[
-  {id:'slug_light',name:'Light Slugthrower',cat:'Slugthrowers',range:'30/60/120',damage:'2d8',ap:2,rof:3,shots:200,minSize:1,mods:1,cost:700,notes:'Pt Def, Rxn Fire'},
-  {id:'slug_med',name:'Medium Slugthrower',cat:'Slugthrowers',range:'30/60/120',damage:'2d8+1',ap:2,rof:3,shots:100,minSize:2,mods:1,cost:1000,notes:'Pt Def, Rxn Fire'},
-  {id:'slug_heavy',name:'Heavy Slugthrower',cat:'Slugthrowers',range:'50/100/200',damage:'2d10 (I)',ap:4,rof:3,shots:50,minSize:3,mods:1,cost:2000,notes:'Pt Def, Rxn Fire'},
-  {id:'minigun',name:'Minigun',cat:'Slugthrowers',range:'50/100/200',damage:'2d8+1 (I)',ap:2,rof:5,shots:2000,minSize:3,mods:1,cost:10000,notes:'Min RoF 3, Pt Def, Rxn Fire'},
-  {id:'ac_light',name:'Light Autocannon',cat:'Autocannons',range:'50/100/200',damage:'3d8 (I)',ap:4,rof:4,shots:100,minSize:2,mods:1,cost:10000,notes:'Min RoF 2, Pt Def, Rxn Fire'},
-  {id:'ac_med',name:'Medium Autocannon',cat:'Autocannons',range:'50/100/200',damage:'4d8 (II)',ap:6,rof:4,shots:80,minSize:8,mods:2,cost:20000,notes:'Min RoF 2'},
-  {id:'ac_heavy',name:'Heavy Autocannon',cat:'Autocannons',range:'75/150/300',damage:'5d8 (III)',ap:8,rof:4,shots:60,minSize:12,mods:3,cost:50000,notes:'Min RoF 2'},
-  {id:'cannon_light',name:'Light Cannon',cat:'Cannons',range:'50/100/200',damage:'3d10 (II)',ap:5,rof:1,shots:80,minSize:1,mods:1,cost:15000,notes:'Rxn Fire, SBT'},
-  {id:'cannon_med',name:'Medium Cannon',cat:'Cannons',range:'75/150/300',damage:'4d10 (III)',ap:10,rof:1,shots:60,minSize:2,mods:3,cost:30000,notes:'SBT'},
-  {id:'cannon_heavy',name:'Heavy Cannon',cat:'Cannons',range:'100/200/400',damage:'5d10 (IV)',ap:20,rof:1,shots:40,minSize:4,mods:5,cost:60000,notes:'SBT'},
-  {id:'cannon_super',name:'Super Cannon',cat:'Cannons',range:'150/300/600',damage:'6d10 (VI)',ap:30,rof:1,shots:20,minSize:10,mods:6,cost:100000,notes:'MBT'},
-  {id:'laser_gat',name:'Gatling Laser',cat:'Lasers',range:'50/100/200',damage:'3d6+4 (I)',ap:4,rof:4,shots:80,minSize:1,mods:1,cost:3000,notes:'Cauterize, Overcharge, Pt Def, Rxn Fire'},
-  {id:'laser_light',name:'Light Laser',cat:'Lasers',range:'150/300/600',damage:'2d10 (II)',ap:10,rof:3,shots:80,minSize:2,mods:1,cost:20000,notes:'Cauterize, Overcharge, Rxn Fire'},
-  {id:'laser_med',name:'Medium Laser',cat:'Lasers',range:'150/300/600',damage:'3d10 (III)',ap:20,rof:2,shots:60,minSize:4,mods:3,cost:50000,notes:'Cauterize, Overcharge'},
-  {id:'laser_heavy',name:'Heavy Laser',cat:'Lasers',range:'150/300/600',damage:'4d10 (V)',ap:30,rof:1,shots:40,minSize:8,mods:5,cost:200000,notes:'Cauterize, Overcharge'},
-  {id:'grenade',name:'Grenade Launcher',cat:'Launchers',range:'24/48/96',damage:'3d6 (I)',ap:0,rof:3,shots:12,minSize:0,mods:1,cost:2600,notes:'MBT'},
-  {id:'missile_rack',name:'Missile Launcher',cat:'Launchers',range:'—',damage:'—',ap:0,rof:0,shots:0,minSize:2,mods:1,cost:1000,notes:'Rack only. Load missiles separately.'},
-  {id:'missile_light',name:'Light Missiles (×8)',cat:'Launchers',range:'100/200/400',damage:'6d6 (III)',ap:16,rof:4,shots:8,minSize:2,mods:0,cost:4000,notes:'Guided, SBT'},
-  {id:'missile_med',name:'Medium Missiles (×4)',cat:'Launchers',range:'150/300/600',damage:'7d6 (IV)',ap:24,rof:2,shots:4,minSize:2,mods:0,cost:10000,notes:'Guided, MBT'},
-  {id:'missile_heavy',name:'Heavy Missiles (×2)',cat:'Launchers',range:'200/400/800',damage:'8d6 (V)',ap:32,rof:1,shots:2,minSize:2,mods:0,cost:20000,notes:'Guided, LBT'},
-  {id:'flamer',name:'Heavy Flamethrower',cat:'Flamethrowers',range:'Cone',damage:'3d12 (I)',ap:0,rof:1,shots:30,minSize:1,mods:1,cost:5000,notes:'Cauterize, Incendiary, Cone 18"'},
-  {id:'md_light',name:'Light Mass Driver',cat:'Mass Drivers',range:'100/200/400',damage:'2d12+2 (I)',ap:5,rof:3,shots:100,minSize:2,mods:2,cost:10000,notes:'Pt Def, Rxn Fire, SBT'},
-  {id:'md_med',name:'Medium Mass Driver',cat:'Mass Drivers',range:'100/200/400',damage:'3d12+3 (II)',ap:5,rof:2,shots:80,minSize:4,mods:3,cost:20000,notes:'MBT'},
-  {id:'pc_light',name:'Light Particle Cannon',cat:'Particle Cannons',range:'100/200/400',damage:'4d6+4 (II)',ap:5,rof:3,shots:90,minSize:2,mods:2,cost:25000,notes:'Pt Def, Rxn Fire'},
-  {id:'pc_med',name:'Medium Particle Cannon',cat:'Particle Cannons',range:'100/200/400',damage:'6d6+6 (III)',ap:10,rof:3,shots:60,minSize:8,mods:4,cost:50000,notes:''}
+  // MEDIEVAL
+  {id:'ballista',name:'Ballista',cat:'Siege Engines',era:'medieval',range:'15/30/60',damage:'3d6',ap:2,rof:1,shots:0,minSize:2,mods:1,cost:500,notes:'Reload 2, HW'},
+  {id:'catapult',name:'Catapult',cat:'Siege Engines',era:'medieval',range:'24/48/96',damage:'3d8',ap:0,rof:1,shots:0,minSize:4,mods:2,cost:1000,notes:'Reload 4, Indirect, MBT'},
+  {id:'trebuchet',name:'Trebuchet',cat:'Siege Engines',era:'medieval',range:'24/48/96',damage:'4d8',ap:4,rof:1,shots:0,minSize:6,mods:3,cost:2000,notes:'Reload 6, Indirect, LBT'},
+  {id:'ram',name:'Battering Ram',cat:'Melee Systems',era:'medieval',range:'—',damage:'Str+2d8',ap:4,rof:0,shots:0,minSize:2,mods:1,cost:200,notes:'Melee only, HW'},
+  {id:'boiling_oil',name:'Boiling Oil',cat:'Defensive Weapons',era:'medieval',range:'Cone',damage:'2d10',ap:0,rof:1,shots:5,minSize:2,mods:1,cost:100,notes:'Cone, Incendiary'},
+  // BLACKPOWDER
+  {id:'swivel_gun',name:'Swivel Gun',cat:'Blackpowder Guns',era:'blackpowder',range:'12/24/48',damage:'2d8',ap:2,rof:1,shots:0,minSize:1,mods:1,cost:300,notes:'Reload 2, Grapeshot (Cone)'},
+  {id:'light_cannon_bp',name:'Light Cannon',cat:'Blackpowder Guns',era:'blackpowder',range:'20/40/80',damage:'3d6+1',ap:4,rof:1,shots:0,minSize:2,mods:1,cost:600,notes:'Reload 3, SBT, HW'},
+  {id:'med_cannon_bp',name:'Medium Cannon',cat:'Blackpowder Guns',era:'blackpowder',range:'25/50/100',damage:'4d6+1',ap:4,rof:1,shots:0,minSize:4,mods:2,cost:1500,notes:'Reload 3, SBT, HW'},
+  {id:'heavy_cannon_bp',name:'Heavy Cannon',cat:'Blackpowder Guns',era:'blackpowder',range:'30/60/120',damage:'5d6',ap:6,rof:1,shots:0,minSize:6,mods:3,cost:3000,notes:'Reload 4, SBT, HW'},
+  {id:'carronade',name:'Carronade',cat:'Blackpowder Guns',era:'blackpowder',range:'10/20/40',damage:'4d6+2',ap:2,rof:1,shots:0,minSize:3,mods:1,cost:800,notes:'Reload 2, Grapeshot (Cone), HW'},
+  // INDUSTRIAL (WWI/WWII era)
+  {id:'hmg',name:'Heavy Machine Gun',cat:'Machine Guns',era:'industrial',range:'30/60/120',damage:'2d8',ap:2,rof:3,shots:200,minSize:1,mods:1,cost:1000,notes:'Pt Def, Rxn Fire'},
+  {id:'autocannon_ww',name:'Autocannon',cat:'Cannons',era:'industrial',range:'40/80/160',damage:'2d10',ap:4,rof:3,shots:100,minSize:2,mods:1,cost:5000,notes:'HW'},
+  {id:'tank_gun_light',name:'Light Tank Gun',cat:'Cannons',era:'industrial',range:'50/100/200',damage:'3d10',ap:6,rof:1,shots:60,minSize:3,mods:2,cost:10000,notes:'SBT, HW'},
+  {id:'tank_gun_med',name:'Medium Tank Gun',cat:'Cannons',era:'industrial',range:'75/150/300',damage:'4d10',ap:10,rof:1,shots:40,minSize:5,mods:3,cost:20000,notes:'SBT, HW'},
+  {id:'tank_gun_heavy',name:'Heavy Tank Gun',cat:'Cannons',era:'industrial',range:'100/200/400',damage:'5d10',ap:16,rof:1,shots:30,minSize:7,mods:4,cost:40000,notes:'SBT, HW'},
+  {id:'flamethrower_ww',name:'Flamethrower',cat:'Flamethrowers',era:'industrial',range:'Cone',damage:'3d6',ap:0,rof:1,shots:10,minSize:1,mods:1,cost:1000,notes:'Incendiary, Cone'},
+  {id:'torpedo_ww',name:'Torpedo',cat:'Torpedoes',era:'industrial',range:'50/100/200',damage:'5d10',ap:10,rof:1,shots:2,minSize:4,mods:1,cost:5000,notes:'Guided (basic), LBT, Aquatic only'},
+  // MODERN
+  {id:'hmg_modern',name:'Heavy Machine Gun',cat:'Machine Guns',era:'modern',range:'50/100/200',damage:'2d10',ap:4,rof:3,shots:200,minSize:1,mods:1,cost:2000,notes:'Pt Def, Rxn Fire, HW'},
+  {id:'minigun_modern',name:'Minigun',cat:'Machine Guns',era:'modern',range:'50/100/200',damage:'2d8+1',ap:2,rof:5,shots:2000,minSize:3,mods:1,cost:10000,notes:'Min RoF 3, Pt Def, Rxn Fire, HW'},
+  {id:'autocannon_mod',name:'Light Autocannon',cat:'Autocannons',era:'modern',range:'50/100/200',damage:'3d8',ap:4,rof:4,shots:100,minSize:2,mods:1,cost:10000,notes:'Min RoF 2, Pt Def, Rxn Fire, HW'},
+  {id:'cannon_mod',name:'Tank Cannon',cat:'Cannons',era:'modern',range:'100/200/400',damage:'5d10',ap:20,rof:1,shots:40,minSize:4,mods:4,cost:50000,notes:'SBT, HW'},
+  {id:'atgm',name:'ATGM Launcher',cat:'Missiles',era:'modern',range:'75/150/300',damage:'5d10',ap:20,rof:1,shots:4,minSize:1,mods:1,cost:8000,notes:'Guided, SBT, HW'},
+  {id:'sam',name:'SAM Launcher',cat:'Missiles',era:'modern',range:'100/200/400',damage:'5d6',ap:10,rof:1,shots:4,minSize:2,mods:1,cost:12000,notes:'Guided, SBT, HW'},
+  {id:'rocket_pod',name:'Rocket Pod',cat:'Missiles',era:'modern',range:'50/100/200',damage:'4d8',ap:6,rof:3,shots:19,minSize:2,mods:1,cost:6000,notes:'SBT, HW'},
+  {id:'grenade_mod',name:'Grenade Launcher',cat:'Launchers',era:'modern',range:'24/48/96',damage:'3d6',ap:0,rof:1,shots:12,minSize:0,mods:1,cost:2600,notes:'MBT'},
+  {id:'torpedo_mod',name:'Modern Torpedo',cat:'Torpedoes',era:'modern',range:'100/200/400',damage:'6d10',ap:16,rof:1,shots:4,minSize:4,mods:2,cost:15000,notes:'Guided, LBT, Aquatic only'},
+  // FUTURE (Sci-fi standard)
+  {id:'slug_future',name:'Heavy Slugthrower',cat:'Slugthrowers',era:'future',range:'50/100/200',damage:'2d10 (I)',ap:4,rof:3,shots:50,minSize:3,mods:1,cost:2000,notes:'Pt Def, Rxn Fire'},
+  {id:'ac_future',name:'Medium Autocannon',cat:'Autocannons',era:'future',range:'50/100/200',damage:'4d8 (II)',ap:6,rof:4,shots:80,minSize:8,mods:2,cost:20000,notes:'Min RoF 2'},
+  {id:'laser_gat',name:'Gatling Laser',cat:'Lasers',era:'future',range:'50/100/200',damage:'3d6+4 (I)',ap:4,rof:4,shots:80,minSize:1,mods:1,cost:3000,notes:'Cauterize, Overcharge, Pt Def, Rxn Fire'},
+  {id:'laser_light',name:'Light Laser',cat:'Lasers',era:'future',range:'150/300/600',damage:'2d10 (II)',ap:10,rof:3,shots:80,minSize:2,mods:1,cost:20000,notes:'Cauterize, Overcharge, Rxn Fire'},
+  {id:'laser_med',name:'Medium Laser',cat:'Lasers',era:'future',range:'150/300/600',damage:'3d10 (III)',ap:20,rof:2,shots:60,minSize:4,mods:3,cost:50000,notes:'Cauterize, Overcharge'},
+  {id:'laser_heavy',name:'Heavy Laser',cat:'Lasers',era:'future',range:'150/300/600',damage:'4d10 (V)',ap:30,rof:1,shots:40,minSize:8,mods:5,cost:200000,notes:'Cauterize, Overcharge'},
+  {id:'cannon_future',name:'Heavy Cannon',cat:'Cannons',era:'future',range:'100/200/400',damage:'5d10 (IV)',ap:20,rof:1,shots:40,minSize:4,mods:5,cost:60000,notes:'SBT'},
+  {id:'cannon_super',name:'Super Cannon',cat:'Cannons',era:'future',range:'150/300/600',damage:'6d10 (VI)',ap:30,rof:1,shots:20,minSize:10,mods:6,cost:100000,notes:'MBT'},
+  {id:'flamer_future',name:'Heavy Flamethrower',cat:'Flamethrowers',era:'future',range:'Cone',damage:'3d12 (I)',ap:0,rof:1,shots:30,minSize:1,mods:1,cost:5000,notes:'Cauterize, Incendiary, Cone 18"'},
+  {id:'missile_light',name:'Light Missiles (×8)',cat:'Missiles',era:'future',range:'100/200/400',damage:'6d6 (III)',ap:16,rof:4,shots:8,minSize:2,mods:0,cost:4000,notes:'Guided, SBT'},
+  {id:'missile_med',name:'Medium Missiles (×4)',cat:'Missiles',era:'future',range:'150/300/600',damage:'7d6 (IV)',ap:24,rof:2,shots:4,minSize:2,mods:0,cost:10000,notes:'Guided, MBT'},
+  {id:'missile_heavy',name:'Heavy Missiles (×2)',cat:'Missiles',era:'future',range:'200/400/800',damage:'8d6 (V)',ap:32,rof:1,shots:2,minSize:2,mods:0,cost:20000,notes:'Guided, LBT'},
+  {id:'missile_rack',name:'Missile Launcher',cat:'Missiles',era:'future',range:'—',damage:'—',ap:0,rof:0,shots:0,minSize:2,mods:1,cost:1000,notes:'Rack only. Load missiles separately.'},
+  // ADVANCED (far-future / energy weapons)
+  {id:'md_light',name:'Light Mass Driver',cat:'Mass Drivers',era:'advanced',range:'100/200/400',damage:'2d12+2 (I)',ap:5,rof:3,shots:100,minSize:2,mods:2,cost:10000,notes:'Pt Def, Rxn Fire, SBT'},
+  {id:'md_med',name:'Medium Mass Driver',cat:'Mass Drivers',era:'advanced',range:'100/200/400',damage:'3d12+3 (II)',ap:5,rof:2,shots:80,minSize:4,mods:3,cost:20000,notes:'MBT'},
+  {id:'pc_light',name:'Light Particle Cannon',cat:'Particle Cannons',era:'advanced',range:'100/200/400',damage:'4d6+4 (II)',ap:5,rof:3,shots:90,minSize:2,mods:2,cost:25000,notes:'Pt Def, Rxn Fire'},
+  {id:'pc_med',name:'Medium Particle Cannon',cat:'Particle Cannons',era:'advanced',range:'100/200/400',damage:'6d6+6 (III)',ap:10,rof:3,shots:60,minSize:8,mods:4,cost:50000,notes:''},
+  {id:'laser_super',name:'Super Laser',cat:'Lasers',era:'advanced',range:'150/300/600',damage:'5d10 (V)',ap:30,rof:1,shots:20,minSize:12,mods:8,cost:300000,notes:'Cauterize, Overcharge'},
+  {id:'plasma_cannon',name:'Plasma Cannon',cat:'Energy Weapons',era:'advanced',range:'75/150/300',damage:'5d10 (IV)',ap:20,rof:1,shots:30,minSize:6,mods:4,cost:150000,notes:'Cauterize, Incendiary, SBT'},
+  {id:'rail_gun',name:'Railgun',cat:'Mass Drivers',era:'advanced',range:'200/400/800',damage:'5d12 (V)',ap:40,rof:1,shots:20,minSize:8,mods:6,cost:250000,notes:'SBT, Ignores Shields'}
 ];
+// Era labels for UI
+var ERA_LABELS={medieval:'Medieval',blackpowder:'Blackpowder',industrial:'Industrial (WWI/WWII)',modern:'Modern',future:'Future (Sci-Fi)',advanced:'Advanced (Far-Future)'};
+var ERA_ORDER=['medieval','blackpowder','industrial','modern','future','advanced'];
+var currentEra='modern';
+// Custom weapons storage
+var customWeapons=[];
+try{var cw=localStorage.getItem('diceforge-cvf-custom-weapons');if(cw)customWeapons=JSON.parse(cw)}catch(e){}
+function getAllWeapons(){return WEAPONS.concat(customWeapons)}
 
 // ═══ STATE ═══
 var S={name:'Untitled Vehicle',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:[]};
@@ -321,12 +357,12 @@ function calcHand(){var f=getFrame(S.size),h=f.hand;if(S.mods.handling)h+=S.mods
 function calcSpeed(){var loco=LOCOS.find(function(l){return l.id===S.loco});var s=loco?loco.speed:5;if(S.mods.inc_speed)s+=S.mods.inc_speed;if(S.mods.reduced_speed)s-=S.mods.reduced_speed;return Math.max(1,s)}
 function calcEnergy(){var f=getFrame(S.size),e=f.energy;if(S.mods.reactor)e*=10;if(S.mods.energy_pod)e*=Math.pow(2,S.mods.energy_pod);return e}
 function calcModsUsed(){var t=0;for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});var ms=modSlots(m,S.size);if(ms>0)t+=ms*S.mods[id]}
-  S.weapons.forEach(function(w){var wp=WEAPONS.find(function(x){return x.id===w.weaponId});if(wp)t+=weaponMountMods(wp,w.mount)});return t}
+  S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp)t+=weaponMountMods(wp,w.mount)});return t}
 function calcModsGained(){var t=0;for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});var ms=modSlots(m,S.size);if(ms<0)t+=Math.abs(ms)*S.mods[id]}return t}
 function calcCost(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco});
   var cost=f.costMult*S.size+(loco?loco.costMult*S.size:0);
   for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});cost+=m.costFn(S.size)*S.mods[id]}
-  S.weapons.forEach(function(w){var wp=WEAPONS.find(function(x){return x.id===w.weaponId});if(wp)cost+=wp.cost});return cost}
+  S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp)cost+=wp.cost});return cost}
 function isWalker(){return S.loco==='legs_biped'||S.loco==='legs_quad'}
 function isHeavyArmor(){return S.size>=4||isWalker()}
 // ═══ DRAG-DROP ENGINE ═══
@@ -347,7 +383,7 @@ function dropMod(id){var m=MODS.find(function(x){return x.id===id});
   if(id==='sealed'&&S.mods.exposed)return;
   if(id==='fwd'&&S.loco!=='wheeled')return;
   if(cur<max){S.mods[id]=cur+1;Audio.clunk();renderModBay(id);renderStats();renderOutput()}}
-function dropWeapon(id){var w=WEAPONS.find(function(x){return x.id===w});if(!w)w=WEAPONS.find(function(x){return x.id===id});if(w.minSize>S.size)return;
+function dropWeapon(id){var w=getAllWeapons().find(function(x){return x.id===id});if(!w||w.minSize>S.size)return;
   S.weapons.push({weaponId:id,mount:S.currentMount});Audio.clunk();renderWeaponBay(id);renderStats();renderOutput()}
 
 // ═══ RENDER FUNCTIONS ═══
@@ -391,22 +427,57 @@ function modInc(id){dropMod(id);Audio.click()}
 function modDec(id){if(S.mods[id]>0){S.mods[id]--;if(!S.mods[id])delete S.mods[id];Audio.click();renderModBay();renderStats();renderOutput()}}
 function modRemoveAll(id){delete S.mods[id];Audio.remove();renderModBay();renderStats();renderOutput()}
 
+function renderEraFilter(){var el=document.getElementById('eraFilter');
+  el.innerHTML='<div class="mount-tab'+(currentEra==='all'?' active':'')+'" onclick="setEra(\'all\')" style="font-size:10px;padding:4px 10px">All</div>'+
+    ERA_ORDER.map(function(e){return '<div class="mount-tab'+(currentEra===e?' active':'')+'" onclick="setEra(\''+e+'\')" style="font-size:10px;padding:4px 10px">'+ERA_LABELS[e]+'</div>'}).join('')+
+    (customWeapons.length?'<div class="mount-tab'+(currentEra==='custom'?' active':'')+'" onclick="setEra(\'custom\')" style="font-size:10px;padding:4px 10px">Custom</div>':'')}
+function setEra(e){currentEra=e;renderEraFilter();renderWeaponCatalogue()}
+
 function renderWeaponCatalogue(){var cats={};
-  WEAPONS.forEach(function(w){if(!cats[w.cat])cats[w.cat]=[];cats[w.cat].push(w)});
+  var wpns=currentEra==='all'?getAllWeapons():currentEra==='custom'?customWeapons:getAllWeapons().filter(function(w){return w.era===currentEra});
+  wpns.forEach(function(w){if(!cats[w.cat])cats[w.cat]=[];cats[w.cat].push(w)});
   var h='';for(var cat in cats){h+='<div class="cat-header">'+cat+'</div>';
     cats[cat].forEach(function(w){var ok=w.minSize<=S.size;
       h+='<div class="weapon-drag-item" style="'+(ok?'':'opacity:.4;pointer-events:none')+'" onmousedown="startDrag(event,\'weapon\',\''+w.id+'\',\''+w.name+'\')" ontouchstart="startDrag(event,\'weapon\',\''+w.id+'\',\''+w.name+'\')">'
         +'<span class="drag-handle" style="color:var(--text-dim);font-size:14px;opacity:.4">&#x2807;</span>'
-        +'<div class="wdi-info"><div class="wdi-name">'+w.name+(ok?'':' (Min Size '+w.minSize+')')+'</div>'
+        +'<div class="wdi-info"><div class="wdi-name">'+w.name+(ok?'':' (Min Size '+w.minSize+')')+(w.era?'<span style="font-size:10px;color:var(--text-dim);font-weight:400"> — '+ERA_LABELS[w.era]+'</span>':'')+'</div>'
         +'<div class="wdi-stats">'+w.range+' · '+w.damage+' · AP '+w.ap+' · RoF '+w.rof+'</div>'
         +'<div class="wdi-stats">'+w.notes+'</div></div>'
         +'<div class="wdi-meta"><div class="wdi-mods">'+w.mods+' mod'+(w.mods!==1?'s':'')+'</div>'
         +'<div class="wdi-price">$'+fmtN(w.cost)+'</div></div></div>'})}
+  if(!h)h='<div class="empty-state"><p>No weapons in this era for Size '+S.size+'.</p></div>';
   document.getElementById('weaponCatalogue').innerHTML=h}
+
+function toggleCustomForm(){var el=document.getElementById('customForm');
+  if(el.style.display==='none'){el.style.display='block';
+    el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'
+      +'<input type="text" id="cw_name" placeholder="Name" style="grid-column:1/3;background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="text" id="cw_cat" placeholder="Category" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="text" id="cw_range" placeholder="Range (e.g. 50/100/200)" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="text" id="cw_damage" placeholder="Damage (e.g. 3d10)" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="number" id="cw_ap" placeholder="AP" value="0" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="number" id="cw_rof" placeholder="RoF" value="1" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="number" id="cw_shots" placeholder="Shots" value="20" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="number" id="cw_minsize" placeholder="Min Size" value="1" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="number" id="cw_mods" placeholder="Mods" value="1" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="number" id="cw_cost" placeholder="Cost" value="5000" style="background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'<input type="text" id="cw_notes" placeholder="Notes (e.g. HW, SBT)" style="grid-column:1/3;background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:4px 8px;font-family:\'Crimson Pro\',serif;font-size:13px">'
+      +'</div><button class="header-btn" onclick="addCustomWeapon()" style="width:100%;margin-top:6px;text-align:center">Add Weapon</button>'}
+  else{el.style.display='none'}}
+
+function addCustomWeapon(){var n=document.getElementById('cw_name').value.trim();if(!n)return;
+  var w={id:'custom_'+Date.now(),name:n,cat:document.getElementById('cw_cat').value.trim()||'Custom',era:'custom',
+    range:document.getElementById('cw_range').value.trim()||'—',damage:document.getElementById('cw_damage').value.trim()||'—',
+    ap:+(document.getElementById('cw_ap').value)||0,rof:+(document.getElementById('cw_rof').value)||1,
+    shots:+(document.getElementById('cw_shots').value)||0,minSize:+(document.getElementById('cw_minsize').value)||1,
+    mods:+(document.getElementById('cw_mods').value)||1,cost:+(document.getElementById('cw_cost').value)||0,
+    notes:document.getElementById('cw_notes').value.trim()||''};
+  customWeapons.push(w);localStorage.setItem('diceforge-cvf-custom-weapons',JSON.stringify(customWeapons));
+  Audio.clunk();document.getElementById('customForm').style.display='none';renderEraFilter();renderWeaponCatalogue()}
 
 function renderWeaponBay(animId){var bay=document.getElementById('weaponBay');
   if(!S.weapons.length){bay.innerHTML='<div class="empty-bay">Drag weapons here to mount them</div>';return}
-  bay.innerHTML=S.weapons.map(function(w,i){var wp=WEAPONS.find(function(x){return x.id===w.weaponId});if(!wp)return '';
+  bay.innerHTML=S.weapons.map(function(w,i){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(!wp)return '';
     var mc=weaponMountMods(wp,w.mount);var ml=w.mount==='fixed'?'Fixed Front':w.mount==='turret'?'Turret':'Pintle';
     return '<div class="weapon-bay-item '+(w.weaponId===animId&&i===S.weapons.length-1?'snap-in':'')+'">'
       +'<div class="wbi-info"><div class="wbi-name">'+wp.name+'</div>'
@@ -433,7 +504,7 @@ function renderOutput(){var p=document.getElementById('panel-output'),f=getFrame
   var loco=LOCOS.find(function(l){return l.id===S.loco});var spd=calcSpeed();
   var used=calcModsUsed(),gained=calcModsGained(),left=(S.size*f.modMult+gained)-used;
   var notes=[];MODS.forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'× '+m.name:m.name)});
-  var wl=[];S.weapons.forEach(function(w){var wp=WEAPONS.find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed Front':w.mount==='turret'?'Turret':'Pintle';
+  var wl=[];S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed Front':w.mount==='turret'?'Turret':'Pintle';
     wl.push(wp.name+' ('+ml+'): Range '+wp.range+', Damage '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof+(wp.notes?', '+wp.notes:''))}});
   var special=[];
   if(isHeavyArmor())special.push('Heavy Armor');
@@ -464,7 +535,7 @@ function copyBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l
   var left=(S.size*f.modMult+calcModsGained())-calcModsUsed();
   var notes=[],wl=[];
   MODS.forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'x '+m.name:m.name)});
-  S.weapons.forEach(function(w){var wp=WEAPONS.find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed':w.mount==='turret'?'Turret':'Pintle';wl.push('  * '+wp.name+' ('+ml+'): '+wp.range+', '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof)}});
+  S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed':w.mount==='turret'?'Turret':'Pintle';wl.push('  * '+wp.name+' ('+ml+'): '+wp.range+', '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof)}});
   var t=S.name+'\nSize '+S.size+' ('+f.cat+'), '+loco.name+', Hand '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)\nTough '+calcTough()+' ('+calcArmor()+'), Wounds '+calcWounds()+', Crew '+f.crew+'\nEnergy '+calcEnergy()+' days, Cost $'+fmtC(calcCost())+', Mods '+left+' remaining\n';
   if(notes.length)t+='Mods: '+notes.join(', ')+'.\n';if(wl.length)t+='Weapons:\n'+wl.join('\n')+'\n';
   if(isHeavyArmor())t+='Special: Heavy Armor.';if(isWalker())t+=' Walker rules apply.';
@@ -514,7 +585,7 @@ function renderSaved(){var list=document.getElementById('savedList');
     return '<div class="saved-item" onclick="loadVehicle('+i+')"><span class="si-name">'+s.name+'</span><span class="si-chassis">Size '+s.size+' '+loco.name+'</span><button class="si-delete" onclick="event.stopPropagation();deleteSaved('+i+')">&times;</button></div>'}).join('')}
 function fmtN(n){return n.toLocaleString()}
 function fmtC(n){if(n>=1e9)return(n/1e9).toFixed(2)+'B';if(n>=1e6)return(n/1e6).toFixed(n%1e6===0?0:2)+'M';if(n>=1e3)return(n/1e3).toFixed(n%1e3===0?0:1)+'K';return n.toString()}
-function renderAll(){renderFrameInfo();renderLocoGrid();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderStats();renderOutput();renderSaved()}
+function renderAll(){renderFrameInfo();renderLocoGrid();renderEraFilter();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderStats();renderOutput();renderSaved()}
 
 // ═══ NAV BAR ═══
 (function(){var tools=[{id:'foundry',label:'🏭 The Foundry',url:'foundry'},{id:'adventure-vault',label:'🎭 Adventure Vault',url:'adventure-vault'},{id:'character-vault',label:'👤 Character Vault',url:'character-vault'},{id:'cvf',label:'⚙ Combat Vehicle Forge',url:'combat-vehicle-forge'},{id:'pa-forge',label:'🛡 Power Armour Forge',url:'pa-forge'}];
