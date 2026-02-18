@@ -455,7 +455,7 @@ function fmtN(n){return n.toLocaleString()}
 function fmtC(n){if(n>=1e9)return(n/1e9).toFixed(2)+'B';if(n>=1e6)return(n/1e6).toFixed(n%1e6===0?0:2)+'M';if(n>=1e3)return(n/1e3).toFixed(n%1e3===0?0:1)+'K';return n.toString()}
 
 // ═══ NAV BAR ═══
-(function(){var tools=[{id:'foundry',label:'🏭 The Foundry',url:'foundry'},{id:'adventure-vault',label:'🎭 Adventure Vault',url:'adventure-vault'},{id:'character-vault',label:'👤 Character Vault',url:'character-vault'},{id:'walker-workshop',label:'⚙ Walker Workshop',url:'walker-workshop'},{id:'pa-forge',label:'🛡 PA Forge',url:'pa-forge'}];
+(function(){var tools=[{id:'foundry',label:'🏭 The Foundry',url:'foundry'},{id:'adventure-vault',label:'🎭 Adventure Vault',url:'adventure-vault'},{id:'character-vault',label:'👤 Character Vault',url:'character-vault'},{id:'walker-workshop',label:'⚙ Walker Workshop',url:'walker-workshop'},{id:'power-armour-forge',label:'🛡 Power Armour Forge',url:'pa-forge'}];
   var nav=document.createElement('div');nav.className='tool-nav';
   tools.forEach(function(t){var btn=document.createElement('button');btn.className='tool-nav-item'+(t.id==='walker-workshop'?' active':'');btn.textContent=t.label;btn.onclick=function(){if(t.id!=='walker-workshop')window.location.href=t.url};nav.appendChild(btn)});
   document.getElementById('toolNavContainer').appendChild(nav)})();
