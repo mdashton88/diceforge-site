@@ -11,7 +11,8 @@ function addToolNavigation(currentTool) {
   const tools = [
     { id: 'foundry', label: '🏭 The Foundry', url: 'foundry' },
     { id: 'adventure-vault', label: '🎭 Adventure Vault', url: 'adventure-vault' },
-    { id: 'character-vault', label: '👤 Character Vault', url: 'character-vault' }
+    { id: 'character-vault', label: '👤 Character Vault', url: 'character-vault' },
+    { id: 'walker-workshop', label: '⚙ Walker Workshop', url: 'walker-workshop' }
   ];
   
   // Create nav bar

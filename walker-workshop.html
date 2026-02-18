@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Walker Design Workshop — DiceForge Studios</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<script src="tool-navigation.js"></script>
+<style>
+/* Tool navigation override — walker uses its own layout */
+.tool-nav { display:flex; gap:0; background:#141210; border-bottom:1px solid #3A3530; padding:0 12px; font-family:'Cinzel',serif; }
+.tool-nav-item { background:transparent; border:none; color:#8A7A60; padding:8px 16px; font-size:11px; letter-spacing:1.5px; cursor:pointer; font-family:'Cinzel',serif; text-transform:uppercase; transition:all 0.15s; }
+.tool-nav-item:hover { color:#D4C8B0; }
+.tool-nav-item.active { color:#C4A44A; border-bottom:2px solid #C4A44A; }
+
+:root {
+  --bg-deep: #0E0C0A;
+  --bg-dark: #141210;
+  --bg-card: #1A1816;
+  --bg-panel: #201E1A;
+  --border: #3A3530;
+  --border-light: #4A4540;
+  --accent: #C4A44A;
+  --accent-dim: #C4A44A40;
+  --accent-glow: #C4A44A20;
+  --text: #D4C8B0;
+  --text-bright: #EDE4D4;
+  --text-dim: #8A7A60;
+  --green: #5A9A5A;
+  --red: #8C3030;
+  --red-bright: #B04040;
+  --blue: #4A7A9A;
+  --orange: #B07830;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; background: var(--bg-deep); color: var(--text); font-family: 'Crimson Pro', Georgia, serif; font-size: 15px; line-height: 1.6; }
+
+/* ── LAYOUT ── */
+.app { display: flex; height: 100vh; overflow: hidden; }
+.sidebar { width: 320px; min-width: 320px; background: var(--bg-dark); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* ── HEADER ── */
+.header { background: var(--bg-dark); border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; gap: 16px; }
+.header-brand { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 3px; color: var(--text-dim); text-transform: uppercase; }
+.header-title { font-family: 'Cinzel', serif; font-size: 18px; color: var(--accent); letter-spacing: 2px; }
+.header-spacer { flex: 1; }
+.header-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 6px 14px; font-family: 'Crimson Pro', serif; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+.header-btn:hover { border-color: var(--accent); color: var(--accent); }
+.header-btn.primary { background: var(--accent); color: var(--bg-deep); border-color: var(--accent); font-weight: 700; }
+.header-btn.primary:hover { background: #D4B45A; }
+
+/* ── SIDEBAR ── */
+.sidebar-header { padding: 16px; border-bottom: 1px solid var(--border); }
+.sidebar-header h2 { font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
+.sidebar-section { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.sidebar-section h3 { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; }
+
+.field-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.field-label { font-size: 13px; color: var(--text-dim); min-width: 80px; }
+.field-value { font-size: 14px; color: var(--text-bright); font-weight: 600; }
+.field-row input[type="text"] { background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-bright); padding: 5px 10px; font-family: 'Crimson Pro', serif; font-size: 14px; flex: 1; }
+.field-row input[type="text"]:focus { outline: none; border-color: var(--accent); }
+
+/* Chassis selector */
+.chassis-grid { display: flex; flex-direction: column; gap: 4px; }
+.chassis-btn { background: var(--bg-deep); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; cursor: pointer; font-family: 'Crimson Pro', serif; font-size: 13px; text-align: left; transition: all 0.15s; display: flex; justify-content: space-between; align-items: center; }
+.chassis-btn:hover { border-color: var(--accent); color: var(--accent); }
+.chassis-btn.active { background: var(--accent-glow); border-color: var(--accent); color: var(--accent); }
+.chassis-btn .chassis-size { font-size: 11px; color: var(--text-dim); }
+.chassis-btn.active .chassis-size { color: var(--accent); opacity: 0.7; }
+
+/* Stats display */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.stat-box { background: var(--bg-deep); border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
+.stat-box .stat-label { font-size: 10px; letter-spacing: 1.5px; color: var(--text-dim); text-transform: uppercase; font-family: 'Cinzel', serif; }
+.stat-box .stat-value { font-size: 16px; font-weight: 700; color: var(--text-bright); margin-top: 2px; }
+.stat-box .stat-value.accent { color: var(--accent); }
+.stat-box .stat-value.warn { color: var(--orange); }
+.stat-box .stat-value.danger { color: var(--red-bright); }
+
+.mods-remaining { background: var(--bg-deep); border: 1px solid var(--border); padding: 10px; text-align: center; margin-top: 8px; }
+.mods-remaining .big-num { font-size: 28px; font-weight: 700; font-family: 'Cinzel', serif; }
+.mods-remaining .big-num.ok { color: var(--green); }
+.mods-remaining .big-num.low { color: var(--orange); }
+.mods-remaining .big-num.over { color: var(--red-bright); }
+.mods-remaining .sub { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
+
+.cost-display { background: var(--bg-deep); border: 1px solid var(--accent-dim); padding: 10px; text-align: center; margin-top: 6px; }
+.cost-display .cost-val { font-size: 18px; font-weight: 700; color: var(--accent); font-family: 'Cinzel', serif; }
+.cost-display .cost-label { font-size: 10px; color: var(--text-dim); letter-spacing: 1.5px; text-transform: uppercase; }
+
+/* ── MAIN CONTENT ── */
+.content { flex: 1; overflow-y: auto; padding: 20px; }
+.content::-webkit-scrollbar { width: 6px; }
+.content::-webkit-scrollbar-track { background: var(--bg-dark); }
+.content::-webkit-scrollbar-thumb { background: var(--border); }
+
+.tab-bar { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+.tab { padding: 10px 20px; font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 1.5px; color: var(--text-dim); cursor: pointer; border-bottom: 2px solid transparent; text-transform: uppercase; transition: all 0.15s; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ── MODIFICATIONS PANEL ── */
+.mod-category { margin-bottom: 20px; }
+.mod-category-header { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+
+.mod-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--bg-card); border: 1px solid var(--border); margin-bottom: 4px; transition: all 0.15s; }
+.mod-row:hover { border-color: var(--border-light); }
+.mod-row.installed { background: var(--accent-glow); border-color: var(--accent-dim); }
+.mod-row .mod-controls { display: flex; align-items: center; gap: 4px; }
+.mod-row .mod-controls button { width: 26px; height: 26px; background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-dim); font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.1s; font-family: 'Crimson Pro', serif; }
+.mod-row .mod-controls button:hover { border-color: var(--accent); color: var(--accent); }
+.mod-row .mod-controls .count { min-width: 20px; text-align: center; font-weight: 700; color: var(--text-bright); font-size: 14px; }
+.mod-info { flex: 1; min-width: 0; }
+.mod-name { font-weight: 600; color: var(--text-bright); font-size: 14px; }
+.mod-desc { font-size: 12px; color: var(--text-dim); font-style: italic; line-height: 1.4; margin-top: 2px; }
+.mod-cost { text-align: right; min-width: 60px; }
+.mod-cost .mod-mods { font-weight: 700; color: var(--accent); font-size: 13px; }
+.mod-cost .mod-price { font-size: 11px; color: var(--text-dim); }
+
+/* ── WEAPONS PANEL ── */
+.weapon-section { margin-bottom: 20px; }
+.weapon-section-header { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+
+.weapon-slot { background: var(--bg-card); border: 1px solid var(--border); padding: 12px; margin-bottom: 6px; }
+.weapon-slot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.weapon-slot-title { font-family: 'Cinzel', serif; font-size: 12px; color: var(--text-bright); letter-spacing: 1px; }
+.weapon-slot .remove-btn { background: transparent; border: 1px solid var(--red); color: var(--red); padding: 2px 8px; font-size: 11px; cursor: pointer; font-family: 'Crimson Pro', serif; }
+.weapon-slot .remove-btn:hover { background: var(--red); color: var(--text-bright); }
+
+.weapon-select { width: 100%; background: var(--bg-deep); border: 1px solid var(--border); color: var(--text); padding: 6px 10px; font-family: 'Crimson Pro', serif; font-size: 13px; cursor: pointer; margin-bottom: 6px; }
+.weapon-select:focus { outline: none; border-color: var(--accent); }
+
+.weapon-options { display: flex; gap: 8px; flex-wrap: wrap; }
+.weapon-opt { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-dim); }
+.weapon-opt input[type="checkbox"] { accent-color: var(--accent); }
+.weapon-opt select { background: var(--bg-deep); border: 1px solid var(--border); color: var(--text); padding: 2px 6px; font-family: 'Crimson Pro', serif; font-size: 12px; }
+
+.add-weapon-btn { background: transparent; border: 1px dashed var(--border); color: var(--text-dim); padding: 10px; width: 100%; cursor: pointer; font-family: 'Crimson Pro', serif; font-size: 13px; transition: all 0.15s; }
+.add-weapon-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── STAT BLOCK OUTPUT ── */
+.stat-block { background: var(--bg-deep); border: 1px solid var(--accent-dim); padding: 24px; font-size: 14px; line-height: 1.8; max-width: 700px; }
+.stat-block .sb-name { font-family: 'Cinzel', serif; font-size: 22px; color: var(--accent); letter-spacing: 3px; text-align: center; margin-bottom: 2px; }
+.stat-block .sb-type { text-align: center; color: var(--text-dim); font-style: italic; font-size: 13px; margin-bottom: 14px; }
+.stat-block .sb-divider { border: none; border-top: 1px solid var(--accent-dim); margin: 10px 0; }
+.stat-block .sb-line { margin-bottom: 2px; }
+.stat-block .sb-label { color: var(--accent); font-weight: 700; }
+.stat-block .sb-notes { color: var(--text-dim); font-style: italic; margin-top: 8px; font-size: 13px; line-height: 1.5; }
+
+/* ── RULES REFERENCE ── */
+.rules-ref { max-width: 700px; }
+.rules-ref h3 { font-family: 'Cinzel', serif; font-size: 14px; color: var(--accent); letter-spacing: 1.5px; margin: 16px 0 8px; }
+.rules-ref h3:first-child { margin-top: 0; }
+.rules-ref p { margin-bottom: 8px; font-size: 14px; color: var(--text); }
+.rules-ref .rule-key { color: var(--accent); font-weight: 700; }
+.rules-ref .rule-note { color: var(--text-dim); font-style: italic; font-size: 13px; }
+
+/* ── SAVED WALKERS ── */
+.saved-list { display: flex; flex-direction: column; gap: 4px; }
+.saved-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; transition: all 0.15s; }
+.saved-item:hover { border-color: var(--accent); }
+.saved-item.active { border-color: var(--accent); background: var(--accent-glow); }
+.saved-item .si-name { flex: 1; font-weight: 600; color: var(--text-bright); font-size: 14px; }
+.saved-item .si-chassis { font-size: 12px; color: var(--text-dim); }
+.saved-item .si-delete { background: transparent; border: none; color: var(--text-dim); cursor: pointer; font-size: 14px; padding: 2px 6px; }
+.saved-item .si-delete:hover { color: var(--red-bright); }
+
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text-dim); }
+.empty-state .empty-icon { font-size: 32px; margin-bottom: 8px; }
+.empty-state p { font-size: 13px; font-style: italic; }
+
+/* ── SCROLLBAR ── */
+.sidebar::-webkit-scrollbar, .content::-webkit-scrollbar { width: 5px; }
+.sidebar::-webkit-scrollbar-track, .content::-webkit-scrollbar-track { background: var(--bg-dark); }
+.sidebar::-webkit-scrollbar-thumb, .content::-webkit-scrollbar-thumb { background: var(--border); }
+
+/* ── FOOTER ── */
+.sidebar-footer { margin-top: auto; padding: 10px 16px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-dim); text-align: center; font-style: italic; }
+.sidebar-footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div id="toolNavContainer"></div>
+<div class="app">
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Walker Workshop</h2>
+      <div class="field-row">
+        <input type="text" id="walkerName" placeholder="Name your walker..." value="Untitled Walker" style="width:100%">
+      </div>
+    </div>
+
+    <!-- Chassis Selection -->
+    <div class="sidebar-section">
+      <h3>Chassis</h3>
+      <div class="chassis-grid" id="chassisGrid"></div>
+    </div>
+
+    <!-- Live Stats -->
+    <div class="sidebar-section" id="statsSection">
+      <h3>Statistics</h3>
+      <div class="stats-grid" id="statsGrid"></div>
+      <div class="mods-remaining" id="modsRemaining"></div>
+      <div class="cost-display" id="costDisplay"></div>
+    </div>
+
+    <!-- Saved Walkers -->
+    <div class="sidebar-section" style="flex:1; overflow-y:auto;">
+      <h3>Saved Designs</h3>
+      <div class="saved-list" id="savedList"></div>
+    </div>
+
+    <div class="sidebar-footer">
+      This tool references the <a href="https://peginc.com" target="_blank">Savage Worlds</a> game system by Pinnacle Entertainment Group. Savage Worlds and all associated logos and trademarks are copyrights of Pinnacle Entertainment Group. Used with permission.<br>
+      &copy; DiceForge Studios Ltd.
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="header">
+      <div>
+        <div class="header-brand">DiceForge Studios</div>
+        <div class="header-title">Walker Design Workshop</div>
+      </div>
+      <div class="header-spacer"></div>
+      <button class="header-btn" onclick="newWalker()">New</button>
+      <button class="header-btn" onclick="saveWalker()">Save</button>
+      <button class="header-btn primary" onclick="exportStatBlock()">Export Stat Block</button>
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab active" data-tab="mods" onclick="switchTab('mods')">Modifications</div>
+      <div class="tab" data-tab="weapons" onclick="switchTab('weapons')">Weapon Systems</div>
+      <div class="tab" data-tab="output" onclick="switchTab('output')">Stat Block</div>
+      <div class="tab" data-tab="rules" onclick="switchTab('rules')">Rules Reference</div>
+    </div>
+
+    <div class="content">
+      <!-- MODIFICATIONS PANEL -->
+      <div class="panel active" id="panel-mods"></div>
+
+      <!-- WEAPONS PANEL -->
+      <div class="panel" id="panel-weapons">
+        <div class="weapon-section">
+          <div class="weapon-section-header">Standard Weapon Systems</div>
+          <div id="standardWeapons"></div>
+          <button class="add-weapon-btn" onclick="addWeaponSlot('standard')">+ Add Standard Weapon</button>
+        </div>
+        <div class="weapon-section" style="margin-top:20px;">
+          <div class="weapon-section-header">Fixed Weapon Systems</div>
+          <div id="fixedWeapons"></div>
+          <button class="add-weapon-btn" onclick="addWeaponSlot('fixed')">+ Add Fixed Weapon</button>
+        </div>
+        <div class="weapon-section" style="margin-top:20px;">
+          <div class="weapon-section-header">Linked Weapon Systems</div>
+          <div id="linkedWeapons"></div>
+          <button class="add-weapon-btn" onclick="addWeaponSlot('linked')">+ Add Linked Weapon Group</button>
+        </div>
+      </div>
+
+      <!-- STAT BLOCK OUTPUT -->
+      <div class="panel" id="panel-output"></div>
+
+      <!-- RULES REFERENCE -->
+      <div class="panel" id="panel-rules">
+        <div class="rules-ref">
+          <h3>Walker Combat</h3>
+          <p><span class="rule-key">Compartments:</span> Heavy mechs are towering contraptions with multiple compartments and failsafes. Large walkers (Size 10+) can never suffer more than two wounds from a single attack regardless of the damage result. The attacker still rolls a Critical Hit for each wound the attack would have caused, however, and a Wrecked Critical Hit still destroys the mech as usual.</p>
+
+          <p><span class="rule-key">Critical Hits:</span> Mechs use advanced power sources that can cause horrific damage if breached. When a mech suffers a Wrecked Critical Hit, it explodes for d6 &times; Size damage in a 10&Prime; (20 yard) burst radius. The walker is completely destroyed in the explosion.</p>
+
+          <p><span class="rule-key">Ejection System:</span> All walkers are equipped with ejection systems. Should a walker suffer a Wrecked result, the pilot may make an Agility roll at &minus;4 (or no penalty if on Hold or hasn&rsquo;t acted yet). Success launches the pilot to descend safely via parachute.</p>
+
+          <h3>Death From Above</h3>
+          <p>Walker pilots sometimes attempt a desperate manoeuvre called &ldquo;Death From Above,&rdquo; where they use jump jets or vantage points to jump on rivals. This is an opposed Piloting roll between the two. If the pilot ties or loses, his mech suffers d6 damage for every 20 feet fallen to a maximum of 10d6. If the pilot wins, his walker lands on top of the target and inflicts its Strength in damage, plus d6 per 20 feet fallen (maximum 10d6).</p>
+
+          <h3>Falling</h3>
+          <p>Walkers knocked prone must spend an entire round getting up (no other actions). A walker that falls from a height suffers d6 damage per 20 feet fallen to a maximum of 10d6.</p>
+
+          <p><span class="rule-key">Jumping:</span> Walkers with Jump Jets may leap vertically up to 20 feet per Size. On the first round of jumping, the Piloting roll is made with no penalty. Each subsequent round spent jumping inflicts a cumulative &minus;2 to the Piloting roll (maximum &minus;6). Failure means the walker descends immediately; a critical failure results in a fall.</p>
+
+          <h3>Table-Top Scale</h3>
+          <p>If fighting with standard mech-sized figures on the table-top (commonly called 1/285th scale or 6mm), divide movement and weapon ranges by 5 (round up). A mech can walk 5&Prime; a round, for example, and a medium auto-cannon has a Short Range of 10.</p>
+
+          <h3>Piloting Walkers</h3>
+          <p>Walkers use the <span class="rule-key">Piloting</span> skill for all manoeuvres. Multi-Action Penalties apply as normal when the pilot fires weapons and performs other actions in the same round. Targeting Systems and AI can offset some of these penalties.</p>
+
+          <p class="rule-note">This tool references the Savage Worlds Sci-Fi Companion (SWD edition). The SWADE Science Fiction Companion may contain updated or revised rules. Always defer to your physical rulebook at the table.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// WALKER DESIGN WORKSHOP — DATA & ENGINE
+// Savage Worlds Sci-Fi Companion Walker Construction Rules
+// ═══════════════════════════════════════════════════════════
+
+const CHASSIS = [
+  { id:'light',      name:'Light',       height:"20'", size:6,  pace:24, str:'d12+4',  tough:20, armor:5,  mods:20, crew:1, cost:1000000 },
+  { id:'medium',     name:'Medium',      height:"30'", size:8,  pace:18, str:'d12+6',  tough:25, armor:6,  mods:25, crew:1, cost:3000000 },
+  { id:'heavy',      name:'Heavy',       height:"40'", size:10, pace:12, str:'d12+8',  tough:30, armor:8,  mods:30, crew:1, cost:5000000 },
+  { id:'superheavy', name:'Super Heavy', height:"50'", size:12, pace:8,  str:'d12+10', tough:35, armor:8,  mods:40, crew:1, cost:10000000 },
+  { id:'titan',      name:'Titan',       height:"60'", size:14, pace:8,  str:'d12+12', tough:40, armor:9,  mods:50, crew:1, cost:20000000 },
+];
+
+const MODIFICATIONS = [
+  // DEFENSIVE
+  { id:'amcm', name:'AMCM', cat:'Defensive', maxTimes:1, modsCost:1, costMult:5000, desc:'Anti-Missile Counter Measures. Adds +2 to Piloting rolls to evade missile attacks.' },
+  { id:'armor', name:'Armor', cat:'Defensive', maxTimes:'U', modsCost:1, costMult:1000, desc:'Increases Armor value by +2 each time taken.' },
+  { id:'armor_heavy', name:'Armor (Heavy)', cat:'Defensive', maxTimes:'U', modsCost:2, costMult:5000, desc:'Adds +6 Front, +4 Sides, +2 Rear (or +4 all around). Only Heavy Weapons cause damage.' },
+  { id:'deflector', name:'Deflector Screens', cat:'Defensive', maxTimes:1, modsCost:1, costMult:5000, desc:'Attackers subtract -2 from Shooting rolls with ballistic weapons (no effect vs. lasers).' },
+  { id:'reinforced', name:'Reinforced Frame', cat:'Defensive', maxTimes:3, modsCost:1, costMult:1000, desc:'Increases base Toughness of the chassis by +2.' },
+  { id:'shields', name:'Shields', cat:'Defensive', maxTimes:3, modsCost:2, costMult:25000, desc:'Ablative energy field absorbs 10×Size damage. Detonates missiles for half damage. Regenerates Size points per round if no attacks made.' },
+  { id:'sloped', name:'Sloped Armor', cat:'Defensive', maxTimes:1, modsCost:2, costMult:3000, desc:'Attackers subtract -2 to hit with direct-fire non-energy weapons.' },
+  { id:'stealth', name:'Stealth System', cat:'Defensive', maxTimes:1, modsCost:2, costMult:10000, desc:'Subtract 4 from rolls to attack or spot. Negated when firing weapons or emitting signals.' },
+
+  // MOBILITY
+  { id:'jump_jets', name:'Jump Jets', cat:'Mobility', maxTimes:1, modsCost:2, costMult:5000, desc:'The walker can leap vertically up to 20\' per Size. Uses Piloting; cumulative -2 per round airborne.' },
+  { id:'pace', name:'Pace', cat:'Mobility', maxTimes:3, modsCost:1, costMult:5000, desc:'Increases Pace by +4. Cannot be taken with Speed Reduction.' },
+  { id:'speed_red', name:'Speed Reduction', cat:'Mobility', maxTimes:3, modsCost:0, costMult:0, desc:'Subtract 4 from Pace to gain half Size in Mod slots. Cannot be taken with Pace.' },
+
+  // SYSTEMS
+  { id:'ai', name:'Artificial Intelligence', cat:'Systems', maxTimes:1, modsCost:1, costMult:5000, desc:'AI operates all systems at d10 (Extra, no Wild Die). No multi-action penalties. Acts on pilot\'s card.' },
+  { id:'sensor', name:'Sensor Suite', cat:'Systems', maxTimes:1, modsCost:1, costMult:5000, desc:'Medium Sensor Suite. +2 to Notice rolls within range, can detect stealth.' },
+  { id:'targeting', name:'Targeting System', cat:'Systems', maxTimes:1, modsCost:1, costMult:5000, desc:'Negates up to 4 points of Shooting penalties from movement, range, and multi-actions.' },
+  { id:'em_shield', name:'Electromagnetic Shielding', cat:'Systems', maxTimes:'U', modsCost:2, costMult:5000, desc:'Adds +6 to effective Toughness vs. EMP weapons.' },
+
+  // CREW & UTILITY
+  { id:'ccw', name:'Close Combat Weapon', cat:'Crew & Utility', maxTimes:'U', modsCost:1, costMult:1000, desc:'Grants Str+d8 melee damage. Additional purchases add more weapons (dual wielding, etc.).' },
+  { id:'crew_space', name:'Crew Space', cat:'Crew & Utility', maxTimes:'U', modsCost:1, costMult:1000, desc:'Additional space for four crew or passengers.' },
+  { id:'passenger', name:'Passenger Compartment', cat:'Crew & Utility', maxTimes:'U', modsCost:1, costMult:1000, desc:'Cramped space for four passengers. Often used in rescue mechs.' },
+  { id:'crew_red', name:'Crew Reduction', cat:'Crew & Utility', maxTimes:'U', modsCost:-1, costMult:0, desc:'Gain 1 Mod slot for every 4 crewman deducted (round up). Requires remaining crew ≥ 1.' },
+];
+
+const WEAPONS = [
+  { id:'minigun', name:'Minigun', range:'24/48/96', damage:'2d8+4', rof:4, shots:1000, mods:1, cost:10000, notes:'AP 3, HW' },
+  { id:'medium_mg', name:'Medium MG', range:'30/60/120', damage:'2d8+1', rof:4, shots:200, mods:2, cost:3000, notes:'AP 2' },
+  { id:'heavy_mg', name:'Heavy MG', range:'50/100/200', damage:'2d10', rof:3, shots:200, mods:2, cost:5000, notes:'AP 4, HW' },
+  { id:'light_ac', name:'Light Auto-Cannon', range:'50/100/200', damage:'2d12', rof:3, shots:200, mods:3, cost:25000, notes:'AP 4, HW' },
+  { id:'medium_ac', name:'Medium Auto-Cannon', range:'50/100/200', damage:'3d8', rof:3, shots:100, mods:3, cost:50000, notes:'AP 6, HW' },
+  { id:'heavy_ac', name:'Heavy Auto-Cannon', range:'75/150/300', damage:'3d10', rof:3, shots:100, mods:4, cost:100000, notes:'AP 8, HW' },
+  { id:'light_laser', name:'Light Laser', range:'50/100/200', damage:'3d6', rof:1, shots:'∞', mods:2, cost:50000, notes:'AP 2, HW' },
+  { id:'medium_laser', name:'Medium Laser', range:'75/150/300', damage:'3d8', rof:1, shots:'∞', mods:3, cost:100000, notes:'AP 4, HW' },
+  { id:'heavy_laser', name:'Heavy Laser', range:'100/200/400', damage:'3d10', rof:1, shots:'∞', mods:4, cost:200000, notes:'AP 6, HW' },
+  { id:'light_rail', name:'Light Rail Gun', range:'50/100/200', damage:'3d8', rof:1, shots:20, mods:2, cost:50000, notes:'AP 8, HW' },
+  { id:'medium_rail', name:'Medium Rail Gun', range:'75/150/300', damage:'3d10', rof:1, shots:20, mods:3, cost:100000, notes:'AP 10, HW' },
+  { id:'heavy_rail', name:'Heavy Rail Gun', range:'100/200/400', damage:'4d8', rof:1, shots:20, mods:4, cost:200000, notes:'AP 12, HW' },
+  { id:'light_cannon', name:'Light Cannon', range:'50/100/200', damage:'3d8', rof:1, shots:30, mods:2, cost:25000, notes:'AP 4, HW' },
+  { id:'heavy_cannon', name:'Heavy Cannon', range:'75/150/300', damage:'3d10', rof:1, shots:30, mods:4, cost:100000, notes:'AP 6, HW' },
+  { id:'super_cannon', name:'Super Heavy Cannon', range:'100/200/400', damage:'4d10', rof:1, shots:20, mods:5, cost:200000, notes:'AP 8, HW' },
+  { id:'missile_launcher', name:'Missile Launcher', range:'—', damage:'—', rof:'—', shots:'—', mods:1, cost:50000, notes:'Carries up to 4 Light or 2 Heavy missiles. See missiles for damage.' },
+  { id:'flamethrower', name:'Flamethrower', range:'Cone', damage:'3d8', rof:1, shots:10, mods:2, cost:25000, notes:'Ignores Armor. Cone template.' },
+];
+
+// ── STATE ──
+let state = {
+  name: 'Untitled Walker',
+  chassisId: 'light',
+  mods: {},       // { modId: count }
+  weapons: [],    // [{ type:'standard'|'fixed'|'linked', weaponId, linked:number, fixed:bool, missiles:[] }]
+  savedWalkers: []
+};
+
+// ── INIT ──
+function init() {
+  loadSaved();
+  renderChassis();
+  renderMods();
+  renderStats();
+  renderSaved();
+  renderWeapons();
+  renderOutput();
+  document.getElementById('walkerName').addEventListener('input', e => {
+    state.name = e.target.value || 'Untitled Walker';
+  });
+}
+
+// ── CHASSIS ──
+function renderChassis() {
+  const grid = document.getElementById('chassisGrid');
+  grid.innerHTML = CHASSIS.map(c => `
+    <div class="chassis-btn ${c.id === state.chassisId ? 'active' : ''}" onclick="selectChassis('${c.id}')">
+      <span>${c.name}</span>
+      <span class="chassis-size">Size ${c.size} &middot; ${c.height}</span>
+    </div>
+  `).join('');
+}
+
+function selectChassis(id) {
+  state.chassisId = id;
+  state.mods = {};
+  state.weapons = [];
+  renderChassis();
+  renderMods();
+  renderStats();
+  renderWeapons();
+  renderOutput();
+}
+
+function getChassis() {
+  return CHASSIS.find(c => c.id === state.chassisId);
+}
+
+// ── MODIFICATIONS ──
+function renderMods() {
+  const panel = document.getElementById('panel-mods');
+  const cats = {};
+  MODIFICATIONS.forEach(m => {
+    if (!cats[m.cat]) cats[m.cat] = [];
+    cats[m.cat].push(m);
+  });
+
+  let html = '';
+  for (const cat in cats) {
+    html += `<div class="mod-category"><div class="mod-category-header">${cat}</div>`;
+    cats[cat].forEach(m => {
+      const count = state.mods[m.id] || 0;
+      const max = m.maxTimes === 'U' ? 99 : m.maxTimes;
+      const chassis = getChassis();
+      const modCost = getModCostForMod(m, count);
+      const priceCost = getMonetaryCostForMod(m, chassis);
+      html += `
+        <div class="mod-row ${count > 0 ? 'installed' : ''}">
+          <div class="mod-controls">
+            <button onclick="modDec('${m.id}')" ${count <= 0 ? 'style="opacity:0.3"' : ''}>−</button>
+            <span class="count">${count}</span>
+            <button onclick="modInc('${m.id}')" ${count >= max ? 'style="opacity:0.3"' : ''}>+</button>
+          </div>
+          <div class="mod-info">
+            <div class="mod-name">${m.name} <span style="color:var(--text-dim);font-size:11px;font-weight:400">(${m.maxTimes === 'U' ? '∞' : m.maxTimes})</span></div>
+            <div class="mod-desc">${m.desc}</div>
+          </div>
+          <div class="mod-cost">
+            <div class="mod-mods">${m.modsCost > 0 ? m.modsCost+' mod'+(m.modsCost>1?'s':'') : m.modsCost < 0 ? '+1 mod' : '0 mods'}</div>
+            <div class="mod-price">${priceCost > 0 ? '$'+formatNum(priceCost) : 'Free'}</div>
+          </div>
+        </div>`;
+    });
+    html += '</div>';
+  }
+  panel.innerHTML = html;
+}
+
+function getModCostForMod(m) { return m.modsCost; }
+function getMonetaryCostForMod(m, chassis) { return m.costMult * chassis.size; }
+
+function modInc(id) {
+  const m = MODIFICATIONS.find(x => x.id === id);
+  const max = m.maxTimes === 'U' ? 99 : m.maxTimes;
+  const cur = state.mods[id] || 0;
+  // Check speed conflicts
+  if (id === 'pace' && (state.mods['speed_red'] || 0) > 0) return;
+  if (id === 'speed_red' && (state.mods['pace'] || 0) > 0) return;
+  if (cur < max) {
+    state.mods[id] = cur + 1;
+    renderMods(); renderStats(); renderOutput();
+  }
+}
+
+function modDec(id) {
+  const cur = state.mods[id] || 0;
+  if (cur > 0) {
+    state.mods[id] = cur - 1;
+    if (state.mods[id] === 0) delete state.mods[id];
+    renderMods(); renderStats(); renderOutput();
+  }
+}
+
+// ── WEAPONS ──
+function renderWeapons() {
+  ['standard','fixed','linked'].forEach(type => {
+    const container = document.getElementById(type === 'standard' ? 'standardWeapons' : type === 'fixed' ? 'fixedWeapons' : 'linkedWeapons');
+    const slots = state.weapons.filter(w => w.type === type);
+    if (slots.length === 0) {
+      container.innerHTML = '<div class="empty-state"><p>No ' + type + ' weapons installed.</p></div>';
+      return;
+    }
+    container.innerHTML = slots.map((w, i) => {
+      const globalIdx = state.weapons.indexOf(w);
+      const weapon = WEAPONS.find(x => x.id === w.weaponId);
+      let linkOpts = '';
+      if (type === 'linked') {
+        linkOpts = `<div class="weapon-opt"><label>Linked ×</label><select onchange="updateWeaponLink(${globalIdx}, this.value)">
+          <option value="2" ${w.linked===2?'selected':''}>2 (Dual)</option>
+          <option value="3" ${w.linked===3?'selected':''}>3 (Triple)</option>
+          <option value="4" ${w.linked===4?'selected':''}>4 (Quad)</option>
+        </select></div>`;
+      }
+      return `
+        <div class="weapon-slot">
+          <div class="weapon-slot-header">
+            <span class="weapon-slot-title">${type === 'linked' ? 'Linked Group' : type === 'fixed' ? 'Fixed Mount' : 'Standard Mount'} #${i+1}</span>
+            <button class="remove-btn" onclick="removeWeapon(${globalIdx})">Remove</button>
+          </div>
+          <select class="weapon-select" onchange="updateWeaponType(${globalIdx}, this.value)">
+            <option value="">— Select Weapon —</option>
+            ${WEAPONS.map(wp => `<option value="${wp.id}" ${wp.id===w.weaponId?'selected':''}>${wp.name} (${wp.range}, ${wp.damage}, Mods: ${wp.mods})</option>`).join('')}
+          </select>
+          <div class="weapon-options">
+            ${linkOpts}
+            ${weapon ? `<span style="font-size:12px;color:var(--text-dim)">Mods: <strong style="color:var(--accent)">${getWeaponModCost(w)}</strong> &middot; Cost: <strong style="color:var(--accent)">$${formatNum(weapon.cost * (w.linked||1))}</strong> &middot; ${weapon.notes}</span>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+  });
+}
+
+function addWeaponSlot(type) {
+  state.weapons.push({ type, weaponId:'', linked: type === 'linked' ? 2 : 1 });
+  renderWeapons(); renderStats(); renderOutput();
+}
+
+function removeWeapon(idx) {
+  state.weapons.splice(idx, 1);
+  renderWeapons(); renderStats(); renderOutput();
+}
+
+function updateWeaponType(idx, weaponId) {
+  state.weapons[idx].weaponId = weaponId;
+  renderWeapons(); renderStats(); renderOutput();
+}
+
+function updateWeaponLink(idx, val) {
+  state.weapons[idx].linked = parseInt(val);
+  renderWeapons(); renderStats(); renderOutput();
+}
+
+function getWeaponModCost(w) {
+  if (!w.weaponId) return 0;
+  const weapon = WEAPONS.find(x => x.id === w.weaponId);
+  if (!weapon) return 0;
+  let baseMods = weapon.mods * (w.linked || 1);
+  // Linked: halve total mods (round up)
+  if (w.type === 'linked') baseMods = Math.ceil(baseMods / 2);
+  // Fixed: halve mods (round up)
+  if (w.type === 'fixed') baseMods = Math.ceil(baseMods / 2);
+  return baseMods;
+}
+
+// ── CALCULATIONS ──
+function calcTotalModsUsed() {
+  let total = 0;
+  for (const id in state.mods) {
+    const m = MODIFICATIONS.find(x => x.id === id);
+    if (m.modsCost > 0) total += m.modsCost * state.mods[id];
+  }
+  state.weapons.forEach(w => { total += getWeaponModCost(w); });
+  return total;
+}
+
+function calcModsGained() {
+  let gained = 0;
+  if (state.mods['crew_red']) gained += state.mods['crew_red'];
+  if (state.mods['speed_red']) {
+    const chassis = getChassis();
+    gained += Math.floor(chassis.size / 2) * state.mods['speed_red'];
+  }
+  return gained;
+}
+
+function calcPace() {
+  const chassis = getChassis();
+  let pace = chassis.pace;
+  if (state.mods['pace']) pace += 4 * state.mods['pace'];
+  if (state.mods['speed_red']) pace -= 4 * state.mods['speed_red'];
+  return Math.max(0, pace);
+}
+
+function calcToughness() {
+  const chassis = getChassis();
+  let tough = chassis.tough;
+  if (state.mods['reinforced']) tough += 2 * state.mods['reinforced'];
+  return tough;
+}
+
+function calcArmor() {
+  const chassis = getChassis();
+  let armor = chassis.armor;
+  if (state.mods['armor']) armor += 2 * state.mods['armor'];
+  // Heavy armor — we note it in output rather than adding here
+  return armor;
+}
+
+function calcHeavyArmor() {
+  if (!state.mods['armor_heavy']) return null;
+  const count = state.mods['armor_heavy'];
+  return { front: 6*count, side: 4*count, rear: 2*count, allAround: 4*count };
+}
+
+function calcCrew() {
+  const chassis = getChassis();
+  let crew = chassis.crew;
+  if (state.mods['crew_space']) crew += 4 * state.mods['crew_space'];
+  if (state.mods['passenger']) crew += 4 * state.mods['passenger'];
+  if (state.mods['crew_red']) crew -= 4 * state.mods['crew_red'];
+  return Math.max(1, crew);
+}
+
+function calcTotalCost() {
+  const chassis = getChassis();
+  let cost = chassis.cost;
+  for (const id in state.mods) {
+    const m = MODIFICATIONS.find(x => x.id === id);
+    cost += m.costMult * chassis.size * state.mods[id];
+  }
+  state.weapons.forEach(w => {
+    if (w.weaponId) {
+      const weapon = WEAPONS.find(x => x.id === w.weaponId);
+      cost += weapon.cost * (w.linked || 1);
+    }
+  });
+  return cost;
+}
+
+// ── RENDER STATS ──
+function renderStats() {
+  const chassis = getChassis();
+  const modsUsed = calcTotalModsUsed();
+  const modsGained = calcModsGained();
+  const modsTotal = chassis.mods + modsGained;
+  const modsLeft = modsTotal - modsUsed;
+  const pace = calcPace();
+  const tough = calcToughness();
+  const armor = calcArmor();
+  const crew = calcCrew();
+  const cost = calcTotalCost();
+
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-box"><div class="stat-label">Size</div><div class="stat-value">${chassis.size}</div></div>
+    <div class="stat-box"><div class="stat-label">Pace</div><div class="stat-value">${pace}</div></div>
+    <div class="stat-box"><div class="stat-label">Strength</div><div class="stat-value">${chassis.str}</div></div>
+    <div class="stat-box"><div class="stat-label">Toughness</div><div class="stat-value">${tough} (${armor})</div></div>
+    <div class="stat-box"><div class="stat-label">Crew</div><div class="stat-value">${crew}</div></div>
+    <div class="stat-box"><div class="stat-label">Mods Used</div><div class="stat-value ${modsUsed > modsTotal ? 'danger' : ''}">${modsUsed}/${modsTotal}</div></div>
+  `;
+
+  const modsEl = document.getElementById('modsRemaining');
+  let cls = 'ok';
+  if (modsLeft <= 3 && modsLeft > 0) cls = 'low';
+  if (modsLeft < 0) cls = 'over';
+  modsEl.innerHTML = `<div class="big-num ${cls}">${modsLeft}</div><div class="sub">Mods Remaining</div>`;
+
+  document.getElementById('costDisplay').innerHTML = `<div class="cost-val">$${formatCost(cost)}</div><div class="cost-label">Total Cost</div>`;
+}
+
+// ── STAT BLOCK OUTPUT ──
+function renderOutput() {
+  const panel = document.getElementById('panel-output');
+  const chassis = getChassis();
+  const pace = calcPace();
+  const tough = calcToughness();
+  const armor = calcArmor();
+  const crew = calcCrew();
+  const cost = calcTotalCost();
+  const modsUsed = calcTotalModsUsed();
+  const modsGained = calcModsGained();
+  const modsLeft = (chassis.mods + modsGained) - modsUsed;
+
+  // Build notes list
+  const notes = [];
+  const modOrder = ['ai','amcm','armor','armor_heavy','ccw','crew_red','crew_space','deflector','em_shield','jump_jets','pace','passenger','reinforced','sensor','shields','sloped','speed_red','stealth','targeting'];
+  modOrder.forEach(id => {
+    if (state.mods[id] && state.mods[id] > 0) {
+      const m = MODIFICATIONS.find(x => x.id === id);
+      const ct = state.mods[id];
+      const name = m.name;
+      notes.push(ct > 1 ? `${ct}×${name}` : name);
+    }
+  });
+
+  // Build weapons list
+  const weaponLines = [];
+  state.weapons.forEach(w => {
+    if (!w.weaponId) return;
+    const weapon = WEAPONS.find(x => x.id === w.weaponId);
+    let prefix = '';
+    if (w.type === 'linked') {
+      const labels = {2:'Dual Linked',3:'Triple Linked',4:'Quad Linked'};
+      prefix = (labels[w.linked] || 'Linked') + ' ';
+    }
+    if (w.type === 'fixed') prefix = 'Fixed ';
+    weaponLines.push(`${prefix}${weapon.name}`);
+  });
+
+  // Heavy armor display
+  const ha = calcHeavyArmor();
+  let toughDisplay = `${tough} (${armor})`;
+  if (ha) {
+    const frontTotal = tough + ha.front;
+    const sideTotal = tough + ha.side;
+    const rearTotal = tough + ha.rear;
+    toughDisplay = `${frontTotal}/${sideTotal}/${rearTotal} (${armor + ha.front}/${armor + ha.side}/${armor + ha.rear})`;
+  }
+
+  panel.innerHTML = `
+    <div class="stat-block">
+      <div class="sb-name">${state.name || 'Untitled Walker'}</div>
+      <div class="sb-type">${chassis.name} Walker: Size ${chassis.size}, Strength ${chassis.str}, Toughness ${toughDisplay}, Pace ${pace} (2d6 Run), Cost $${formatCost(cost)}, Remaining Mods ${modsLeft}</div>
+      <hr class="sb-divider">
+      ${notes.length ? `<div class="sb-line"><span class="sb-label">Notes:</span> ${notes.join(', ')}</div>` : ''}
+      ${weaponLines.length ? `<div class="sb-line"><span class="sb-label">Weapons:</span></div>` + weaponLines.map(w => `<div class="sb-line">&nbsp;&nbsp;&bull; ${w}</div>`).join('') : '<div class="sb-line" style="color:var(--text-dim);font-style:italic">No weapons installed.</div>'}
+      <hr class="sb-divider">
+      <div class="sb-notes">
+        <span class="sb-label">Special:</span> All walkers roll 2d6 for running dice. Piloting skill for all manoeuvres.${chassis.size >= 10 ? ' <strong>Compartmentalised:</strong> Can never suffer more than two wounds from a single attack.' : ''}${state.mods['shields'] ? ' <strong>Shields:</strong> Absorb '+10*chassis.size * state.mods['shields']+' points of damage before depletion; regenerate '+chassis.size+' per round with no attacks.' : ''}${state.mods['jump_jets'] ? ' <strong>Jump Jets:</strong> Leap up to '+(20*chassis.size)+'\' vertically.' : ''}
+      </div>
+    </div>
+    <div style="margin-top:16px;">
+      <button class="header-btn" onclick="copyStatBlock()">Copy to Clipboard</button>
+    </div>
+  `;
+}
+
+function copyStatBlock() {
+  const chassis = getChassis();
+  const pace = calcPace();
+  const tough = calcToughness();
+  const armor = calcArmor();
+  const cost = calcTotalCost();
+  const modsUsed = calcTotalModsUsed();
+  const modsGained = calcModsGained();
+  const modsLeft = (chassis.mods + modsGained) - modsUsed;
+
+  const notes = [];
+  MODIFICATIONS.forEach(m => {
+    if (state.mods[m.id] && state.mods[m.id] > 0) {
+      const ct = state.mods[m.id];
+      notes.push(ct > 1 ? `${ct}×${m.name}` : m.name);
+    }
+  });
+
+  const weaponLines = [];
+  state.weapons.forEach(w => {
+    if (!w.weaponId) return;
+    const weapon = WEAPONS.find(x => x.id === w.weaponId);
+    let prefix = '';
+    if (w.type === 'linked') { prefix = {2:'Dual Linked ',3:'Triple Linked ',4:'Quad Linked '}[w.linked] || 'Linked '; }
+    if (w.type === 'fixed') prefix = 'Fixed ';
+    weaponLines.push(`• ${prefix}${weapon.name}`);
+  });
+
+  let text = `${state.name}\n`;
+  text += `${chassis.name} Walker: Size ${chassis.size}, Strength ${chassis.str}, Toughness ${tough} (${armor}), Pace ${pace} (2d6 Run), Cost $${formatCost(cost)}, Remaining Mods ${modsLeft}\n`;
+  if (notes.length) text += `Notes: ${notes.join(', ')}\n`;
+  if (weaponLines.length) text += `Weapons:\n${weaponLines.join('\n')}\n`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    btn.style.borderColor = 'var(--green)';
+    btn.style.color = 'var(--green)';
+    setTimeout(() => { btn.textContent = 'Copy to Clipboard'; btn.style.borderColor = ''; btn.style.color = ''; }, 1500);
+  });
+}
+
+function exportStatBlock() { switchTab('output'); }
+
+// ── TABS ──
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + tab));
+  if (tab === 'output') renderOutput();
+}
+
+// ── SAVE / LOAD ──
+function saveWalker() {
+  const data = { name: state.name, chassisId: state.chassisId, mods: {...state.mods}, weapons: state.weapons.map(w => ({...w})) };
+  const existing = state.savedWalkers.findIndex(w => w.name === state.name);
+  if (existing >= 0) state.savedWalkers[existing] = data;
+  else state.savedWalkers.push(data);
+  localStorage.setItem('diceforge-walkers', JSON.stringify(state.savedWalkers));
+  renderSaved();
+}
+
+function loadWalker(idx) {
+  const data = state.savedWalkers[idx];
+  state.name = data.name;
+  state.chassisId = data.chassisId;
+  state.mods = {...data.mods};
+  state.weapons = data.weapons.map(w => ({...w}));
+  document.getElementById('walkerName').value = state.name;
+  renderChassis(); renderMods(); renderStats(); renderWeapons(); renderOutput(); renderSaved();
+}
+
+function deleteSavedWalker(idx) {
+  state.savedWalkers.splice(idx, 1);
+  localStorage.setItem('diceforge-walkers', JSON.stringify(state.savedWalkers));
+  renderSaved();
+}
+
+function newWalker() {
+  state.name = 'Untitled Walker';
+  state.chassisId = 'light';
+  state.mods = {};
+  state.weapons = [];
+  document.getElementById('walkerName').value = state.name;
+  renderChassis(); renderMods(); renderStats(); renderWeapons(); renderOutput();
+}
+
+function loadSaved() {
+  try {
+    const data = localStorage.getItem('diceforge-walkers');
+    if (data) state.savedWalkers = JSON.parse(data);
+  } catch(e) {}
+}
+
+function renderSaved() {
+  const list = document.getElementById('savedList');
+  if (state.savedWalkers.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">⚙</div><p>No saved designs yet. Build your first walker and hit Save.</p></div>';
+    return;
+  }
+  list.innerHTML = state.savedWalkers.map((w, i) => {
+    const c = CHASSIS.find(x => x.id === w.chassisId);
+    return `<div class="saved-item ${w.name === state.name ? 'active' : ''}" onclick="loadWalker(${i})">
+      <span class="si-name">${w.name}</span>
+      <span class="si-chassis">${c ? c.name : '?'}</span>
+      <button class="si-delete" onclick="event.stopPropagation(); deleteSavedWalker(${i})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// ── UTILS ──
+function formatNum(n) { return n.toLocaleString(); }
+function formatCost(n) {
+  if (n >= 1000000000) return (n/1000000000).toFixed(2) + 'B';
+  if (n >= 1000000) return (n/1000000).toFixed(n % 1000000 === 0 ? 0 : 2) + 'M';
+  if (n >= 1000) return (n/1000).toFixed(n % 1000 === 0 ? 0 : 1) + 'K';
+  return n.toString();
+}
+
+// ── BOOT ──
+// Add tool navigation
+(function() {
+  const container = document.getElementById('toolNavContainer');
+  const tools = [
+    { id: 'foundry', label: '🏭 The Foundry', url: 'foundry' },
+    { id: 'adventure-vault', label: '🎭 Adventure Vault', url: 'adventure-vault' },
+    { id: 'character-vault', label: '👤 Character Vault', url: 'character-vault' },
+    { id: 'walker-workshop', label: '⚙ Walker Workshop', url: 'walker-workshop' }
+  ];
+  const nav = document.createElement('div');
+  nav.className = 'tool-nav';
+  tools.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'tool-nav-item' + (t.id === 'walker-workshop' ? ' active' : '');
+    btn.textContent = t.label;
+    btn.onclick = () => { if (t.id !== 'walker-workshop') window.location.href = t.url; };
+    nav.appendChild(btn);
+  });
+  container.appendChild(nav);
+})();
+init();
+</script>
+</body>
+</html>
