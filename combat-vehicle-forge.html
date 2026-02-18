@@ -277,20 +277,35 @@ var MODS=[
   {id:'variable_form',name:'Variable Form',cat:'Locomotion & Power',max:1,mods:'half',costFn:function(s){return 20000*s},desc:'Switch between two locomotion types as an action. Choose second form at build.'}
 ];
 // ═══ WEAPON CATALOGUE — DiceForge originals by era, SW compatible ═══
-// Eras: medieval, blackpowder, industrial, modern, future, advanced
+// Eras: ancient, medieval, blackpowder, industrial, modern, future, advanced
 var WEAPONS=[
+  // ANCIENT
+  {id:'scorpion',name:'Scorpion',cat:'Siege Engines',era:'ancient',range:'15/30/60',damage:'2d6',ap:2,rof:1,shots:0,minSize:1,mods:1,cost:200,notes:'Reload 1, HW'},
+  {id:'onager',name:'Onager',cat:'Siege Engines',era:'ancient',range:'24/48/96',damage:'3d6',ap:0,rof:1,shots:0,minSize:3,mods:2,cost:500,notes:'Reload 4, Indirect, MBT'},
+  {id:'polybolos',name:'Polybolos',cat:'Siege Engines',era:'ancient',range:'15/30/60',damage:'2d6',ap:2,rof:2,shots:0,minSize:2,mods:1,cost:400,notes:'Reload 1, Repeating ballista, HW'},
+  {id:'greek_fire_s',name:'Greek Fire Siphon',cat:'Incendiaries',era:'ancient',range:'Cone',damage:'2d8',ap:0,rof:1,shots:10,minSize:2,mods:1,cost:300,notes:'Cone 12", Incendiary, Cauterize'},
+  {id:'bow_battery',name:'Bow Battery',cat:'Ranged',era:'ancient',range:'12/24/48',damage:'2d6',ap:1,rof:2,shots:0,minSize:2,mods:1,cost:100,notes:'Crew of archers, Reload 1'},
+  {id:'javelin_rack',name:'Javelin Rack',cat:'Ranged',era:'ancient',range:'4/8/16',damage:'2d4',ap:0,rof:3,shots:20,minSize:1,mods:1,cost:50,notes:'Thrown, limited range'},
+  {id:'scythed_wheels',name:'Scythed Wheels',cat:'Melee Systems',era:'ancient',range:'—',damage:'Str+2d6',ap:2,rof:0,shots:0,minSize:2,mods:1,cost:100,notes:'Melee, damages adjacent on pass, HW'},
+  {id:'ram_ancient',name:'Bronze Ram',cat:'Melee Systems',era:'ancient',range:'—',damage:'Str+2d8',ap:4,rof:0,shots:0,minSize:4,mods:1,cost:300,notes:'Ship ram, melee only, HW'},
   // MEDIEVAL
   {id:'ballista',name:'Ballista',cat:'Siege Engines',era:'medieval',range:'15/30/60',damage:'3d6',ap:2,rof:1,shots:0,minSize:2,mods:1,cost:500,notes:'Reload 2, HW'},
   {id:'catapult',name:'Catapult',cat:'Siege Engines',era:'medieval',range:'24/48/96',damage:'3d8',ap:0,rof:1,shots:0,minSize:4,mods:2,cost:1000,notes:'Reload 4, Indirect, MBT'},
   {id:'trebuchet',name:'Trebuchet',cat:'Siege Engines',era:'medieval',range:'24/48/96',damage:'4d8',ap:4,rof:1,shots:0,minSize:6,mods:3,cost:2000,notes:'Reload 6, Indirect, LBT'},
+  {id:'mangonel',name:'Mangonel',cat:'Siege Engines',era:'medieval',range:'18/36/72',damage:'3d6',ap:0,rof:1,shots:0,minSize:3,mods:2,cost:700,notes:'Reload 3, Indirect, MBT'},
+  {id:'springald',name:'Springald',cat:'Siege Engines',era:'medieval',range:'20/40/80',damage:'2d8',ap:4,rof:1,shots:0,minSize:2,mods:1,cost:400,notes:'Reload 2, AP bolt, HW'},
   {id:'ram',name:'Battering Ram',cat:'Melee Systems',era:'medieval',range:'—',damage:'Str+2d8',ap:4,rof:0,shots:0,minSize:2,mods:1,cost:200,notes:'Melee only, HW'},
-  {id:'boiling_oil',name:'Boiling Oil',cat:'Defensive Weapons',era:'medieval',range:'Cone',damage:'2d10',ap:0,rof:1,shots:5,minSize:2,mods:1,cost:100,notes:'Cone, Incendiary'},
+  {id:'boiling_oil',name:'Boiling Oil/Pitch',cat:'Defensive Weapons',era:'medieval',range:'Cone',damage:'2d10',ap:0,rof:1,shots:5,minSize:2,mods:1,cost:100,notes:'Cone, Incendiary'},
+  {id:'fire_arrows',name:'Fire Arrows',cat:'Incendiaries',era:'medieval',range:'12/24/48',damage:'2d6',ap:0,rof:2,shots:0,minSize:1,mods:1,cost:80,notes:'Incendiary, Reload 1'},
   // BLACKPOWDER
   {id:'swivel_gun',name:'Swivel Gun',cat:'Blackpowder Guns',era:'blackpowder',range:'12/24/48',damage:'2d8',ap:2,rof:1,shots:0,minSize:1,mods:1,cost:300,notes:'Reload 2, Grapeshot (Cone)'},
   {id:'light_cannon_bp',name:'Light Cannon',cat:'Blackpowder Guns',era:'blackpowder',range:'20/40/80',damage:'3d6+1',ap:4,rof:1,shots:0,minSize:2,mods:1,cost:600,notes:'Reload 3, SBT, HW'},
   {id:'med_cannon_bp',name:'Medium Cannon',cat:'Blackpowder Guns',era:'blackpowder',range:'25/50/100',damage:'4d6+1',ap:4,rof:1,shots:0,minSize:4,mods:2,cost:1500,notes:'Reload 3, SBT, HW'},
   {id:'heavy_cannon_bp',name:'Heavy Cannon',cat:'Blackpowder Guns',era:'blackpowder',range:'30/60/120',damage:'5d6',ap:6,rof:1,shots:0,minSize:6,mods:3,cost:3000,notes:'Reload 4, SBT, HW'},
   {id:'carronade',name:'Carronade',cat:'Blackpowder Guns',era:'blackpowder',range:'10/20/40',damage:'4d6+2',ap:2,rof:1,shots:0,minSize:3,mods:1,cost:800,notes:'Reload 2, Grapeshot (Cone), HW'},
+  {id:'mortar_bp',name:'Mortar',cat:'Blackpowder Guns',era:'blackpowder',range:'24/48/96',damage:'3d8',ap:0,rof:1,shots:0,minSize:2,mods:1,cost:500,notes:'Reload 3, Indirect, MBT, HW'},
+  {id:'congreve',name:'Congreve Rocket',cat:'Rockets',era:'blackpowder',range:'18/36/72',damage:'3d6',ap:0,rof:1,shots:6,minSize:1,mods:1,cost:400,notes:'Inaccurate (-1 Shooting), Incendiary, MBT'},
+  {id:'chain_shot',name:'Chain Shot',cat:'Blackpowder Guns',era:'blackpowder',range:'15/30/60',damage:'3d6',ap:0,rof:1,shots:0,minSize:3,mods:0,cost:200,notes:'Anti-rigging. Reload 3. Targets mast/locomotion only'},
   // INDUSTRIAL (WWI/WWII era)
   {id:'hmg',name:'Heavy Machine Gun',cat:'Machine Guns',era:'industrial',range:'30/60/120',damage:'2d8',ap:2,rof:3,shots:200,minSize:1,mods:1,cost:1000,notes:'Pt Def, Rxn Fire'},
   {id:'autocannon_ww',name:'Autocannon',cat:'Cannons',era:'industrial',range:'40/80/160',damage:'2d10',ap:4,rof:3,shots:100,minSize:2,mods:1,cost:5000,notes:'HW'},
@@ -299,6 +314,10 @@ var WEAPONS=[
   {id:'tank_gun_heavy',name:'Heavy Tank Gun',cat:'Cannons',era:'industrial',range:'100/200/400',damage:'5d10',ap:16,rof:1,shots:30,minSize:7,mods:4,cost:40000,notes:'SBT, HW'},
   {id:'flamethrower_ww',name:'Flamethrower',cat:'Flamethrowers',era:'industrial',range:'Cone',damage:'3d6',ap:0,rof:1,shots:10,minSize:1,mods:1,cost:1000,notes:'Incendiary, Cone'},
   {id:'torpedo_ww',name:'Torpedo',cat:'Torpedoes',era:'industrial',range:'50/100/200',damage:'5d10',ap:10,rof:1,shots:2,minSize:4,mods:1,cost:5000,notes:'Guided (basic), LBT, Aquatic only'},
+  {id:'bombs_ww',name:'Bomb Bay',cat:'Ordnance',era:'industrial',range:'—',damage:'4d8',ap:4,rof:1,shots:10,minSize:4,mods:2,cost:3000,notes:'Aircraft only. Drop, MBT. Bombing run rules.'},
+  {id:'depth_charge_ww',name:'Depth Charges',cat:'Anti-Submarine',era:'industrial',range:'—',damage:'4d8',ap:4,rof:1,shots:8,minSize:4,mods:1,cost:2000,notes:'Drop, MBT. Anti-sub only.'},
+  {id:'naval_gun_ww',name:'Naval Gun',cat:'Naval Guns',era:'industrial',range:'100/200/400',damage:'5d10',ap:12,rof:1,shots:60,minSize:8,mods:4,cost:35000,notes:'SBT, HW. Deck-mounted.'},
+  {id:'mine_ww',name:'Naval Mine Layer',cat:'Mines',era:'industrial',range:'—',damage:'5d10',ap:8,rof:0,shots:20,minSize:4,mods:2,cost:4000,notes:'Deploy mine per round. 3d6 trigger radius.'},
   // MODERN
   {id:'hmg_modern',name:'Heavy Machine Gun',cat:'Machine Guns',era:'modern',range:'50/100/200',damage:'2d10',ap:4,rof:3,shots:200,minSize:1,mods:1,cost:2000,notes:'Pt Def, Rxn Fire, HW'},
   {id:'minigun_modern',name:'Minigun',cat:'Machine Guns',era:'modern',range:'50/100/200',damage:'2d8+1',ap:2,rof:5,shots:2000,minSize:3,mods:1,cost:10000,notes:'Min RoF 3, Pt Def, Rxn Fire, HW'},
@@ -309,6 +328,11 @@ var WEAPONS=[
   {id:'rocket_pod',name:'Rocket Pod',cat:'Missiles',era:'modern',range:'50/100/200',damage:'4d8',ap:6,rof:3,shots:19,minSize:2,mods:1,cost:6000,notes:'SBT, HW'},
   {id:'grenade_mod',name:'Grenade Launcher',cat:'Launchers',era:'modern',range:'24/48/96',damage:'3d6',ap:0,rof:1,shots:12,minSize:0,mods:1,cost:2600,notes:'MBT'},
   {id:'torpedo_mod',name:'Modern Torpedo',cat:'Torpedoes',era:'modern',range:'100/200/400',damage:'6d10',ap:16,rof:1,shots:4,minSize:4,mods:2,cost:15000,notes:'Guided, LBT, Aquatic only'},
+  {id:'ciws',name:'CIWS / Phalanx',cat:'Point Defense',era:'modern',range:'30/60/120',damage:'2d10',ap:4,rof:6,shots:1000,minSize:4,mods:2,cost:20000,notes:'Pt Def only. Auto-fire vs missiles/aircraft.'},
+  {id:'naval_gun_mod',name:'Naval Gun (5-inch)',cat:'Naval Guns',era:'modern',range:'150/300/600',damage:'5d10+2',ap:14,rof:1,shots:80,minSize:8,mods:4,cost:60000,notes:'SBT, HW. Deck-mounted.'},
+  {id:'cruise_missile',name:'Cruise Missile',cat:'Missiles',era:'modern',range:'500/1K/2K',damage:'8d6',ap:24,rof:1,shots:2,minSize:6,mods:2,cost:50000,notes:'Guided, LBT, HW. Extreme range.'},
+  {id:'bombs_mod',name:'Bomb Bay / Hardpoint',cat:'Ordnance',era:'modern',range:'—',damage:'5d8',ap:8,rof:1,shots:8,minSize:4,mods:2,cost:5000,notes:'Aircraft only. Drop, MBT. Precision guided.'},
+  {id:'depth_charge_mod',name:'Depth Charges',cat:'Anti-Submarine',era:'modern',range:'—',damage:'5d8',ap:6,rof:1,shots:6,minSize:4,mods:1,cost:5000,notes:'Drop, MBT. Anti-sub only.'},
   // FUTURE (Sci-fi standard)
   {id:'slug_future',name:'Heavy Slugthrower',cat:'Slugthrowers',era:'future',range:'50/100/200',damage:'2d10 (I)',ap:4,rof:3,shots:50,minSize:3,mods:1,cost:2000,notes:'Pt Def, Rxn Fire'},
   {id:'ac_future',name:'Medium Autocannon',cat:'Autocannons',era:'future',range:'50/100/200',damage:'4d8 (II)',ap:6,rof:4,shots:80,minSize:8,mods:2,cost:20000,notes:'Min RoF 2'},
@@ -323,6 +347,7 @@ var WEAPONS=[
   {id:'missile_med',name:'Medium Missiles (×4)',cat:'Missiles',era:'future',range:'150/300/600',damage:'7d6 (IV)',ap:24,rof:2,shots:4,minSize:2,mods:0,cost:10000,notes:'Guided, MBT'},
   {id:'missile_heavy',name:'Heavy Missiles (×2)',cat:'Missiles',era:'future',range:'200/400/800',damage:'8d6 (V)',ap:32,rof:1,shots:2,minSize:2,mods:0,cost:20000,notes:'Guided, LBT'},
   {id:'missile_rack',name:'Missile Launcher',cat:'Missiles',era:'future',range:'—',damage:'—',ap:0,rof:0,shots:0,minSize:2,mods:1,cost:1000,notes:'Rack only. Load missiles separately.'},
+  {id:'torpedo_future',name:'Plasma Torpedo',cat:'Torpedoes',era:'future',range:'100/200/400',damage:'6d10 (IV)',ap:20,rof:1,shots:4,minSize:4,mods:2,cost:20000,notes:'Guided, LBT, Aquatic/Space'},
   // ADVANCED (far-future / energy weapons)
   {id:'md_light',name:'Light Mass Driver',cat:'Mass Drivers',era:'advanced',range:'100/200/400',damage:'2d12+2 (I)',ap:5,rof:3,shots:100,minSize:2,mods:2,cost:10000,notes:'Pt Def, Rxn Fire, SBT'},
   {id:'md_med',name:'Medium Mass Driver',cat:'Mass Drivers',era:'advanced',range:'100/200/400',damage:'3d12+3 (II)',ap:5,rof:2,shots:80,minSize:4,mods:3,cost:20000,notes:'MBT'},
@@ -333,8 +358,8 @@ var WEAPONS=[
   {id:'rail_gun',name:'Railgun',cat:'Mass Drivers',era:'advanced',range:'200/400/800',damage:'5d12 (V)',ap:40,rof:1,shots:20,minSize:8,mods:6,cost:250000,notes:'SBT, Ignores Shields'}
 ];
 // Era labels for UI
-var ERA_LABELS={medieval:'Medieval',blackpowder:'Blackpowder',industrial:'Industrial (WWI/WWII)',modern:'Modern',future:'Future (Sci-Fi)',advanced:'Advanced (Far-Future)'};
-var ERA_ORDER=['medieval','blackpowder','industrial','modern','future','advanced'];
+var ERA_LABELS={ancient:'Ancient',medieval:'Medieval',blackpowder:'Blackpowder',industrial:'Industrial (WWI/WWII)',modern:'Modern',future:'Future (Sci-Fi)',advanced:'Advanced (Far-Future)'};
+var ERA_ORDER=['ancient','medieval','blackpowder','industrial','modern','future','advanced'];
 var currentEra='modern';
 // Custom weapons storage
 var customWeapons=[];
