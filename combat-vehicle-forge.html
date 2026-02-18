@@ -269,7 +269,12 @@ var MODS=[
   {id:'pro_bay',name:'Professional Bay',cat:'Personnel',max:'U',mods:4,costFn:function(){return 100000},desc:'Skill-specific facility. Free reroll on relevant Trait rolls.'},
   {id:'sealed',name:'Sealed',cat:'Personnel',max:1,mods:2,costFn:function(s){return 5000*s},desc:'Hermetically sealed. Life support, airlocks. Can\'t take Exposed.'},
   // STRUCTURAL
-  {id:'hangar',name:'Hangar',cat:'Structural',max:'U',mods:5,costFn:function(){return 500000},desc:'Carry up to 10 Size points of vehicles (max half your Size).'}
+  {id:'hangar',name:'Hangar',cat:'Structural',max:'U',mods:5,costFn:function(){return 500000},desc:'Carry up to 10 Size points of vehicles (max half your Size).'},
+  // WALKER-SPECIFIC (available when walker loco selected)
+  {id:'jump_jets',name:'Jump Jets',cat:'Walker Systems',max:1,mods:1,costFn:function(s){return 10000*s},desc:'Move as VTOL once per encounter. Walker only.'},
+  {id:'tandem_pilots',name:'Tandem Pilots',cat:'Negative Qualities',max:1,mods:-1,costFn:function(s){return -10000*s},desc:'Requires two pilots. Walker only.'},
+  // MULTI-FORM
+  {id:'variable_form',name:'Variable Form',cat:'Locomotion & Power',max:1,mods:'half',costFn:function(s){return 20000*s},desc:'Switch between two locomotion types as an action. Choose second form at build.'}
 ];
 // ═══ WEAPON CATALOGUE — DiceForge originals by era, SW compatible ═══
 // Eras: medieval, blackpowder, industrial, modern, future, advanced
@@ -405,6 +410,8 @@ function renderFrameInfo(){var f=getFrame(S.size);document.getElementById('sizeV
 function renderModCatalogue(){var el=document.getElementById('modCatalogue'),cats={};
   MODS.forEach(function(m){
     if(m.id==='fwd'&&S.loco!=='wheeled')return;
+    if(m.id==='jump_jets'&&!isWalker())return;
+    if(m.id==='tandem_pilots'&&!isWalker())return;
     if(!cats[m.cat])cats[m.cat]=[];cats[m.cat].push(m)});
   var h='';for(var cat in cats){h+='<div class="cat-header">'+cat+'</div>';
     cats[cat].forEach(function(m){var ms=modSlots(m,S.size);var price=m.costFn(S.size);
