@@ -3,862 +3,663 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Walker Design Workshop — DiceForge Studios</title>
+<title>Walker Design Workshop — Test Build</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<script src="tool-navigation.js"></script>
 <style>
-/* Tool navigation override — walker uses its own layout */
-.tool-nav { display:flex; gap:0; background:#141210; border-bottom:1px solid #3A3530; padding:0 12px; font-family:'Cinzel',serif; }
-.tool-nav-item { background:transparent; border:none; color:#8A7A60; padding:8px 16px; font-size:11px; letter-spacing:1.5px; cursor:pointer; font-family:'Cinzel',serif; text-transform:uppercase; transition:all 0.15s; }
-.tool-nav-item:hover { color:#D4C8B0; }
-.tool-nav-item.active { color:#C4A44A; border-bottom:2px solid #C4A44A; }
-
-:root {
-  --bg-deep: #0E0C0A;
-  --bg-dark: #141210;
-  --bg-card: #1A1816;
-  --bg-panel: #201E1A;
-  --border: #3A3530;
-  --border-light: #4A4540;
-  --accent: #C4A44A;
-  --accent-dim: #C4A44A40;
-  --accent-glow: #C4A44A20;
-  --text: #D4C8B0;
-  --text-bright: #EDE4D4;
-  --text-dim: #8A7A60;
-  --green: #5A9A5A;
-  --red: #8C3030;
-  --red-bright: #B04040;
-  --blue: #4A7A9A;
-  --orange: #B07830;
-}
-
-* { margin:0; padding:0; box-sizing:border-box; }
-html, body { height:100%; background: var(--bg-deep); color: var(--text); font-family: 'Crimson Pro', Georgia, serif; font-size: 15px; line-height: 1.6; }
-
-/* ── LAYOUT ── */
-.app { display: flex; height: 100vh; overflow: hidden; }
-.sidebar { width: 320px; min-width: 320px; background: var(--bg-dark); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-
-/* ── HEADER ── */
-.header { background: var(--bg-dark); border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; gap: 16px; }
-.header-brand { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 3px; color: var(--text-dim); text-transform: uppercase; }
-.header-title { font-family: 'Cinzel', serif; font-size: 18px; color: var(--accent); letter-spacing: 2px; }
-.header-spacer { flex: 1; }
-.header-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 6px 14px; font-family: 'Crimson Pro', serif; font-size: 13px; cursor: pointer; transition: all 0.15s; }
-.header-btn:hover { border-color: var(--accent); color: var(--accent); }
-.header-btn.primary { background: var(--accent); color: var(--bg-deep); border-color: var(--accent); font-weight: 700; }
-.header-btn.primary:hover { background: #D4B45A; }
-
-/* ── SIDEBAR ── */
-.sidebar-header { padding: 16px; border-bottom: 1px solid var(--border); }
-.sidebar-header h2 { font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
-.sidebar-section { padding: 12px 16px; border-bottom: 1px solid var(--border); }
-.sidebar-section h3 { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; }
-
-.field-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-.field-label { font-size: 13px; color: var(--text-dim); min-width: 80px; }
-.field-value { font-size: 14px; color: var(--text-bright); font-weight: 600; }
-.field-row input[type="text"] { background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-bright); padding: 5px 10px; font-family: 'Crimson Pro', serif; font-size: 14px; flex: 1; }
-.field-row input[type="text"]:focus { outline: none; border-color: var(--accent); }
-
-/* Chassis selector */
-.chassis-grid { display: flex; flex-direction: column; gap: 4px; }
-.chassis-btn { background: var(--bg-deep); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; cursor: pointer; font-family: 'Crimson Pro', serif; font-size: 13px; text-align: left; transition: all 0.15s; display: flex; justify-content: space-between; align-items: center; }
-.chassis-btn:hover { border-color: var(--accent); color: var(--accent); }
-.chassis-btn.active { background: var(--accent-glow); border-color: var(--accent); color: var(--accent); }
-.chassis-btn .chassis-size { font-size: 11px; color: var(--text-dim); }
-.chassis-btn.active .chassis-size { color: var(--accent); opacity: 0.7; }
-
-/* Stats display */
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.stat-box { background: var(--bg-deep); border: 1px solid var(--border); padding: 8px 10px; text-align: center; }
-.stat-box .stat-label { font-size: 10px; letter-spacing: 1.5px; color: var(--text-dim); text-transform: uppercase; font-family: 'Cinzel', serif; }
-.stat-box .stat-value { font-size: 16px; font-weight: 700; color: var(--text-bright); margin-top: 2px; }
-.stat-box .stat-value.accent { color: var(--accent); }
-.stat-box .stat-value.warn { color: var(--orange); }
-.stat-box .stat-value.danger { color: var(--red-bright); }
-
-.mods-remaining { background: var(--bg-deep); border: 1px solid var(--border); padding: 10px; text-align: center; margin-top: 8px; }
-.mods-remaining .big-num { font-size: 28px; font-weight: 700; font-family: 'Cinzel', serif; }
-.mods-remaining .big-num.ok { color: var(--green); }
-.mods-remaining .big-num.low { color: var(--orange); }
-.mods-remaining .big-num.over { color: var(--red-bright); }
-.mods-remaining .sub { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
-
-.cost-display { background: var(--bg-deep); border: 1px solid var(--accent-dim); padding: 10px; text-align: center; margin-top: 6px; }
-.cost-display .cost-val { font-size: 18px; font-weight: 700; color: var(--accent); font-family: 'Cinzel', serif; }
-.cost-display .cost-label { font-size: 10px; color: var(--text-dim); letter-spacing: 1.5px; text-transform: uppercase; }
-
-/* ── MAIN CONTENT ── */
-.content { flex: 1; overflow-y: auto; padding: 20px; }
-.content::-webkit-scrollbar { width: 6px; }
-.content::-webkit-scrollbar-track { background: var(--bg-dark); }
-.content::-webkit-scrollbar-thumb { background: var(--border); }
-
-.tab-bar { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-.tab { padding: 10px 20px; font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 1.5px; color: var(--text-dim); cursor: pointer; border-bottom: 2px solid transparent; text-transform: uppercase; transition: all 0.15s; }
-.tab:hover { color: var(--text); }
-.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
-.panel { display: none; }
-.panel.active { display: block; }
-
-/* ── MODIFICATIONS PANEL ── */
-.mod-category { margin-bottom: 20px; }
-.mod-category-header { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
-
-.mod-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--bg-card); border: 1px solid var(--border); margin-bottom: 4px; transition: all 0.15s; }
-.mod-row:hover { border-color: var(--border-light); }
-.mod-row.installed { background: var(--accent-glow); border-color: var(--accent-dim); }
-.mod-row .mod-controls { display: flex; align-items: center; gap: 4px; }
-.mod-row .mod-controls button { width: 26px; height: 26px; background: var(--bg-deep); border: 1px solid var(--border); color: var(--text-dim); font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.1s; font-family: 'Crimson Pro', serif; }
-.mod-row .mod-controls button:hover { border-color: var(--accent); color: var(--accent); }
-.mod-row .mod-controls .count { min-width: 20px; text-align: center; font-weight: 700; color: var(--text-bright); font-size: 14px; }
-.mod-info { flex: 1; min-width: 0; }
-.mod-name { font-weight: 600; color: var(--text-bright); font-size: 14px; }
-.mod-desc { font-size: 12px; color: var(--text-dim); font-style: italic; line-height: 1.4; margin-top: 2px; }
-.mod-cost { text-align: right; min-width: 60px; }
-.mod-cost .mod-mods { font-weight: 700; color: var(--accent); font-size: 13px; }
-.mod-cost .mod-price { font-size: 11px; color: var(--text-dim); }
-
-/* ── WEAPONS PANEL ── */
-.weapon-section { margin-bottom: 20px; }
-.weapon-section-header { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
-
-.weapon-slot { background: var(--bg-card); border: 1px solid var(--border); padding: 12px; margin-bottom: 6px; }
-.weapon-slot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.weapon-slot-title { font-family: 'Cinzel', serif; font-size: 12px; color: var(--text-bright); letter-spacing: 1px; }
-.weapon-slot .remove-btn { background: transparent; border: 1px solid var(--red); color: var(--red); padding: 2px 8px; font-size: 11px; cursor: pointer; font-family: 'Crimson Pro', serif; }
-.weapon-slot .remove-btn:hover { background: var(--red); color: var(--text-bright); }
-
-.weapon-select { width: 100%; background: var(--bg-deep); border: 1px solid var(--border); color: var(--text); padding: 6px 10px; font-family: 'Crimson Pro', serif; font-size: 13px; cursor: pointer; margin-bottom: 6px; }
-.weapon-select:focus { outline: none; border-color: var(--accent); }
-
-.weapon-options { display: flex; gap: 8px; flex-wrap: wrap; }
-.weapon-opt { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-dim); }
-.weapon-opt input[type="checkbox"] { accent-color: var(--accent); }
-.weapon-opt select { background: var(--bg-deep); border: 1px solid var(--border); color: var(--text); padding: 2px 6px; font-family: 'Crimson Pro', serif; font-size: 12px; }
-
-.add-weapon-btn { background: transparent; border: 1px dashed var(--border); color: var(--text-dim); padding: 10px; width: 100%; cursor: pointer; font-family: 'Crimson Pro', serif; font-size: 13px; transition: all 0.15s; }
-.add-weapon-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-/* ── STAT BLOCK OUTPUT ── */
-.stat-block { background: var(--bg-deep); border: 1px solid var(--accent-dim); padding: 24px; font-size: 14px; line-height: 1.8; max-width: 700px; }
-.stat-block .sb-name { font-family: 'Cinzel', serif; font-size: 22px; color: var(--accent); letter-spacing: 3px; text-align: center; margin-bottom: 2px; }
-.stat-block .sb-type { text-align: center; color: var(--text-dim); font-style: italic; font-size: 13px; margin-bottom: 14px; }
-.stat-block .sb-divider { border: none; border-top: 1px solid var(--accent-dim); margin: 10px 0; }
-.stat-block .sb-line { margin-bottom: 2px; }
-.stat-block .sb-label { color: var(--accent); font-weight: 700; }
-.stat-block .sb-notes { color: var(--text-dim); font-style: italic; margin-top: 8px; font-size: 13px; line-height: 1.5; }
-
-/* ── RULES REFERENCE ── */
-.rules-ref { max-width: 700px; }
-.rules-ref h3 { font-family: 'Cinzel', serif; font-size: 14px; color: var(--accent); letter-spacing: 1.5px; margin: 16px 0 8px; }
-.rules-ref h3:first-child { margin-top: 0; }
-.rules-ref p { margin-bottom: 8px; font-size: 14px; color: var(--text); }
-.rules-ref .rule-key { color: var(--accent); font-weight: 700; }
-.rules-ref .rule-note { color: var(--text-dim); font-style: italic; font-size: 13px; }
-
-/* ── SAVED WALKERS ── */
-.saved-list { display: flex; flex-direction: column; gap: 4px; }
-.saved-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; transition: all 0.15s; }
-.saved-item:hover { border-color: var(--accent); }
-.saved-item.active { border-color: var(--accent); background: var(--accent-glow); }
-.saved-item .si-name { flex: 1; font-weight: 600; color: var(--text-bright); font-size: 14px; }
-.saved-item .si-chassis { font-size: 12px; color: var(--text-dim); }
-.saved-item .si-delete { background: transparent; border: none; color: var(--text-dim); cursor: pointer; font-size: 14px; padding: 2px 6px; }
-.saved-item .si-delete:hover { color: var(--red-bright); }
-
-.empty-state { text-align: center; padding: 40px 20px; color: var(--text-dim); }
-.empty-state .empty-icon { font-size: 32px; margin-bottom: 8px; }
-.empty-state p { font-size: 13px; font-style: italic; }
-
-/* ── SCROLLBAR ── */
-.sidebar::-webkit-scrollbar, .content::-webkit-scrollbar { width: 5px; }
-.sidebar::-webkit-scrollbar-track, .content::-webkit-scrollbar-track { background: var(--bg-dark); }
-.sidebar::-webkit-scrollbar-thumb, .content::-webkit-scrollbar-thumb { background: var(--border); }
-
-/* ── FOOTER ── */
-.sidebar-footer { margin-top: auto; padding: 10px 16px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-dim); text-align: center; font-style: italic; }
-.sidebar-footer a { color: var(--accent); text-decoration: none; }
+.tool-nav{display:flex;gap:0;background:#141210;border-bottom:1px solid #3A3530;padding:0 12px;font-family:'Cinzel',serif}
+.tool-nav-item{background:transparent;border:none;color:#8A7A60;padding:8px 16px;font-size:11px;letter-spacing:1.5px;cursor:pointer;font-family:'Cinzel',serif;text-transform:uppercase;transition:all .15s}
+.tool-nav-item:hover{color:#D4C8B0}
+.tool-nav-item.active{color:#C4A44A;border-bottom:2px solid #C4A44A}
+:root{--bg-deep:#0E0C0A;--bg-dark:#141210;--bg-card:#1A1816;--bg-panel:#201E1A;--border:#3A3530;--border-light:#4A4540;--accent:#C4A44A;--accent-dim:#C4A44A40;--accent-glow:#C4A44A20;--text:#D4C8B0;--text-bright:#EDE4D4;--text-dim:#8A7A60;--green:#5A9A5A;--red:#8C3030;--red-bright:#B04040;--blue:#4A7A9A;--orange:#B07830}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-size:15px;line-height:1.6}
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:320px;min-width:320px;background:var(--bg-dark);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.header{background:var(--bg-dark);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;gap:16px}
+.header-brand{font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase}
+.header-title{font-family:'Cinzel',serif;font-size:18px;color:var(--accent);letter-spacing:2px}
+.header-spacer{flex:1}
+.header-btn{background:transparent;border:1px solid var(--border);color:var(--text-dim);padding:6px 14px;font-family:'Crimson Pro',serif;font-size:13px;cursor:pointer;transition:all .15s}
+.header-btn:hover{border-color:var(--accent);color:var(--accent)}
+.header-btn.primary{background:var(--accent);color:var(--bg-deep);border-color:var(--accent);font-weight:700}
+.header-btn.primary:hover{background:#D4B45A}
+.sidebar-header{padding:16px;border-bottom:1px solid var(--border)}
+.sidebar-header h2{font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.sidebar-section{padding:12px 16px;border-bottom:1px solid var(--border)}
+.sidebar-section h3{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px}
+.field-row input[type="text"]{background:var(--bg-deep);border:1px solid var(--border);color:var(--text-bright);padding:5px 10px;font-family:'Crimson Pro',serif;font-size:14px;width:100%}
+.field-row input[type="text"]:focus{outline:none;border-color:var(--accent)}
+.chassis-grid{display:flex;flex-direction:column;gap:4px}
+.chassis-btn{background:var(--bg-deep);border:1px solid var(--border);color:var(--text);padding:8px 12px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:13px;text-align:left;transition:all .15s;display:flex;justify-content:space-between;align-items:center}
+.chassis-btn:hover{border-color:var(--accent);color:var(--accent)}
+.chassis-btn.active{background:var(--accent-glow);border-color:var(--accent);color:var(--accent)}
+.chassis-btn .chassis-size{font-size:11px;color:var(--text-dim)}
+.chassis-btn.active .chassis-size{color:var(--accent);opacity:.7}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.stat-box{background:var(--bg-deep);border:1px solid var(--border);padding:8px 10px;text-align:center}
+.stat-box .stat-label{font-size:10px;letter-spacing:1.5px;color:var(--text-dim);text-transform:uppercase;font-family:'Cinzel',serif}
+.stat-box .stat-value{font-size:16px;font-weight:700;color:var(--text-bright);margin-top:2px}
+.stat-box .stat-value.danger{color:var(--red-bright)}
+.mods-remaining{background:var(--bg-deep);border:1px solid var(--border);padding:10px;text-align:center;margin-top:8px}
+.mods-remaining .big-num{font-size:28px;font-weight:700;font-family:'Cinzel',serif}
+.mods-remaining .big-num.ok{color:var(--green)}
+.mods-remaining .big-num.low{color:var(--orange)}
+.mods-remaining .big-num.over{color:var(--red-bright)}
+.mods-remaining .sub{font-size:11px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase}
+.cost-display{background:var(--bg-deep);border:1px solid var(--accent-dim);padding:10px;text-align:center;margin-top:6px}
+.cost-display .cost-val{font-size:18px;font-weight:700;color:var(--accent);font-family:'Cinzel',serif}
+.cost-display .cost-label{font-size:10px;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase}
+.content{flex:1;overflow-y:auto;padding:20px}
+.content::-webkit-scrollbar{width:6px}
+.content::-webkit-scrollbar-track{background:var(--bg-dark)}
+.content::-webkit-scrollbar-thumb{background:var(--border)}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid var(--border)}
+.tab{padding:10px 20px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.5px;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;text-transform:uppercase;transition:all .15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.panel{display:none}
+.panel.active{display:block}
+.dnd-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;min-height:400px}
+.dnd-column h3{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.drag-item{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:5px;background:var(--bg-card);border:1px solid var(--border);cursor:grab;transition:transform .15s,box-shadow .15s,border-color .15s;user-select:none;touch-action:none;-webkit-user-select:none}
+.drag-item:hover{border-color:var(--border-light)}
+.drag-item:active{cursor:grabbing}
+.drag-item .drag-handle{color:var(--text-dim);font-size:14px;opacity:.4}
+.drag-item .di-info{flex:1;min-width:0}
+.drag-item .di-name{font-weight:600;color:var(--text-bright);font-size:13px}
+.drag-item .di-desc{font-size:11px;color:var(--text-dim);font-style:italic;line-height:1.3;margin-top:1px}
+.drag-item .di-meta{text-align:right;min-width:55px}
+.drag-item .di-mods{font-weight:700;color:var(--accent);font-size:12px}
+.drag-item .di-price{font-size:10px;color:var(--text-dim)}
+.drag-item .di-max{font-size:10px;color:var(--text-dim)}
+.drag-item.dragging{opacity:.5;transform:scale(.97);border-color:var(--accent-dim)}
+.drag-ghost{position:fixed;pointer-events:none;z-index:1000;padding:8px 14px;background:var(--bg-panel);border:1px solid var(--accent);box-shadow:0 8px 32px rgba(196,164,74,.3),0 0 12px rgba(196,164,74,.15);font-family:'Cinzel',serif;font-size:13px;color:var(--accent);letter-spacing:1px;white-space:nowrap}
+.drag-ghost.near-target{box-shadow:0 12px 48px rgba(196,164,74,.5),0 0 20px rgba(196,164,74,.25);transform:scale(1.05)}
+.drop-bay{min-height:120px;padding:8px;background:var(--bg-deep);border:2px dashed var(--border);transition:border-color .2s,background .2s,box-shadow .2s}
+.drop-bay.drag-over{border-color:var(--accent);border-style:solid;background:var(--accent-glow);box-shadow:inset 0 0 30px rgba(196,164,74,.08)}
+.drop-bay .empty-bay{text-align:center;padding:30px 16px;color:var(--text-dim);font-style:italic;font-size:13px}
+.bay-item{display:flex;align-items:center;gap:8px;padding:8px 12px;margin-bottom:4px;background:var(--bg-card);border:1px solid var(--accent-dim);position:relative;overflow:hidden}
+.bay-item .bi-info{flex:1}
+.bay-item .bi-name{font-weight:600;color:var(--accent);font-size:13px}
+.bay-item .bi-detail{font-size:11px;color:var(--text-dim)}
+.bay-item .bi-count{font-family:'Cinzel',serif;font-size:14px;color:var(--text-bright);font-weight:700;min-width:24px;text-align:center}
+.bay-item .bi-controls{display:flex;gap:3px}
+.bay-item .bi-controls button{width:24px;height:24px;background:var(--bg-deep);border:1px solid var(--border);color:var(--text-dim);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Crimson Pro',serif;transition:all .1s}
+.bay-item .bi-controls button:hover{border-color:var(--accent);color:var(--accent)}
+.bay-item .bi-remove{background:transparent;border:none;color:var(--text-dim);cursor:pointer;font-size:13px;padding:2px 6px;margin-left:4px}
+.bay-item .bi-remove:hover{color:var(--red-bright)}
+@keyframes snapIn{0%{transform:translateY(-8px) scale(1.03);opacity:.6}40%{transform:translateY(2px) scale(.98);opacity:1}70%{transform:translateY(-1px) scale(1.005)}100%{transform:translateY(0) scale(1)}}
+.bay-item.snap-in{animation:snapIn .3s ease-out}
+@keyframes impactFlash{0%{box-shadow:inset 0 0 20px rgba(196,164,74,.4)}100%{box-shadow:inset 0 0 0 rgba(196,164,74,0)}}
+.drop-bay.impact{animation:impactFlash .35s ease-out}
+.cat-header{font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;padding:8px 0 4px;margin-top:8px}
+.cat-header:first-child{margin-top:0}
+.weapon-drag-item{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:5px;background:var(--bg-card);border:1px solid var(--border);cursor:grab;transition:transform .15s,box-shadow .15s,border-color .15s;user-select:none;touch-action:none;-webkit-user-select:none}
+.weapon-drag-item:hover{border-color:var(--border-light)}
+.weapon-drag-item:active{cursor:grabbing}
+.weapon-drag-item.dragging{opacity:.5;transform:scale(.97)}
+.weapon-drag-item .wdi-info{flex:1}
+.weapon-drag-item .wdi-name{font-weight:600;color:var(--text-bright);font-size:13px}
+.weapon-drag-item .wdi-stats{font-size:11px;color:var(--text-dim)}
+.weapon-drag-item .wdi-meta{text-align:right;min-width:55px}
+.weapon-drag-item .wdi-mods{font-weight:700;color:var(--accent);font-size:12px}
+.weapon-drag-item .wdi-price{font-size:10px;color:var(--text-dim)}
+.weapon-bay-item{display:flex;align-items:center;gap:8px;padding:10px 12px;margin-bottom:4px;background:var(--bg-card);border:1px solid var(--accent-dim)}
+.weapon-bay-item.snap-in{animation:snapIn .3s ease-out}
+.weapon-bay-item .wbi-info{flex:1}
+.weapon-bay-item .wbi-name{font-weight:600;color:var(--accent);font-size:13px}
+.weapon-bay-item .wbi-stats{font-size:11px;color:var(--text-dim)}
+.weapon-bay-item .wbi-mount{font-size:10px;color:var(--text-dim);font-style:italic}
+.weapon-bay-item select{background:var(--bg-deep);border:1px solid var(--border);color:var(--text);padding:2px 6px;font-family:'Crimson Pro',serif;font-size:11px;cursor:pointer}
+.weapon-bay-item .wbi-remove{background:transparent;border:none;color:var(--text-dim);cursor:pointer;font-size:13px;padding:2px 6px}
+.weapon-bay-item .wbi-remove:hover{color:var(--red-bright)}
+.mount-tabs{display:flex;gap:0;margin-bottom:10px}
+.mount-tab{padding:6px 14px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;color:var(--text-dim);cursor:pointer;border:1px solid var(--border);background:transparent;text-transform:uppercase;transition:all .15s}
+.mount-tab:first-child{border-radius:3px 0 0 3px}
+.mount-tab:last-child{border-radius:0 3px 3px 0}
+.mount-tab:not(:first-child){border-left:none}
+.mount-tab:hover{color:var(--text)}
+.mount-tab.active{background:var(--accent-glow);color:var(--accent);border-color:var(--accent)}
+.stat-block{background:var(--bg-deep);border:1px solid var(--accent-dim);padding:24px;font-size:14px;line-height:1.8;max-width:700px}
+.stat-block .sb-name{font-family:'Cinzel',serif;font-size:22px;color:var(--accent);letter-spacing:3px;text-align:center;margin-bottom:2px}
+.stat-block .sb-type{text-align:center;color:var(--text-dim);font-style:italic;font-size:13px;margin-bottom:14px}
+.stat-block .sb-divider{border:none;border-top:1px solid var(--accent-dim);margin:10px 0}
+.stat-block .sb-line{margin-bottom:2px}
+.stat-block .sb-label{color:var(--accent);font-weight:700}
+.stat-block .sb-notes{color:var(--text-dim);font-style:italic;margin-top:8px;font-size:13px;line-height:1.5}
+.rules-ref{max-width:700px}
+.rules-ref h3{font-family:'Cinzel',serif;font-size:14px;color:var(--accent);letter-spacing:1.5px;margin:16px 0 8px}
+.rules-ref h3:first-child{margin-top:0}
+.rules-ref p{margin-bottom:8px;font-size:14px;color:var(--text)}
+.rules-ref .rule-key{color:var(--accent);font-weight:700}
+.rules-ref .rule-note{color:var(--text-dim);font-style:italic;font-size:13px}
+.saved-list{display:flex;flex-direction:column;gap:4px}
+.saved-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg-card);border:1px solid var(--border);cursor:pointer;transition:all .15s}
+.saved-item:hover{border-color:var(--accent)}
+.saved-item .si-name{flex:1;font-weight:600;color:var(--text-bright);font-size:14px}
+.saved-item .si-chassis{font-size:12px;color:var(--text-dim)}
+.saved-item .si-delete{background:transparent;border:none;color:var(--text-dim);cursor:pointer;font-size:14px;padding:2px 6px}
+.saved-item .si-delete:hover{color:var(--red-bright)}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text-dim)}
+.empty-state p{font-size:13px;font-style:italic}
+.sidebar-footer{margin-top:auto;padding:10px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--text-dim);text-align:center;font-style:italic}
+.sidebar-footer a{color:var(--accent);text-decoration:none}
 </style>
 </head>
 <body>
 <div id="toolNavContainer"></div>
 <div class="app">
-  <!-- SIDEBAR -->
-  <div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <h2>Walker Workshop</h2>
-      <div class="field-row">
-        <input type="text" id="walkerName" placeholder="Name your walker..." value="Untitled Walker" style="width:100%">
-      </div>
-    </div>
-
-    <!-- Chassis Selection -->
-    <div class="sidebar-section">
-      <h3>Chassis</h3>
-      <div class="chassis-grid" id="chassisGrid"></div>
-    </div>
-
-    <!-- Live Stats -->
-    <div class="sidebar-section" id="statsSection">
-      <h3>Statistics</h3>
-      <div class="stats-grid" id="statsGrid"></div>
-      <div class="mods-remaining" id="modsRemaining"></div>
-      <div class="cost-display" id="costDisplay"></div>
-    </div>
-
-    <!-- Saved Walkers -->
-    <div class="sidebar-section" style="flex:1; overflow-y:auto;">
-      <h3>Saved Designs</h3>
-      <div class="saved-list" id="savedList"></div>
-    </div>
-
-    <div class="sidebar-footer">
-      This tool references the <a href="https://peginc.com" target="_blank">Savage Worlds</a> game system by Pinnacle Entertainment Group. Savage Worlds and all associated logos and trademarks are copyrights of Pinnacle Entertainment Group. Used with permission.<br>
-      &copy; DiceForge Studios Ltd.
-    </div>
+  <div class="sidebar">
+    <div class="sidebar-header"><h2>Walker Workshop</h2><div class="field-row"><input type="text" id="walkerName" placeholder="Name your walker..." value="Untitled Walker"></div></div>
+    <div class="sidebar-section"><h3>Chassis</h3><div class="chassis-grid" id="chassisGrid"></div></div>
+    <div class="sidebar-section"><h3>Statistics</h3><div class="stats-grid" id="statsGrid"></div><div class="mods-remaining" id="modsRemaining"></div><div class="cost-display" id="costDisplay"></div></div>
+    <div class="sidebar-section" style="flex:1;overflow-y:auto"><h3>Saved Designs</h3><div class="saved-list" id="savedList"></div></div>
+    <div class="sidebar-footer">Savage Worlds &copy; Pinnacle Entertainment Group. &copy; DiceForge Studios Ltd.</div>
   </div>
-
-  <!-- MAIN -->
   <div class="main">
-    <div class="header">
-      <div>
-        <div class="header-brand">DiceForge Studios</div>
-        <div class="header-title">Walker Design Workshop</div>
-      </div>
-      <div class="header-spacer"></div>
-      <button class="header-btn" onclick="newWalker()">New</button>
-      <button class="header-btn" onclick="saveWalker()">Save</button>
-      <button class="header-btn primary" onclick="exportStatBlock()">Export Stat Block</button>
-    </div>
-
+    <div class="header"><div><div class="header-brand">DiceForge Studios</div><div class="header-title">Walker Design Workshop</div></div><div class="header-spacer"></div><button class="header-btn" onclick="newWalker()">New</button><button class="header-btn" onclick="saveWalker()">Save</button><button class="header-btn primary" onclick="switchTab('output')">Export</button></div>
     <div class="tab-bar">
       <div class="tab active" data-tab="mods" onclick="switchTab('mods')">Modifications</div>
       <div class="tab" data-tab="weapons" onclick="switchTab('weapons')">Weapon Systems</div>
       <div class="tab" data-tab="output" onclick="switchTab('output')">Stat Block</div>
       <div class="tab" data-tab="rules" onclick="switchTab('rules')">Rules Reference</div>
     </div>
-
     <div class="content">
-      <!-- MODIFICATIONS PANEL -->
-      <div class="panel active" id="panel-mods"></div>
-
-      <!-- WEAPONS PANEL -->
-      <div class="panel" id="panel-weapons">
-        <div class="weapon-section">
-          <div class="weapon-section-header">Standard Weapon Systems</div>
-          <div id="standardWeapons"></div>
-          <button class="add-weapon-btn" onclick="addWeaponSlot('standard')">+ Add Standard Weapon</button>
-        </div>
-        <div class="weapon-section" style="margin-top:20px;">
-          <div class="weapon-section-header">Fixed Weapon Systems</div>
-          <div id="fixedWeapons"></div>
-          <button class="add-weapon-btn" onclick="addWeaponSlot('fixed')">+ Add Fixed Weapon</button>
-        </div>
-        <div class="weapon-section" style="margin-top:20px;">
-          <div class="weapon-section-header">Linked Weapon Systems</div>
-          <div id="linkedWeapons"></div>
-          <button class="add-weapon-btn" onclick="addWeaponSlot('linked')">+ Add Linked Weapon Group</button>
-        </div>
-      </div>
-
-      <!-- STAT BLOCK OUTPUT -->
+      <div class="panel active" id="panel-mods"><div class="dnd-layout"><div class="dnd-column"><h3>Available Modifications</h3><div id="modCatalogue"></div></div><div class="dnd-column"><h3>Installed Systems</h3><div class="drop-bay" id="modBay"><div class="empty-bay">Drag modifications here to install them</div></div></div></div></div>
+      <div class="panel" id="panel-weapons"><div class="dnd-layout"><div class="dnd-column"><h3>Weapon Catalogue</h3><div id="weaponCatalogue"></div></div><div class="dnd-column"><h3>Weapon Hardpoints</h3><div class="mount-tabs"><div class="mount-tab active" data-mount="standard" onclick="switchMount('standard')">Standard</div><div class="mount-tab" data-mount="fixed" onclick="switchMount('fixed')">Fixed (&frac12; Mods)</div><div class="mount-tab" data-mount="linked" onclick="switchMount('linked')">Linked (&frac12; Mods)</div></div><div class="drop-bay" id="weaponBay"><div class="empty-bay">Drag weapons here to mount them</div></div></div></div></div>
       <div class="panel" id="panel-output"></div>
-
-      <!-- RULES REFERENCE -->
-      <div class="panel" id="panel-rules">
-        <div class="rules-ref">
-          <h3>Walker Combat</h3>
-          <p><span class="rule-key">Compartments:</span> Heavy mechs are towering contraptions with multiple compartments and failsafes. Large walkers (Size 10+) can never suffer more than two wounds from a single attack regardless of the damage result. The attacker still rolls a Critical Hit for each wound the attack would have caused, however, and a Wrecked Critical Hit still destroys the mech as usual.</p>
-
-          <p><span class="rule-key">Critical Hits:</span> Mechs use advanced power sources that can cause horrific damage if breached. When a mech suffers a Wrecked Critical Hit, it explodes for d6 &times; Size damage in a 10&Prime; (20 yard) burst radius. The walker is completely destroyed in the explosion.</p>
-
-          <p><span class="rule-key">Ejection System:</span> All walkers are equipped with ejection systems. Should a walker suffer a Wrecked result, the pilot may make an Agility roll at &minus;4 (or no penalty if on Hold or hasn&rsquo;t acted yet). Success launches the pilot to descend safely via parachute.</p>
-
-          <h3>Death From Above</h3>
-          <p>Walker pilots sometimes attempt a desperate manoeuvre called &ldquo;Death From Above,&rdquo; where they use jump jets or vantage points to jump on rivals. This is an opposed Piloting roll between the two. If the pilot ties or loses, his mech suffers d6 damage for every 20 feet fallen to a maximum of 10d6. If the pilot wins, his walker lands on top of the target and inflicts its Strength in damage, plus d6 per 20 feet fallen (maximum 10d6).</p>
-
-          <h3>Falling</h3>
-          <p>Walkers knocked prone must spend an entire round getting up (no other actions). A walker that falls from a height suffers d6 damage per 20 feet fallen to a maximum of 10d6.</p>
-
-          <p><span class="rule-key">Jumping:</span> Walkers with Jump Jets may leap vertically up to 20 feet per Size. On the first round of jumping, the Piloting roll is made with no penalty. Each subsequent round spent jumping inflicts a cumulative &minus;2 to the Piloting roll (maximum &minus;6). Failure means the walker descends immediately; a critical failure results in a fall.</p>
-
-          <h3>Table-Top Scale</h3>
-          <p>If fighting with standard mech-sized figures on the table-top (commonly called 1/285th scale or 6mm), divide movement and weapon ranges by 5 (round up). A mech can walk 5&Prime; a round, for example, and a medium auto-cannon has a Short Range of 10.</p>
-
-          <h3>Piloting Walkers</h3>
-          <p>Walkers use the <span class="rule-key">Piloting</span> skill for all manoeuvres. Multi-Action Penalties apply as normal when the pilot fires weapons and performs other actions in the same round. Targeting Systems and AI can offset some of these penalties.</p>
-
-          <p class="rule-note">This tool references the Savage Worlds Sci-Fi Companion (SWD edition). The SWADE Science Fiction Companion may contain updated or revised rules. Always defer to your physical rulebook at the table.</p>
-        </div>
-      </div>
+      <div class="panel" id="panel-rules"><div class="rules-ref"><h3>Walker Combat</h3><p><span class="rule-key">Compartments:</span> Large walkers (Size 10+) can never suffer more than two wounds from a single attack. The attacker still rolls Critical Hits for each wound, and a Wrecked result still destroys the mech.</p><p><span class="rule-key">Critical Hits:</span> When a mech suffers a Wrecked Critical Hit, it explodes for d6 &times; Size damage in a 10&Prime; burst radius.</p><p><span class="rule-key">Ejection:</span> On a Wrecked result, the pilot may make an Agility roll at &minus;4 to eject safely.</p><h3>Death From Above</h3><p>Opposed Piloting roll. Win: Str + d6 per 20' fallen (max 10d6). Tie/Lose: d6 per 20' fallen to self.</p><h3>Piloting</h3><p>Walkers use <span class="rule-key">Piloting</span> for all manoeuvres. Multi-Action Penalties apply as normal.</p><p class="rule-note">References the Savage Worlds Sci-Fi Companion. Always defer to your physical rulebook.</p></div></div>
     </div>
   </div>
 </div>
-
 <script>
-// ═══════════════════════════════════════════════════════════
-// WALKER DESIGN WORKSHOP — DATA & ENGINE
-// Savage Worlds Sci-Fi Companion Walker Construction Rules
-// ═══════════════════════════════════════════════════════════
-
-const CHASSIS = [
-  { id:'light',      name:'Light',       height:"20'", size:6,  pace:24, str:'d12+4',  tough:20, armor:5,  mods:20, crew:1, cost:1000000 },
-  { id:'medium',     name:'Medium',      height:"30'", size:8,  pace:18, str:'d12+6',  tough:25, armor:6,  mods:25, crew:1, cost:3000000 },
-  { id:'heavy',      name:'Heavy',       height:"40'", size:10, pace:12, str:'d12+8',  tough:30, armor:8,  mods:30, crew:1, cost:5000000 },
-  { id:'superheavy', name:'Super Heavy', height:"50'", size:12, pace:8,  str:'d12+10', tough:35, armor:8,  mods:40, crew:1, cost:10000000 },
-  { id:'titan',      name:'Titan',       height:"60'", size:14, pace:8,  str:'d12+12', tough:40, armor:9,  mods:50, crew:1, cost:20000000 },
-];
-
-const MODIFICATIONS = [
-  // DEFENSIVE
-  { id:'amcm', name:'AMCM', cat:'Defensive', maxTimes:1, modsCost:1, costMult:5000, desc:'Anti-Missile Counter Measures. Adds +2 to Piloting rolls to evade missile attacks.' },
-  { id:'armor', name:'Armor', cat:'Defensive', maxTimes:'U', modsCost:1, costMult:1000, desc:'Increases Armor value by +2 each time taken.' },
-  { id:'armor_heavy', name:'Armor (Heavy)', cat:'Defensive', maxTimes:'U', modsCost:2, costMult:5000, desc:'Adds +6 Front, +4 Sides, +2 Rear (or +4 all around). Only Heavy Weapons cause damage.' },
-  { id:'deflector', name:'Deflector Screens', cat:'Defensive', maxTimes:1, modsCost:1, costMult:5000, desc:'Attackers subtract -2 from Shooting rolls with ballistic weapons (no effect vs. lasers).' },
-  { id:'reinforced', name:'Reinforced Frame', cat:'Defensive', maxTimes:3, modsCost:1, costMult:1000, desc:'Increases base Toughness of the chassis by +2.' },
-  { id:'shields', name:'Shields', cat:'Defensive', maxTimes:3, modsCost:2, costMult:25000, desc:'Ablative energy field absorbs 10×Size damage. Detonates missiles for half damage. Regenerates Size points per round if no attacks made.' },
-  { id:'sloped', name:'Sloped Armor', cat:'Defensive', maxTimes:1, modsCost:2, costMult:3000, desc:'Attackers subtract -2 to hit with direct-fire non-energy weapons.' },
-  { id:'stealth', name:'Stealth System', cat:'Defensive', maxTimes:1, modsCost:2, costMult:10000, desc:'Subtract 4 from rolls to attack or spot. Negated when firing weapons or emitting signals.' },
-
-  // MOBILITY
-  { id:'jump_jets', name:'Jump Jets', cat:'Mobility', maxTimes:1, modsCost:2, costMult:5000, desc:'The walker can leap vertically up to 20\' per Size. Uses Piloting; cumulative -2 per round airborne.' },
-  { id:'pace', name:'Pace', cat:'Mobility', maxTimes:3, modsCost:1, costMult:5000, desc:'Increases Pace by +4. Cannot be taken with Speed Reduction.' },
-  { id:'speed_red', name:'Speed Reduction', cat:'Mobility', maxTimes:3, modsCost:0, costMult:0, desc:'Subtract 4 from Pace to gain half Size in Mod slots. Cannot be taken with Pace.' },
-
-  // SYSTEMS
-  { id:'ai', name:'Artificial Intelligence', cat:'Systems', maxTimes:1, modsCost:1, costMult:5000, desc:'AI operates all systems at d10 (Extra, no Wild Die). No multi-action penalties. Acts on pilot\'s card.' },
-  { id:'sensor', name:'Sensor Suite', cat:'Systems', maxTimes:1, modsCost:1, costMult:5000, desc:'Medium Sensor Suite. +2 to Notice rolls within range, can detect stealth.' },
-  { id:'targeting', name:'Targeting System', cat:'Systems', maxTimes:1, modsCost:1, costMult:5000, desc:'Negates up to 4 points of Shooting penalties from movement, range, and multi-actions.' },
-  { id:'em_shield', name:'Electromagnetic Shielding', cat:'Systems', maxTimes:'U', modsCost:2, costMult:5000, desc:'Adds +6 to effective Toughness vs. EMP weapons.' },
-
-  // CREW & UTILITY
-  { id:'ccw', name:'Close Combat Weapon', cat:'Crew & Utility', maxTimes:'U', modsCost:1, costMult:1000, desc:'Grants Str+d8 melee damage. Additional purchases add more weapons (dual wielding, etc.).' },
-  { id:'crew_space', name:'Crew Space', cat:'Crew & Utility', maxTimes:'U', modsCost:1, costMult:1000, desc:'Additional space for four crew or passengers.' },
-  { id:'passenger', name:'Passenger Compartment', cat:'Crew & Utility', maxTimes:'U', modsCost:1, costMult:1000, desc:'Cramped space for four passengers. Often used in rescue mechs.' },
-  { id:'crew_red', name:'Crew Reduction', cat:'Crew & Utility', maxTimes:'U', modsCost:-1, costMult:0, desc:'Gain 1 Mod slot for every 4 crewman deducted (round up). Requires remaining crew ≥ 1.' },
-];
-
-const WEAPONS = [
-  { id:'minigun', name:'Minigun', range:'24/48/96', damage:'2d8+4', rof:4, shots:1000, mods:1, cost:10000, notes:'AP 3, HW' },
-  { id:'medium_mg', name:'Medium MG', range:'30/60/120', damage:'2d8+1', rof:4, shots:200, mods:2, cost:3000, notes:'AP 2' },
-  { id:'heavy_mg', name:'Heavy MG', range:'50/100/200', damage:'2d10', rof:3, shots:200, mods:2, cost:5000, notes:'AP 4, HW' },
-  { id:'light_ac', name:'Light Auto-Cannon', range:'50/100/200', damage:'2d12', rof:3, shots:200, mods:3, cost:25000, notes:'AP 4, HW' },
-  { id:'medium_ac', name:'Medium Auto-Cannon', range:'50/100/200', damage:'3d8', rof:3, shots:100, mods:3, cost:50000, notes:'AP 6, HW' },
-  { id:'heavy_ac', name:'Heavy Auto-Cannon', range:'75/150/300', damage:'3d10', rof:3, shots:100, mods:4, cost:100000, notes:'AP 8, HW' },
-  { id:'light_laser', name:'Light Laser', range:'50/100/200', damage:'3d6', rof:1, shots:'∞', mods:2, cost:50000, notes:'AP 2, HW' },
-  { id:'medium_laser', name:'Medium Laser', range:'75/150/300', damage:'3d8', rof:1, shots:'∞', mods:3, cost:100000, notes:'AP 4, HW' },
-  { id:'heavy_laser', name:'Heavy Laser', range:'100/200/400', damage:'3d10', rof:1, shots:'∞', mods:4, cost:200000, notes:'AP 6, HW' },
-  { id:'light_rail', name:'Light Rail Gun', range:'50/100/200', damage:'3d8', rof:1, shots:20, mods:2, cost:50000, notes:'AP 8, HW' },
-  { id:'medium_rail', name:'Medium Rail Gun', range:'75/150/300', damage:'3d10', rof:1, shots:20, mods:3, cost:100000, notes:'AP 10, HW' },
-  { id:'heavy_rail', name:'Heavy Rail Gun', range:'100/200/400', damage:'4d8', rof:1, shots:20, mods:4, cost:200000, notes:'AP 12, HW' },
-  { id:'light_cannon', name:'Light Cannon', range:'50/100/200', damage:'3d8', rof:1, shots:30, mods:2, cost:25000, notes:'AP 4, HW' },
-  { id:'heavy_cannon', name:'Heavy Cannon', range:'75/150/300', damage:'3d10', rof:1, shots:30, mods:4, cost:100000, notes:'AP 6, HW' },
-  { id:'super_cannon', name:'Super Heavy Cannon', range:'100/200/400', damage:'4d10', rof:1, shots:20, mods:5, cost:200000, notes:'AP 8, HW' },
-  { id:'missile_launcher', name:'Missile Launcher', range:'—', damage:'—', rof:'—', shots:'—', mods:1, cost:50000, notes:'Carries up to 4 Light or 2 Heavy missiles. See missiles for damage.' },
-  { id:'flamethrower', name:'Flamethrower', range:'Cone', damage:'3d8', rof:1, shots:10, mods:2, cost:25000, notes:'Ignores Armor. Cone template.' },
-];
-
-// ── STATE ──
-let state = {
-  name: 'Untitled Walker',
-  chassisId: 'light',
-  mods: {},       // { modId: count }
-  weapons: [],    // [{ type:'standard'|'fixed'|'linked', weaponId, linked:number, fixed:bool, missiles:[] }]
-  savedWalkers: []
+// ═══ AUDIO ENGINE ═══
+var AudioEngine = {
+  ctx: null,
+  init: function() { 
+    if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); 
+    if (this.ctx.state === 'suspended') this.ctx.resume(); 
+  },
+  clunk: function() {
+    this.init(); var c = this.ctx; if (c.state === 'suspended') c.resume(); var n = c.currentTime;
+    // Short noise tap — very brief, filtered high for a click character
+    var buf = c.createBuffer(1, c.sampleRate * 0.02, c.sampleRate);
+    var d = buf.getChannelData(0);
+    for (var i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 12);
+    var ns = c.createBufferSource(); ns.buffer = buf;
+    var bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 4200; bp.Q.value = 2;
+    // Soft metallic ring — higher pitch, fast decay
+    var o1 = c.createOscillator(); o1.type = 'sine'; o1.frequency.value = 820;
+    var g1 = c.createGain(); g1.gain.setValueAtTime(0.06, n); g1.gain.exponentialRampToValueAtTime(0.001, n + 0.06);
+    // Gentle overtone
+    var o2 = c.createOscillator(); o2.type = 'sine'; o2.frequency.value = 2200;
+    var g2 = c.createGain(); g2.gain.setValueAtTime(0.02, n); g2.gain.exponentialRampToValueAtTime(0.001, n + 0.03);
+    var m = c.createGain(); m.gain.value = 0.3;
+    ns.connect(bp).connect(m); o1.connect(g1).connect(m); o2.connect(g2).connect(m);
+    m.connect(c.destination);
+    ns.start(n); ns.stop(n + 0.02); o1.start(n); o1.stop(n + 0.08); o2.start(n); o2.stop(n + 0.05);
+  },
+  click: function() {
+    this.init(); var c = this.ctx; if (c.state === 'suspended') c.resume(); var n = c.currentTime;
+    var o = c.createOscillator(); o.type = 'sine'; o.frequency.value = 600;
+    var g = c.createGain(); g.gain.setValueAtTime(0.08, n); g.gain.exponentialRampToValueAtTime(0.001, n + 0.04);
+    o.connect(g).connect(c.destination); o.start(n); o.stop(n + 0.05);
+  },
+  remove: function() {
+    this.init(); var c = this.ctx; if (c.state === 'suspended') c.resume(); var n = c.currentTime;
+    var o = c.createOscillator(); o.type = 'triangle';
+    o.frequency.setValueAtTime(500, n); o.frequency.exponentialRampToValueAtTime(200, n + 0.1);
+    var g = c.createGain(); g.gain.setValueAtTime(0.1, n); g.gain.exponentialRampToValueAtTime(0.001, n + 0.12);
+    o.connect(g).connect(c.destination); o.start(n); o.stop(n + 0.15);
+  }
 };
 
-// ── INIT ──
-function init() {
-  loadSaved();
-  renderChassis();
-  renderMods();
-  renderStats();
-  renderSaved();
-  renderWeapons();
-  renderOutput();
-  document.getElementById('walkerName').addEventListener('input', e => {
-    state.name = e.target.value || 'Untitled Walker';
-  });
+// ═══ DATA ═══
+var CHASSIS = [
+  {id:'light',name:'Light',height:"20'",size:6,pace:24,str:'d12+4',tough:20,armor:5,mods:20,crew:1,cost:1000000},
+  {id:'medium',name:'Medium',height:"30'",size:8,pace:18,str:'d12+6',tough:25,armor:6,mods:25,crew:1,cost:3000000},
+  {id:'heavy',name:'Heavy',height:"40'",size:10,pace:12,str:'d12+8',tough:30,armor:8,mods:30,crew:1,cost:5000000},
+  {id:'superheavy',name:'Super Heavy',height:"50'",size:12,pace:8,str:'d12+10',tough:35,armor:8,mods:40,crew:1,cost:10000000},
+  {id:'titan',name:'Titan',height:"60'",size:14,pace:8,str:'d12+12',tough:40,armor:9,mods:50,crew:1,cost:20000000}
+];
+
+var MODIFICATIONS = [
+  {id:'amcm',name:'AMCM',cat:'Defensive',maxTimes:1,modsCost:1,costMult:5000,desc:'+2 Piloting vs. missiles.'},
+  {id:'armor',name:'Armor',cat:'Defensive',maxTimes:'U',modsCost:1,costMult:1000,desc:'+2 Armor value.'},
+  {id:'armor_heavy',name:'Armor (Heavy)',cat:'Defensive',maxTimes:'U',modsCost:2,costMult:5000,desc:'+6 Front / +4 Sides / +2 Rear. HW only.'},
+  {id:'deflector',name:'Deflector Screens',cat:'Defensive',maxTimes:1,modsCost:1,costMult:5000,desc:'Attackers -2 Shooting (ballistics).'},
+  {id:'reinforced',name:'Reinforced Frame',cat:'Defensive',maxTimes:3,modsCost:1,costMult:1000,desc:'+2 base Toughness.'},
+  {id:'shields',name:'Shields',cat:'Defensive',maxTimes:3,modsCost:2,costMult:25000,desc:'Absorbs 10 x Size damage. Regen Size/round.'},
+  {id:'sloped',name:'Sloped Armor',cat:'Defensive',maxTimes:1,modsCost:2,costMult:3000,desc:'-2 to hit with non-energy weapons.'},
+  {id:'stealth',name:'Stealth System',cat:'Defensive',maxTimes:1,modsCost:2,costMult:10000,desc:'-4 to spot/attack. Negated when firing.'},
+  {id:'jump_jets',name:'Jump Jets',cat:'Mobility',maxTimes:1,modsCost:2,costMult:5000,desc:"Leap 20' per Size. Piloting -2/round."},
+  {id:'pace',name:'Pace',cat:'Mobility',maxTimes:3,modsCost:1,costMult:5000,desc:'+4 Pace. Conflicts with Speed Reduction.'},
+  {id:'speed_red',name:'Speed Reduction',cat:'Mobility',maxTimes:3,modsCost:0,costMult:0,desc:'-4 Pace, gain half-Size mod slots.'},
+  {id:'ai',name:'Artificial Intelligence',cat:'Systems',maxTimes:1,modsCost:1,costMult:5000,desc:'AI d10, no multi-action penalties.'},
+  {id:'sensor',name:'Sensor Suite',cat:'Systems',maxTimes:1,modsCost:1,costMult:5000,desc:'+2 Notice within range.'},
+  {id:'targeting',name:'Targeting System',cat:'Systems',maxTimes:1,modsCost:1,costMult:5000,desc:'Negates up to 4 Shooting penalties.'},
+  {id:'em_shield',name:'EM Shielding',cat:'Systems',maxTimes:'U',modsCost:2,costMult:5000,desc:'+6 Toughness vs. EMP.'},
+  {id:'ccw',name:'Close Combat Weapon',cat:'Utility',maxTimes:'U',modsCost:1,costMult:1000,desc:'Str+d8 melee.'},
+  {id:'crew_space',name:'Crew Space',cat:'Utility',maxTimes:'U',modsCost:1,costMult:1000,desc:'+4 crew/passengers.'},
+  {id:'passenger',name:'Passenger Compartment',cat:'Utility',maxTimes:'U',modsCost:1,costMult:1000,desc:'Cramped space for 4.'},
+  {id:'crew_red',name:'Crew Reduction',cat:'Utility',maxTimes:'U',modsCost:-1,costMult:0,desc:'+1 mod per 4 crew removed. Min 1.'}
+];
+
+var WEAPONS = [
+  {id:'minigun',name:'Minigun',range:'24/48/96',damage:'2d8+4',rof:4,shots:1000,mods:1,cost:10000,notes:'AP 3, HW'},
+  {id:'medium_mg',name:'Medium MG',range:'30/60/120',damage:'2d8+1',rof:4,shots:200,mods:2,cost:3000,notes:'AP 2'},
+  {id:'heavy_mg',name:'Heavy MG',range:'50/100/200',damage:'2d10',rof:3,shots:200,mods:2,cost:5000,notes:'AP 4, HW'},
+  {id:'light_ac',name:'Light Auto-Cannon',range:'50/100/200',damage:'2d12',rof:3,shots:200,mods:3,cost:25000,notes:'AP 4, HW'},
+  {id:'medium_ac',name:'Medium Auto-Cannon',range:'50/100/200',damage:'3d8',rof:3,shots:100,mods:3,cost:50000,notes:'AP 6, HW'},
+  {id:'heavy_ac',name:'Heavy Auto-Cannon',range:'75/150/300',damage:'3d10',rof:3,shots:100,mods:4,cost:100000,notes:'AP 8, HW'},
+  {id:'light_laser',name:'Light Laser',range:'50/100/200',damage:'3d6',rof:1,shots:'Inf',mods:2,cost:50000,notes:'AP 2, HW'},
+  {id:'medium_laser',name:'Medium Laser',range:'75/150/300',damage:'3d8',rof:1,shots:'Inf',mods:3,cost:100000,notes:'AP 4, HW'},
+  {id:'heavy_laser',name:'Heavy Laser',range:'100/200/400',damage:'3d10',rof:1,shots:'Inf',mods:4,cost:200000,notes:'AP 6, HW'},
+  {id:'light_rail',name:'Light Rail Gun',range:'50/100/200',damage:'3d8',rof:1,shots:20,mods:2,cost:50000,notes:'AP 8, HW'},
+  {id:'medium_rail',name:'Medium Rail Gun',range:'75/150/300',damage:'3d10',rof:1,shots:20,mods:3,cost:100000,notes:'AP 10, HW'},
+  {id:'heavy_rail',name:'Heavy Rail Gun',range:'100/200/400',damage:'4d8',rof:1,shots:20,mods:4,cost:200000,notes:'AP 12, HW'},
+  {id:'light_cannon',name:'Light Cannon',range:'50/100/200',damage:'3d8',rof:1,shots:30,mods:2,cost:25000,notes:'AP 4, HW'},
+  {id:'heavy_cannon',name:'Heavy Cannon',range:'75/150/300',damage:'3d10',rof:1,shots:30,mods:4,cost:100000,notes:'AP 6, HW'},
+  {id:'super_cannon',name:'Super Heavy Cannon',range:'100/200/400',damage:'4d10',rof:1,shots:20,mods:5,cost:200000,notes:'AP 8, HW'},
+  {id:'missile_launcher',name:'Missile Launcher',range:'--',damage:'--',rof:'--',shots:'--',mods:1,cost:50000,notes:'4 Light or 2 Heavy missiles.'},
+  {id:'flamethrower',name:'Flamethrower',range:'Cone',damage:'3d8',rof:1,shots:10,mods:2,cost:25000,notes:'Ignores Armor. Cone.'}
+];
+
+// ═══ STATE ═══
+var state = {name:'Untitled Walker', chassisId:'light', mods:{}, weapons:[], currentMount:'standard', savedWalkers:[]};
+var dragState = {active:false, type:null, id:null, ghost:null};
+
+// ═══ DRAG & DROP (mouse + touch) ═══
+function getXY(e) {
+  if (e.touches && e.touches.length) return {x: e.touches[0].clientX, y: e.touches[0].clientY};
+  if (e.changedTouches && e.changedTouches.length) return {x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY};
+  return {x: e.clientX, y: e.clientY};
 }
 
-// ── CHASSIS ──
-function renderChassis() {
-  const grid = document.getElementById('chassisGrid');
-  grid.innerHTML = CHASSIS.map(c => `
-    <div class="chassis-btn ${c.id === state.chassisId ? 'active' : ''}" onclick="selectChassis('${c.id}')">
-      <span>${c.name}</span>
-      <span class="chassis-size">Size ${c.size} &middot; ${c.height}</span>
-    </div>
-  `).join('');
+function startDrag(e, type, id, label) {
+  e.preventDefault(); AudioEngine.init();
+  var pt = getXY(e);
+  dragState = {active:true, type:type, id:id, ghost:null};
+  var ghost = document.createElement('div');
+  ghost.className = 'drag-ghost'; ghost.textContent = label;
+  ghost.style.left = pt.x + 'px'; ghost.style.top = pt.y + 'px';
+  document.body.appendChild(ghost); dragState.ghost = ghost;
+  var src = e.target.closest('.drag-item') || e.target.closest('.weapon-drag-item');
+  if (src) src.classList.add('dragging');
+  document.addEventListener('mousemove', onDragMove);
+  document.addEventListener('mouseup', onDragEnd);
+  document.addEventListener('touchmove', onDragMove, {passive: false});
+  document.addEventListener('touchend', onDragEnd);
+  document.addEventListener('touchcancel', onDragEnd);
 }
 
-function selectChassis(id) {
-  state.chassisId = id;
-  state.mods = {};
-  state.weapons = [];
-  renderChassis();
-  renderMods();
-  renderStats();
-  renderWeapons();
-  renderOutput();
-}
-
-function getChassis() {
-  return CHASSIS.find(c => c.id === state.chassisId);
-}
-
-// ── MODIFICATIONS ──
-function renderMods() {
-  const panel = document.getElementById('panel-mods');
-  const cats = {};
-  MODIFICATIONS.forEach(m => {
-    if (!cats[m.cat]) cats[m.cat] = [];
-    cats[m.cat].push(m);
-  });
-
-  let html = '';
-  for (const cat in cats) {
-    html += `<div class="mod-category"><div class="mod-category-header">${cat}</div>`;
-    cats[cat].forEach(m => {
-      const count = state.mods[m.id] || 0;
-      const max = m.maxTimes === 'U' ? 99 : m.maxTimes;
-      const chassis = getChassis();
-      const modCost = getModCostForMod(m, count);
-      const priceCost = getMonetaryCostForMod(m, chassis);
-      html += `
-        <div class="mod-row ${count > 0 ? 'installed' : ''}">
-          <div class="mod-controls">
-            <button onclick="modDec('${m.id}')" ${count <= 0 ? 'style="opacity:0.3"' : ''}>−</button>
-            <span class="count">${count}</span>
-            <button onclick="modInc('${m.id}')" ${count >= max ? 'style="opacity:0.3"' : ''}>+</button>
-          </div>
-          <div class="mod-info">
-            <div class="mod-name">${m.name} <span style="color:var(--text-dim);font-size:11px;font-weight:400">(${m.maxTimes === 'U' ? '∞' : m.maxTimes})</span></div>
-            <div class="mod-desc">${m.desc}</div>
-          </div>
-          <div class="mod-cost">
-            <div class="mod-mods">${m.modsCost > 0 ? m.modsCost+' mod'+(m.modsCost>1?'s':'') : m.modsCost < 0 ? '+1 mod' : '0 mods'}</div>
-            <div class="mod-price">${priceCost > 0 ? '$'+formatNum(priceCost) : 'Free'}</div>
-          </div>
-        </div>`;
-    });
-    html += '</div>';
+function onDragMove(e) {
+  if (!dragState.active || !dragState.ghost) return;
+  if (e.cancelable) e.preventDefault();
+  var pt = getXY(e);
+  var bayId = dragState.type === 'mod' ? 'modBay' : 'weaponBay';
+  var bay = document.getElementById(bayId);
+  var gx = pt.x, gy = pt.y;
+  if (bay) {
+    var r = bay.getBoundingClientRect();
+    var inside = gx >= r.left && gx <= r.right && gy >= r.top && gy <= r.bottom;
+    var near = gx >= r.left - 80 && gx <= r.right + 80 && gy >= r.top - 80 && gy <= r.bottom + 80;
+    bay.classList.toggle('drag-over', inside);
+    dragState.ghost.classList.toggle('near-target', near && !inside);
+    // Magnetic pull
+    if (near && !inside) {
+      var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      gx += (cx - gx) * 0.08; gy += (cy - gy) * 0.08;
+    }
   }
-  panel.innerHTML = html;
+  dragState.ghost.style.left = gx + 'px'; dragState.ghost.style.top = gy + 'px';
 }
 
-function getModCostForMod(m) { return m.modsCost; }
-function getMonetaryCostForMod(m, chassis) { return m.costMult * chassis.size; }
+function onDragEnd(e) {
+  document.removeEventListener('mousemove', onDragMove);
+  document.removeEventListener('mouseup', onDragEnd);
+  document.removeEventListener('touchmove', onDragMove);
+  document.removeEventListener('touchend', onDragEnd);
+  document.removeEventListener('touchcancel', onDragEnd);
+  if (dragState.ghost) dragState.ghost.remove();
+  document.querySelectorAll('.dragging').forEach(function(el) { el.classList.remove('dragging'); });
+  var pt = getXY(e);
+  var bayId = dragState.type === 'mod' ? 'modBay' : 'weaponBay';
+  var bay = document.getElementById(bayId);
+  if (bay) {
+    var r = bay.getBoundingClientRect();
+    if (pt.x >= r.left && pt.x <= r.right && pt.y >= r.top && pt.y <= r.bottom) {
+      if (dragState.type === 'mod') dropMod(dragState.id);
+      else if (dragState.type === 'weapon') dropWeapon(dragState.id);
+      bay.classList.remove('impact'); void bay.offsetWidth; bay.classList.add('impact');
+    }
+    bay.classList.remove('drag-over');
+  }
+  dragState = {active:false, type:null, id:null, ghost:null};
+}
 
-function modInc(id) {
-  const m = MODIFICATIONS.find(x => x.id === id);
-  const max = m.maxTimes === 'U' ? 99 : m.maxTimes;
-  const cur = state.mods[id] || 0;
-  // Check speed conflicts
+function dropMod(id) {
+  var m = MODIFICATIONS.find(function(x) { return x.id === id; });
+  var max = m.maxTimes === 'U' ? 99 : m.maxTimes;
+  var cur = state.mods[id] || 0;
   if (id === 'pace' && (state.mods['speed_red'] || 0) > 0) return;
   if (id === 'speed_red' && (state.mods['pace'] || 0) > 0) return;
-  if (cur < max) {
-    state.mods[id] = cur + 1;
-    renderMods(); renderStats(); renderOutput();
-  }
+  if (cur < max) { state.mods[id] = cur + 1; AudioEngine.clunk(); renderModBay(id); renderStats(); renderOutput(); }
 }
 
-function modDec(id) {
-  const cur = state.mods[id] || 0;
-  if (cur > 0) {
-    state.mods[id] = cur - 1;
-    if (state.mods[id] === 0) delete state.mods[id];
-    renderMods(); renderStats(); renderOutput();
-  }
+function dropWeapon(id) {
+  state.weapons.push({type: state.currentMount, weaponId: id, linked: state.currentMount === 'linked' ? 2 : 1});
+  AudioEngine.clunk(); renderWeaponBay(id); renderStats(); renderOutput();
 }
 
-// ── WEAPONS ──
-function renderWeapons() {
-  ['standard','fixed','linked'].forEach(type => {
-    const container = document.getElementById(type === 'standard' ? 'standardWeapons' : type === 'fixed' ? 'fixedWeapons' : 'linkedWeapons');
-    const slots = state.weapons.filter(w => w.type === type);
-    if (slots.length === 0) {
-      container.innerHTML = '<div class="empty-state"><p>No ' + type + ' weapons installed.</p></div>';
-      return;
-    }
-    container.innerHTML = slots.map((w, i) => {
-      const globalIdx = state.weapons.indexOf(w);
-      const weapon = WEAPONS.find(x => x.id === w.weaponId);
-      let linkOpts = '';
-      if (type === 'linked') {
-        linkOpts = `<div class="weapon-opt"><label>Linked ×</label><select onchange="updateWeaponLink(${globalIdx}, this.value)">
-          <option value="2" ${w.linked===2?'selected':''}>2 (Dual)</option>
-          <option value="3" ${w.linked===3?'selected':''}>3 (Triple)</option>
-          <option value="4" ${w.linked===4?'selected':''}>4 (Quad)</option>
-        </select></div>`;
-      }
-      return `
-        <div class="weapon-slot">
-          <div class="weapon-slot-header">
-            <span class="weapon-slot-title">${type === 'linked' ? 'Linked Group' : type === 'fixed' ? 'Fixed Mount' : 'Standard Mount'} #${i+1}</span>
-            <button class="remove-btn" onclick="removeWeapon(${globalIdx})">Remove</button>
-          </div>
-          <select class="weapon-select" onchange="updateWeaponType(${globalIdx}, this.value)">
-            <option value="">— Select Weapon —</option>
-            ${WEAPONS.map(wp => `<option value="${wp.id}" ${wp.id===w.weaponId?'selected':''}>${wp.name} (${wp.range}, ${wp.damage}, Mods: ${wp.mods})</option>`).join('')}
-          </select>
-          <div class="weapon-options">
-            ${linkOpts}
-            ${weapon ? `<span style="font-size:12px;color:var(--text-dim)">Mods: <strong style="color:var(--accent)">${getWeaponModCost(w)}</strong> &middot; Cost: <strong style="color:var(--accent)">$${formatNum(weapon.cost * (w.linked||1))}</strong> &middot; ${weapon.notes}</span>` : ''}
-          </div>
-        </div>`;
-    }).join('');
-  });
+// ═══ INIT ═══
+function getChassis() { return CHASSIS.find(function(c) { return c.id === state.chassisId; }); }
+
+function init() {
+  loadSaved(); renderChassis(); renderModCatalogue(); renderModBay();
+  renderWeaponCatalogue(); renderWeaponBay(); renderStats(); renderSaved(); renderOutput();
+  document.getElementById('walkerName').addEventListener('input', function(e) { state.name = e.target.value || 'Untitled Walker'; });
 }
 
-function addWeaponSlot(type) {
-  state.weapons.push({ type, weaponId:'', linked: type === 'linked' ? 2 : 1 });
-  renderWeapons(); renderStats(); renderOutput();
-}
-
-function removeWeapon(idx) {
-  state.weapons.splice(idx, 1);
-  renderWeapons(); renderStats(); renderOutput();
-}
-
-function updateWeaponType(idx, weaponId) {
-  state.weapons[idx].weaponId = weaponId;
-  renderWeapons(); renderStats(); renderOutput();
-}
-
-function updateWeaponLink(idx, val) {
-  state.weapons[idx].linked = parseInt(val);
-  renderWeapons(); renderStats(); renderOutput();
-}
-
-function getWeaponModCost(w) {
-  if (!w.weaponId) return 0;
-  const weapon = WEAPONS.find(x => x.id === w.weaponId);
-  if (!weapon) return 0;
-  let baseMods = weapon.mods * (w.linked || 1);
-  // Linked: halve total mods (round up)
-  if (w.type === 'linked') baseMods = Math.ceil(baseMods / 2);
-  // Fixed: halve mods (round up)
-  if (w.type === 'fixed') baseMods = Math.ceil(baseMods / 2);
-  return baseMods;
-}
-
-// ── CALCULATIONS ──
-function calcTotalModsUsed() {
-  let total = 0;
-  for (const id in state.mods) {
-    const m = MODIFICATIONS.find(x => x.id === id);
-    if (m.modsCost > 0) total += m.modsCost * state.mods[id];
-  }
-  state.weapons.forEach(w => { total += getWeaponModCost(w); });
-  return total;
-}
-
-function calcModsGained() {
-  let gained = 0;
-  if (state.mods['crew_red']) gained += state.mods['crew_red'];
-  if (state.mods['speed_red']) {
-    const chassis = getChassis();
-    gained += Math.floor(chassis.size / 2) * state.mods['speed_red'];
-  }
-  return gained;
-}
-
-function calcPace() {
-  const chassis = getChassis();
-  let pace = chassis.pace;
-  if (state.mods['pace']) pace += 4 * state.mods['pace'];
-  if (state.mods['speed_red']) pace -= 4 * state.mods['speed_red'];
-  return Math.max(0, pace);
-}
-
-function calcToughness() {
-  const chassis = getChassis();
-  let tough = chassis.tough;
-  if (state.mods['reinforced']) tough += 2 * state.mods['reinforced'];
-  return tough;
-}
-
-function calcArmor() {
-  const chassis = getChassis();
-  let armor = chassis.armor;
-  if (state.mods['armor']) armor += 2 * state.mods['armor'];
-  // Heavy armor — we note it in output rather than adding here
-  return armor;
-}
-
-function calcHeavyArmor() {
-  if (!state.mods['armor_heavy']) return null;
-  const count = state.mods['armor_heavy'];
-  return { front: 6*count, side: 4*count, rear: 2*count, allAround: 4*count };
-}
-
-function calcCrew() {
-  const chassis = getChassis();
-  let crew = chassis.crew;
-  if (state.mods['crew_space']) crew += 4 * state.mods['crew_space'];
-  if (state.mods['passenger']) crew += 4 * state.mods['passenger'];
-  if (state.mods['crew_red']) crew -= 4 * state.mods['crew_red'];
-  return Math.max(1, crew);
-}
-
-function calcTotalCost() {
-  const chassis = getChassis();
-  let cost = chassis.cost;
-  for (const id in state.mods) {
-    const m = MODIFICATIONS.find(x => x.id === id);
-    cost += m.costMult * chassis.size * state.mods[id];
-  }
-  state.weapons.forEach(w => {
-    if (w.weaponId) {
-      const weapon = WEAPONS.find(x => x.id === w.weaponId);
-      cost += weapon.cost * (w.linked || 1);
-    }
-  });
-  return cost;
-}
-
-// ── RENDER STATS ──
-function renderStats() {
-  const chassis = getChassis();
-  const modsUsed = calcTotalModsUsed();
-  const modsGained = calcModsGained();
-  const modsTotal = chassis.mods + modsGained;
-  const modsLeft = modsTotal - modsUsed;
-  const pace = calcPace();
-  const tough = calcToughness();
-  const armor = calcArmor();
-  const crew = calcCrew();
-  const cost = calcTotalCost();
-
-  document.getElementById('statsGrid').innerHTML = `
-    <div class="stat-box"><div class="stat-label">Size</div><div class="stat-value">${chassis.size}</div></div>
-    <div class="stat-box"><div class="stat-label">Pace</div><div class="stat-value">${pace}</div></div>
-    <div class="stat-box"><div class="stat-label">Strength</div><div class="stat-value">${chassis.str}</div></div>
-    <div class="stat-box"><div class="stat-label">Toughness</div><div class="stat-value">${tough} (${armor})</div></div>
-    <div class="stat-box"><div class="stat-label">Crew</div><div class="stat-value">${crew}</div></div>
-    <div class="stat-box"><div class="stat-label">Mods Used</div><div class="stat-value ${modsUsed > modsTotal ? 'danger' : ''}">${modsUsed}/${modsTotal}</div></div>
-  `;
-
-  const modsEl = document.getElementById('modsRemaining');
-  let cls = 'ok';
-  if (modsLeft <= 3 && modsLeft > 0) cls = 'low';
-  if (modsLeft < 0) cls = 'over';
-  modsEl.innerHTML = `<div class="big-num ${cls}">${modsLeft}</div><div class="sub">Mods Remaining</div>`;
-
-  document.getElementById('costDisplay').innerHTML = `<div class="cost-val">$${formatCost(cost)}</div><div class="cost-label">Total Cost</div>`;
-}
-
-// ── STAT BLOCK OUTPUT ──
-function renderOutput() {
-  const panel = document.getElementById('panel-output');
-  const chassis = getChassis();
-  const pace = calcPace();
-  const tough = calcToughness();
-  const armor = calcArmor();
-  const crew = calcCrew();
-  const cost = calcTotalCost();
-  const modsUsed = calcTotalModsUsed();
-  const modsGained = calcModsGained();
-  const modsLeft = (chassis.mods + modsGained) - modsUsed;
-
-  // Build notes list
-  const notes = [];
-  const modOrder = ['ai','amcm','armor','armor_heavy','ccw','crew_red','crew_space','deflector','em_shield','jump_jets','pace','passenger','reinforced','sensor','shields','sloped','speed_red','stealth','targeting'];
-  modOrder.forEach(id => {
-    if (state.mods[id] && state.mods[id] > 0) {
-      const m = MODIFICATIONS.find(x => x.id === id);
-      const ct = state.mods[id];
-      const name = m.name;
-      notes.push(ct > 1 ? `${ct}×${name}` : name);
-    }
-  });
-
-  // Build weapons list
-  const weaponLines = [];
-  state.weapons.forEach(w => {
-    if (!w.weaponId) return;
-    const weapon = WEAPONS.find(x => x.id === w.weaponId);
-    let prefix = '';
-    if (w.type === 'linked') {
-      const labels = {2:'Dual Linked',3:'Triple Linked',4:'Quad Linked'};
-      prefix = (labels[w.linked] || 'Linked') + ' ';
-    }
-    if (w.type === 'fixed') prefix = 'Fixed ';
-    weaponLines.push(`${prefix}${weapon.name}`);
-  });
-
-  // Heavy armor display
-  const ha = calcHeavyArmor();
-  let toughDisplay = `${tough} (${armor})`;
-  if (ha) {
-    const frontTotal = tough + ha.front;
-    const sideTotal = tough + ha.side;
-    const rearTotal = tough + ha.rear;
-    toughDisplay = `${frontTotal}/${sideTotal}/${rearTotal} (${armor + ha.front}/${armor + ha.side}/${armor + ha.rear})`;
-  }
-
-  panel.innerHTML = `
-    <div class="stat-block">
-      <div class="sb-name">${state.name || 'Untitled Walker'}</div>
-      <div class="sb-type">${chassis.name} Walker: Size ${chassis.size}, Strength ${chassis.str}, Toughness ${toughDisplay}, Pace ${pace} (2d6 Run), Cost $${formatCost(cost)}, Remaining Mods ${modsLeft}</div>
-      <hr class="sb-divider">
-      ${notes.length ? `<div class="sb-line"><span class="sb-label">Notes:</span> ${notes.join(', ')}</div>` : ''}
-      ${weaponLines.length ? `<div class="sb-line"><span class="sb-label">Weapons:</span></div>` + weaponLines.map(w => `<div class="sb-line">&nbsp;&nbsp;&bull; ${w}</div>`).join('') : '<div class="sb-line" style="color:var(--text-dim);font-style:italic">No weapons installed.</div>'}
-      <hr class="sb-divider">
-      <div class="sb-notes">
-        <span class="sb-label">Special:</span> All walkers roll 2d6 for running dice. Piloting skill for all manoeuvres.${chassis.size >= 10 ? ' <strong>Compartmentalised:</strong> Can never suffer more than two wounds from a single attack.' : ''}${state.mods['shields'] ? ' <strong>Shields:</strong> Absorb '+10*chassis.size * state.mods['shields']+' points of damage before depletion; regenerate '+chassis.size+' per round with no attacks.' : ''}${state.mods['jump_jets'] ? ' <strong>Jump Jets:</strong> Leap up to '+(20*chassis.size)+'\' vertically.' : ''}
-      </div>
-    </div>
-    <div style="margin-top:16px;">
-      <button class="header-btn" onclick="copyStatBlock()">Copy to Clipboard</button>
-    </div>
-  `;
-}
-
-function copyStatBlock() {
-  const chassis = getChassis();
-  const pace = calcPace();
-  const tough = calcToughness();
-  const armor = calcArmor();
-  const cost = calcTotalCost();
-  const modsUsed = calcTotalModsUsed();
-  const modsGained = calcModsGained();
-  const modsLeft = (chassis.mods + modsGained) - modsUsed;
-
-  const notes = [];
-  MODIFICATIONS.forEach(m => {
-    if (state.mods[m.id] && state.mods[m.id] > 0) {
-      const ct = state.mods[m.id];
-      notes.push(ct > 1 ? `${ct}×${m.name}` : m.name);
-    }
-  });
-
-  const weaponLines = [];
-  state.weapons.forEach(w => {
-    if (!w.weaponId) return;
-    const weapon = WEAPONS.find(x => x.id === w.weaponId);
-    let prefix = '';
-    if (w.type === 'linked') { prefix = {2:'Dual Linked ',3:'Triple Linked ',4:'Quad Linked '}[w.linked] || 'Linked '; }
-    if (w.type === 'fixed') prefix = 'Fixed ';
-    weaponLines.push(`• ${prefix}${weapon.name}`);
-  });
-
-  let text = `${state.name}\n`;
-  text += `${chassis.name} Walker: Size ${chassis.size}, Strength ${chassis.str}, Toughness ${tough} (${armor}), Pace ${pace} (2d6 Run), Cost $${formatCost(cost)}, Remaining Mods ${modsLeft}\n`;
-  if (notes.length) text += `Notes: ${notes.join(', ')}\n`;
-  if (weaponLines.length) text += `Weapons:\n${weaponLines.join('\n')}\n`;
-
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = event.target;
-    btn.textContent = 'Copied!';
-    btn.style.borderColor = 'var(--green)';
-    btn.style.color = 'var(--green)';
-    setTimeout(() => { btn.textContent = 'Copy to Clipboard'; btn.style.borderColor = ''; btn.style.color = ''; }, 1500);
-  });
-}
-
-function exportStatBlock() { switchTab('output'); }
-
-// ── TABS ──
-function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + tab));
-  if (tab === 'output') renderOutput();
-}
-
-// ── SAVE / LOAD ──
-function saveWalker() {
-  const data = { name: state.name, chassisId: state.chassisId, mods: {...state.mods}, weapons: state.weapons.map(w => ({...w})) };
-  const existing = state.savedWalkers.findIndex(w => w.name === state.name);
-  if (existing >= 0) state.savedWalkers[existing] = data;
-  else state.savedWalkers.push(data);
-  localStorage.setItem('diceforge-walkers', JSON.stringify(state.savedWalkers));
-  renderSaved();
-}
-
-function loadWalker(idx) {
-  const data = state.savedWalkers[idx];
-  state.name = data.name;
-  state.chassisId = data.chassisId;
-  state.mods = {...data.mods};
-  state.weapons = data.weapons.map(w => ({...w}));
-  document.getElementById('walkerName').value = state.name;
-  renderChassis(); renderMods(); renderStats(); renderWeapons(); renderOutput(); renderSaved();
-}
-
-function deleteSavedWalker(idx) {
-  state.savedWalkers.splice(idx, 1);
-  localStorage.setItem('diceforge-walkers', JSON.stringify(state.savedWalkers));
-  renderSaved();
-}
-
-function newWalker() {
-  state.name = 'Untitled Walker';
-  state.chassisId = 'light';
-  state.mods = {};
-  state.weapons = [];
-  document.getElementById('walkerName').value = state.name;
-  renderChassis(); renderMods(); renderStats(); renderWeapons(); renderOutput();
-}
-
-function loadSaved() {
-  try {
-    const data = localStorage.getItem('diceforge-walkers');
-    if (data) state.savedWalkers = JSON.parse(data);
-  } catch(e) {}
-}
-
-function renderSaved() {
-  const list = document.getElementById('savedList');
-  if (state.savedWalkers.length === 0) {
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon">⚙</div><p>No saved designs yet. Build your first walker and hit Save.</p></div>';
-    return;
-  }
-  list.innerHTML = state.savedWalkers.map((w, i) => {
-    const c = CHASSIS.find(x => x.id === w.chassisId);
-    return `<div class="saved-item ${w.name === state.name ? 'active' : ''}" onclick="loadWalker(${i})">
-      <span class="si-name">${w.name}</span>
-      <span class="si-chassis">${c ? c.name : '?'}</span>
-      <button class="si-delete" onclick="event.stopPropagation(); deleteSavedWalker(${i})">✕</button>
-    </div>`;
+function renderChassis() {
+  document.getElementById('chassisGrid').innerHTML = CHASSIS.map(function(c) {
+    return '<div class="chassis-btn ' + (c.id === state.chassisId ? 'active' : '') + '" onclick="selectChassis(\'' + c.id + '\')">'
+      + '<span>' + c.name + '</span><span class="chassis-size">Size ' + c.size + ' &middot; ' + c.height + '</span></div>';
   }).join('');
 }
 
-// ── UTILS ──
-function formatNum(n) { return n.toLocaleString(); }
-function formatCost(n) {
-  if (n >= 1000000000) return (n/1000000000).toFixed(2) + 'B';
-  if (n >= 1000000) return (n/1000000).toFixed(n % 1000000 === 0 ? 0 : 2) + 'M';
-  if (n >= 1000) return (n/1000).toFixed(n % 1000 === 0 ? 0 : 1) + 'K';
-  return n.toString();
+function selectChassis(id) {
+  state.chassisId = id; state.mods = {}; state.weapons = [];
+  renderChassis(); renderModCatalogue(); renderModBay(); renderWeaponBay(); renderStats(); renderOutput();
 }
 
-// ── BOOT ──
-// Add tool navigation
+// ═══ MOD CATALOGUE ═══
+function renderModCatalogue() {
+  var el = document.getElementById('modCatalogue'), cats = {}, ch = getChassis();
+  MODIFICATIONS.forEach(function(m) { if (!cats[m.cat]) cats[m.cat] = []; cats[m.cat].push(m); });
+  var h = '';
+  for (var cat in cats) {
+    h += '<div class="cat-header">' + cat + '</div>';
+    cats[cat].forEach(function(m) {
+      var p = m.costMult * ch.size;
+      h += '<div class="drag-item" onmousedown="startDrag(event,\'mod\',\'' + m.id + '\',\'' + m.name + '\')" ontouchstart="startDrag(event,\'mod\',\'' + m.id + '\',\'' + m.name + '\')">'
+        + '<span class="drag-handle">&#x2807;</span>'
+        + '<div class="di-info"><div class="di-name">' + m.name + '</div><div class="di-desc">' + m.desc + '</div></div>'
+        + '<div class="di-meta"><div class="di-mods">' + (m.modsCost > 0 ? m.modsCost + ' mod' + (m.modsCost > 1 ? 's' : '') : m.modsCost < 0 ? '+1 mod' : '&mdash;') + '</div>'
+        + '<div class="di-price">' + (p > 0 ? '$' + fmtN(p) : 'Free') + '</div>'
+        + '<div class="di-max">Max: ' + (m.maxTimes === 'U' ? '&infin;' : m.maxTimes) + '</div></div></div>';
+    });
+  }
+  el.innerHTML = h;
+}
+
+// ═══ MOD BAY ═══
+function renderModBay(animId) {
+  var bay = document.getElementById('modBay');
+  var inst = []; for (var k in state.mods) { if (state.mods[k] > 0) inst.push([k, state.mods[k]]); }
+  if (!inst.length) { bay.innerHTML = '<div class="empty-bay">Drag modifications here to install them</div>'; return; }
+  var ch = getChassis();
+  bay.innerHTML = inst.map(function(pair) {
+    var id = pair[0], ct = pair[1];
+    var m = MODIFICATIONS.find(function(x) { return x.id === id; });
+    var tp = m.costMult * ch.size * ct, tm = m.modsCost * ct;
+    return '<div class="bay-item ' + (id === animId ? 'snap-in' : '') + '">'
+      + '<div class="bi-info"><div class="bi-name">' + m.name + '</div>'
+      + '<div class="bi-detail">' + (tm > 0 ? tm + ' mods' : tm < 0 ? 'Grants ' + Math.abs(tm) + ' mods' : '0 mods') + ' &middot; $' + fmtN(tp) + '</div></div>'
+      + '<div class="bi-controls"><button onclick="modDec(\'' + id + '\')">&minus;</button>'
+      + '<span class="bi-count">' + ct + '</span>'
+      + '<button onclick="modInc(\'' + id + '\')">+</button></div>'
+      + '<span class="bi-remove" onclick="modRemoveAll(\'' + id + '\')" title="Remove all">&times;</span></div>';
+  }).join('');
+}
+
+function modInc(id) {
+  var m = MODIFICATIONS.find(function(x) { return x.id === id; });
+  var max = m.maxTimes === 'U' ? 99 : m.maxTimes, cur = state.mods[id] || 0;
+  if (id === 'pace' && (state.mods['speed_red'] || 0) > 0) return;
+  if (id === 'speed_red' && (state.mods['pace'] || 0) > 0) return;
+  if (cur < max) { state.mods[id] = cur + 1; AudioEngine.click(); renderModBay(); renderStats(); renderOutput(); }
+}
+function modDec(id) {
+  var cur = state.mods[id] || 0;
+  if (cur > 0) { state.mods[id] = cur - 1; if (!state.mods[id]) delete state.mods[id]; AudioEngine.click(); renderModBay(); renderStats(); renderOutput(); }
+}
+function modRemoveAll(id) { delete state.mods[id]; AudioEngine.remove(); renderModBay(); renderStats(); renderOutput(); }
+
+// ═══ WEAPON CATALOGUE ═══
+function renderWeaponCatalogue() {
+  document.getElementById('weaponCatalogue').innerHTML = WEAPONS.map(function(w) {
+    return '<div class="weapon-drag-item" onmousedown="startDrag(event,\'weapon\',\'' + w.id + '\',\'' + w.name + '\')" ontouchstart="startDrag(event,\'weapon\',\'' + w.id + '\',\'' + w.name + '\')">'
+      + '<span class="drag-handle" style="color:var(--text-dim);font-size:14px;opacity:.4">&#x2807;</span>'
+      + '<div class="wdi-info"><div class="wdi-name">' + w.name + '</div>'
+      + '<div class="wdi-stats">' + w.range + ' &middot; ' + w.damage + ' &middot; RoF ' + w.rof + ' &middot; ' + w.notes + '</div></div>'
+      + '<div class="wdi-meta"><div class="wdi-mods">' + w.mods + ' mod' + (w.mods > 1 ? 's' : '') + '</div>'
+      + '<div class="wdi-price">$' + fmtN(w.cost) + '</div></div></div>';
+  }).join('');
+}
+
+// ═══ WEAPON BAY ═══
+function renderWeaponBay(animId) {
+  var bay = document.getElementById('weaponBay');
+  if (!state.weapons.length) { bay.innerHTML = '<div class="empty-bay">Drag weapons here to mount them</div>'; return; }
+  bay.innerHTML = state.weapons.map(function(w, i) {
+    var wp = WEAPONS.find(function(x) { return x.id === w.weaponId; }); if (!wp) return '';
+    var isNew = w.weaponId === animId && i === state.weapons.length - 1;
+    var mc = getWeaponModCost(w);
+    var ml = w.type === 'linked' ? 'Linked' : w.type === 'fixed' ? 'Fixed' : 'Standard';
+    var ls = '';
+    if (w.type === 'linked') {
+      ls = '<select onchange="updateWeaponLink(' + i + ',this.value)">'
+        + '<option value="2"' + (w.linked === 2 ? ' selected' : '') + '>&times;2 Dual</option>'
+        + '<option value="3"' + (w.linked === 3 ? ' selected' : '') + '>&times;3 Triple</option>'
+        + '<option value="4"' + (w.linked === 4 ? ' selected' : '') + '>&times;4 Quad</option></select>';
+    }
+    return '<div class="weapon-bay-item ' + (isNew ? 'snap-in' : '') + '">'
+      + '<div class="wbi-info"><div class="wbi-name">' + wp.name + '</div>'
+      + '<div class="wbi-stats">' + wp.range + ' &middot; ' + wp.damage + ' &middot; ' + wp.notes + '</div>'
+      + '<div class="wbi-mount">' + ml + ' mount &middot; ' + mc + ' mods &middot; $' + fmtN(wp.cost * (w.linked || 1)) + '</div></div>'
+      + ls + '<span class="wbi-remove" onclick="removeWeapon(' + i + ')">&times;</span></div>';
+  }).join('');
+}
+
+function switchMount(m) { state.currentMount = m; document.querySelectorAll('.mount-tab').forEach(function(t) { t.classList.toggle('active', t.dataset.mount === m); }); }
+function removeWeapon(i) { state.weapons.splice(i, 1); AudioEngine.remove(); renderWeaponBay(); renderStats(); renderOutput(); }
+function updateWeaponLink(i, v) { state.weapons[i].linked = parseInt(v); AudioEngine.click(); renderWeaponBay(); renderStats(); renderOutput(); }
+
+function getWeaponModCost(w) {
+  if (!w.weaponId) return 0;
+  var wp = WEAPONS.find(function(x) { return x.id === w.weaponId; }); if (!wp) return 0;
+  var b = wp.mods * (w.linked || 1);
+  if (w.type === 'linked') b = Math.ceil(b / 2);
+  if (w.type === 'fixed') b = Math.ceil(b / 2);
+  return b;
+}
+
+// ═══ CALCULATIONS ═══
+function calcTotalModsUsed() {
+  var t = 0;
+  for (var id in state.mods) { var m = MODIFICATIONS.find(function(x) { return x.id === id; }); if (m.modsCost > 0) t += m.modsCost * state.mods[id]; }
+  state.weapons.forEach(function(w) { t += getWeaponModCost(w); });
+  return t;
+}
+function calcModsGained() {
+  var g = 0;
+  if (state.mods['crew_red']) g += state.mods['crew_red'];
+  if (state.mods['speed_red']) g += Math.floor(getChassis().size / 2) * state.mods['speed_red'];
+  return g;
+}
+function calcPace() { var c = getChassis(), p = c.pace; if (state.mods['pace']) p += 4 * state.mods['pace']; if (state.mods['speed_red']) p -= 4 * state.mods['speed_red']; return Math.max(0, p); }
+function calcToughness() { var c = getChassis(), t = c.tough; if (state.mods['reinforced']) t += 2 * state.mods['reinforced']; return t; }
+function calcArmor() { var c = getChassis(), a = c.armor; if (state.mods['armor']) a += 2 * state.mods['armor']; return a; }
+function calcHeavyArmor() { if (!state.mods['armor_heavy']) return null; var n = state.mods['armor_heavy']; return {front: 6*n, side: 4*n, rear: 2*n}; }
+function calcCrew() { var c = getChassis(), cr = c.crew; if (state.mods['crew_space']) cr += 4 * state.mods['crew_space']; if (state.mods['passenger']) cr += 4 * state.mods['passenger']; if (state.mods['crew_red']) cr -= 4 * state.mods['crew_red']; return Math.max(1, cr); }
+function calcTotalCost() {
+  var c = getChassis(), cost = c.cost;
+  for (var id in state.mods) { var m = MODIFICATIONS.find(function(x) { return x.id === id; }); cost += m.costMult * c.size * state.mods[id]; }
+  state.weapons.forEach(function(w) { if (w.weaponId) { var wp = WEAPONS.find(function(x) { return x.id === w.weaponId; }); cost += wp.cost * (w.linked || 1); } });
+  return cost;
+}
+
+// ═══ RENDER STATS ═══
+function renderStats() {
+  var c = getChassis(), used = calcTotalModsUsed(), gained = calcModsGained(), total = c.mods + gained, left = total - used;
+  document.getElementById('statsGrid').innerHTML =
+    '<div class="stat-box"><div class="stat-label">Size</div><div class="stat-value">' + c.size + '</div></div>'
+    + '<div class="stat-box"><div class="stat-label">Pace</div><div class="stat-value">' + calcPace() + '</div></div>'
+    + '<div class="stat-box"><div class="stat-label">Strength</div><div class="stat-value">' + c.str + '</div></div>'
+    + '<div class="stat-box"><div class="stat-label">Toughness</div><div class="stat-value">' + calcToughness() + ' (' + calcArmor() + ')</div></div>'
+    + '<div class="stat-box"><div class="stat-label">Crew</div><div class="stat-value">' + calcCrew() + '</div></div>'
+    + '<div class="stat-box"><div class="stat-label">Mods Used</div><div class="stat-value ' + (used > total ? 'danger' : '') + '">' + used + '/' + total + '</div></div>';
+  var cls = 'ok'; if (left <= 3 && left > 0) cls = 'low'; if (left < 0) cls = 'over';
+  document.getElementById('modsRemaining').innerHTML = '<div class="big-num ' + cls + '">' + left + '</div><div class="sub">Mods Remaining</div>';
+  document.getElementById('costDisplay').innerHTML = '<div class="cost-val">$' + fmtC(calcTotalCost()) + '</div><div class="cost-label">Total Cost</div>';
+}
+
+// ═══ STAT BLOCK OUTPUT ═══
+function renderOutput() {
+  var p = document.getElementById('panel-output'), c = getChassis();
+  var tough = calcToughness(), armor = calcArmor(), pace = calcPace(), cost = calcTotalCost();
+  var used = calcTotalModsUsed(), gained = calcModsGained(), left = (c.mods + gained) - used;
+  var notes = [];
+  var order = ['ai','amcm','armor','armor_heavy','ccw','crew_red','crew_space','deflector','em_shield','jump_jets','pace','passenger','reinforced','sensor','shields','sloped','speed_red','stealth','targeting'];
+  order.forEach(function(id) {
+    if (state.mods[id] > 0) {
+      var m = MODIFICATIONS.find(function(x) { return x.id === id; });
+      notes.push(state.mods[id] > 1 ? state.mods[id] + '&times;' + m.name : m.name);
+    }
+  });
+  var wl = [];
+  state.weapons.forEach(function(w) {
+    if (!w.weaponId) return;
+    var wp = WEAPONS.find(function(x) { return x.id === w.weaponId; });
+    var pr = '';
+    if (w.type === 'linked') pr = {2:'Dual Linked ',3:'Triple Linked ',4:'Quad Linked '}[w.linked] || '';
+    if (w.type === 'fixed') pr = 'Fixed ';
+    wl.push(pr + wp.name);
+  });
+  var ha = calcHeavyArmor();
+  var td = tough + ' (' + armor + ')';
+  if (ha) td = (tough+ha.front)+'/'+(tough+ha.side)+'/'+(tough+ha.rear)+' ('+(armor+ha.front)+'/'+(armor+ha.side)+'/'+(armor+ha.rear)+')';
+
+  p.innerHTML = '<div class="stat-block">'
+    + '<div class="sb-name">' + (state.name || 'Untitled Walker') + '</div>'
+    + '<div class="sb-type">' + c.name + ' Walker: Size ' + c.size + ', Str ' + c.str + ', Toughness ' + td + ', Pace ' + pace + ' (2d6 Run), Cost $' + fmtC(cost) + ', Remaining Mods ' + left + '</div>'
+    + '<hr class="sb-divider">'
+    + (notes.length ? '<div class="sb-line"><span class="sb-label">Notes:</span> ' + notes.join(', ') + '</div>' : '')
+    + (wl.length ? '<div class="sb-line"><span class="sb-label">Weapons:</span></div>' + wl.map(function(w) { return '<div class="sb-line">&nbsp;&nbsp;&bull; ' + w + '</div>'; }).join('') : '<div class="sb-line" style="color:var(--text-dim);font-style:italic">No weapons installed.</div>')
+    + '<hr class="sb-divider">'
+    + '<div class="sb-notes"><span class="sb-label">Special:</span> 2d6 running dice. Piloting for all manoeuvres.'
+    + (c.size >= 10 ? ' <strong>Compartmentalised:</strong> Max 2 wounds from a single attack.' : '')
+    + (state.mods['shields'] ? ' <strong>Shields:</strong> Absorb ' + (10 * c.size * state.mods['shields']) + ' damage; regen ' + c.size + '/round.' : '')
+    + (state.mods['jump_jets'] ? " <strong>Jump Jets:</strong> Leap up to " + (20 * c.size) + "'." : '')
+    + '</div></div>'
+    + '<div style="margin-top:16px"><button class="header-btn" onclick="copyStatBlock()">Copy to Clipboard</button></div>';
+}
+
+function copyStatBlock() {
+  var c = getChassis(), notes = [], wl = [];
+  MODIFICATIONS.forEach(function(m) { if (state.mods[m.id] > 0) notes.push(state.mods[m.id] > 1 ? state.mods[m.id] + 'x' + m.name : m.name); });
+  state.weapons.forEach(function(w) {
+    if (!w.weaponId) return; var wp = WEAPONS.find(function(x) { return x.id === w.weaponId; });
+    var p = ''; if (w.type === 'linked') p = {2:'Dual Linked ',3:'Triple Linked ',4:'Quad Linked '}[w.linked] || '';
+    if (w.type === 'fixed') p = 'Fixed '; wl.push('  * ' + p + wp.name);
+  });
+  var used = calcTotalModsUsed(), gained = calcModsGained(), left = (c.mods + gained) - used;
+  var t = state.name + '\n' + c.name + ' Walker: Size ' + c.size + ', Str ' + c.str + ', Toughness ' + calcToughness() + ' (' + calcArmor() + '), Pace ' + calcPace() + ' (2d6 Run), Cost $' + fmtC(calcTotalCost()) + ', Remaining Mods ' + left + '\n';
+  if (notes.length) t += 'Notes: ' + notes.join(', ') + '\n';
+  if (wl.length) t += 'Weapons:\n' + wl.join('\n') + '\n';
+  navigator.clipboard.writeText(t).then(function() {
+    var btn = event.target; btn.textContent = 'Copied!'; btn.style.borderColor = 'var(--green)'; btn.style.color = 'var(--green)';
+    setTimeout(function() { btn.textContent = 'Copy to Clipboard'; btn.style.borderColor = ''; btn.style.color = ''; }, 1500);
+  });
+}
+
+// ═══ TABS ═══
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.toggle('active', t.dataset.tab === tab); });
+  document.querySelectorAll('.panel').forEach(function(p) { p.classList.toggle('active', p.id === 'panel-' + tab); });
+  if (tab === 'output') renderOutput();
+}
+
+// ═══ SAVE / LOAD ═══
+function saveWalker() {
+  var d = {name: state.name, chassisId: state.chassisId, mods: JSON.parse(JSON.stringify(state.mods)), weapons: JSON.parse(JSON.stringify(state.weapons))};
+  var i = state.savedWalkers.findIndex(function(w) { return w.name === state.name; });
+  if (i >= 0) state.savedWalkers[i] = d; else state.savedWalkers.push(d);
+  localStorage.setItem('diceforge-walkers', JSON.stringify(state.savedWalkers)); renderSaved();
+}
+function loadWalker(i) {
+  var d = state.savedWalkers[i]; state.name = d.name; state.chassisId = d.chassisId;
+  state.mods = JSON.parse(JSON.stringify(d.mods)); state.weapons = JSON.parse(JSON.stringify(d.weapons));
+  document.getElementById('walkerName').value = state.name;
+  renderChassis(); renderModCatalogue(); renderModBay(); renderWeaponBay(); renderStats(); renderOutput(); renderSaved();
+}
+function deleteSavedWalker(i) { state.savedWalkers.splice(i, 1); localStorage.setItem('diceforge-walkers', JSON.stringify(state.savedWalkers)); renderSaved(); }
+function newWalker() {
+  state.name = 'Untitled Walker'; state.chassisId = 'light'; state.mods = {}; state.weapons = [];
+  document.getElementById('walkerName').value = state.name;
+  renderChassis(); renderModCatalogue(); renderModBay(); renderWeaponBay(); renderStats(); renderOutput();
+}
+function loadSaved() { try { var d = localStorage.getItem('diceforge-walkers'); if (d) state.savedWalkers = JSON.parse(d); } catch(e) {} }
+
+function renderSaved() {
+  var list = document.getElementById('savedList');
+  if (!state.savedWalkers.length) { list.innerHTML = '<div class="empty-state"><p>No saved designs yet.</p></div>'; return; }
+  list.innerHTML = state.savedWalkers.map(function(w, i) {
+    var c = CHASSIS.find(function(x) { return x.id === w.chassisId; });
+    return '<div class="saved-item" onclick="loadWalker(' + i + ')"><span class="si-name">' + w.name + '</span><span class="si-chassis">' + (c ? c.name : '?') + '</span><button class="si-delete" onclick="event.stopPropagation(); deleteSavedWalker(' + i + ')">&times;</button></div>';
+  }).join('');
+}
+
+// ═══ UTILS ═══
+function fmtN(n) { return n.toLocaleString(); }
+function fmtC(n) { if (n >= 1e9) return (n/1e9).toFixed(2)+'B'; if (n >= 1e6) return (n/1e6).toFixed(n%1e6===0?0:2)+'M'; if (n >= 1e3) return (n/1e3).toFixed(n%1e3===0?0:1)+'K'; return n.toString(); }
+
+// ═══ NAV BAR ═══
 (function() {
-  const container = document.getElementById('toolNavContainer');
-  const tools = [
-    { id: 'foundry', label: '🏭 The Foundry', url: 'foundry' },
-    { id: 'adventure-vault', label: '🎭 Adventure Vault', url: 'adventure-vault' },
-    { id: 'character-vault', label: '👤 Character Vault', url: 'character-vault' },
-    { id: 'walker-workshop', label: '⚙ Walker Workshop', url: 'walker-workshop' }
+  var tools = [
+    {id:'foundry',label:'🏭 The Foundry',url:'foundry'},
+    {id:'adventure-vault',label:'🎭 Adventure Vault',url:'adventure-vault'},
+    {id:'character-vault',label:'👤 Character Vault',url:'character-vault'},
+    {id:'walker-workshop',label:'⚙ Walker Workshop',url:'walker-workshop'}
   ];
-  const nav = document.createElement('div');
-  nav.className = 'tool-nav';
-  tools.forEach(t => {
-    const btn = document.createElement('button');
+  var nav = document.createElement('div'); nav.className = 'tool-nav';
+  tools.forEach(function(t) {
+    var btn = document.createElement('button');
     btn.className = 'tool-nav-item' + (t.id === 'walker-workshop' ? ' active' : '');
     btn.textContent = t.label;
-    btn.onclick = () => { if (t.id !== 'walker-workshop') window.location.href = t.url; };
+    btn.onclick = function() { if (t.id !== 'walker-workshop') window.location.href = t.url; };
     nav.appendChild(btn);
   });
-  container.appendChild(nav);
+  document.getElementById('toolNavContainer').appendChild(nav);
+})();
+
+// ═══ BOOT ═══
+// iOS Safari requires AudioContext created AND resumed inside a direct user gesture.
+// We unlock on the very first interaction, then re-unlock inside every clunk/click/remove as belt-and-braces.
+var audioUnlocked = false;
+(function() {
+  function unlockAudio() {
+    if (audioUnlocked) return;
+    AudioEngine.init();
+    var c = AudioEngine.ctx;
+    if (c.state === 'suspended') c.resume();
+    // Play silent buffer — iOS requires actual audio output in a gesture to unlock
+    var buf = c.createBuffer(1, 1, c.sampleRate);
+    var src = c.createBufferSource();
+    src.buffer = buf; src.connect(c.destination); src.start(0);
+    audioUnlocked = true;
+    document.removeEventListener('touchstart', unlockAudio, true);
+    document.removeEventListener('touchend', unlockAudio, true);
+    document.removeEventListener('mousedown', unlockAudio, true);
+    document.removeEventListener('click', unlockAudio, true);
+  }
+  // touchend is the most reliable gesture event on iOS Safari
+  document.addEventListener('touchstart', unlockAudio, true);
+  document.addEventListener('touchend', unlockAudio, true);
+  document.addEventListener('mousedown', unlockAudio, true);
+  document.addEventListener('click', unlockAudio, true);
 })();
 init();
 </script>
