@@ -364,6 +364,7 @@ function calcCost(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.
   for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});cost+=m.costFn(S.size)*S.mods[id]}
   S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp)cost+=wp.cost});return cost}
 function isWalker(){return S.loco==='legs_biped'||S.loco==='legs_quad'}
+function walkerStr(){return 'd12+'+S.size}
 function isHeavyArmor(){return S.size>=4||isWalker()}
 // ═══ DRAG-DROP ENGINE ═══
 function getXY(e){if(e.touches&&e.touches.length)return{x:e.touches[0].clientX,y:e.touches[0].clientY};if(e.changedTouches&&e.changedTouches.length)return{x:e.changedTouches[0].clientX,y:e.changedTouches[0].clientY};return{x:e.clientX,y:e.clientY}}
@@ -494,6 +495,7 @@ function renderStats(){var f=getFrame(S.size),used=calcModsUsed(),gained=calcMod
     +'<div class="stat-box"><div class="stat-label">Handling</div><div class="stat-value">'+(calcHand()>=0?'+':'')+calcHand()+'</div></div>'
     +'<div class="stat-box"><div class="stat-label">Top Speed</div><div class="stat-value">'+spd+' ('+speedMPH(spd)+' MPH)</div></div>'
     +'<div class="stat-box"><div class="stat-label">Crew</div><div class="stat-value">'+f.crew+'</div></div>'
+    +(isWalker()?'<div class="stat-box"><div class="stat-label">Strength</div><div class="stat-value" style="color:var(--accent)">'+walkerStr()+'</div></div>':'')
     +'<div class="stat-box"><div class="stat-label">Energy</div><div class="stat-value">'+calcEnergy()+' days</div></div>';
   var cls=left<0?'over':left<=2?'low':'ok';
   document.getElementById('modsRemaining').innerHTML='<div class="big-num '+cls+'">'+left+'</div><div class="sub">Mods Remaining</div>';
@@ -509,7 +511,7 @@ function renderOutput(){var p=document.getElementById('panel-output'),f=getFrame
   var special=[];
   if(isHeavyArmor())special.push('Heavy Armor');
   if(loco)special.push(loco.name+': '+loco.notes);
-  if(isWalker())special.push('Piloting skill. Parry 2 + ½ Piloting + Handling. Fighting = lower of Piloting/Fighting. Always armed (Str damage, HW).');
+  if(isWalker())special.push('Piloting skill. Parry 2 + ½ Piloting + Handling. Fighting = lower of Piloting/Fighting. Always armed (Str '+walkerStr()+' damage, HW).');
   if(S.mods.shields)special.push('Shields: '+Math.floor(calcWounds()/2)+' charges, Soak with Electronics.');
   if(S.mods.reactor)special.push('Reactor: Energy ×10. Locomotion Crit on odd die = explosion.');
   if(S.mods.stabilizer)special.push('Stabilizer: No Unstable Platform penalty.');
@@ -522,6 +524,7 @@ function renderOutput(){var p=document.getElementById('panel-output'),f=getFrame
     +'<div class="sb-line"><span class="sb-label">Toughness:</span> '+calcTough()+' ('+calcArmor()+')</div>'
     +'<div class="sb-line"><span class="sb-label">Wounds:</span> '+calcWounds()+'</div>'
     +'<div class="sb-line"><span class="sb-label">Crew:</span> '+f.crew+'</div>'
+    +(isWalker()?'<div class="sb-line"><span class="sb-label">Strength:</span> '+walkerStr()+'</div>':'')
     +'<div class="sb-line"><span class="sb-label">Energy:</span> '+calcEnergy()+' days</div>'
     +'<div class="sb-line"><span class="sb-label">Cost:</span> $'+fmtC(calcCost())+', Mods '+left+' remaining</div>'
     +'<hr class="sb-divider">'
@@ -536,7 +539,7 @@ function copyBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l
   var notes=[],wl=[];
   MODS.forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'x '+m.name:m.name)});
   S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed':w.mount==='turret'?'Turret':'Pintle';wl.push('  * '+wp.name+' ('+ml+'): '+wp.range+', '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof)}});
-  var t=S.name+'\nSize '+S.size+' ('+f.cat+'), '+loco.name+', Hand '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)\nTough '+calcTough()+' ('+calcArmor()+'), Wounds '+calcWounds()+', Crew '+f.crew+'\nEnergy '+calcEnergy()+' days, Cost $'+fmtC(calcCost())+', Mods '+left+' remaining\n';
+  var t=S.name+'\nSize '+S.size+' ('+f.cat+'), '+loco.name+', Hand '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)\nTough '+calcTough()+' ('+calcArmor()+'), Wounds '+calcWounds()+', Crew '+f.crew+(isWalker()?', Str '+walkerStr():'')+'\nEnergy '+calcEnergy()+' days, Cost $'+fmtC(calcCost())+', Mods '+left+' remaining\n';
   if(notes.length)t+='Mods: '+notes.join(', ')+'.\n';if(wl.length)t+='Weapons:\n'+wl.join('\n')+'\n';
   if(isHeavyArmor())t+='Special: Heavy Armor.';if(isWalker())t+=' Walker rules apply.';
   navigator.clipboard.writeText(t).then(function(){var btn=event.target;btn.textContent='Copied!';btn.style.borderColor='var(--green)';btn.style.color='var(--green)';setTimeout(function(){btn.textContent='Copy to Clipboard';btn.style.borderColor='';btn.style.color=''},1500)})}
