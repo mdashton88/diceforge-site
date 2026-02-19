@@ -420,7 +420,7 @@ function calcModsGained(){var t=0;for(var id in S.mods){var m=MODS.find(function
 function calcCost(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco});
   var cost=f.costMult*S.size+(loco?loco.costMult*S.size:0);
   for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});if(m)cost+=m.costFn(S.size)*S.mods[id]}
-  S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp)cost+=wp.cost});return cost}
+  S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp)cost+=wp.cost});return Math.max(0,cost)}
 function isWalker(){return S.loco==='legs_biped'||S.loco==='legs_quad'}
 function walkerStr(){return 'd12+'+S.size}
 function isHeavyArmor(){return S.size>=4||isWalker()}
