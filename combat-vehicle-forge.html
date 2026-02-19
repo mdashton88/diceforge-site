@@ -262,6 +262,7 @@ var MODS=[
   {id:'reduced_speed',name:'Reduced Speed',cat:'Negative Qualities',max:3,mods:-2,costFn:function(s){return -10000*s},desc:'-1 Speed Rating. Can\'t combine with Increased Speed.'},
   {id:'rough_ride',name:'Rough Ride',cat:'Negative Qualities',max:1,mods:-2,costFn:function(s){return -10000*s},desc:'Unstable Platform penalty is -4 instead of -2.'},
   {id:'unsafe',name:'Unsafe',cat:'Negative Qualities',max:1,mods:-2,costFn:function(s){return -10000*s},desc:'Full collision damage. No safety measures. Eject at -2.'},
+  {id:'lightweight',name:'Lightweight Construction',cat:'Negative Qualities',max:3,mods:-1,costFn:function(s){return -8000*s},desc:'Reduce base Toughness by 2 per take. Plywood, canvas, aluminium, fibreglass. For large vehicles that are long but lightly built.'},
   // CORE SYSTEMS
   {id:'ai',name:'Artificial Intelligence',cat:'Core Systems',max:3,mods:1,costFn:function(s){return 5000*s},desc:'AI ally: d6 + Wild Die. 2nd: d10. 3rd: ignore 2 MAP.'},
   {id:'av_system',name:'AV System',cat:'Core Systems',max:1,mods:1,costFn:function(){return 10000},desc:'50× magnification, -4 Illumination, +2 Notice. +2 hearing 200 yds.'},
@@ -422,7 +423,7 @@ document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key
 function modSlots(m,sz){if(m.mods==='half')return Math.ceil(sz/2);if(m.mods==='halfneg')return -Math.ceil(sz/2);if(m.mods==='size')return sz;return m.mods}
 function weaponMountMods(w,mount){var mc=w.mods;if(mount==='fixed')mc=Math.ceil(mc/2);if(mount==='turret')mc=mc*2;return mc}
 function maxArmorTakes(){var f=getFrame(S.size);return Math.floor((f.maxArmor-f.baseTough)/2)}
-function calcTough(){var f=getFrame(S.size),t=f.baseTough;if(S.mods.battered)t-=2*S.mods.battered;if(S.mods.toughness)t+=S.mods.toughness;return Math.max(0,t)}
+function calcTough(){var f=getFrame(S.size),t=f.baseTough;if(S.mods.battered)t-=2*S.mods.battered;if(S.mods.lightweight)t-=2*S.mods.lightweight;if(S.mods.toughness)t+=S.mods.toughness;return Math.max(0,t)}
 function calcArmor(){var f=getFrame(S.size),a=f.baseTough;if(S.mods.armor)a+=2*S.mods.armor;if(S.mods.composite_armor)a+=4*S.mods.composite_armor;a+=S.armourTech;return Math.min(a,f.maxArmor+S.armourTech)}
 function calcWounds(){var f=getFrame(S.size),w=f.wounds;if(S.mods.fragile)w-=S.mods.fragile;return Math.max(1,w)}
 function calcHand(){var f=getFrame(S.size),h=f.hand;if(S.mods.handling)h+=S.mods.handling;if(S.mods.reduced_hand)h-=S.mods.reduced_hand;return h}
