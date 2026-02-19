@@ -159,6 +159,16 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
       <div class="loco-grid" id="locoGrid"></div>
     </div>
     <div class="sidebar-section">
+      <h3>Armour Technology</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+        <div class="loco-btn" id="at0" onclick="setAT(0)">Standard<span class="loco-speed">+0</span></div>
+        <div class="loco-btn" id="at1" onclick="setAT(4)">Superior<span class="loco-speed">+4</span></div>
+        <div class="loco-btn" id="at2" onclick="setAT(8)">Advanced<span class="loco-speed">+8</span></div>
+        <div class="loco-btn" id="at3" onclick="setAT(12)">Exotic<span class="loco-speed">+12</span></div>
+      </div>
+      <div id="atDesc" style="font-size:11px;color:var(--text-dim);font-style:italic;margin-top:6px;line-height:1.3"></div>
+    </div>
+    <div class="sidebar-section">
       <h3>Statistics</h3>
       <div id="statsGrid" class="stats-grid"></div>
       <div id="modsRemaining" class="mods-remaining"></div>
@@ -399,7 +409,7 @@ try{var cw=localStorage.getItem('diceforge-cvf-custom-weapons');if(cw)customWeap
 function getAllWeapons(){return WEAPONS.concat(customWeapons)}
 
 // ═══ STATE ═══
-var S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:[]};
+var S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:[],armourTech:0};
 // ═══ UNDO/REDO ENGINE ═══
 var undoStack=[],redoStack=[],maxUndo=50;
 function snapState(){return{mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons)),size:S.size,loco:S.loco}}
@@ -413,7 +423,7 @@ function modSlots(m,sz){if(m.mods==='half')return Math.ceil(sz/2);if(m.mods==='h
 function weaponMountMods(w,mount){var mc=w.mods;if(mount==='fixed')mc=Math.ceil(mc/2);if(mount==='turret')mc=mc*2;return mc}
 function maxArmorTakes(){var f=getFrame(S.size);return Math.floor((f.maxArmor-f.baseTough)/2)}
 function calcTough(){var f=getFrame(S.size),t=f.baseTough;if(S.mods.battered)t-=2*S.mods.battered;if(S.mods.toughness)t+=S.mods.toughness;return Math.max(0,t)}
-function calcArmor(){var f=getFrame(S.size),a=f.baseTough;if(S.mods.armor)a+=2*S.mods.armor;if(S.mods.composite_armor)a+=4*S.mods.composite_armor;return Math.min(a,f.maxArmor)}
+function calcArmor(){var f=getFrame(S.size),a=f.baseTough;if(S.mods.armor)a+=2*S.mods.armor;if(S.mods.composite_armor)a+=4*S.mods.composite_armor;a+=S.armourTech;return Math.min(a,f.maxArmor+S.armourTech)}
 function calcWounds(){var f=getFrame(S.size),w=f.wounds;if(S.mods.fragile)w-=S.mods.fragile;return Math.max(1,w)}
 function calcHand(){var f=getFrame(S.size),h=f.hand;if(S.mods.handling)h+=S.mods.handling;if(S.mods.reduced_hand)h-=S.mods.reduced_hand;return h}
 function calcSpeed(){var loco=LOCOS.find(function(l){return l.id===S.loco});var s=loco?loco.speed:5;if(S.mods.inc_speed)s+=S.mods.inc_speed;if(S.mods.reduced_speed)s-=S.mods.reduced_speed;if(S.mods.high_perf_engine)s+=2*S.mods.high_perf_engine;return Math.max(1,s)}
@@ -425,7 +435,9 @@ function calcModsGained(){var t=0;for(var id in S.mods){var m=MODS.find(function
 function calcCost(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco});
   var cost=f.costMult*S.size+(loco?loco.costMult*S.size:0);
   for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});if(m)cost+=m.costFn(S.size)*S.mods[id]}
-  S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp)cost+=wp.cost});return Math.max(0,cost)}
+  S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp)cost+=wp.cost});
+  var atInfo=AT_INFO[S.armourTech]||AT_INFO[0];if(atInfo.cost>1)cost=cost*atInfo.cost;
+  return Math.max(0,cost)}
 function isWalker(){return S.loco==='legs_biped'||S.loco==='legs_quad'}
 function walkerStr(){return 'd12+'+S.size}
 function isHeavyArmor(){return S.size>=4||isWalker()}
@@ -446,12 +458,12 @@ function clearImage(){S.image='';document.getElementById('imgInput').value='';sh
 
 // ═══ IMPORT/EXPORT ═══
 function exportJSON(){var data={version:'1.0',tool:'DiceForge Combat Vehicle Forge',exported:new Date().toISOString(),
-  vehicle:{name:S.name,desc:S.desc,notes:S.notes,image:S.image,size:S.size,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons))}};
+  vehicle:{name:S.name,desc:S.desc,notes:S.notes,image:S.image,size:S.size,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons)),armourTech:S.armourTech}};
   var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);
   var a=document.createElement('a');a.href=url;a.download=(S.name||'vehicle').replace(/[^a-zA-Z0-9_-]/g,'_')+'.cvf.json';a.click();URL.revokeObjectURL(url)}
 function importJSON(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){
   try{var data=JSON.parse(ev.target.result);
-    if(data.vehicle){var v=data.vehicle;S.name=v.name||'Imported Vehicle';S.desc=v.desc||'';S.notes=v.notes||'';S.image=v.image||'';S.size=v.size||6;S.loco=v.loco||'wheeled';S.mods=v.mods||{};S.weapons=v.weapons||[];
+    if(data.vehicle){var v=data.vehicle;S.name=v.name||'Imported Vehicle';S.desc=v.desc||'';S.notes=v.notes||'';S.image=v.image||'';S.size=v.size||6;S.loco=v.loco||'wheeled';S.mods=v.mods||{};S.weapons=v.weapons||[];S.armourTech=v.armourTech||0;
       document.getElementById('vName').value=S.name;document.getElementById('vDesc').value=S.desc;document.getElementById('vNotes').value=S.notes;document.getElementById('sizeSlider').value=S.size;
       showImage();renderAll();Audio.clunk()}
     else alert('Invalid .cvf.json file.')}catch(err){alert('Error reading file: '+err.message)}};reader.readAsText(file);e.target.value=''}
@@ -473,6 +485,14 @@ function dropWeapon(id){var w=getAllWeapons().find(function(x){return x.id===id}
 function renderLocoGrid(){var el=document.getElementById('locoGrid');
   el.innerHTML=LOCOS.map(function(l){return '<div class="loco-btn'+(S.loco===l.id?' active':'')+'" onclick="setLoco(\''+l.id+'\')"><span>'+l.name+'</span><span class="loco-speed">Spd '+l.speed+'</span></div>'}).join('')}
 function setLoco(id){S.loco=id;Audio.click();renderLocoGrid();renderStats();renderOutput();renderModCatalogue()}
+var AT_INFO={0:{name:'Standard',desc:'Baseline armour for the era. Rolled steel, iron plate, wooden hull, hide over frame. No bonus.',cost:0},4:{name:'Superior',desc:'One generation ahead of baseline. Late-war sloped welded steel, hardened alloys, early composites. +4 Armour. Cost ×2.',cost:2},8:{name:'Advanced',desc:'Two generations ahead. Chobham composite, depleted uranium layers, reactive armour packages. Modern MBTs, advanced sci-fi. +8 Armour. Cost ×4.',cost:4},12:{name:'Exotic',desc:'Three generations ahead. Alien alloys, magical wards, phased materials, energy-bonded plating. +12 Armour. Cost ×8.',cost:8}};
+function setAT(v){S.armourTech=v;Audio.click();renderAT();renderStats();renderOutput()}
+function renderAT(){var info=AT_INFO[S.armourTech]||AT_INFO[0];
+  document.getElementById('at0').classList.toggle('active',S.armourTech===0);
+  document.getElementById('at1').classList.toggle('active',S.armourTech===4);
+  document.getElementById('at2').classList.toggle('active',S.armourTech===8);
+  document.getElementById('at3').classList.toggle('active',S.armourTech===12);
+  document.getElementById('atDesc').innerHTML=info.desc}
 function setSize(sz){S.size=sz;S.mods={};S.weapons=[];document.getElementById('sizeVal').textContent=sz;document.getElementById('sizeClass').textContent=getFrame(sz).cat;renderFrameInfo();renderLocoGrid();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderStats();renderOutput()}
 function renderFrameInfo(){var f=getFrame(S.size);var ref=SIZE_REF[S.size]||{len:'?',ex:'—',wt:'?'};
   document.getElementById('sizeVal').textContent=S.size;document.getElementById('sizeClass').textContent=f.cat;
@@ -605,6 +625,7 @@ function renderOutput(){var p=document.getElementById('outputContent'),f=getFram
   if(S.mods.targeting)special.push('Targeting: -2 Shooting penalties.');
   if(S.mods.submersible)special.push('Submersible'+(S.mods.submersible>1?' (Deep Dive)':'')+': Submerge as action. -4 to detect when submerged.');
   if(S.mods.composite_armor)special.push('Composite Armour: Advanced armour composition.');
+  if(S.armourTech>0){var ati=AT_INFO[S.armourTech];special.push(ati.name+' Armour Technology: +'+S.armourTech+' Armour. Cost ×'+ati.cost+'.'); }
   if(S.mods.road_vehicle)special.push('Road Vehicle: Speed '+calcRoadSpeed()+' ('+speedMPH(calcRoadSpeed())+' MPH) on paved roads.');
   if(S.mods.high_perf_engine)special.push('High-Performance Engine'+(S.mods.high_perf_engine>1?' ×'+S.mods.high_perf_engine:'')+': Halve Energy per take.');
 
@@ -778,7 +799,7 @@ function filterHelp(){var q=(document.getElementById('helpSearch').value||'').to
 
 // ═══ TABS, SAVE/LOAD, UTILS ═══
 function switchTab(tab){document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===tab)});document.querySelectorAll('.panel').forEach(function(p){p.classList.toggle('active',p.id==='panel-'+tab)});if(tab==='output')renderOutput()}
-function newVehicle(){S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:S.saved};document.getElementById('vName').value=S.name;document.getElementById('vDesc').value='';document.getElementById('vNotes').value='';document.getElementById('sizeSlider').value=6;clearImage();undoStack=[];redoStack=[];renderAll()}
+function newVehicle(){S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:S.saved,armourTech:0};document.getElementById('vName').value=S.name;document.getElementById('vDesc').value='';document.getElementById('vNotes').value='';document.getElementById('sizeSlider').value=6;clearImage();undoStack=[];redoStack=[];renderAll()}
 function duplicateVehicle(){S.name=(S.name||'Vehicle')+' (copy)';document.getElementById('vName').value=S.name;saveVehicle();Audio.clunk()}
 function printStatBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco}),spd=calcSpeed();
   var used=calcModsUsed(),gained=calcModsGained(),left=(S.size*f.modMult+gained)-used;
@@ -791,6 +812,7 @@ function printStatBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){ret
   if(S.mods.reactor)special.push('Reactor.');if(S.mods.stabilizer)special.push('Stabilizer.');if(S.mods.targeting)special.push('Targeting System.');
   if(S.mods.submersible)special.push('Submersible'+(S.mods.submersible>1?' (Deep)':'')+'.');
   if(S.mods.composite_armor)special.push('Composite Armour.');
+  if(S.armourTech>0){var ati=AT_INFO[S.armourTech];special.push(ati.name+' Armour (+'+S.armourTech+').'); }
   if(S.mods.road_vehicle)special.push('Road Speed '+calcRoadSpeed()+' ('+speedMPH(calcRoadSpeed())+' MPH).');
   if(S.mods.high_perf_engine)special.push('High-Perf Engine'+(S.mods.high_perf_engine>1?' ×'+S.mods.high_perf_engine:'')+'. Halve Energy.');
   var imgTag=S.image?'<img src="'+S.image+'" style="max-width:100%;max-height:200px;display:block;margin:0 auto 8px">':'';
@@ -826,8 +848,8 @@ function printStatBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){ret
     +'<script>window.onload=function(){window.print()}<\/script>'
     +'</body></html>');
   win.document.close()}
-function saveVehicle(){var d={name:S.name,desc:S.desc,notes:S.notes,image:S.image,size:S.size,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons))};var i=S.saved.findIndex(function(s){return s.name===S.name});if(i>=0)S.saved[i]=d;else S.saved.push(d);localStorage.setItem('diceforge-cvf',JSON.stringify(S.saved));renderSaved();Audio.click()}
-function loadVehicle(i){var d=S.saved[i];S.name=d.name;S.desc=d.desc||'';S.notes=d.notes||'';S.image=d.image||'';S.size=d.size;S.loco=d.loco;S.mods=JSON.parse(JSON.stringify(d.mods));S.weapons=JSON.parse(JSON.stringify(d.weapons));document.getElementById('vName').value=S.name;document.getElementById('vDesc').value=S.desc;document.getElementById('vNotes').value=S.notes;document.getElementById('sizeSlider').value=S.size;showImage();renderAll()}
+function saveVehicle(){var d={name:S.name,desc:S.desc,notes:S.notes,image:S.image,size:S.size,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons)),armourTech:S.armourTech};var i=S.saved.findIndex(function(s){return s.name===S.name});if(i>=0)S.saved[i]=d;else S.saved.push(d);localStorage.setItem('diceforge-cvf',JSON.stringify(S.saved));renderSaved();Audio.click()}
+function loadVehicle(i){var d=S.saved[i];S.name=d.name;S.desc=d.desc||'';S.notes=d.notes||'';S.image=d.image||'';S.size=d.size;S.loco=d.loco;S.mods=JSON.parse(JSON.stringify(d.mods));S.weapons=JSON.parse(JSON.stringify(d.weapons));S.armourTech=d.armourTech||0;document.getElementById('vName').value=S.name;document.getElementById('vDesc').value=S.desc;document.getElementById('vNotes').value=S.notes;document.getElementById('sizeSlider').value=S.size;showImage();renderAll()}
 function deleteSaved(i){S.saved.splice(i,1);localStorage.setItem('diceforge-cvf',JSON.stringify(S.saved));renderSaved()}
 function renderSaved(){var list=document.getElementById('savedList');
   if(!S.saved.length){list.innerHTML='<div class="empty-state"><p>No saved builds yet.</p></div>';return}
@@ -835,7 +857,7 @@ function renderSaved(){var list=document.getElementById('savedList');
     return '<div class="saved-item" onclick="loadVehicle('+i+')"><span class="si-name">'+esc(s.name)+'</span><span class="si-chassis">Size '+s.size+' '+(loco?loco.name:'')+'</span><button class="si-delete" onclick="event.stopPropagation();deleteSaved('+i+')">&times;</button></div>'}).join('')}
 function fmtN(n){return n.toLocaleString()}
 function fmtC(n){if(n>=1e9)return(n/1e9).toFixed(2)+'B';if(n>=1e6)return(n/1e6).toFixed(n%1e6===0?0:2)+'M';if(n>=1e3)return(n/1e3).toFixed(n%1e3===0?0:1)+'K';return n.toString()}
-function renderAll(){renderFrameInfo();renderLocoGrid();renderEraFilter();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderStats();renderOutput();renderSaved()}
+function renderAll(){renderFrameInfo();renderLocoGrid();renderAT();renderEraFilter();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderStats();renderOutput();renderSaved()}
 
 // ═══ NAV BAR ═══
 (function(){var tools=[{id:'foundry',label:'🏭 The Foundry',url:'foundry'},{id:'adventure-vault',label:'🎭 Adventure Vault',url:'adventure-vault'},{id:'character-vault',label:'👤 Character Vault',url:'character-vault'},{id:'cvf',label:'⚙ Combat Vehicle Forge',url:'combat-vehicle-forge'},{id:'pa-forge',label:'🛡 Power Armour Forge',url:'pa-forge'}];
