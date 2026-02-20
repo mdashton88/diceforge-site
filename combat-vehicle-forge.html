@@ -151,7 +151,7 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
     </div>
     <div class="sidebar-section">
       <h3>Size &amp; Frame</h3>
-      <div class="size-picker"><span class="size-val" id="sizeVal">6</span><input type="range" id="sizeSlider" min="1" max="24" value="6" oninput="setSize(+this.value)"><span class="size-class" id="sizeClass">Large</span></div>
+      <div class="size-picker"><span class="size-val" id="sizeVal">6</span><input type="range" id="sizeSlider" min="1" max="30" value="6" oninput="setSize(+this.value)"><span class="size-class" id="sizeClass">Large</span></div>
       <div id="frameInfo"></div>
     </div>
     <div class="sidebar-section">
@@ -160,11 +160,13 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
     </div>
     <div class="sidebar-section">
       <h3>Armour Technology</h3>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
-        <div class="loco-btn" id="at0" onclick="setAT(0)">Standard<span class="loco-speed">+0</span></div>
-        <div class="loco-btn" id="at1" onclick="setAT(4)">Superior<span class="loco-speed">+4</span></div>
-        <div class="loco-btn" id="at2" onclick="setAT(8)">Advanced<span class="loco-speed">+8</span></div>
-        <div class="loco-btn" id="at3" onclick="setAT(12)">Exotic<span class="loco-speed">+12</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+        <div class="loco-btn" id="at0" onclick="setAT(0)">Primitive<span class="loco-speed">+1</span></div>
+        <div class="loco-btn" id="at1" onclick="setAT(1)">Forged<span class="loco-speed">+2</span></div>
+        <div class="loco-btn" id="at2" onclick="setAT(2)">Industrial<span class="loco-speed">+3</span></div>
+        <div class="loco-btn" id="at3" onclick="setAT(3)">Composite<span class="loco-speed">+4</span></div>
+        <div class="loco-btn" id="at4" onclick="setAT(4)">Nanoweave<span class="loco-speed">+6</span></div>
+        <div class="loco-btn" id="at5" onclick="setAT(5)">Exotic<span class="loco-speed">+8</span></div>
       </div>
       <div id="atDesc" style="font-size:11px;color:var(--text-dim);font-style:italic;margin-top:6px;line-height:1.3"></div>
     </div>
@@ -186,6 +188,7 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
         <button class="header-btn" onclick="document.getElementById('importInput').click()">Import .json</button>
         <input type="file" id="importInput" accept=".json,.cvf.json" style="display:none" onchange="importJSON(event)">
         <button class="header-btn" onclick="batchExport()" title="Export all saved vehicles as one file">Batch Export</button>
+        <button class="header-btn" onclick="showExtensionManager()" title="Install supplement extensions" style="border-color:var(--accent);color:var(--accent)">⚙ Extensions</button>
         <button class="header-btn" onclick="printAll()" title="Print all saved vehicles as stat blocks">Print All</button>
       </div>
       <div id="savedList" style="margin-top:8px"></div>
@@ -201,13 +204,29 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
     <div class="tabs">
       <div class="tab active" data-tab="mods" onclick="switchTab('mods')">Modifications</div>
       <div class="tab" data-tab="weapons" onclick="switchTab('weapons')">Weapons</div>
+      <div class="tab" data-tab="specials" onclick="switchTab('specials')">Special</div>
       <div class="tab" data-tab="output" onclick="switchTab('output')">Stat Block</div>
       <div class="tab" data-tab="help" onclick="switchTab('help')">Reference Guide</div>
     </div>
     <div class="panel active" id="panel-mods"><div class="dnd-layout"><div class="dnd-column"><h3>Modifications Catalogue</h3><input type="text" class="search-bar" id="modSearch" placeholder="Search modifications..." oninput="renderModCatalogue()"><div id="modCatalogue"></div></div><div class="dnd-column"><h3>Installed Modifications</h3><div class="drop-bay" id="modBay"><div class="empty-bay">Drag modifications here to install them</div></div></div></div></div>
     <div class="panel" id="panel-weapons"><div class="dnd-layout"><div class="dnd-column"><h3>Vehicular Weapons</h3><div id="eraFilter" style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px"></div><input type="text" class="search-bar" id="weaponSearch" placeholder="Search weapons..." oninput="renderWeaponCatalogue()"><div id="weaponCatalogue"></div><div style="margin-top:12px;padding-top:8px;border-top:1px solid var(--border)"><button class="header-btn" onclick="toggleCustomForm()" style="width:100%;text-align:center">+ Add Custom Weapon</button><div id="customForm" style="display:none;margin-top:8px"></div></div></div><div class="dnd-column"><h3>Weapon Hardpoints</h3><div class="mount-tabs"><div class="mount-tab active" data-mount="pintle" onclick="switchMount('pintle')">Pintle</div><div class="mount-tab" data-mount="fixed" onclick="switchMount('fixed')">Fixed (½)</div><div class="mount-tab" data-mount="turret" onclick="switchMount('turret')">Turret (×2)</div></div><div class="drop-bay" id="weaponBay"><div class="empty-bay">Drag weapons here to mount them</div></div></div></div></div>
+    <div class="panel" id="panel-specials">
+      <div style="max-width:800px">
+        <p style="font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:12px">Special Abilities are narrative traits that define what a vehicle <em>is</em>, not what was engineered into it. They cost no mod slots and don't affect construction math. A DUKW is Amphibious because that's what a DUKW is. Noah's Ark has Divine Commission because the Almighty said so. Toggle abilities on or off, and add custom abilities for anything the library doesn't cover.</p>
+        <div id="specialsGrid"></div>
+        <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
+          <h3 style="font-size:14px;margin-bottom:8px">Custom Special Abilities</h3>
+          <textarea id="customSpecialInput" placeholder="Divine Commission — sustained and protected by divine mandate. Ignore logistics and crew requirements. Indestructible for the duration of its ordained voyage." rows="3" style="width:100%;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:12px;resize:vertical" oninput="S.customSpecial=this.value;renderOutput()"></textarea>
+          <p style="font-size:11px;color:var(--text-dim);margin-top:4px;font-style:italic">Free text. Appears in the stat block Special section exactly as written. Use for setting-specific, supernatural, or unique abilities.</p>
+        </div>
+        <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
+          <h3 style="font-size:14px;margin-bottom:6px">Active Special Abilities</h3>
+          <div id="activeSpecialsList" style="font-size:12px;color:var(--text-dim)">None selected.</div>
+        </div>
+      </div>
+    </div>
     <div class="panel" id="panel-output"><div id="outputContent"></div></div>
-    <div class="panel" id="panel-help"><input type="text" class="search-bar help-search" id="helpSearch" placeholder="Search reference guide..." oninput="filterHelp()"><div id="helpContent"></div></div>
+    <div class="panel" id="panel-help"><div style="display:flex;gap:8px;margin-bottom:8px"><input type="text" class="search-bar help-search" id="helpSearch" placeholder="Search reference guide..." oninput="filterHelp()" style="flex:1;margin:0"><button class="btn" onclick="popOutHelp()" title="Open in new window" style="white-space:nowrap;padding:6px 14px">⧉ Pop Out</button></div><div id="helpContent"></div></div>
   </div>
 </div>
 <script>
@@ -219,105 +238,101 @@ remove:function(){this.init();var c=this.ctx,n=c.currentTime;var o=c.createOscil
 
 // ═══ SIZE REFERENCE ═══
 var SIZE_REF={
-  1:{len:"6'",ex:'Motorcycle, drone',wt:'250 lbs'},2:{len:"9'",ex:'Horse, large dog',wt:'1,000 lbs'},
-  3:{len:"12'",ex:'Bull, early car, chariot',wt:'2,000 lbs'},4:{len:"15'",ex:'Hippo, compact car, jeep',wt:'2 tons'},
-  5:{len:"18'",ex:'White rhino, SUV, truck',wt:'4 tons'},6:{len:"24'",ex:'Elephant, APC, orca',wt:'8 tons'},
-  7:{len:"30'",ex:'T-Rex, heavy tank',wt:'16 tons'},8:{len:"36'",ex:'Dragon, patrol boat',wt:'32 tons'},
-  9:{len:"50'",ex:'Sperm whale, MBT',wt:'64 tons'},10:{len:"63'",ex:'Bowhead whale, bomber',wt:'125 tons'},
-  11:{len:"75'",ex:'Blue whale, corvette',wt:'250 tons'},12:{len:"100'",ex:'Kaiju, PT boat, frigate',wt:'500 tons'},
-  13:{len:"125'",ex:'Space shuttle, destroyer',wt:'1,000 tons'},14:{len:"150'",ex:'Galleon, landing craft',wt:'2,000 tons'},
-  15:{len:"200'",ex:'Large warship',wt:'4,000 tons'},16:{len:"250'",ex:'Heavy destroyer',wt:'8,000 tons'},
-  17:{len:"300'",ex:'Battlecruiser',wt:'16,000 tons'},18:{len:"400'",ex:'Carrier',wt:'32,000 tons'},
-  19:{len:"500'",ex:'Supercarrier',wt:'64,000 tons'},20:{len:"600'",ex:'Mega-platform',wt:'125,000 tons'},
-  21:{len:"800'*",ex:'Mobile fortress',wt:'250K tons'},22:{len:"1000'*",ex:'Traction city, titan',wt:'500K tons'},
-  23:{len:"1200'*",ex:'Capital ship',wt:'1M tons'},24:{len:"1500'+*",ex:'World-engine',wt:'2M+ tons'}};
+  1:{len:"8'",ex:'Motorcycle, drone',wt:'500 lbs'},2:{len:"9'",ex:'Horse, ATV',wt:'1,000 lbs'},
+  3:{len:"12'",ex:'Car, chariot, delivery pod',wt:'2,000 lbs'},4:{len:"15'",ex:'Pickup, jeep, motorboat',wt:'2 tons'},
+  5:{len:"18'",ex:'SUV, light APC, fishing boat',wt:'4 tons'},6:{len:"24'",ex:'APC, light tank, fighter',wt:'8 tons'},
+  7:{len:"30'",ex:'Medium tank, sloop, shuttle',wt:'16 tons'},8:{len:"36'",ex:'MBT, patrol boat, jet',wt:'32 tons'},
+  9:{len:"50'",ex:'Heavy tank, longship, bomber',wt:'64 tons'},10:{len:"63'",ex:'Super-heavy, drakkar, yacht',wt:'125 tons'},
+  11:{len:"75'",ex:'Armoured train, caravel',wt:'250 tons'},12:{len:"100'",ex:'Bireme, frigate, PT boat',wt:'500 tons'},
+  13:{len:"125'",ex:'Trireme, destroyer, shuttle',wt:'1,000 tons'},14:{len:"150'",ex:'Galleon, cutter, bomber',wt:'2,000 tons'},
+  15:{len:"200'",ex:'Corvette, carrack, sloop-of-war',wt:'4,000 tons'},16:{len:"250'",ex:'Frigate, u-boat, icebreaker',wt:'8,000 tons'},
+  17:{len:"300'",ex:'Destroyer, steamboat',wt:'16,000 tons'},18:{len:"400'",ex:'Hvy destroyer, carrier, ferry',wt:'32,000 tons'},
+  19:{len:"500'",ex:'Light cruiser, super trawler',wt:'64,000 tons'},20:{len:"600'",ex:'Cruiser, heavy freighter',wt:'125,000 tons'},
+  21:{len:"700'",ex:'Battlecruiser, nuclear sub',wt:'250K tons'},22:{len:"800'",ex:'Battleship, cruise ship',wt:'500K tons'},
+  23:{len:"900'",ex:'Heavy battleship, carrier',wt:'750K tons'},24:{len:"1000'",ex:'Super carrier, tanker',wt:'1M tons'},
+  25:{len:"1100'",ex:'Dreadnought, bulk container',wt:'1.5M tons'},26:{len:"1250'",ex:'Super dreadnought, super tanker',wt:'2.5M tons'},
+  27:{len:"1500'",ex:'Mega dreadnought',wt:'5M tons'},28:{len:"2000'",ex:'Titan, space station',wt:'10M tons'},
+  29:{len:"2500'",ex:'Super titan, bulk transport',wt:'25M tons'},30:{len:"1 km",ex:'Star base, mega titan',wt:'50M tons'}};
 
-function getFrame(sz){
-  if(sz<=3)return{cat:'Normal',hand:1,baseTough:5,maxArmor:20,wounds:3,crew:1,energy:3,modMult:3,costMult:10000,compactBonus:(sz<=2?2:0)};
+function getFrame(sz){// DiceForge Chassis Formula v5.1var baseTough=5+sz;var maxArmor=Math.max(1,Math.ceil(sz/2));var mods=Math.floor(sz*2.5);var cost=1000*sz*sz;var cat,hand,wounds,crew,energy;if(sz<=3){cat='Light';hand=1;wounds=3;crew=1;energy=3}else if(sz<=7){cat='Medium';hand=0;wounds=4;crew=1;energy=5}else if(sz<=11){cat='Heavy';hand=-1;wounds=5;crew=5;energy=15}else if(sz<=20){cat='Super-Heavy';hand=-2;wounds=6;crew=20;energy=30}else if(sz<=25){cat='Capital';hand=-3;wounds=7;crew=100;energy=60}else{cat='Titan';hand=-4;wounds=8;crew=500;energy=100}return{cat:cat,hand:hand,baseTough:baseTough,maxArmor:maxArmor,wounds:wounds,crew:crew,energy:energy,modSlots:mods,costBase:cost,compactBonus:0}};
   if(sz<=7)return{cat:'Large',hand:0,baseTough:10,maxArmor:30,wounds:4,crew:3,energy:5,modMult:3,costMult:30000,compactBonus:0};
   if(sz<=11)return{cat:'Huge',hand:-1,baseTough:15,maxArmor:40,wounds:5,crew:5,energy:15,modMult:3,costMult:50000,compactBonus:0};
   return{cat:'Gargantuan',hand:-2,baseTough:20,maxArmor:50,wounds:6,crew:50,energy:30,modMult:4,costMult:1000000,compactBonus:0};}
 
 var LOCOS=[
-  {id:'wheeled',name:'Wheeled',speed:5,costMult:1000,notes:'Standard wheels.',group:'ground'},
-  {id:'tracked',name:'Tracked',speed:4,costMult:5000,notes:'Ignores Difficult Ground.',group:'ground'},
-  {id:'hover',name:'Hover',speed:6,costMult:10000,notes:'Ignores low obstacles and water.',group:'ground'},
-  {id:'vtol',name:'Aircraft, VTOL',speed:8,costMult:100000,notes:'VTOL, hover, or fly.',group:'air'},
-  {id:'turboprop',name:'Aircraft, Turboprop',speed:11,costMult:100000,notes:'Min speed 60 MPH or Out of Control.',group:'air'},
-  {id:'jet',name:'Aircraft, Jet',speed:13,costMult:500000,notes:'Min speed 120 MPH or Out of Control.',group:'air'},
-  {id:'water_turbo',name:'Water, Turboprop',speed:3,costMult:2000,notes:'Boat or ship, propeller/oar driven.',group:'water'},
-  {id:'water_jet',name:'Water, Jet',speed:5,costMult:5000,notes:'Boat or ship, jet driven.',group:'water'},
-  {id:'legs_biped',name:'Legs (Bipedal)',speed:8,costMult:50000,notes:'Walker rules. Fighting, Stomp, Death From Above.',group:'walker'},
-  {id:'legs_quad',name:'Legs (Multileg)',speed:6,costMult:50000,notes:'Walker rules. 3+ legs: Reroll failed Piloting vs Out of Control.',group:'walker'}];
+  {id:'wheeled',name:'Wheeled',speed:4,costMult:1000,notes:'Standard wheels.',group:'ground'},
+  {id:'tracked',name:'Tracked',speed:3,costMult:5000,notes:'Ignores Difficult Ground.',group:'ground'},
+  {id:'hover',name:'Hover',speed:5,costMult:10000,notes:'Ignores low obstacles and water.',group:'ground'},
+  {id:'vtol',name:'Aircraft, VTOL',speed:7,costMult:100000,notes:'VTOL, hover, or fly.',group:'air'},
+  {id:'turboprop',name:'Aircraft, Turboprop',speed:10,costMult:100000,notes:'Min speed 60 MPH or Out of Control.',group:'air'},
+  {id:'jet',name:'Aircraft, Jet',speed:12,costMult:500000,notes:'Min speed 120 MPH or Out of Control.',group:'air'},
+  {id:'water_sail',name:'Water, Sail',speed:2,costMult:1000,notes:'Wind-powered. Speed varies with conditions. No fuel cost.',group:'water'},
+  {id:'water_turbo',name:'Water, Propeller',speed:3,costMult:2000,notes:'Boat or ship, propeller or oar driven.',group:'water'},
+  {id:'water_jet',name:'Water, Jet',speed:4,costMult:5000,notes:'Boat or ship, jet driven.',group:'water'},
+  {id:'legs_biped',name:'Legs (Bipedal)',speed:6,costMult:50000,notes:'Walker rules. Fighting, Stomp, Death From Above.',group:'walker'},
+  {id:'legs_quad',name:'Legs (Multileg)',speed:5,costMult:50000,notes:'Walker rules. 3+ legs: Reroll failed Piloting vs Out of Control.',group:'walker'}];
 
 var SPD_TABLE={1:4,2:8,3:16,4:25,5:40,6:60,7:80,8:100,9:120,10:160,11:200,12:250,13:400,14:600,15:800,16:1000,17:1200,18:1600,19:2000,20:2500};
 function speedMPH(r){return SPD_TABLE[r]||(r+'?')}
 var MODS=[
-  // NEGATIVE QUALITIES
-  {id:'battered',name:'Battered',cat:'Negative Qualities',max:2,mods:-2,costFn:function(s){return -10000*s},desc:'Reduce base Toughness by 2.'},
-  {id:'drone',name:'Drone',cat:'Negative Qualities',max:1,mods:-2,costFn:function(s){return -5000*s},desc:'No pilot. Requires Remote Control or AI. Crew drops to 0.'},
-  {id:'exposed',name:'Exposed Crew',cat:'Negative Qualities',max:1,mods:-2,costFn:function(s){return -10000*s},desc:'Crew targetable, no Armor bonus. Can\'t take Sealed.'},
-  {id:'finicky',name:'Finicky',cat:'Negative Qualities',max:2,mods:-2,costFn:function(s){return -10000*s},desc:'Repair at -2 (-4 if taken twice).'},
-  {id:'fragile',name:'Fragile',cat:'Negative Qualities',max:2,mods:-2,costFn:function(s){return -10000*s},desc:'Reduce Wounds by 1.'},
-  {id:'inefficient',name:'Inefficient',cat:'Negative Qualities',max:1,mods:-2,costFn:function(s){return -10000*s},desc:'Double fuel use per day.'},
-  {id:'manual',name:'Manual',cat:'Negative Qualities',max:1,mods:-2,costFn:function(s){return -10000*s},desc:'No electronics. Cannot install electronic Mods.'},
-  {id:'reduced_crew',name:'Reduced Crew',cat:'Negative Qualities',max:1,mods:'halfneg',costFn:function(s){return -10000*s},desc:'Crew drops to next lowest frame category.'},
-  {id:'reduced_hand',name:'Reduced Handling',cat:'Negative Qualities',max:6,mods:-2,costFn:function(s){return -10000*s},desc:'-1 Handling per take (max -6 total).'},
-  {id:'reduced_speed',name:'Reduced Speed',cat:'Negative Qualities',max:3,mods:-2,costFn:function(s){return -10000*s},desc:'-1 Speed Rating. Can\'t combine with Increased Speed.'},
-  {id:'rough_ride',name:'Rough Ride',cat:'Negative Qualities',max:1,mods:-2,costFn:function(s){return -10000*s},desc:'Unstable Platform penalty is -4 instead of -2.'},
-  {id:'unsafe',name:'Unsafe',cat:'Negative Qualities',max:1,mods:-2,costFn:function(s){return -10000*s},desc:'Full collision damage. No safety measures. Eject at -2.'},
-  {id:'lightweight',name:'Lightweight Construction',cat:'Negative Qualities',max:3,mods:-1,costFn:function(s){return -8000*s},desc:'Reduce base Toughness by 2 per take. Plywood, canvas, aluminium, fibreglass. For large vehicles that are long but lightly built.'},
-  // CORE SYSTEMS
-  {id:'ai',name:'Artificial Intelligence',cat:'Core Systems',max:3,mods:1,costFn:function(s){return 5000*s},desc:'AI ally: d6 + Wild Die. 2nd: d10. 3rd: ignore 2 MAP.'},
-  {id:'av_system',name:'AV System',cat:'Core Systems',max:1,mods:1,costFn:function(){return 10000},desc:'50× magnification, -4 Illumination, +2 Notice. +2 hearing 200 yds.'},
-  {id:'command',name:'Command Suite',cat:'Core Systems',max:1,mods:1,costFn:function(){return 10000},desc:'See/hear through linked allies. Extend Command Range.'},
-  {id:'comms',name:'Comms',cat:'Core Systems',max:2,mods:1,costFn:function(){return 5000},desc:'20 mile range. 2nd: 100 miles.'},
-  {id:'entangled',name:'Entangled Comms',cat:'Core Systems',max:'U',mods:1,costFn:function(){return 50000},desc:'Quantum comms. Unlimited range, unjammable.'},
-  {id:'remote',name:'Remote Control',cat:'Core Systems',max:1,mods:1,costFn:function(){return 10000},desc:'Operate from afar with Electronics -2.'},
-  {id:'scanner',name:'Scanner',cat:'Core Systems',max:1,mods:1,costFn:function(){return 1000},desc:'Detect 50 yds. +2 Notice. Target need not be visible.'},
-  {id:'sensor_array',name:'Sensor Array',cat:'Core Systems',max:1,mods:4,costFn:function(){return 25000},desc:'Scan 1 light-year / LOS. Full round, Vulnerable.'},
-  // DEFENSIVE SYSTEMS
-  {id:'amecm',name:'AM/ECM',cat:'Defensive Systems',max:1,mods:1,costFn:function(s){return 5000*s},desc:'+2 Evasion vs Guided Weapons.'},
-  {id:'anti_tp',name:'Anti-Teleportation',cat:'Defensive Systems',max:1,mods:4,costFn:function(s){return 10000*s},desc:'Prevent teleportation into/onto vehicle.'},
-  {id:'armor',name:'Armor',cat:'Defensive Systems',max:'frame',mods:1,costFn:function(s){return 5000*s},desc:'+2 Armor per take (up to frame max). Size 4+ = Heavy Armor.'},
-  {id:'emp_shield',name:'EMP Shielding',cat:'Defensive Systems',max:1,mods:2,costFn:function(s){return 5000*s},desc:'Ignore 2 of -4 EMP penalty.'},
-  {id:'escape',name:'Escape System',cat:'Defensive Systems',max:1,mods:'half',costFn:function(s){return 1000*s},desc:'Ejection seats (Size 7-) or escape pods (Size 8+).'},
-  {id:'repair_drone',name:'Repair Drones',cat:'Defensive Systems',max:1,mods:'half',costFn:function(s){return 25000*s},desc:'Drones attempt Repair. Crit Fail = can\'t retry.'},
-  {id:'repair_nano',name:'Repair Nanomachines',cat:'Defensive Systems',max:1,mods:3,costFn:function(s){return 50000*s},desc:'Repair as limited action. 3 Wounds max per 24hrs.'},
-  {id:'shields',name:'Shields',cat:'Defensive Systems',max:1,mods:'half',costFn:function(s){return 50000*s},desc:'Charges = half base Wounds. Soak with Electronics.'},
-  {id:'sloped',name:'Sloped Armor',cat:'Defensive Systems',max:1,mods:'half',costFn:function(s){return 5000*s},desc:'-2 enemy Shooting (direct-fire energy/kinetic only).'},
-  {id:'stealth',name:'Stealth System',cat:'Defensive Systems',max:1,mods:'size',costFn:function(s){return 50000*s},desc:'-4 to lock on with Electronics.'},
-  {id:'toughness',name:'Toughness',cat:'Defensive Systems',max:5,mods:1,costFn:function(s){return 5000*s},desc:'+1 Toughness.'},
-  // LOCOMOTION & POWER
-  {id:'amphibious',name:'Amphibious',cat:'Locomotion & Power',max:2,mods:2,costFn:function(s){return 1000*s},desc:'Enter water. Hand -1, Speed 2. 2nd: Speed 3.'},
-  {id:'boosters',name:'Boosters',cat:'Locomotion & Power',max:4,mods:1,costFn:function(s){return 1000*s},desc:'Once/encounter: +1 Speed Rating for round. Don\'t stack.'},
-  {id:'energy_pod',name:'Energy Pod',cat:'Locomotion & Power',max:'U',mods:'half',costFn:function(s){return 5000*s},desc:'Double Energy capacity.'},
-  {id:'fwd',name:'Four-Wheel Drive',cat:'Locomotion & Power',max:1,mods:1,costFn:function(s){return 1000*s},desc:'Wheeled only. Difficult Ground = 1.5" per inch.'},
-  {id:'handling',name:'Handling',cat:'Locomotion & Power',max:2,mods:'half',costFn:function(s){return 10000*s},desc:'+1 Handling (max +4 total).'},
-  {id:'inc_speed',name:'Increased Speed',cat:'Locomotion & Power',max:5,mods:'half',costFn:function(s){return 10000*s},desc:'+1 Speed Rating. Can\'t combine with Reduced Speed.'},
-  {id:'reactor',name:'Reactor',cat:'Locomotion & Power',max:1,mods:'half',costFn:function(s){return 10000*s},desc:'Energy ×10. Locomotion Crit: odd die = reactor explodes.'},
-  // OFFENSIVE SYSTEMS
-  {id:'stabilizer',name:'Stabilizer',cat:'Offensive Systems',max:1,mods:1,costFn:function(){return 5000},desc:'Negate Unstable Platform for all direct-fire weapons.'},
-  {id:'targeting',name:'Targeting System',cat:'Offensive Systems',max:1,mods:1,costFn:function(){return 25000},desc:'-2 Shooting penalties (Called Shot, Cover, Range, Scale, Speed).'},
-  // PERSONNEL
-  {id:'crew_seat',name:'Crew Seating/Quarters',cat:'Personnel',max:'U',mods:'half',costFn:function(){return 10000},desc:'Add accommodations equal to Crew rating per take.'},
-  {id:'luxury',name:'Luxury Features',cat:'Personnel',max:'U',mods:'half',costFn:function(s){return s>=8?10000*s:10000},desc:'Enhanced comfort. Required for voyages > few weeks.'},
-  {id:'passenger_pod',name:'Passenger Pod',cat:'Personnel',max:'U',mods:2,costFn:function(){return 50000},desc:'Size 7 or less. 10 passengers, short trips.'},
-  {id:'pro_bay',name:'Professional Bay',cat:'Personnel',max:'U',mods:4,costFn:function(){return 100000},desc:'Skill-specific facility. Free reroll on relevant Trait rolls.'},
-  {id:'sealed',name:'Sealed',cat:'Personnel',max:1,mods:2,costFn:function(s){return 5000*s},desc:'Hermetically sealed. Life support, airlocks. Can\'t take Exposed.'},
-  // STRUCTURAL
-  {id:'hangar',name:'Hangar',cat:'Structural',max:'U',mods:5,costFn:function(){return 500000},desc:'Carry up to 10 Size points of vehicles (max half your Size).'},
-  // WALKER-SPECIFIC (available when walker loco selected)
-  {id:'jump_jets',name:'Jump Jets',cat:'Walker Systems',max:1,mods:1,costFn:function(s){return 10000*s},desc:'Move as VTOL once per encounter. Walker only.'},
-  {id:'tandem_pilots',name:'Tandem Pilots',cat:'Negative Qualities',max:1,mods:-1,costFn:function(s){return -10000*s},desc:'Requires two pilots. Walker only.'},
-  // MULTI-FORM
-  {id:'variable_form',name:'Variable Form',cat:'Locomotion & Power',max:1,mods:'half',costFn:function(s){return 20000*s},desc:'Switch between two locomotion types as an action. Note secondary mode in Description (e.g. "Variable Form: VTOL"). Use secondary mode base Speed when transformed.'},
-  {id:'submersible',name:'Submersible',cat:'Locomotion & Power',max:2,mods:2,costFn:function(s){return 10000*s},desc:'Can submerge as action. -4 to detect when submerged. 2nd: deep dive, crush-proof.'},
-  // CANON ALIGNMENT MODS
-  {id:'composite_armor',name:'Composite Armour',cat:'Defensive Systems',max:'frame',mods:1,costFn:function(s){return 50000*s},desc:'+4 Armour per take (not +2). Advanced composites, reactive armour, or layered plate. Stacks with standard Armor.'},
-  {id:'road_vehicle',name:'Road Vehicle',cat:'Locomotion & Power',max:1,mods:0,costFn:function(s){return 5000*s},desc:'Wheeled only. +3 Speed Ratings on paved roads. Road tyres, suspension, transmission. Off-road speed unchanged.'},
-  {id:'high_perf_engine',name:'High-Performance Engine',cat:'Locomotion & Power',max:3,mods:1,costFn:function(s){return 20000*s},desc:'+2 Speed Ratings per take. Superchargers, turbines, afterburners. Halve Energy per take.'}
-];
+  // ═══ DRAWBACKS ═══
+  {id:'war_worn',name:'War-Worn',cat:'Drawbacks',max:2,mods:-2,costFn:function(s){return -8000*s},desc:'-1 Toughness per take. -1 Persuasion when trying to impress.'},
+  {id:'unmanned',name:'Unmanned',cat:'Drawbacks',max:1,mods:-2,costFn:function(s){return -5000*s},desc:'No crew. Requires Remote Operator or Machine Intelligence.'},
+  {id:'open_crew',name:'Open Crew',cat:'Drawbacks',max:3,mods:-1,costFn:function(s){return -5000*s},desc:'Take 1: Medium Cover (-4). Take 2: Light Cover (-2). Take 3: No Cover, ignore vehicle Toughness/Armour.'},
+  {id:'temperamental',name:'Temperamental',cat:'Drawbacks',max:2,mods:-2,costFn:function(s){return -10000*s},desc:'Repair at -1 per take. Snake eyes on any vehicle roll: random system shorts for 1 round.'},
+  {id:'weak_frame',name:'Weak Frame',cat:'Drawbacks',max:2,mods:-1,costFn:function(s){return -10000*s},desc:'-1 Wound per take.'},
+  {id:'gas_guzzler',name:'Gas-Guzzler',cat:'Drawbacks',max:1,mods:-1,costFn:function(s){return -5000*s},desc:'+50% fuel consumption.'},
+  {id:'low_tech',name:'Low-Tech',cat:'Drawbacks',max:1,mods:-2,costFn:function(s){return -10000*s},desc:'No electronics. Cannot install electronic mods. +1 to resist EMP/hacking.'},
+  {id:'skeleton_crew',name:'Skeleton Crew',cat:'Drawbacks',max:1,mods:-1,costFn:function(s){return -10000*s},desc:'Halve crew capacity.'},
+  {id:'sluggish',name:'Sluggish',cat:'Drawbacks',max:4,mods:-1,costFn:function(s){return -8000*s},desc:'-1 Handling per take (max -4 total).'},
+  {id:'underpowered',name:'Underpowered',cat:'Drawbacks',max:3,mods:-1,costFn:function(s){return -8000*s},desc:'-1 Speed Rating per take. Cannot reduce below 1.'},
+  {id:'bone_shaker',name:'Bone Shaker',cat:'Drawbacks',max:1,mods:-1,costFn:function(s){return -8000*s},desc:'Unstable Platform penalty is -3 instead of -2.'},
+  {id:'death_trap',name:'Death Trap',cat:'Drawbacks',max:1,mods:-1,costFn:function(s){return -8000*s},desc:'Full collision damage. Eject at -2. Crew take +2 damage from penetrating hits.'},
+  {id:'lightweight',name:'Lightweight Build',cat:'Drawbacks',max:3,mods:-1,costFn:function(s){return -8000*s},desc:'-2 base Toughness per take. Plywood, canvas, aluminium, fibreglass.'},
+  // ═══ CORE SYSTEMS ═══
+  {id:'machine_intel',name:'Machine Intelligence',cat:'Core Systems',max:3,mods:2,costFn:function(s){return 8000*s},desc:'AI companion. 1st: d6+Wild Die. 2nd: d8. 3rd: d10 + one free action per round for ship systems.'},
+  {id:'enhanced_sensors',name:'Enhanced Sensors',cat:'Core Systems',max:1,mods:1,costFn:function(){return 12000},desc:'30× magnification, ignore 2 Illumination, +1 Notice. +2 vs Stealth at night.'},
+  {id:'tactical_relay',name:'Tactical Relay',cat:'Core Systems',max:1,mods:2,costFn:function(){return 15000},desc:'Share sensory feeds with linked vehicles. +1 Battle rolls when coordinating linked units.'},
+  {id:'signal_rig',name:'Signal Rig',cat:'Core Systems',max:2,mods:1,costFn:function(){return 5000},desc:'15 mile range (1st), 75 miles (2nd). +1 cooperative rolls with allied vehicles in range.'},
+  {id:'remote_operator',name:'Remote Operator',cat:'Core Systems',max:1,mods:1,costFn:function(){return 10000},desc:'Operate remotely at -1 Piloting/Driving. Requires Signal Rig.'},
+  {id:'detection_grid',name:'Detection Grid',cat:'Core Systems',max:1,mods:1,costFn:function(){return 8000},desc:'Active detection 40 yds. +2 Notice vs hidden/concealed. Through walls within 10 yds at -2.'},
+  {id:'sensor_array',name:'Sensor Array',cat:'Core Systems',max:1,mods:4,costFn:function(){return 25000},desc:'Scan 1 light-year / LOS. Full round, Vulnerable. +2 Notice at extreme range.'},
+  // ═══ DEFENSIVE SYSTEMS ═══
+  {id:'hull_plating',name:'Hull Plating',cat:'Defensive Systems',max:'frame',mods:1,costFn:function(s){return 5000*s},desc:'Armour bonus per take depends on Armour Tech tier. Size 5+ = Heavy Armour.'},
+  {id:'composite_layering',name:'Composite Layering',cat:'Defensive Systems',max:'frame',mods:1,costFn:function(s){return 8000*s},desc:'+3 Toughness per take. Reactive tiles, spall liners, layered ceramics. Stacks with Hull Plating.'},
+  {id:'sloped_armour',name:'Sloped Armour',cat:'Defensive Systems',max:1,mods:3,costFn:function(s){return 10000*s},desc:'-2 enemy Shooting (direct-fire energy/kinetic only).'},
+  {id:'reinforced_frame',name:'Reinforced Frame',cat:'Defensive Systems',max:4,mods:1,costFn:function(s){return 6000*s},desc:'+2 Toughness per take. Internal bracing, keel reinforcement.'},
+  {id:'countermeasure_suite',name:'Countermeasure Suite',cat:'Defensive Systems',max:1,mods:1,costFn:function(s){return 5000*s},desc:'+2 vs Guided Weapons. One free Evasion reroll per encounter.'},
+  {id:'surge_protection',name:'Surge Protection',cat:'Defensive Systems',max:1,mods:2,costFn:function(s){return 5000*s},desc:'Halve EMP penalties (round down). Faraday caging, hardened circuits.'},
+  {id:'crew_escape',name:'Crew Escape',cat:'Defensive Systems',max:1,mods:2,costFn:function(s){return 2000*s},desc:'Ejection (Size 6-) or pods (Size 7+). Agility/Smarts at -1. Pods hold 8, 20 days supplies.'},
+  {id:'nanorepair',name:'Nanorepair System',cat:'Defensive Systems',max:2,mods:3,costFn:function(s){return 30000*s},desc:'1st: roll d6/round, 5-6 heals 1 Wound (max 2/12hrs). 2nd: heals on 4-6 (max 3/12hrs).'},
+  {id:'deflection_field',name:'Deflection Field',cat:'Defensive Systems',max:1,mods:3,costFn:function(s){return 20000*s},desc:'Charges = Wounds÷2 (round up). Soak with Smarts. Recharges 1/round out of combat, Repair roll in combat.'},
+  {id:'stealth_system',name:'Stealth System',cat:'Defensive Systems',max:1,mods:'sizehalf',costFn:function(s){return 15000*s},desc:'-4 to detect with Electronics. Low-observable profile.'},
+  // ═══ OFFENSIVE SYSTEMS ═══
+  {id:'gimballed',name:'Gimballed Weapons',cat:'Offensive Systems',max:1,mods:1,costFn:function(){return 5000},desc:'Reduce Unstable Platform penalty to -1 for all direct-fire weapons.'},
+  {id:'fire_control',name:'Fire Control',cat:'Offensive Systems',max:1,mods:2,costFn:function(){return 25000},desc:'Reduce Shooting penalties by 1 (Called Shot, Cover, Range, Scale, Speed). On a raise, reduce by 2.'},
+  // ═══ LOCOMOTION & POWER ═══
+  {id:'amphibious',name:'Amphibious Kit',cat:'Locomotion & Power',max:2,mods:2,costFn:function(s){return 10000*s},desc:'Enter water. Handling -1, Speed 2. 2nd take: Speed 3.'},
+  {id:'boosters',name:'Boost Injector',cat:'Locomotion & Power',max:4,mods:1,costFn:function(s){return 5000*s},desc:'Once/encounter: +1 Speed Rating for one round per take.'},
+  {id:'reserve_tanks',name:'Reserve Tanks',cat:'Locomotion & Power',max:'U',mods:2,costFn:function(s){return 5000*s},desc:'+50% fuel capacity per take.'},
+  {id:'offroad',name:'Off-Road Package',cat:'Locomotion & Power',max:1,mods:1,costFn:function(){return 5000},desc:'Wheeled only. Halve Difficult Ground penalties.'},
+  {id:'improved_handling',name:'Improved Handling',cat:'Locomotion & Power',max:2,mods:2,costFn:function(s){return 10000*s},desc:'+1 Handling per take (max +3 total).'},
+  {id:'improved_speed',name:'Improved Speed',cat:'Locomotion & Power',max:4,mods:2,costFn:function(s){return 10000*s},desc:'+1 Speed Rating per take. Max +4.'},
+  {id:'fusion_core',name:'Fusion Core',cat:'Locomotion & Power',max:1,mods:4,costFn:function(s){return 20000*s},desc:'Energy ×8. Locomotion Critical: 1-2 on d6 = core breach (Wounds×d8, SBT).'},
+  {id:'high_perf_engine',name:'High-Performance Engine',cat:'Locomotion & Power',max:3,mods:1,costFn:function(s){return 8000*s},desc:'+2 Speed Ratings per take. Halve Energy per take.'},
+  {id:'road_vehicle',name:'Road Vehicle',cat:'Locomotion & Power',max:1,mods:0,costFn:function(){return 2000},desc:'Wheeled only. +3 Speed Ratings on paved roads.'},
+  {id:'submersible',name:'Submersible',cat:'Locomotion & Power',max:2,mods:2,costFn:function(s){return 15000*s},desc:'Submerge as action. -4 to detect. 2nd: deep dive, crush-proof.'},
+  {id:'variable_form',name:'Variable Form',cat:'Locomotion & Power',max:1,mods:3,costFn:function(s){return 20000*s},desc:'Switch between two locomotion types as an action.'},
+  // ═══ PERSONNEL ═══
+  {id:'berths',name:'Berths',cat:'Personnel',max:'U',mods:2,costFn:function(){return 10000},desc:'Each take adds living space for 8. Size 7- = seating. Size 8+ = quarters.'},
+  {id:'comfort',name:'Comfort Upgrade',cat:'Personnel',max:3,mods:'comfort',costFn:function(s){var tk=S.mods.comfort||0;if(tk<=0)return 20000*s;if(tk===1)return 40000*s;return 80000*s},desc:'Take 1 (Comfort): +1 Spirit morale. Take 2 (Luxury): +2 Spirit, +1 Persuasion hosting. Take 3 (Insane): +3 Spirit, +2 Persuasion, guests roll Spirit or become envious.'},
+  {id:'troop_bay',name:'Troop Bay',cat:'Personnel',max:'U',mods:2,costFn:function(){return 50000},desc:'Size 8 or less. 8 passengers per take, short trips.'},
+  {id:'specialist_workshop',name:'Specialist Workshop',cat:'Personnel',max:'U',mods:3,costFn:function(){return 80000},desc:'Skill-specific facility. +2 to relevant Trait rolls.'},
+  {id:'env_seal',name:'Environmental Seal',cat:'Personnel',max:1,mods:2,costFn:function(s){return 10000*s},desc:'Airtight, pressurised, life support. Vacuum, gas, radiation protection. Includes airlock.'},
+  // ═══ STRUCTURAL & WALKER ═══
+  {id:'vehicle_bay',name:'Vehicle Bay',cat:'Structural',max:'U',mods:4,costFn:function(s){return 50000*s},desc:'Carry up to 8 Size points (max 1/3 your Size) per take. Includes fuelling and maintenance.'},
+  {id:'jump_jets',name:'Jump Jets',cat:'Walker Systems',max:1,mods:1,costFn:function(){return 10000},desc:'Move as VTOL once per encounter. Walker only.'},
+  {id:'dual_cockpit',name:'Dual Cockpit',cat:'Walker Systems',max:1,mods:-1,costFn:function(){return 0},desc:'Requires two pilots. Walker only.'}];
 // ═══ WEAPON CATALOGUE — DiceForge originals by era, SW compatible ═══
 // Eras: ancient, medieval, blackpowder, industrial, modern, future, advanced
 var WEAPONS=[
@@ -325,7 +340,7 @@ var WEAPONS=[
   {id:'scorpion',name:'Scorpion',cat:'Siege Engines',era:'ancient',range:'15/30/60',damage:'2d6',ap:2,rof:1,shots:0,minSize:1,mods:1,cost:200,notes:'Reload 1, HW'},
   {id:'onager',name:'Onager',cat:'Siege Engines',era:'ancient',range:'24/48/96',damage:'3d6',ap:0,rof:1,shots:0,minSize:3,mods:2,cost:500,notes:'Reload 4, Indirect, MBT'},
   {id:'polybolos',name:'Polybolos',cat:'Siege Engines',era:'ancient',range:'15/30/60',damage:'2d6',ap:2,rof:2,shots:0,minSize:2,mods:1,cost:400,notes:'Reload 1, Repeating ballista, HW'},
-  {id:'greek_fire_s',name:'Greek Fire Siphon',cat:'Incendiaries',era:'ancient',range:'Cone',damage:'2d8',ap:0,rof:1,shots:10,minSize:2,mods:1,cost:300,notes:'Cone 12", Incendiary, Cauterize'},
+  {id:'greek_fire_s',name:'Greek Fire Siphon',cat:'Incendiaries',era:'ancient',range:'Cone',damage:'2d8',ap:0,rof:1,shots:10,minSize:2,mods:1,cost:300,notes:'Cone 12", Incendiary, Clean Burn'},
   {id:'bow_battery',name:'Bow Battery',cat:'Ranged',era:'ancient',range:'12/24/48',damage:'2d6',ap:1,rof:2,shots:0,minSize:2,mods:1,cost:100,notes:'Crew of archers, Reload 1'},
   {id:'javelin_rack',name:'Javelin Rack',cat:'Ranged',era:'ancient',range:'4/8/16',damage:'2d4',ap:0,rof:3,shots:20,minSize:1,mods:1,cost:50,notes:'Thrown, limited range'},
   {id:'scythed_wheels',name:'Scythed Wheels',cat:'Melee Systems',era:'ancient',range:'—',damage:'Str+2d6',ap:2,rof:0,shots:0,minSize:2,mods:1,cost:100,notes:'Melee, damages adjacent on pass, HW'},
@@ -376,70 +391,227 @@ var WEAPONS=[
   {id:'bombs_mod',name:'Bomb Bay / Hardpoint',cat:'Ordnance',era:'modern',range:'—',damage:'5d8',ap:8,rof:1,shots:8,minSize:4,mods:2,cost:5000,notes:'Aircraft only. Drop, MBT. Precision guided.'},
   {id:'depth_charge_mod',name:'Depth Charges',cat:'Anti-Submarine',era:'modern',range:'—',damage:'5d8',ap:6,rof:1,shots:6,minSize:4,mods:1,cost:5000,notes:'Drop, MBT. Anti-sub only.'},
   // FUTURE (Sci-fi standard)
-  {id:'slug_future',name:'Heavy Slugthrower',cat:'Slugthrowers',era:'future',range:'50/100/200',damage:'2d10 (I)',ap:4,rof:3,shots:50,minSize:3,mods:1,cost:2000,notes:'Pt Def, Rxn Fire'},
-  {id:'ac_future',name:'Medium Autocannon',cat:'Autocannons',era:'future',range:'50/100/200',damage:'4d8 (II)',ap:6,rof:4,shots:80,minSize:8,mods:2,cost:20000,notes:'Min RoF 2'},
-  {id:'laser_gat',name:'Gatling Laser',cat:'Lasers',era:'future',range:'50/100/200',damage:'3d6+4 (I)',ap:4,rof:4,shots:80,minSize:1,mods:1,cost:3000,notes:'Cauterize, Overcharge, Pt Def, Rxn Fire'},
-  {id:'laser_light',name:'Light Laser',cat:'Lasers',era:'future',range:'150/300/600',damage:'2d10 (II)',ap:10,rof:3,shots:80,minSize:2,mods:1,cost:20000,notes:'Cauterize, Overcharge, Rxn Fire'},
-  {id:'laser_med',name:'Medium Laser',cat:'Lasers',era:'future',range:'150/300/600',damage:'3d10 (III)',ap:20,rof:2,shots:60,minSize:4,mods:3,cost:50000,notes:'Cauterize, Overcharge'},
-  {id:'laser_heavy',name:'Heavy Laser',cat:'Lasers',era:'future',range:'150/300/600',damage:'4d10 (V)',ap:30,rof:1,shots:40,minSize:8,mods:5,cost:200000,notes:'Cauterize, Overcharge'},
-  {id:'cannon_future',name:'Heavy Cannon',cat:'Cannons',era:'future',range:'100/200/400',damage:'5d10 (IV)',ap:20,rof:1,shots:40,minSize:4,mods:5,cost:60000,notes:'SBT'},
-  {id:'cannon_super',name:'Super Cannon',cat:'Cannons',era:'future',range:'150/300/600',damage:'6d10 (VI)',ap:30,rof:1,shots:20,minSize:10,mods:6,cost:100000,notes:'MBT'},
-  {id:'flamer_future',name:'Heavy Flamethrower',cat:'Flamethrowers',era:'future',range:'Cone',damage:'3d12 (I)',ap:0,rof:1,shots:30,minSize:1,mods:1,cost:5000,notes:'Cauterize, Incendiary, Cone 18"'},
-  {id:'missile_light',name:'Light Missiles (×8)',cat:'Missiles',era:'future',range:'100/200/400',damage:'6d6 (III)',ap:16,rof:4,shots:8,minSize:2,mods:0,cost:4000,notes:'Guided, SBT'},
-  {id:'missile_med',name:'Medium Missiles (×4)',cat:'Missiles',era:'future',range:'150/300/600',damage:'7d6 (IV)',ap:24,rof:2,shots:4,minSize:2,mods:0,cost:10000,notes:'Guided, MBT'},
-  {id:'missile_heavy',name:'Heavy Missiles (×2)',cat:'Missiles',era:'future',range:'200/400/800',damage:'8d6 (V)',ap:32,rof:1,shots:2,minSize:2,mods:0,cost:20000,notes:'Guided, LBT'},
+  {id:'slug_future',name:'Heavy Slugthrower',cat:'Slugthrowers',era:'future',range:'50/100/200',damage:'2d10',ap:4,rof:3,shots:50,minSize:3,mods:1,cost:2000,notes:'Pt Def, Rxn Fire'},
+  {id:'ac_future',name:'Medium Autocannon',cat:'Autocannons',era:'future',range:'50/100/200',damage:'4d8',ap:6,rof:4,shots:80,minSize:8,mods:2,cost:20000,notes:'Min RoF 2'},
+  {id:'laser_gat',name:'Gatling Laser',cat:'Lasers',era:'future',range:'50/100/200',damage:'3d6+4',ap:4,rof:4,shots:80,minSize:1,mods:1,cost:3000,notes:'Clean Burn, Pt Def, Rxn Fire'},
+  {id:'laser_light',name:'Light Laser',cat:'Lasers',era:'future',range:'150/300/600',damage:'2d10',ap:10,rof:3,shots:80,minSize:2,mods:1,cost:20000,notes:'Clean Burn, Rxn Fire'},
+  {id:'laser_med',name:'Medium Laser',cat:'Lasers',era:'future',range:'150/300/600',damage:'3d10',ap:20,rof:2,shots:60,minSize:4,mods:3,cost:50000,notes:'Clean Burn'},
+  {id:'laser_heavy',name:'Heavy Laser',cat:'Lasers',era:'future',range:'150/300/600',damage:'4d10',ap:30,rof:1,shots:40,minSize:8,mods:5,cost:200000,notes:'Clean Burn'},
+  {id:'cannon_future',name:'Heavy Cannon',cat:'Cannons',era:'future',range:'100/200/400',damage:'5d10',ap:20,rof:1,shots:40,minSize:4,mods:5,cost:60000,notes:'SBT'},
+  {id:'cannon_super',name:'Super Cannon',cat:'Cannons',era:'future',range:'150/300/600',damage:'6d10',ap:30,rof:1,shots:20,minSize:10,mods:6,cost:100000,notes:'MBT'},
+  {id:'flamer_future',name:'Heavy Flamethrower',cat:'Flamethrowers',era:'future',range:'Cone',damage:'3d12',ap:0,rof:1,shots:30,minSize:1,mods:1,cost:5000,notes:'Clean Burn, Incendiary, Cone 18"'},
+  {id:'missile_light',name:'Light Missiles (×8)',cat:'Missiles',era:'future',range:'100/200/400',damage:'6d6',ap:16,rof:4,shots:8,minSize:2,mods:0,cost:4000,notes:'Guided, SBT'},
+  {id:'missile_med',name:'Medium Missiles (×4)',cat:'Missiles',era:'future',range:'150/300/600',damage:'7d6',ap:24,rof:2,shots:4,minSize:2,mods:0,cost:10000,notes:'Guided, MBT'},
+  {id:'missile_heavy',name:'Heavy Missiles (×2)',cat:'Missiles',era:'future',range:'200/400/800',damage:'8d6',ap:32,rof:1,shots:2,minSize:2,mods:0,cost:20000,notes:'Guided, LBT'},
   {id:'missile_rack',name:'Missile Launcher',cat:'Missiles',era:'future',range:'—',damage:'—',ap:0,rof:0,shots:0,minSize:2,mods:1,cost:1000,notes:'Rack only. Load missiles separately.'},
-  {id:'torpedo_future',name:'Plasma Torpedo',cat:'Torpedoes',era:'future',range:'100/200/400',damage:'6d10 (IV)',ap:20,rof:1,shots:4,minSize:4,mods:2,cost:20000,notes:'Guided, LBT, Aquatic/Space'},
+  {id:'torpedo_future',name:'Plasma Torpedo',cat:'Torpedoes',era:'future',range:'100/200/400',damage:'6d10',ap:20,rof:1,shots:4,minSize:4,mods:2,cost:20000,notes:'Guided, LBT, Aquatic/Space'},
   // ADVANCED (far-future / energy weapons)
-  {id:'md_light',name:'Light Mass Driver',cat:'Mass Drivers',era:'advanced',range:'100/200/400',damage:'2d12+2 (I)',ap:5,rof:3,shots:100,minSize:2,mods:2,cost:10000,notes:'Pt Def, Rxn Fire, SBT'},
-  {id:'md_med',name:'Medium Mass Driver',cat:'Mass Drivers',era:'advanced',range:'100/200/400',damage:'3d12+3 (II)',ap:5,rof:2,shots:80,minSize:4,mods:3,cost:20000,notes:'MBT'},
-  {id:'pc_light',name:'Light Particle Cannon',cat:'Particle Cannons',era:'advanced',range:'100/200/400',damage:'4d6+4 (II)',ap:5,rof:3,shots:90,minSize:2,mods:2,cost:25000,notes:'Pt Def, Rxn Fire'},
-  {id:'pc_med',name:'Medium Particle Cannon',cat:'Particle Cannons',era:'advanced',range:'100/200/400',damage:'6d6+6 (III)',ap:10,rof:3,shots:60,minSize:8,mods:4,cost:50000,notes:''},
-  {id:'laser_super',name:'Super Laser',cat:'Lasers',era:'advanced',range:'150/300/600',damage:'5d10 (V)',ap:30,rof:1,shots:20,minSize:12,mods:8,cost:300000,notes:'Cauterize, Overcharge'},
-  {id:'plasma_cannon',name:'Plasma Cannon',cat:'Energy Weapons',era:'advanced',range:'75/150/300',damage:'5d10 (IV)',ap:20,rof:1,shots:30,minSize:6,mods:4,cost:150000,notes:'Cauterize, Incendiary, SBT'},
-  {id:'rail_gun',name:'Railgun',cat:'Mass Drivers',era:'advanced',range:'200/400/800',damage:'5d12 (V)',ap:40,rof:1,shots:20,minSize:8,mods:6,cost:250000,notes:'SBT, Ignores Shields'}
+  {id:'md_light',name:'Light Mass Driver',cat:'Mass Drivers',era:'advanced',range:'100/200/400',damage:'2d12+2',ap:5,rof:3,shots:100,minSize:2,mods:2,cost:10000,notes:'Pt Def, Rxn Fire, SBT'},
+  {id:'md_med',name:'Medium Mass Driver',cat:'Mass Drivers',era:'advanced',range:'100/200/400',damage:'3d12+3',ap:5,rof:2,shots:80,minSize:4,mods:3,cost:20000,notes:'MBT'},
+  {id:'pc_light',name:'Light Particle Cannon',cat:'Particle Cannons',era:'advanced',range:'100/200/400',damage:'4d6+4',ap:5,rof:3,shots:90,minSize:2,mods:2,cost:25000,notes:'Pt Def, Rxn Fire'},
+  {id:'pc_med',name:'Medium Particle Cannon',cat:'Particle Cannons',era:'advanced',range:'100/200/400',damage:'6d6+6',ap:10,rof:3,shots:60,minSize:8,mods:4,cost:50000,notes:''},
+  {id:'laser_super',name:'Super Laser',cat:'Lasers',era:'advanced',range:'150/300/600',damage:'5d10',ap:30,rof:1,shots:20,minSize:12,mods:8,cost:300000,notes:'Clean Burn'},
+  {id:'plasma_cannon',name:'Plasma Cannon',cat:'Energy Weapons',era:'advanced',range:'75/150/300',damage:'5d10',ap:20,rof:1,shots:30,minSize:6,mods:4,cost:150000,notes:'Clean Burn, Incendiary, SBT'},
+  {id:'rail_gun',name:'Railgun',cat:'Mass Drivers',era:'advanced',range:'200/400/800',damage:'5d12',ap:40,rof:1,shots:20,minSize:8,mods:6,cost:250000,notes:'SBT, Ignores Shields'},
+  // ═══ EXPANDED FUTURE WEAPONS ═══
+  // AUTOCANNONS (future) — explosive-tipped rounds, high RoF suppression
+  {id:'ac_light',name:'Light Autocannon',cat:'Autocannons',era:'future',range:'50/100/200',damage:'3d8',ap:4,rof:4,shots:100,minSize:2,mods:1,cost:10000,notes:'Min RoF 2, Pt Def, Rxn Fire'},
+  {id:'ac_heavy',name:'Heavy Autocannon',cat:'Autocannons',era:'future',range:'75/150/300',damage:'5d8',ap:8,rof:4,shots:60,minSize:12,mods:3,cost:50000,notes:'Min RoF 2'},
+  // BOMBS — dropped from air/space
+  {id:'bomb_micro',name:'Micro Bombs',cat:'Ordnance',era:'future',range:'25/50/100',damage:'3d6',ap:4,rof:1,shots:2,minSize:1,mods:0,cost:500,notes:'Bomblet swarm, LBT'},
+  {id:'bomb_light',name:'Light Bomb',cat:'Ordnance',era:'future',range:'—',damage:'6d10',ap:5,rof:4,shots:8,minSize:4,mods:0,cost:1000,notes:'Drop only, LBT. Requires Bomb Rack.'},
+  {id:'bomb_med',name:'Medium Bomb',cat:'Ordnance',era:'future',range:'—',damage:'8d10',ap:10,rof:2,shots:4,minSize:4,mods:0,cost:4000,notes:'Drop only, 10" radius. Requires Bomb Rack.'},
+  {id:'bomb_heavy',name:'Heavy Bomb',cat:'Ordnance',era:'future',range:'—',damage:'10d10',ap:10,rof:1,shots:2,minSize:4,mods:0,cost:10000,notes:'Drop only, 25" radius. Requires Bomb Rack.'},
+  {id:'bomb_rack',name:'Bomb Rack',cat:'Ordnance',era:'future',range:'—',damage:'—',ap:0,rof:0,shots:0,minSize:4,mods:1,cost:50000,notes:'Rack only. Holds one bomb type. Load bombs separately.'},
+  // CANNONS (future) — AP or HE rounds, backbone of armoured warfare
+  {id:'cannon_light',name:'Light Cannon',cat:'Cannons',era:'future',range:'50/100/200',damage:'3d10',ap:5,rof:1,shots:80,minSize:1,mods:1,cost:15000,notes:'SBT, Rxn Fire. HE: 3d8 LBT AP 0'},
+  {id:'cannon_med',name:'Medium Cannon',cat:'Cannons',era:'future',range:'75/150/300',damage:'4d10',ap:10,rof:1,shots:60,minSize:2,mods:3,cost:30000,notes:'SBT. HE: 4d8 LBT AP 5'},
+  {id:'cannon_superheavy',name:'Super Heavy Cannon',cat:'Cannons',era:'future',range:'150/300/600',damage:'8d10',ap:40,rof:1,shots:10,minSize:16,mods:8,cost:500000,notes:'MBT. HE: 8d8 LBT AP 20'},
+  // ION CANNONS — EMP weapons, disrupt electronics without direct damage
+  {id:'ion_light',name:'Light Ion Cannon',cat:'Ion Cannons',era:'future',range:'75/150/300',damage:'5d8',ap:0,rof:1,shots:10,minSize:4,mods:3,cost:20000,notes:'EMP. No actual Wounds — knocks out electronics if damage >= Toughness.'},
+  {id:'ion_med',name:'Medium Ion Cannon',cat:'Ion Cannons',era:'future',range:'75/150/300',damage:'7d8',ap:0,rof:1,shots:10,minSize:8,mods:4,cost:50000,notes:'EMP. No actual Wounds — knocks out electronics if damage >= Toughness.'},
+  {id:'ion_heavy',name:'Heavy Ion Cannon',cat:'Ion Cannons',era:'future',range:'75/150/300',damage:'9d8',ap:0,rof:1,shots:10,minSize:20,mods:5,cost:100000,notes:'EMP. No actual Wounds — knocks out electronics if damage >= Toughness.'},
+  // LASERS — Super Heavy and Mega tiers
+  {id:'laser_superheavy',name:'Super Heavy Laser',cat:'Lasers',era:'advanced',range:'150/300/600',damage:'6d10',ap:40,rof:1,shots:10,minSize:20,mods:12,cost:1000000,notes:'Clean Burn'},
+  {id:'laser_mega',name:'Mega Laser',cat:'Lasers',era:'advanced',range:'150/300/600',damage:'8d10',ap:40,rof:1,shots:1,minSize:28,mods:16,cost:2000000,notes:'Clean Burn. 1 minute recharge after firing. Cannot be Linked or d.'},
+  // MASS DRIVERS — Heavy through Mega tiers
+  {id:'md_heavy',name:'Heavy Mass Driver',cat:'Mass Drivers',era:'advanced',range:'100/200/400',damage:'4d12+4',ap:5,rof:1,shots:60,minSize:8,mods:4,cost:40000,notes:'LBT'},
+  {id:'md_super',name:'Super Mass Driver',cat:'Mass Drivers',era:'advanced',range:'100/200/400',damage:'6d12+6',ap:5,rof:1,shots:40,minSize:12,mods:8,cost:80000,notes:'10" (20 yard) radius'},
+  {id:'md_superheavy',name:'Super Heavy Mass Driver',cat:'Mass Drivers',era:'advanced',range:'100/200/400',damage:'8d12+8',ap:5,rof:1,shots:10,minSize:20,mods:12,cost:400000,notes:'25" (50 yard) radius'},
+  {id:'md_mega',name:'Mega Mass Driver',cat:'Mass Drivers',era:'advanced',range:'100/200/400',damage:'10d12+10',ap:5,rof:1,shots:1,minSize:28,mods:16,cost:1000000,notes:'50" (100 yard) radius. Planetary bombardment.'},
+  // MISSILES — Micro swarm pods
+  {id:'missile_micro',name:'Micro Missiles',cat:'Missiles',era:'future',range:'25/50/100',damage:'3d6',ap:0,rof:1,shots:2,minSize:1,mods:0,cost:1000,notes:'Swarm pod, LBT, Guided, ignores Pt Def'},
+  // PARTICLE BEAMS — distinct from Particle Cannons, higher AP/damage
+  {id:'pb_light',name:'Light Particle Beam',cat:'Particle Beams',era:'advanced',range:'75/150/300',damage:'5d8',ap:24,rof:2,shots:40,minSize:4,mods:3,cost:150000,notes:'Beam, Rxn Fire'},
+  {id:'pb_med',name:'Medium Particle Beam',cat:'Particle Beams',era:'advanced',range:'75/150/300',damage:'7d8',ap:32,rof:2,shots:20,minSize:8,mods:4,cost:750000,notes:'Beam'},
+  {id:'pb_heavy',name:'Heavy Particle Beam',cat:'Particle Beams',era:'advanced',range:'75/150/300',damage:'9d8',ap:40,rof:2,shots:2,minSize:20,mods:5,cost:3000000,notes:'Beam'},
+  // PARTICLE CANNONS — Heavy tier
+  {id:'pc_heavy',name:'Heavy Particle Cannon',cat:'Particle Cannons',era:'advanced',range:'100/200/400',damage:'8d6+8',ap:20,rof:3,shots:30,minSize:12,mods:6,cost:250000,notes:''},
+  // ROCKETS — unguided, shorter range than missiles, can't be jammed
+  {id:'rocket_micro',name:'Micro Rockets',cat:'Rockets',era:'future',range:'20/40/80',damage:'3d6',ap:0,rof:1,shots:2,minSize:1,mods:0,cost:500,notes:'Swarm pod, LBT, ignores Pt Def'},
+  {id:'rocket_light',name:'Light Rockets (×8)',cat:'Rockets',era:'future',range:'20/40/80',damage:'6d6',ap:16,rof:4,shots:8,minSize:2,mods:0,cost:2000,notes:'SBT, No Recoil'},
+  {id:'rocket_med',name:'Medium Rockets (×4)',cat:'Rockets',era:'future',range:'20/40/80',damage:'7d6',ap:24,rof:2,shots:4,minSize:2,mods:0,cost:6000,notes:'MBT, No Recoil'},
+  {id:'rocket_heavy',name:'Heavy Rockets (×2)',cat:'Rockets',era:'future',range:'20/40/80',damage:'8d6',ap:32,rof:1,shots:2,minSize:2,mods:0,cost:15000,notes:'LBT, No Recoil'},
+  {id:'rocket_rack',name:'Rocket Launcher',cat:'Rockets',era:'future',range:'—',damage:'—',ap:0,rof:0,shots:0,minSize:2,mods:1,cost:1000,notes:'Rack only. Load rockets separately.'},
+  // SLUGTHROWERS — Light and Medium MGs (not Heavy Weapons)
+  {id:'slug_light',name:'Light Machine Gun',cat:'Slugthrowers',era:'future',range:'30/60/120',damage:'2d8',ap:2,rof:3,shots:200,minSize:1,mods:1,cost:700,notes:'Pt Def, Rxn Fire. NOT a Heavy Weapon.'},
+  {id:'slug_med',name:'Medium Machine Gun',cat:'Slugthrowers',era:'future',range:'30/60/120',damage:'2d8+1',ap:2,rof:3,shots:100,minSize:2,mods:1,cost:1000,notes:'Pt Def, Rxn Fire. NOT a Heavy Weapon.'},
+  {id:'slug_minigun',name:'Minigun',cat:'Slugthrowers',era:'future',range:'50/100/200',damage:'2d8+1',ap:2,rof:5,shots:2000,minSize:3,mods:1,cost:10000,notes:'Min RoF 3, Pt Def, Rxn Fire'},
+  // TORPEDOES — replace generic with Light/Medium/Heavy. Space or liquid only.
+  {id:'torpedo_light',name:'Light Torpedo',cat:'Torpedoes',era:'advanced',range:'300/600/1200',damage:'6d10',ap:20,rof:2,shots:2,minSize:12,mods:0,cost:200000,notes:'Guided, LBT. Space or liquid only.'},
+  {id:'torpedo_med',name:'Medium Torpedo',cat:'Torpedoes',era:'advanced',range:'300/600/1200',damage:'7d10',ap:30,rof:1,shots:1,minSize:12,mods:0,cost:300000,notes:'Guided, LBT. Space or liquid only.'},
+  {id:'torpedo_heavy',name:'Heavy Torpedo',cat:'Torpedoes',era:'advanced',range:'300/600/1200',damage:'8d12',ap:40,rof:1,shots:1,minSize:12,mods:0,cost:400000,notes:'Guided, LBT. Space or liquid only.'},
+  {id:'torpedo_rack',name:'Torpedo Launcher',cat:'Torpedoes',era:'advanced',range:'—',damage:'—',ap:0,rof:0,shots:0,minSize:12,mods:2,cost:500000,notes:'Rack only. Load torpedoes separately.'},
+  // GRAVITY CANNON — gravitic distortion weapon
+  {id:'grav_cannon',name:'Gravity Cannon',cat:'Energy Weapons',era:'advanced',range:'50/100/200',damage:'5d12',ap:10,rof:1,shots:10,minSize:12,mods:5,cost:100000,notes:'LBT. Targets Shaken or Wounded are also Distracted.'},
+  // MINES
+  {id:'mine_future',name:'Mine',cat:'Ordnance',era:'future',range:'—',damage:'4d6',ap:10,rof:1,shots:1,minSize:1,mods:0,cost:1000,notes:'LBT. Deploy or launch at half Grenade Launcher range. Can be fitted with warheads.'},
+  // GRENADE LAUNCHER (future)
+  {id:'grenade_future',name:'Grenade Launcher',cat:'Launchers',era:'future',range:'24/48/96',damage:'3d6',ap:0,rof:3,shots:12,minSize:1,mods:1,cost:2600,notes:'MBT. Can load warhead grenades.'},
+  // STUN WEAPONS
+  {id:'stun_ray',name:'Stun Ray',cat:'Stun Weapons',era:'future',range:'50/100/200',damage:'—',ap:0,rof:1,shots:60,minSize:1,mods:1,cost:5000,notes:'Vigor –4 or Stunned (–6 on raise). No effect on vehicles or robots.'},
+  {id:'stun_proj',name:'Stun Projector',cat:'Stun Weapons',era:'future',range:'25/50/100',damage:'—',ap:0,rof:1,shots:30,minSize:2,mods:1,cost:10000,notes:'Cone. Vigor –4 or Stunned (–6 on raise). No effect on vehicles or robots.'}
 ];
 // Era labels for UI
 var ERA_LABELS={ancient:'Ancient',medieval:'Medieval',blackpowder:'Blackpowder',industrial:'Industrial (WWI/WWII)',modern:'Modern',future:'Future (Sci-Fi)',advanced:'Advanced (Far-Future)'};
-var ERA_ORDER=['ancient','medieval','blackpowder','industrial','modern','future','advanced'];
+var ERA_ORDER=['ancient''medieval''blackpowder''industrial''modern''future''advanced'];
 var currentEra='modern';
 // Custom weapons storage
 var customWeapons=[];
 try{var cw=localStorage.getItem('diceforge-cvf-custom-weapons');if(cw)customWeapons=JSON.parse(cw)}catch(e){}
-function getAllWeapons(){return WEAPONS.concat(customWeapons)}
+function getAllWeapons(){return WEAPONS.concat(customWeapons).concat(extWeapons)}
+
+// ═══ SPECIAL ABILITIES (zero-cost narrative traits) ═══
+var SPECIALS=[
+  // MOVEMENT
+  {id:'amphibious',name:'Amphibious',cat:'Movement',desc:'Can enter water at half Speed. Not a true watercraft — limited to calm conditions.'},
+  {id:'four_wd',name:'Four Wheel Drive',cat:'Movement',desc:'Halve Difficult Ground movement penalties (round down).'},
+  {id:'all_terrain',name:'All-Terrain',cat:'Movement',desc:'Ignore Difficult Ground penalties entirely. Designed for rough country.'},
+  {id:'stol',name:'STOL',cat:'Movement',desc:'Short Takeoff and Landing. Needs only half the normal runway distance.'},
+  {id:'unpowered',name:'Unpowered',cat:'Movement',desc:'No propulsion system. Drifts with current, wind, or gravity. Effective Speed 0.'},
+  {id:'shallow_draft',name:'Shallow Draft',cat:'Movement',desc:'Can navigate rivers, shallows, and coastal waters inaccessible to deeper-hulled vessels.'},
+  {id:'deep_draft',name:'Deep Draft',cat:'Movement',desc:'Requires deep water. Cannot enter shallows, rivers, or shallow harbours without risk of grounding.'},
+  // CREW & PASSENGERS
+  {id:'open_top',name:'Open Top',cat:'Crew',desc:'No overhead cover. Crew can be targeted directly. Ranged attacks against crew ignore vehicle Armour.'},
+  {id:'enclosed',name:'Enclosed',cat:'Crew',desc:'Sealed cabin. Crew protected from weather, debris, and environmental hazards.'},
+  {id:'cramped',name:'Cramped',cat:'Crew',desc:'Tight interior. –1 to all physical actions performed inside the vehicle.'},
+  {id:'spacious',name:'Spacious',cat:'Crew',desc:'Generous interior. Crew can move freely, change positions, even sleep aboard.'},
+  {id:'ejection',name:'Ejection System',cat:'Crew',desc:'Pilot can eject as a free action. Lands safely on a Piloting roll at –2.'},
+  {id:'cargo_bay',name:'Cargo Bay',cat:'Crew',desc:'Internal bay large enough to carry smaller vehicles, mounts, or bulk cargo.'},
+  // DURABILITY
+  {id:'sealed',name:'Sealed',cat:'Durability',desc:'Airtight. Proof against gas, vacuum, NBC hazards. Requires life support for extended use.'},
+  {id:'pressurised',name:'Pressurised',cat:'Durability',desc:'Maintains internal pressure at altitude or depth. Breach causes explosive decompression.'},
+  {id:'fireproof',name:'Fireproof',cat:'Durability',desc:'Resistant to fire and incendiary weapons. Halve fire damage.'},
+  {id:'waterproof',name:'Waterproof',cat:'Durability',desc:'Survives immersion without damage. Electronics and cargo protected from water.'},
+  {id:'ram_plate',name:'Ram Plate',cat:'Durability',desc:'Reinforced prow or bumper. +2 damage on ram attacks. Vehicle takes half ram damage.'},
+  // OPERATIONAL
+  {id:'long_range',name:'Long Range',cat:'Operational',desc:'Extended fuel capacity or efficient engines. Double normal operational range.'},
+  {id:'short_range',name:'Short Range',cat:'Operational',desc:'Limited endurance. Half normal operational range. Common in fighters and interceptors.'},
+  {id:'stealth',name:'Stealth',cat:'Operational',desc:'Low observable profile. –2 to Notice or Electronics rolls to detect this vehicle.'},
+  {id:'loud',name:'Loud',cat:'Operational',desc:'Extremely noisy. +2 to Notice rolls to detect. Can be heard long before it arrives.'},
+  {id:'night_ops',name:'Night Operations',cat:'Operational',desc:'Equipped for darkness. Headlights, IR systems, or NV as standard. No darkness penalties for driver.'},
+  {id:'smoke_screen',name:'Smoke Screen',cat:'Operational',desc:'Deploy smoke as a free action. Creates a LBT of obscuring smoke that lasts 3 rounds.'},
+  {id:'flares',name:'Flares / Chaff',cat:'Operational',desc:'Countermeasures against guided missiles. Electronics roll to spoof incoming guided weapons.'},
+  {id:'towing',name:'Towing Capacity',cat:'Operational',desc:'Rated for towing. Can tow another vehicle up to its own Size without penalty.'},
+  // QUIRKS
+  {id:'temperamental',name:'Temperamental',cat:'Quirks',desc:'Has a personality. Responds to its handler and may refuse strangers. Treat as a character for social purposes.'},
+  {id:'famous',name:'Famous / Infamous',cat:'Quirks',desc:'This vehicle is well-known. +2 or –2 to social interactions depending on reputation and audience.'},
+  {id:'cursed',name:'Cursed',cat:'Quirks',desc:'Something is wrong with this vehicle. The GM draws a card each session — on a Club, something goes wrong.'},
+  {id:'haunted',name:'Haunted',cat:'Quirks',desc:'Inhabited by a presence. Lights flicker, instruments drift, voices in the static. May help or hinder.'},
+  {id:'sentient',name:'Sentient',cat:'Quirks',desc:'The vehicle has its own mind. It has a Spirit die and may cooperate, argue, or refuse orders.'},
+  {id:'unreliable',name:'Unreliable System',cat:'Quirks',desc:'One specific system fails on snake eyes. Specify which system when this ability is taken.'},
+  {id:'prototype',name:'Prototype',cat:'Quirks',desc:'One of a kind or experimental. Spare parts unavailable. Repair at –2 but the vehicle has capabilities nothing else does.'},
+];
+
+// ═══ VFX EXTENSION SYSTEM ═══
+var extensions=[];
+try{var ext=localStorage.getItem('diceforge-cvf-extensions');if(ext)extensions=JSON.parse(ext)}catch(e){}
+function saveExtensions(){localStorage.setItem('diceforge-cvf-extensions',JSON.stringify(extensions))}
+function installExtension(data){
+  if(!data||!data.id||!data.name){alert('Invalid .vfx file.');return}
+  // Remove existing version
+  extensions=extensions.filter(function(e){return e.id!==data.id});
+  extensions.push(data);saveExtensions();rebuildExtensionData();renderAll();
+  alert('Installed: '+data.name+(data.version?' v'+data.version:''))}
+function removeExtension(id){extensions=extensions.filter(function(e){return e.id!==id});saveExtensions();rebuildExtensionData();renderAll()}
+function rebuildExtensionData(){
+  // Merge extension content into working arrays
+  extWeapons=[];extMods=[];extSpecials=[];extPrebuilts=[];
+  extensions.forEach(function(ext){
+    if(ext.weapons)ext.weapons.forEach(function(w){w._ext=ext.id;w._extName=ext.name;extWeapons.push(w)});
+    if(ext.mods)ext.mods.forEach(function(m){
+      m._ext=ext.id;m._extName=ext.name;
+      // Parse costFn from string if needed
+      if(typeof m.costFn==='string'){try{m.costFn=eval('('+m.costFn+')')}catch(e){m.costFn=function(){return 0}}}
+      extMods.push(m)});
+    if(ext.specials)ext.specials.forEach(function(s){s._ext=ext.id;s._extName=ext.name;extSpecials.push(s)});
+    if(ext.prebuilts)ext.prebuilts.forEach(function(p){p._ext=ext.id;p._extName=ext.name;extPrebuilts.push(p)})
+  })
+}
+var extWeapons=[],extMods=[],extSpecials=[],extPrebuilts=[];
+rebuildExtensionData();
+function getAllWeaponsExt(){return WEAPONS.concat(customWeapons).concat(extWeapons)}
+function getAllMods(){return MODS.concat(extMods)}
+function getAllSpecials(){return SPECIALS.concat(extSpecials)}
+function findMod(id){return getAllMods().find(function(x){return x.id===id})}
+function findSpecial(id){return getAllSpecials().find(function(x){return x.id===id})}
+function getAllModsExt(){return MODS.concat(extMods)}
+function getAllSpecialsExt(){return SPECIALS.concat(extSpecials)}
+function importVFX(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){
+  try{var data=JSON.parse(ev.target.result);installExtension(data)}catch(err){alert('Error reading .vfx file: '+err.message)}};reader.readAsText(file);e.target.value=''}
+function showExtensionManager(){
+  var html='<div style="padding:20px;max-width:600px;margin:0 auto"><h2 style="font-family:Cinzel,serif;color:var(--accent);margin-bottom:16px">Extension Manager</h2>';
+  html+='<p style="color:var(--text-dim);margin-bottom:16px;font-size:13px">Install .vfx supplement files to add new weapons, modifications, specials, and pre-built vehicles to the Forge.</p>';
+  html+='<div style="margin-bottom:20px"><input type="file" id="vfxImport" accept=".vfx,.json" onchange="importVFX(event)" style="display:none"><button class="header-btn primary" onclick="document.getElementById(\'vfxImport\').click()" style="width:100%;text-align:center;padding:10px">Install .vfx Extension</button></div>';
+  if(extensions.length===0){html+='<p style="color:var(--text-dim);text-align:center;padding:20px;border:1px dashed var(--border)">No extensions installed. Purchase supplements from DriveThruRPG to expand the Forge.</p>'}
+  else{extensions.forEach(function(ext){
+    html+='<div style="background:var(--bg-card);border:1px solid var(--border);padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">';
+    html+='<div><strong style="color:var(--text-bright)">'+ext.name+'</strong>';
+    if(ext.version)html+=' <span style="color:var(--text-dim);font-size:12px">v'+ext.version+'</span>';
+    html+='<div style="font-size:12px;color:var(--text-dim)">';
+    var counts=[];
+    if(ext.weapons&&ext.weapons.length)counts.push(ext.weapons.length+' weapons');
+    if(ext.mods&&ext.mods.length)counts.push(ext.mods.length+' mods');
+    if(ext.specials&&ext.specials.length)counts.push(ext.specials.length+' specials');
+    if(ext.prebuilts&&ext.prebuilts.length)counts.push(ext.prebuilts.length+' pre-builts');
+    html+=counts.join(' · ')+'</div></div>';
+    html+='<button class="header-btn" onclick="if(confirm(\'Remove '+ext.name+'?\')){removeExtension(\''+ext.id+'\');showExtensionManager()}" style="font-size:11px">Remove</button>';
+    html+='</div>'})}
+  html+='<div style="margin-top:20px;text-align:center"><button class="header-btn" onclick="closeExtMgr()">Close</button></div></div>';
+  var overlay=document.getElementById('extOverlay');
+  if(!overlay){overlay=document.createElement('div');overlay.id='extOverlay';overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:9999;overflow-y:auto;display:flex;align-items:center;justify-content:center';document.body.appendChild(overlay)}
+  overlay.innerHTML=html;overlay.style.display='flex'}
+function closeExtMgr(){var o=document.getElementById('extOverlay');if(o)o.style.display='none'}
 
 // ═══ STATE ═══
-var customWeapons=[];
-try{var cw=localStorage.getItem('diceforge-cvf-custom-weapons');if(cw)customWeapons=JSON.parse(cw)}catch(e){}
-function getAllWeapons(){return WEAPONS.concat(customWeapons)}
-
-// ═══ STATE ═══
-var S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:[],armourTech:0};
+var S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:[],armourTech:0,specials:[],customSpecial:''};
 // ═══ UNDO/REDO ENGINE ═══
 var undoStack=[],redoStack=[],maxUndo=50;
-function snapState(){return{mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons)),size:S.size,loco:S.loco}}
+function snapState(){return{mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons)),size:S.size,loco:S.loco,specials:S.specials.slice(),customSpecial:S.customSpecial,armourTech:S.armourTech}}
 function pushUndo(){redoStack=[];undoStack.push(snapState());if(undoStack.length>maxUndo)undoStack.shift()}
-function undo(){if(!undoStack.length)return;redoStack.push(snapState());var prev=undoStack.pop();S.mods=prev.mods;S.weapons=prev.weapons;S.size=prev.size;S.loco=prev.loco;document.getElementById('sizeSlider').value=S.size;Audio.remove();renderAll()}
-function redo(){if(!redoStack.length)return;undoStack.push(snapState());var next=redoStack.pop();S.mods=next.mods;S.weapons=next.weapons;S.size=next.size;S.loco=next.loco;document.getElementById('sizeSlider').value=S.size;Audio.click();renderAll()}
+function undo(){if(!undoStack.length)return;redoStack.push(snapState());var prev=undoStack.pop();S.mods=prev.mods;S.weapons=prev.weapons;S.size=prev.size;S.loco=prev.loco;S.specials=prev.specials;S.customSpecial=prev.customSpecial;S.armourTech=prev.armourTech;document.getElementById('sizeSlider').value=S.size;document.getElementById('customSpecialInput').value=S.customSpecial;Audio.remove();renderAll()}
+function redo(){if(!redoStack.length)return;undoStack.push(snapState());var next=redoStack.pop();S.mods=next.mods;S.weapons=next.weapons;S.size=next.size;S.loco=next.loco;S.specials=next.specials;S.customSpecial=next.customSpecial;S.armourTech=next.armourTech;document.getElementById('sizeSlider').value=S.size;document.getElementById('customSpecialInput').value=S.customSpecial;Audio.click();renderAll()}
 document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='z'&&!e.shiftKey){e.preventDefault();undo()}if((e.ctrlKey||e.metaKey)&&(e.key==='y'||(e.key==='z'&&e.shiftKey))){e.preventDefault();redo()}});
 
 // ═══ CALCULATIONS ═══
-function modSlots(m,sz){if(m.mods==='half')return Math.ceil(sz/2);if(m.mods==='halfneg')return -Math.ceil(sz/2);if(m.mods==='size')return sz;return m.mods}
+function modSlots(m,sz){if(m.mods==='comfort'){var tk=S.mods[m.id]||0;if(tk<=0)return 2;if(tk===1)return 3;return 5}if(m.mods==='sizehalf')return Math.max(1,Math.ceil(sz/2));if(m.mods==='half')return Math.ceil(sz/2);if(m.mods==='halfneg')return -Math.ceil(sz/2);if(m.mods==='size')return sz;return m.mods}
 function weaponMountMods(w,mount){var mc=w.mods;if(mount==='fixed')mc=Math.ceil(mc/2);if(mount==='turret')mc=mc*2;return mc}
 function maxArmorTakes(){var f=getFrame(S.size);return Math.floor((f.maxArmor-f.baseTough)/2)}
-function calcTough(){var f=getFrame(S.size),t=f.baseTough;if(S.mods.battered)t-=2*S.mods.battered;if(S.mods.lightweight)t-=2*S.mods.lightweight;if(S.mods.toughness)t+=S.mods.toughness;return Math.max(0,t)}
-function calcArmor(){var f=getFrame(S.size),a=f.baseTough;if(S.mods.armor)a+=2*S.mods.armor;if(S.mods.composite_armor)a+=4*S.mods.composite_armor;a+=S.armourTech;return Math.min(a,f.maxArmor+S.armourTech)}
-function calcWounds(){var f=getFrame(S.size),w=f.wounds;if(S.mods.fragile)w-=S.mods.fragile;return Math.max(1,w)}
-function calcHand(){var f=getFrame(S.size),h=f.hand;if(S.mods.handling)h+=S.mods.handling;if(S.mods.reduced_hand)h-=S.mods.reduced_hand;return h}
-function calcSpeed(){var loco=LOCOS.find(function(l){return l.id===S.loco});var s=loco?loco.speed:5;if(S.mods.inc_speed)s+=S.mods.inc_speed;if(S.mods.reduced_speed)s-=S.mods.reduced_speed;if(S.mods.high_perf_engine)s+=2*S.mods.high_perf_engine;return Math.max(1,s)}
+function calcTough(){var f=getFrame(S.size),t=f.baseTough;if(S.mods.war_worn)t-=1*S.mods.war_worn;if(S.mods.lightweight)t-=2*S.mods.lightweight;return Math.max(0,t)}
+function calcVehicleClass(){var sz=S.size;if(sz<=3)return 'L';if(sz<=7)return 'M';if(sz<=11)return 'H';if(sz<=20)return 'S';if(sz<=25)return 'C';return 'T'}
+function vehicleClassLabel(){var c=calcVehicleClass();var names={L:'Light',M:'Medium',H:'Heavy',S:'Super-Heavy',C:'Capital',T:'Titan'};return names[c]||c};return names[c]||c}
+function calcArmor(){var f=getFrame(S.size),tierBonus=[1,2,3,4,6,8],hpPerTake=tierBonus[S.armourTech]||1,a=f.baseTough;if(S.mods.hull_plating)a+=hpPerTake*S.mods.hull_plating;if(S.mods.composite_layering)a+=3*S.mods.composite_layering;if(S.mods.reinforced_frame)a+=2*S.mods.reinforced_frame;return a}
+function calcWounds(){var f=getFrame(S.size),w=f.wounds;if(S.mods.weak_frame)w-=S.mods.weak_frame;return Math.max(1,w)}
+function calcHand(){var f=getFrame(S.size),h=f.hand;if(S.mods.improved_handling)h+=S.mods.improved_handling;if(S.mods.sluggish)h-=S.mods.sluggish;return h}
+function calcSpeed(){var loco=LOCOS.find(function(l){return l.id===S.loco});var s=loco?loco.speed:4;if(S.mods.improved_speed)s+=S.mods.improved_speed;if(S.mods.underpowered)s-=S.mods.underpowered;if(S.mods.high_perf_engine)s+=2*S.mods.high_perf_engine;return Math.max(1,s)});var s=loco?loco.speed:5;if(S.mods.improved_speed)s+=S.mods.improved_speed;if(S.mods.underpowered)s-=S.mods.underpowered;if(S.mods.high_perf_engine)s+=2*S.mods.high_perf_engine;return Math.max(1,s)}
 function calcRoadSpeed(){var s=calcSpeed();if(S.mods.road_vehicle&&S.loco==='wheeled')s+=3;return s}
-function calcEnergy(){var f=getFrame(S.size),e=f.energy;if(S.mods.reactor)e*=10;if(S.mods.energy_pod)e*=Math.pow(2,S.mods.energy_pod);if(S.mods.high_perf_engine)e=Math.max(1,Math.floor(e/Math.pow(2,S.mods.high_perf_engine)));return e}
-function calcModsUsed(){var t=0;for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});if(m){var ms=modSlots(m,S.size);if(ms>0)t+=ms*S.mods[id]}}
+function calcEnergy(){var f=getFrame(S.size),e=f.energy;if(S.mods.reactor)e*=10;if(S.mods.reserve_tanks)e*=Math.pow(2,S.mods.reserve_tanks);if(S.mods.high_perf_engine)e=Math.max(1,Math.floor(e/Math.pow(2,S.mods.high_perf_engine)));return e}
+function calcModsUsed(){var t=0;for(var id in S.mods){var m=findMod(id);if(m){var ms=modSlots(m,S.size);if(ms>0)t+=ms*S.mods[id]}}
   S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp)t+=weaponMountMods(wp,w.mount)});return t}
-function calcModsGained(){var t=0;for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});if(m){var ms=modSlots(m,S.size);if(ms<0)t+=Math.abs(ms)*S.mods[id]}}return t}
+function calcModsGained(){var t=0;for(var id in S.mods){var m=findMod(id);if(m){var ms=modSlots(m,S.size);if(ms<0)t+=Math.abs(ms)*S.mods[id]}}return t}
 function calcCost(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco});
   var cost=f.costMult*S.size+(loco?loco.costMult*S.size:0);
-  for(var id in S.mods){var m=MODS.find(function(x){return x.id===id});if(m)cost+=m.costFn(S.size)*S.mods[id]}
+  for(var id in S.mods){var m=findMod(id);if(m)cost+=m.costFn(S.size)*S.mods[id]}
   S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp)cost+=wp.cost});
   var atInfo=AT_INFO[S.armourTech]||AT_INFO[0];if(atInfo.cost>1)cost=cost*atInfo.cost;
   return Math.max(0,cost)}
@@ -462,23 +634,23 @@ function showImage(){if(S.image){document.getElementById('imgPreview').src=S.ima
 function clearImage(){S.image='';document.getElementById('imgInput').value='';showImage()}
 
 // ═══ IMPORT/EXPORT ═══
-function exportJSON(){var data={version:'1.0',tool:'DiceForge Vehicle Forge',exported:new Date().toISOString(),
-  vehicle:{name:S.name,desc:S.desc,notes:S.notes,image:S.image,size:S.size,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons)),armourTech:S.armourTech}};
+function exportJSON(){var data={version:'1.1',tool:'DiceForge Vehicle Forge',exported:new Date().toISOString(),
+  vehicle:{name:S.name,desc:S.desc,notes:S.notes,image:S.image,size:S.size,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons)),armourTech:S.armourTech,specials:S.specials.slice(),customSpecial:S.customSpecial}};
   var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');a.href=url;a.download=(S.name||'vehicle').replace(/[^a-zA-Z0-9_-]/g,'_')+'.cvf.json';a.click();URL.revokeObjectURL(url)}
+  var a=document.createElement('a');a.href=url;a.download=(S.name||'vehicle').replace(/[^a-zA-Z0-9_-]/g'_')+'.cvf.json';a.click();URL.revokeObjectURL(url)}
 function importJSON(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){
   try{var data=JSON.parse(ev.target.result);
-    if(data.vehicle){var v=data.vehicle;S.name=v.name||'Imported Vehicle';S.desc=v.desc||'';S.notes=v.notes||'';S.image=v.image||'';S.size=v.size||6;S.loco=v.loco||'wheeled';S.mods=v.mods||{};S.weapons=v.weapons||[];S.armourTech=v.armourTech||0;
-      document.getElementById('vName').value=S.name;document.getElementById('vDesc').value=S.desc;document.getElementById('vNotes').value=S.notes;document.getElementById('sizeSlider').value=S.size;
+    if(data.vehicle){var v=data.vehicle;S.name=v.name||'Imported Vehicle';S.desc=v.desc||'';S.notes=v.notes||'';S.image=v.image||'';S.size=v.size||6;S.loco=v.loco||'wheeled';S.mods=v.mods||{};S.weapons=v.weapons||[];S.armourTech=v.armourTech||0;S.specials=v.specials||[];S.customSpecial=v.customSpecial||'';
+      document.getElementById('vName').value=S.name;document.getElementById('vDesc').value=S.desc;document.getElementById('vNotes').value=S.notes;document.getElementById('sizeSlider').value=S.size;document.getElementById('customSpecialInput').value=S.customSpecial;
       showImage();renderAll();Audio.clunk()}
     else if(data.vehicles&&Array.isArray(data.vehicles)){data.vehicles.forEach(function(v){
-        S.saved.push({name:v.name||'Imported',desc:v.desc||'',notes:v.notes||'',image:v.image||'',size:v.size||6,loco:v.loco||'wheeled',mods:v.mods||{},weapons:v.weapons||[],armourTech:v.armourTech||0})});
+        S.saved.push({name:v.name||'Imported',desc:v.desc||'',notes:v.notes||'',image:v.image||'',size:v.size||6,loco:v.loco||'wheeled',mods:v.mods||{},weapons:v.weapons||[],armourTech:v.armourTech||0,specials:v.specials||[],customSpecial:v.customSpecial||''})});
       localStorage.setItem('diceforge-cvf',JSON.stringify(S.saved));renderSaved();Audio.clunk();
       alert('Imported '+data.vehicles.length+' vehicles.')}
     else alert('Invalid .cvf.json file.')}catch(err){alert('Error reading file: '+err.message)}};reader.readAsText(file);e.target.value=''}
 function batchExport(){if(!S.saved.length){alert('No saved vehicles to export.');return}
-  var data={version:'1.0',tool:'DiceForge Vehicle Forge',exported:new Date().toISOString(),count:S.saved.length,
-    vehicles:S.saved.map(function(v){return{name:v.name,desc:v.desc,notes:v.notes,image:v.image,size:v.size,loco:v.loco,mods:JSON.parse(JSON.stringify(v.mods)),weapons:JSON.parse(JSON.stringify(v.weapons)),armourTech:v.armourTech||0}})};
+  var data={version:'1.1',tool:'DiceForge Vehicle Forge',exported:new Date().toISOString(),count:S.saved.length,
+    vehicles:S.saved.map(function(v){return{name:v.name,desc:v.desc,notes:v.notes,image:v.image,size:v.size,loco:v.loco,mods:JSON.parse(JSON.stringify(v.mods)),weapons:JSON.parse(JSON.stringify(v.weapons)),armourTech:v.armourTech||0,specials:v.specials||[],customSpecial:v.customSpecial||''}})};
   var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);
   var a=document.createElement('a');a.href=url;a.download='vehicle-pack-'+S.saved.length+'.cvf.json';a.click();URL.revokeObjectURL(url)}
 
@@ -488,24 +660,32 @@ var drag={active:false,type:null,id:null,ghost:null};
 function startDrag(e,type,id,label){e.preventDefault();Audio.init();var pt=getXY(e);drag={active:true,type:type,id:id,ghost:null};var ghost=document.createElement('div');ghost.className='drag-ghost';ghost.textContent=label;ghost.style.left=pt.x+'px';ghost.style.top=pt.y+'px';document.body.appendChild(ghost);drag.ghost=ghost;var src=e.target.closest('.drag-item')||e.target.closest('.weapon-drag-item');if(src)src.classList.add('dragging');document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onEnd);document.addEventListener('touchmove',onMove,{passive:false});document.addEventListener('touchend',onEnd);document.addEventListener('touchcancel',onEnd)}
 function onMove(e){if(!drag.active||!drag.ghost)return;if(e.cancelable)e.preventDefault();var pt=getXY(e);var bay=document.getElementById(drag.type==='mod'?'modBay':'weaponBay');if(bay){var r=bay.getBoundingClientRect();var inside=pt.x>=r.left&&pt.x<=r.right&&pt.y>=r.top&&pt.y<=r.bottom;bay.classList.toggle('drag-over',inside);drag.ghost.classList.toggle('near-target',!inside&&pt.x>=r.left-80&&pt.x<=r.right+80&&pt.y>=r.top-80&&pt.y<=r.bottom+80)}drag.ghost.style.left=pt.x+'px';drag.ghost.style.top=pt.y+'px'}
 function onEnd(e){document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onEnd);document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onEnd);document.removeEventListener('touchcancel',onEnd);if(drag.ghost)drag.ghost.remove();document.querySelectorAll('.dragging').forEach(function(el){el.classList.remove('dragging')});var pt=getXY(e);var bay=document.getElementById(drag.type==='mod'?'modBay':'weaponBay');if(bay){var r=bay.getBoundingClientRect();if(pt.x>=r.left&&pt.x<=r.right&&pt.y>=r.top&&pt.y<=r.bottom){if(drag.type==='mod')dropMod(drag.id);else dropWeapon(drag.id);bay.classList.remove('impact');void bay.offsetWidth;bay.classList.add('impact')}bay.classList.remove('drag-over')}drag={active:false,type:null,id:null,ghost:null}}
-function dropMod(id){var m=MODS.find(function(x){return x.id===id});var max=m.max==='U'?99:m.max==='frame'?maxArmorTakes():m.max;var cur=S.mods[id]||0;
-  if(id==='inc_speed'&&S.mods.reduced_speed)return;if(id==='reduced_speed'&&S.mods.inc_speed)return;
-  if(id==='exposed'&&S.mods.sealed)return;if(id==='sealed'&&S.mods.exposed)return;
+function dropMod(id){var m=findMod(id);var max=m.max==='U'?99:m.max==='frame'?maxArmorTakes():m.max;var cur=S.mods[id]||0;
+  if(id==='inc_speed'&&S.mods.underpowered)return;if(id==='reduced_speed'&&S.mods.improved_speed)return;
+  if(id==='exposed'&&S.mods.env_seal)return;if(id==='sealed'&&S.mods.open_crew)return;
   if(id==='fwd'&&S.loco!=='wheeled')return;if(id==='road_vehicle'&&S.loco!=='wheeled')return;if(id==='jump_jets'&&!isWalker())return;if(id==='tandem_pilots'&&!isWalker())return;
   if(cur<max){pushUndo();S.mods[id]=cur+1;Audio.clunk();renderModBay(id);renderStats();renderOutput()}}
 function dropWeapon(id){var w=getAllWeapons().find(function(x){return x.id===id});if(!w||w.minSize>S.size)return;
   pushUndo();S.weapons.push({weaponId:id,mount:S.currentMount});Audio.clunk();renderWeaponBay(id);renderStats();renderOutput()}
+// ═══ WEAPON GROUPING HELPER ═══
+function groupWeaponsForDisplay(mode){
+  // mode: 'full' for stat block'compact' for print-all
+  var groups=[];S.weapons.forEach(function(w){var key=w.weaponId+'|'+w.mount;var g=groups.find(function(x){return x.key===key});if(g)g.count++;else groups.push({key:key,weaponId:w.weaponId,mount:w.mount,count:1})});
+  return groups.map(function(g){var wp=getAllWeapons().find(function(x){return x.id===g.weaponId});if(!wp)return null;
+    var ml=g.mount==='fixed'?(mode==='compact'?'Fixed':'Fixed Front'):g.mount==='turret'?'Turret':'Pintle';
+    var prefix=(g.count>1?g.count+'× ':'')+wp.name+' ('+ml+')';
+    if(mode==='compact')return prefix+': '+wp.range+''+wp.damage+', AP '+wp.ap+', RoF '+wp.rof+(wp.notes?''+wp.notes:'');
+    return prefix+': Range '+wp.range+', Damage '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof+(wp.notes?''+wp.notes:'');
+  }).filter(Boolean);
+}
 // ═══ RENDER FUNCTIONS ═══
 function renderLocoGrid(){var el=document.getElementById('locoGrid');
   el.innerHTML=LOCOS.map(function(l){return '<div class="loco-btn'+(S.loco===l.id?' active':'')+'" onclick="setLoco(\''+l.id+'\')"><span>'+l.name+'</span><span class="loco-speed">Spd '+l.speed+'</span></div>'}).join('')}
 function setLoco(id){S.loco=id;Audio.click();renderLocoGrid();renderStats();renderOutput();renderModCatalogue()}
-var AT_INFO={0:{name:'Standard',desc:'Baseline armour for the era. Rolled steel, iron plate, wooden hull, hide over frame. No bonus.',cost:0},4:{name:'Superior',desc:'One generation ahead of baseline. Late-war sloped welded steel, hardened alloys, early composites. +4 Armour. Cost ×2.',cost:2},8:{name:'Advanced',desc:'Two generations ahead. Chobham composite, depleted uranium layers, reactive armour packages. Modern MBTs, advanced sci-fi. +8 Armour. Cost ×4.',cost:4},12:{name:'Exotic',desc:'Three generations ahead. Alien alloys, magical wards, phased materials, energy-bonded plating. +12 Armour. Cost ×8.',cost:8}};
+var AT_INFO={0:{name:'Primitive',desc:'Hide, wicker, wood, leather over frame. +1 Armour per Hull Plating. Cost ×1.',cost:1},1:{name:'Forged',desc:'Iron plate, bronze, oak planking. +2 Armour per Hull Plating. Cost ×1.5.',cost:1.5},2:{name:'Industrial',desc:'Steel plate, case-hardened armour. +3 Armour per Hull Plating. Cost ×2.',cost:2},3:{name:'Composite',desc:'Ceramic-metallic, reactive tiles, Chobham. +4 Armour per Hull Plating. Cost ×3.',cost:3},4:{name:'Nanoweave',desc:'Molecular composites, smart materials. +6 Armour per Hull Plating. Cost ×5.',cost:5},5:{name:'Exotic',desc:'Phase materials, force matrices, alien tech, magical wards. +8 Armour per Hull Plating. Cost ×8.',cost:8}};
 function setAT(v){S.armourTech=v;Audio.click();renderAT();renderStats();renderOutput()}
 function renderAT(){var info=AT_INFO[S.armourTech]||AT_INFO[0];
-  document.getElementById('at0').classList.toggle('active',S.armourTech===0);
-  document.getElementById('at1').classList.toggle('active',S.armourTech===4);
-  document.getElementById('at2').classList.toggle('active',S.armourTech===8);
-  document.getElementById('at3').classList.toggle('active',S.armourTech===12);
+  for(var i=0;i<6;i++){var el=document.getElementById('at'+i);if(el)el.classList.toggle('active',S.armourTech===i)}
   document.getElementById('atDesc').innerHTML=info.desc}
 function setSize(sz){S.size=sz;S.mods={};S.weapons=[];document.getElementById('sizeVal').textContent=sz;document.getElementById('sizeClass').textContent=getFrame(sz).cat;renderFrameInfo();renderLocoGrid();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderStats();renderOutput()}
 function renderFrameInfo(){var f=getFrame(S.size);var ref=SIZE_REF[S.size]||{len:'?',ex:'—',wt:'?'};
@@ -520,15 +700,15 @@ function renderFrameInfo(){var f=getFrame(S.size);var ref=SIZE_REF[S.size]||{len
 
 function renderModCatalogue(){var el=document.getElementById('modCatalogue'),cats={};
   var q=(document.getElementById('modSearch').value||'').toLowerCase();
-  MODS.forEach(function(m){
+  getAllMods().forEach(function(m){
     if(m.id==='fwd'&&S.loco!=='wheeled')return;if(m.id==='road_vehicle'&&S.loco!=='wheeled')return;if(m.id==='jump_jets'&&!isWalker())return;if(m.id==='tandem_pilots'&&!isWalker())return;
     if(q&&m.name.toLowerCase().indexOf(q)===-1&&m.desc.toLowerCase().indexOf(q)===-1&&m.cat.toLowerCase().indexOf(q)===-1)return;
     if(!cats[m.cat])cats[m.cat]=[];cats[m.cat].push(m)});
   var h='';for(var cat in cats){h+='<div class="cat-header">'+cat+'</div>';
-    cats[cat].forEach(function(m){var ms=modSlots(m,S.size);var price=m.costFn(S.size);
+    cats[cat].forEach(function(m){var ms=modSlots(m,S.size);var price=m.costFn(S.size);var badge=m._ext?'<span style="background:var(--accent);color:var(--bg-deep);font-size:8px;padding:1px 4px;margin-left:4px;font-family:Cinzel,serif;letter-spacing:0.5px">'+m._extName+'</span>':'';
       h+='<div class="drag-item" onmousedown="startDrag(event,\'mod\',\''+m.id+'\',\''+m.name+'\')" ontouchstart="startDrag(event,\'mod\',\''+m.id+'\',\''+m.name+'\')">'
         +'<span class="drag-handle">&#x2807;</span>'
-        +'<div class="di-info"><div class="di-name">'+m.name+'</div><div class="di-desc">'+m.desc+'</div></div>'
+        +'<div class="di-info"><div class="di-name">'+m.name+badge+'</div><div class="di-desc">'+m.desc+'</div></div>'
         +'<div class="di-meta"><div class="di-mods">'+(ms>0?ms+' mod'+(ms>1?'s':''):ms<0?'+'+Math.abs(ms)+' mod'+(Math.abs(ms)>1?'s':''):'—')+'</div>'
         +'<div class="di-price">'+(price>=0?'$'+fmtN(price):'-$'+fmtN(Math.abs(price)))+'</div></div></div>'})}
   if(!h)h='<div class="empty-state"><p>No modifications match your search.</p></div>';
@@ -537,7 +717,7 @@ function renderModCatalogue(){var el=document.getElementById('modCatalogue'),cat
 function renderModBay(animId){var bay=document.getElementById('modBay');
   var inst=[];for(var k in S.mods){if(S.mods[k]>0)inst.push([k,S.mods[k]])}
   if(!inst.length){bay.innerHTML='<div class="empty-bay">Drag modifications here to install them</div>';return}
-  bay.innerHTML=inst.map(function(p){var id=p[0],ct=p[1];var m=MODS.find(function(x){return x.id===id});if(!m)return '';var ms=modSlots(m,S.size)*ct;var tp=m.costFn(S.size)*ct;
+  bay.innerHTML=inst.map(function(p){var id=p[0],ct=p[1];var m=findMod(id);if(!m)return '';var ms=modSlots(m,S.size)*ct;var tp=m.costFn(S.size)*ct;
     return '<div class="bay-item '+(id===animId?'snap-in':'')+'">'
       +'<div class="bi-info"><div class="bi-name">'+m.name+'</div>'
       +'<div class="bi-detail">'+(ms>0?ms+' mods':ms<0?'Grants '+Math.abs(ms)+' mods':'0 mods')+' · '+(tp>=0?'$'+fmtN(tp):'-$'+fmtN(Math.abs(tp)))+'</div></div>'
@@ -563,7 +743,7 @@ function renderWeaponCatalogue(){var cats={};
     cats[cat].forEach(function(w){var ok=w.minSize<=S.size;
       h+='<div class="weapon-drag-item" style="'+(ok?'':'opacity:.4;pointer-events:none')+'" onmousedown="startDrag(event,\'weapon\',\''+w.id+'\',\''+w.name+'\')" ontouchstart="startDrag(event,\'weapon\',\''+w.id+'\',\''+w.name+'\')">'
         +'<span class="drag-handle" style="color:var(--text-dim);font-size:14px;opacity:.4">&#x2807;</span>'
-        +'<div class="wdi-info"><div class="wdi-name">'+w.name+(ok?'':' (Min Size '+w.minSize+')')+(w.era&&currentEra==='all'?'<span style="font-size:10px;color:var(--text-dim);font-weight:400"> — '+(ERA_LABELS[w.era]||'Custom')+'</span>':'')+'</div>'
+        +'<div class="wdi-info"><div class="wdi-name">'+w.name+(ok?'':' (Min Size '+w.minSize+')')+(w._ext?'<span style="background:var(--accent);color:var(--bg-deep);font-size:8px;padding:1px 4px;margin-left:4px;font-family:Cinzel,serif;letter-spacing:0.5px">'+w._extName+'</span>':'')+(w.era&&currentEra==='all'?'<span style="font-size:10px;color:var(--text-dim);font-weight:400"> — '+(ERA_LABELS[w.era]||'Custom')+'</span>':'')+'</div>'
         +'<div class="wdi-stats">'+w.range+' · '+w.damage+' · AP '+w.ap+' · RoF '+w.rof+'</div>'
         +'<div class="wdi-stats">'+w.notes+'</div></div>'
         +'<div class="wdi-meta"><div class="wdi-mods">'+w.mods+' mod'+(w.mods!==1?'s':'')+'</div>'
@@ -572,17 +752,24 @@ function renderWeaponCatalogue(){var cats={};
   document.getElementById('weaponCatalogue').innerHTML=h}
 
 function renderWeaponBay(animId){var bay=document.getElementById('weaponBay');
-  if(!S.weapons.length){bay.innerHTML='<div class="empty-bay">Drag weapons here to mount them</div>';return}
-  bay.innerHTML=S.weapons.map(function(w,i){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(!wp)return '';
-    var mc=weaponMountMods(wp,w.mount);var ml=w.mount==='fixed'?'Fixed Front':w.mount==='turret'?'Turret':'Pintle';
-    return '<div class="weapon-bay-item '+(w.weaponId===animId&&i===S.weapons.length-1?'snap-in':'')+'">'
-      +'<div class="wbi-info"><div class="wbi-name">'+wp.name+'</div>'
-      +'<div class="wbi-stats">'+wp.range+' · '+wp.damage+' · AP '+wp.ap+' · '+wp.notes+'</div>'
-      +'<div class="wbi-mount"><span onclick="cycleMount('+i+')" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px" title="Click to change mount type">'+ml+'</span> · '+mc+' mod'+(mc!==1?'s':'')+' · $'+fmtN(wp.cost)+'</div></div>'
-      +'<span class="wbi-remove" onclick="removeWeapon('+i+')">&times;</span></div>'}).join('')}
+  if(!S.weapons.length){bay.innerHTML='<div class="empty-bay">Click weapons in the catalogue to mount them</div>';return}
+  // Group by weaponId+mount
+  var groups=[];S.weapons.forEach(function(w){var key=w.weaponId+'|'+w.mount;var g=groups.find(function(x){return x.key===key});if(g)g.count++;else groups.push({key:key,weaponId:w.weaponId,mount:w.mount,count:1})});
+  bay.innerHTML=groups.map(function(g){var wp=getAllWeapons().find(function(x){return x.id===g.weaponId});if(!wp)return '';
+    var mc=weaponMountMods(wp,g.mount)*g.count;var ml=g.mount==='fixed'?'Fixed Front':g.mount==='turret'?'Turret':'Pintle';
+    return '<div class="weapon-bay-item '+(g.weaponId===animId?'snap-in':'')+'">'+
+      '<div class="wbi-info"><div class="wbi-name">'+wp.name+(g.count>1?' &times;'+g.count:'')+'</div>'+
+      '<div class="wbi-stats">'+wp.range+' &middot; '+wp.damage+' &middot; AP '+wp.ap+' &middot; '+wp.notes+'</div>'+
+      '<div class="wbi-mount"><span onclick="cycleGroupMount(\''+g.key+'\')" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px" title="Click to change mount type">'+ml+'</span> &middot; '+mc+' mod'+(mc!==1?'s':'')+' &middot; $'+fmtN(wp.cost*g.count)+'</div></div>'+
+      '<div class="bi-controls"><button onclick="weaponDec(\''+g.key+'\')">&minus;</button><span class="bi-count">'+g.count+'</span><button onclick="weaponInc(\''+g.key+'\')">+</button></div>'+
+      '<span class="wbi-remove" onclick="weaponRemoveAll(\''+g.key+'\')">&times;</span></div>'}).join('')}
 function switchMount(m){S.currentMount=m;document.querySelectorAll('.mount-tab').forEach(function(t){t.classList.toggle('active',t.dataset.mount===m)})}
 function removeWeapon(i){pushUndo();S.weapons.splice(i,1);Audio.remove();renderWeaponBay();renderStats();renderOutput()}
-function cycleMount(i){pushUndo();var order=['pintle','fixed','turret'];var cur=order.indexOf(S.weapons[i].mount);S.weapons[i].mount=order[(cur+1)%3];Audio.click();renderWeaponBay();renderStats();renderOutput()}
+function cycleMount(i){pushUndo();var order=['pintle''fixed''turret'];var cur=order.indexOf(S.weapons[i].mount);S.weapons[i].mount=order[(cur+1)%3];Audio.click();renderWeaponBay();renderStats();renderOutput()}
+function weaponInc(key){var parts=key.split('|');var wid=parts[0],mt=parts[1];var w=getAllWeapons().find(function(x){return x.id===wid});if(!w||w.minSize>S.size)return;pushUndo();S.weapons.push({weaponId:wid,mount:mt});Audio.clunk();renderWeaponBay();renderStats();renderOutput()}
+function weaponDec(key){var parts=key.split('|');var wid=parts[0],mt=parts[1];for(var i=S.weapons.length-1;i>=0;i--){if(S.weapons[i].weaponId===wid&&S.weapons[i].mount===mt){pushUndo();S.weapons.splice(i,1);Audio.click();renderWeaponBay();renderStats();renderOutput();return}}}
+function weaponRemoveAll(key){var parts=key.split('|');var wid=parts[0],mt=parts[1];pushUndo();S.weapons=S.weapons.filter(function(w){return !(w.weaponId===wid&&w.mount===mt)});Audio.remove();renderWeaponBay();renderStats();renderOutput()}
+function cycleGroupMount(key){var parts=key.split('|');var wid=parts[0],mt=parts[1];var order=['pintle''fixed''turret'];var newMt=order[(order.indexOf(mt)+1)%3];pushUndo();S.weapons.forEach(function(w){if(w.weaponId===wid&&w.mount===mt)w.mount=newMt});Audio.click();renderWeaponBay();renderStats();renderOutput()}
 function toggleCustomForm(){var el=document.getElementById('customForm');
   if(el.style.display==='none'){el.style.display='block';
     el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'
@@ -612,6 +799,7 @@ function addCustomWeapon(){var n=document.getElementById('cw_name').value.trim()
 function renderStats(){var f=getFrame(S.size),used=calcModsUsed(),gained=calcModsGained(),total=(S.size*f.modMult+f.compactBonus)+gained,left=total-used;var spd=calcSpeed();var rspd=calcRoadSpeed();var spdLabel=rspd>spd?'Off-Road':'Top Speed';var spdExtra=rspd>spd?'<div class="stat-box"><div class="stat-label">Road Speed</div><div class="stat-value">'+rspd+' ('+speedMPH(rspd)+' MPH)</div></div>':'';
   document.getElementById('statsGrid').innerHTML=
     '<div class="stat-box"><div class="stat-label">Toughness</div><div class="stat-value">'+calcTough()+' ('+calcArmor()+')</div></div>'
+    +'<div class="stat-box"><div class="stat-label">Weight Class</div><div class="stat-value" style="color:var(--accent)">'+vehicleClassLabel()+'</div></div>'
     +'<div class="stat-box"><div class="stat-label">Wounds</div><div class="stat-value">'+calcWounds()+'</div></div>'
     +'<div class="stat-box"><div class="stat-label">Handling</div><div class="stat-value">'+(calcHand()>=0?'+':'')+calcHand()+'</div></div>'
     +'<div class="stat-box"><div class="stat-label">'+spdLabel+'</div><div class="stat-value">'+spd+' ('+speedMPH(spd)+' MPH)</div></div>'
@@ -626,22 +814,23 @@ function renderStats(){var f=getFrame(S.size),used=calcModsUsed(),gained=calcMod
 function renderOutput(){var p=document.getElementById('outputContent'),f=getFrame(S.size);
   var loco=LOCOS.find(function(l){return l.id===S.loco});var spd=calcSpeed();
   var used=calcModsUsed(),gained=calcModsGained(),left=((S.size*f.modMult+f.compactBonus)+gained)-used;
-  var notes=[];MODS.forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'× '+m.name:m.name)});
-  var wl=[];S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed Front':w.mount==='turret'?'Turret':'Pintle';
-    wl.push(wp.name+' ('+ml+'): Range '+wp.range+', Damage '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof+(wp.notes?', '+wp.notes:''))}});
+  var notes=[];getAllMods().forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'× '+m.name:m.name)});
+  var wl=groupWeaponsForDisplay('full');
   var special=[];
   if(isHeavyArmor())special.push('Heavy Armor');
   if(loco)special.push(loco.name+': '+loco.notes);
   if(isWalker())special.push('Piloting skill. Parry 2 + ½ Piloting + Handling. Fighting = lower of Piloting/Fighting. Always armed (Str '+walkerStr()+' damage, HW).');
-  if(S.mods.shields)special.push('Shields: '+Math.floor(calcWounds()/2)+' charges, Soak with Electronics.');
+  if(S.mods.deflection_field)special.push('Shields: '+Math.floor(calcWounds()/2)+' charges, Soak with Electronics.');
   if(S.mods.reactor)special.push('Reactor: Energy ×10. Locomotion Crit on odd die = explosion.');
-  if(S.mods.stabilizer)special.push('Stabilizer: No Unstable Platform penalty.');
-  if(S.mods.targeting)special.push('Targeting: -2 Shooting penalties.');
+  if(S.mods.gimballed)special.push('Stabilizer: No Unstable Platform penalty.');
+  if(S.mods.fire_control)special.push('Targeting: -2 Shooting penalties.');
   if(S.mods.submersible)special.push('Submersible'+(S.mods.submersible>1?' (Deep Dive)':'')+': Submerge as action. -4 to detect when submerged.');
-  if(S.mods.composite_armor)special.push('Composite Armour: Advanced armour composition.');
+  if(S.mods.composite_layering)special.push('Composite Armour: Advanced armour composition.');
   if(S.armourTech>0){var ati=AT_INFO[S.armourTech];special.push(ati.name+' Armour Technology: +'+S.armourTech+' Armour. Cost ×'+ati.cost+'.'); }
   if(S.mods.road_vehicle)special.push('Road Vehicle: Speed '+calcRoadSpeed()+' ('+speedMPH(calcRoadSpeed())+' MPH) on paved roads.');
   if(S.mods.high_perf_engine)special.push('High-Performance Engine'+(S.mods.high_perf_engine>1?' ×'+S.mods.high_perf_engine:'')+': Halve Energy per take.');
+  // Append toggled Special Abilities
+  getSpecialText().forEach(function(t){special.push(t)});
 
   var imgHtml=S.image?'<div style="text-align:center;margin-bottom:10px"><img src="'+S.image+'" style="max-width:100%;max-height:250px;border:1px solid var(--border)"></div>':'';
   var descHtml=S.desc?'<div style="font-size:13px;font-style:italic;color:var(--text);margin-bottom:8px;line-height:1.4">'+esc(S.desc)+'</div>':'';
@@ -650,7 +839,7 @@ function renderOutput(){var p=document.getElementById('outputContent'),f=getFram
   p.innerHTML=imgHtml+'<div class="stat-block">'
     +'<div class="sb-name">'+(S.name||'Untitled Vehicle')+'</div>'
     +descHtml
-    +'<div class="sb-type">Size '+S.size+' ('+f.cat+'), '+loco.name+', Handling '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)</div>'
+    +'<div class="sb-type">'+vehicleClassLabel()+' — Size '+S.size+' ('+f.cat+')'+loco.name+', Handling '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)</div>'
     +'<hr class="sb-divider">'
     +'<div class="sb-line"><span class="sb-label">Toughness:</span> '+calcTough()+' ('+calcArmor()+')</div>'
     +'<div class="sb-line"><span class="sb-label">Wounds:</span> '+calcWounds()+'</div>'
@@ -659,25 +848,36 @@ function renderOutput(){var p=document.getElementById('outputContent'),f=getFram
     +'<div class="sb-line"><span class="sb-label">Energy:</span> '+calcEnergy()+' days</div>'
     +'<div class="sb-line"><span class="sb-label">Cost:</span> $'+fmtC(calcCost())+', Mods '+left+' remaining</div>'
     +'<hr class="sb-divider">'
-    +(notes.length?'<div class="sb-line"><span class="sb-label">Mods:</span> '+notes.join(', ')+'.</div>':'')
+    +(notes.length?'<div class="sb-line"><span class="sb-label">Mods:</span> '+notes.join('')+'.</div>':'')
     +(wl.length?'<div class="sb-line"><span class="sb-label">Weapons:</span></div>'+wl.map(function(w){return '<div class="sb-line">&nbsp;&nbsp;• '+w+'</div>'}).join(''):'')
-    +(special.length?'<hr class="sb-divider"><div class="sb-notes"><span class="sb-label">Special:</span> '+special.join(' ')+'</div>':'')
+    +(special.length?'<hr class="sb-divider"><div class="sb-notes"><span class="sb-label">Special:</span>'+special.map(function(s){return '<div style="margin:2px 0 2px 12px">&bull; '+s+'</div>'}).join('')+'</div>':'')
     +notesHtml
     +'<div class="sb-watermark">Built with DiceForge Vehicle Forge · diceforgestudios.pages.dev</div>'
     +'</div>'
     +'<div style="margin-top:16px;display:flex;gap:8px"><button class="header-btn" onclick="copyBlock()">Copy to Clipboard</button><button class="header-btn" onclick="exportJSON()">Export .json</button><button class="header-btn" onclick="printStatBlock()">Print</button></div>'}
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}
+function esc(s){return s.replace(/&/g'&amp;').replace(/</g'&lt;').replace(/>/g'&gt;').replace(/\n/g'<br>')}
 
 function copyBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco});var spd=calcSpeed();
   var left=((S.size*f.modMult+f.compactBonus)+calcModsGained())-calcModsUsed();
   var notes=[],wl=[];
-  MODS.forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'x '+m.name:m.name)});
-  S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed':w.mount==='turret'?'Turret':'Pintle';wl.push('  * '+wp.name+' ('+ml+'): '+wp.range+', '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof)}});
+  getAllMods().forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'x '+m.name:m.name)});
+  groupWeaponsForDisplay('compact').forEach(function(line){wl.push('  * '+line)});
   var t=S.name+'\n';if(S.desc)t+=S.desc+'\n';
-  t+='Size '+S.size+' ('+f.cat+'), '+loco.name+', Hand '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)\nTough '+calcTough()+' ('+calcArmor()+'), Wounds '+calcWounds()+', Crew '+f.crew+(isWalker()?', Str '+walkerStr():'')+'\nEnergy '+calcEnergy()+' days, Cost $'+fmtC(calcCost())+', Mods '+left+' remaining\n';
-  if(notes.length)t+='Mods: '+notes.join(', ')+'.\n';if(wl.length)t+='Weapons:\n'+wl.join('\n')+'\n';
-  if(isHeavyArmor())t+='Special: Heavy Armor.';if(isWalker())t+=' Walker rules apply.';
-  t+='\n— Built with DiceForge Vehicle Forge';
+  t+=vehicleClassLabel()+' \u2014 Size '+S.size+' ('+f.cat+')'+loco.name+', Hand '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)\nTough '+calcTough()+' ('+calcArmor()+'), Wounds '+calcWounds()+', Crew '+f.crew+(isWalker()?', Str '+walkerStr():'')+'\nEnergy '+calcEnergy()+' days, Cost $'+fmtC(calcCost())+', Mods '+left+' remaining\n';
+  if(notes.length)t+='Mods: '+notes.join('')+'.\n';if(wl.length)t+='Weapons:\n'+wl.join('\n')+'\n';
+  var special=[];
+  if(isHeavyArmor())special.push('Heavy Armor.');if(loco)special.push(loco.name+': '+loco.notes);
+  if(isWalker())special.push('Str '+walkerStr()+' melee (HW). Walker rules apply.');
+  if(S.mods.deflection_field)special.push('Shields: '+Math.floor(calcWounds()/2)+' charges.');
+  if(S.mods.reactor)special.push('Reactor.');if(S.mods.gimballed)special.push('Stabilizer.');if(S.mods.fire_control)special.push('Targeting.');
+  if(S.mods.submersible)special.push('Submersible'+(S.mods.submersible>1?' (Deep)':'')+'.');
+  if(S.mods.composite_layering)special.push('Composite Armour.');
+  if(S.armourTech>0){var ati=AT_INFO[S.armourTech];special.push(ati.name+' Armour (+'+S.armourTech+').');}
+  if(S.mods.road_vehicle)special.push('Road Speed '+calcRoadSpeed()+' ('+speedMPH(calcRoadSpeed())+' MPH).');
+  if(S.mods.high_perf_engine)special.push('Hi-Perf Engine'+(S.mods.high_perf_engine>1?' x'+S.mods.high_perf_engine:'')+'.');
+  getSpecialText().forEach(function(s){special.push(s)});
+  if(special.length)t+='Special:\n'+special.map(function(s){return '  \u2022 '+s}).join('\n')+'\n';
+  t+='\n\u2014 Built with DiceForge Vehicle Forge';
   navigator.clipboard.writeText(t).then(function(){var btn=event.target;btn.textContent='Copied!';btn.style.borderColor='var(--green)';btn.style.color='var(--green)';setTimeout(function(){btn.textContent='Copy to Clipboard';btn.style.borderColor='';btn.style.color=''},1500)})}
 // ═══ COMPREHENSIVE HELP/REFERENCE PANEL ═══
 function buildHelp(){
@@ -685,9 +885,9 @@ function buildHelp(){
   // SECTION: Quick Start
   h+='<div class="help-section" data-help="quick start overview how to use"><h3>Quick Start Guide</h3>';
   h+='<p><span class="rule-key">1. Name your vehicle</span> in the sidebar — add a description, notes, and optionally upload an image.</p>';
-  h+='<p><span class="rule-key">2. Set Size</span> using the slider (1–20). This determines your frame category, base stats, and available Mods.</p>';
-  h+='<p><span class="rule-key">3. Choose Main Locomotion</span> — wheeled, tracked, hover, VTOL, jet, turboprop, water, or walker (biped/multileg). Use Variable Form for secondary modes.</p>';
-  h+='<p><span class="rule-key">4. Install Modifications</span> by dragging them from the catalogue into the Installed bay. Negative Qualities give Mods back.</p>';
+  h+='<p><span class="rule-key">2. Set Size</span> using the slider (1–30). This determines your frame category, base stats, and available Mods.</p>';
+  h+='<p><span class="rule-key">3. Choose Main Locomotion</span> — wheeled, tracked, hover, VTOL, jet, turboprop, water (sail, propeller, or jet), or walker (biped/multileg). Use Variable Form for secondary modes.</p>';
+  h+='<p><span class="rule-key">4. Install Modifications</span> by dragging them from the catalogue into the Installed bay. Drawbacks give Mods back.</p>';
   h+='<p><span class="rule-key">5. Mount Weapons</span> — select your mount type (Pintle, Fixed, Turret), then drag weapons into the Hardpoints bay.</p>';
   h+='<p><span class="rule-key">6. Review your Stat Block</span> on the output tab. Copy to clipboard or export as .json to share.</p>';
   h+='</div>';
@@ -706,9 +906,9 @@ function buildHelp(){
   // SECTION: Size Reference
   h+='<div class="help-section" data-help="size reference length weight examples dimensions"><h3>Size Reference</h3>';
   h+='<table><tr><th>Size</th><th>Length</th><th>Weight</th><th>Examples</th></tr>';
-  for(var i=1;i<=24;i++){var r=SIZE_REF[i];h+='<tr'+(i>=21?' style="color:#997700;font-style:italic"':'')+'>'+
+  for(var i=1;i<=30;i++){var r=SIZE_REF[i];h+='<tr>'+
     '<td>'+i+'</td><td>~'+r.len+'</td><td>~'+r.wt+'</td><td>'+r.ex+'</td></tr>'}
-  h+='<tr><td colspan="4" style="font-size:10px;color:#888;padding:6px">* Size 21+ extrapolated beyond published Savage Worlds tables. Use as guidelines. Consider mass combat rules for fleet-scale engagements.</td></tr>'
+  h+='<tr><td colspan="4" style="font-size:10px;color:#888;padding:6px">Mass varies significantly by vehicle type and construction. A 100-foot wooden bireme and a 100-foot steel frigate are both Size 12 but have very different masses. Size determines targeting profile, not weight. See the Savage Worlds Vehicle Guide for additional conversion guidance.</td></tr>'
   h+='</table></div>';
 
   // SECTION: Locomotion
@@ -727,7 +927,7 @@ function buildHelp(){
 
   // SECTION: Modifications Reference
   h+='<div class="help-section" data-help="modifications mods negative qualities core defensive systems locomotion power offensive personnel structural"><h3>All Modifications</h3>';
-  var mcats={};MODS.forEach(function(m){if(!mcats[m.cat])mcats[m.cat]=[];mcats[m.cat].push(m)});
+  var mcats={};getAllMods().forEach(function(m){if(!mcats[m.cat])mcats[m.cat]=[];mcats[m.cat].push(m)});
   for(var cat in mcats){h+='<h4>'+cat+'</h4><table><tr><th>Name</th><th>Mods</th><th>Max</th><th>Cost</th><th>Description</th></tr>';
     mcats[cat].forEach(function(m){var ms=modSlots(m,6);h+='<tr><td>'+m.name+'</td><td>'+(ms>0?ms:ms<0?ms:'0')+'</td><td>'+(m.max==='U'?'∞':m.max==='frame'?'Frame':m.max)+'</td><td>'+
       (m.costFn(6)>=0?'$'+fmtN(m.costFn(6)):'-$'+fmtN(Math.abs(m.costFn(6))))+'*</td><td>'+m.desc+'</td></tr>'});
@@ -772,6 +972,27 @@ function buildHelp(){
   h+='<p><span class="rule-key">Collision/Ram:</span> Damage = vehicle\'s base Toughness (plus Strength for walkers) as a melee attack. Both vehicles take damage.</p>';
   h+='<p><span class="rule-key">Chase Rules:</span> Use Speed Ratings to determine chase positions. Piloting/Driving rolls each round to gain or lose ground.</p></div>';
 
+  // SECTION: Weight Class
+  h+='<div class="help-section" data-help="weight class rating I II III IV V VI sci-fi scale weapon compatibility"><h3>Weight Class Rating</h3>';
+  h+='<p>The Weight Class is a sci-fi classification system that matches weapon scale to vehicle durability. A MediumI weapon reliably threatens a MediumI vehicle. One class below is a disadvantage. Two classes below is futile. The class is calculated automatically from total Toughness (armoured value).</p>';
+  h+='<table><tr><th>Class</th><th>Toughness</th><th>Examples</th></tr>';
+  h+='<tr><td>I</td><td>5–15</td><td>Motorcycle, car, light truck, small boat, shuttle</td></tr>';
+  h+='<tr><td>II</td><td>16–25</td><td>APC, WWII tank, fighter, armed yacht, scout ship</td></tr>';
+  h+='<tr><td>III</td><td>26–35</td><td>Modern MBT, heavy tank, corvette, heavy fighter</td></tr>';
+  h+='<tr><td>IV</td><td>36–45</td><td>Frigate, destroyer, armoured cruiser, assault ship</td></tr>';
+  h+='<tr><td>V</td><td>46–55</td><td>Battleship, titan, dreadnought, star destroyer</td></tr>';
+  h+='<tr><td>VI</td><td>56–65</td><td>Star base, mega-titan, orbital platform</td></tr>';
+  h+='<tr><td>VII</td><td>66+</td><td>World-killer, planet cracker, ultra-capital</td></tr>';
+  h+='</table>';
+  h+='<p>Weight Class ratings (L/M/H/S/C/D/T) indicate the vehicle scale category</p></div>';
+
+  // SECTION: Heavy Metal Rules
+  h+='<div class="help-section" data-help="heavy metal rules simplified damage wounds class weapon vehicle combat sci-fi"><h3>Heavy Metal Rules</h3>';
+  h+='<p>The <span class="rule-key">Heavy Metal</span> system in the <em>Savage Worlds Science Fiction Companion</em> simplifies vehicular combat by replacing conventional damage calculations with a quick class-versus-class comparison. When a weapon hits, compare the Weapon Class tag to the target\'s Weight Class to determine the outcome.</p>';
+  h+='<p>Vehicle Forge calculates both Weight Class (from Toughness) and Weapon Class (from average damage + AP) automatically, so all the values you need for Heavy Metal are already on the stat block. Weight Class labels (L through T) match the vehicle scale categories.</p>';
+  h+='<p><span class="rule-key">In brief:</span> outclassed weapons are ineffective, matched weapons are dangerous, and weapons above the target\'s class are devastating. For the full resolution table, warhead modifiers, and worked examples, see the <em>Science Fiction Companion</em> (p.93).</p>';
+  h+='<p style="font-size:11px;color:var(--text-dim)">Available from <a href="https://www.drivethrurpg.com" style="color:var(--gold)">DriveThruRPG</a> and your friendly local game store.</p></div>';
+
   // SECTION: Weapon Notes
   h+='<div class="help-section" data-help="weapon notes abbreviations SBT MBT LBT guided cauterize overcharge incendiary point defense reaction fire reload heavy weapon"><h3>Weapon Notes Glossary</h3>';
   h+='<table><tr><th>Abbreviation</th><th>Meaning</th></tr>';
@@ -781,15 +1002,26 @@ function buildHelp(){
   h+='<tr><td>LBT</td><td>Large Blast Template (6" radius)</td></tr>';
   h+='<tr><td>Cone</td><td>Cone Template (9" default or as noted)</td></tr>';
   h+='<tr><td>Guided</td><td>Weapon tracks target. +2 Shooting. Can be jammed by AM/ECM.</td></tr>';
-  h+='<tr><td>Cauterize</td><td>Energy weapon. Seals wounds on contact.</td></tr>';
-  h+='<tr><td>Overcharge</td><td>Spend extra shot for +1d damage. Risk of burnout on 1.</td></tr>';
+  h+='<tr><td>Clean Burn</td><td>Energy weapon. Seals wounds on contact.</td></tr>';
+  h+='<tr><td></td><td>Spend extra shot for +1d damage. Risk of burnout on 1.</td></tr>';
   h+='<tr><td>Incendiary</td><td>Target catches fire on hit. See Fire rules.</td></tr>';
   h+='<tr><td>Pt Def</td><td>Point Defense — can fire at incoming missiles/torpedoes.</td></tr>';
-  h+='<tr><td>Rxn Fire</td><td>Reaction Fire — can fire during enemy movement.</td></tr>';
+  h+='<tr><td>Rxn Fire</td><td>Defensive Fire — can fire during enemy movement.</td></tr>';
   h+='<tr><td>Reload X</td><td>Requires X actions to reload between shots.</td></tr>';
   h+='<tr><td>Indirect</td><td>Can fire over obstacles without line of sight.</td></tr>';
   h+='<tr><td>AP X</td><td>Armor Piercing — ignores X points of Armor.</td></tr>';
-  h+='<tr><td>(I)–(VI)</td><td>Sci-fi weapon class rating for compatibility.</td></tr>';
+  h+='<tr><td>L–T: Weight Class rating matching vehicle scale</td><td>Weapon class rating. Matches Weight Class — a MediumI weapon reliably threatens a MediumI vehicle. See Weight Class Rating section.</td></tr>';
+  h+='</table></div>';
+
+  // SECTION: Special Abilities
+  h+='<div class="help-section" data-help="special abilities narrative traits zero cost custom divine commission amphibious open top cursed haunted famous stealth"><h3>Special Abilities</h3>';
+  h+='<p>Special Abilities are narrative traits — things a vehicle <em>is</em> rather than things that were engineered into it. They cost no modification slots and do not affect construction math. A DUKW is Amphibious because that is what a DUKW is. A Viking longship has Shallow Draft because it was built to raid up rivers. Noah\'s Ark has Divine Commission because the Almighty said so.</p>';
+  h+='<p>The Special tab provides a library of common abilities sorted by category (Movement, Crew, Durability, Operational, Quirks). Toggle abilities on and off as needed. For anything the library does not cover, use the Custom Special Abilities text field — whatever you type appears directly in the stat block.</p>';
+  h+='<p>This is core Savage Worlds philosophy. The published vehicle stat blocks are full of notes that have no construction cost: \"Amphibious,\" \"Night Vision,\" \"Handles poorly in reverse.\" Special Abilities are how the Vehicle Forge does the same thing. The construction system tells you what the vehicle <em>can do</em>. Special Abilities tell you what the vehicle <em>is</em>.</p>';
+  h+='<p><span class="rule-key">Design Advice:</span> The most memorable vehicles are defined by their Special Abilities more than their stats. The Millennium Falcon is Famous, Cramped, and has Smuggling Compartments. Christine is Sentient and Temperamental. The Nautilus is Sealed, Stealth, and the captain has issues. A stat block without Special Abilities is a set of numbers. A stat block with them is a story.</p>';
+  h+='<table><tr><th>Category</th><th>Abilities</th></tr>';
+  var sacats={};getAllSpecials().forEach(function(s){if(!sacats[s.cat])sacats[s.cat]=[];sacats[s.cat].push(s.name)});
+  Object.keys(sacats).forEach(function(c){h+='<tr><td>'+c+'</td><td>'+sacats[c].join('')+'</td></tr>'});
   h+='</table></div>';
 
   // SECTION: Import/Export
@@ -802,7 +1034,7 @@ function buildHelp(){
   // SECTION: About
   h+='<div class="help-section" data-help="about credits diceforge studios savage worlds compatible"><h3>About Vehicle Forge</h3>';
   h+='<p>Vehicle Forge is a universal vehicle construction toolkit fully compatible with Savage Worlds. It covers every vehicle type from ancient war chariots to far-future hover carriers — ground, air, water, and walker — in a single tool.</p>';
-  h+='<p>71 weapons across 7 historical eras (Ancient through Advanced), 40+ modifications, 10 locomotion types, and sizes from 1 (motorcycle) to 20 (mega-platform). Plus custom weapon entry for anything your setting needs.</p>';
+  h+='<p>111 weapons across 7 historical eras (Ancient through Advanced), 40+ modifications, 11 locomotion types, and sizes from 1 (motorcycle) to 30 (star base). All weapons carry a class rating compatible with the Heavy Metal rules. Plus custom weapon entry for anything your setting needs.</p>';
   h+='<p style="font-size:12px;color:var(--text-dim);margin-top:8px">This product is not affiliated with or endorsed by Pinnacle Entertainment Group. Savage Worlds and all related marks and logos are trademarks of Pinnacle Entertainment Group. Used with permission.</p></div>';
 
   return h}
@@ -813,28 +1045,57 @@ function filterHelp(){var q=(document.getElementById('helpSearch').value||'').to
     var tags=(s.dataset.help||'')+' '+s.textContent.toLowerCase();
     s.style.display=tags.indexOf(q)>=0?'':'none'})}
 
+function popOutHelp(){var w=window.open('''VF_Reference''width=900,height=800,scrollbars=yes,resizable=yes');
+  var d=w.document;d.open();
+  d.write('<!DOCTYPE html><html><head><title>Vehicle Forge — Reference Guide</title>');
+  d.write('<style>');
+  d.write('*{box-sizing:border-box;margin:0;padding:0}');
+  d.write('body{background:#1a1a1a;color:#d4c5a0;font:14px/1.6 "Crimson Pro",Georgia,serif;padding:24px 32px}');
+  d.write('h2{color:#c5a442;font-family:Cinzel,serif;margin:0 0 16px;font-size:22px;border-bottom:2px solid #c5a442;padding-bottom:8px}');
+  d.write('h3{color:#c5a442;font-family:Cinzel,serif;margin:24px 0 10px;font-size:17px}');
+  d.write('h4{color:#b89a3a;margin:14px 0 6px;font-size:15px}');
+  d.write('p{margin:6px 0}');
+  d.write('table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}');
+  d.write('th{background:#2a2a2a;color:#c5a442;padding:6px 8px;text-align:left;border:1px solid #333;font-family:Cinzel,serif;font-size:12px}');
+  d.write('td{padding:5px 8px;border:1px solid #333;vertical-align:top}');
+  d.write('tr:nth-child(even){background:#222}');
+  d.write('.rule-key{color:#c5a442;font-weight:700}');
+  d.write('.rule-note{font-size:12px;color:#888;margin:8px 0}');
+  d.write('.search-bar{width:100%;padding:10px 14px;background:#222;border:1px solid #444;color:#d4c5a0;font:14px "Crimson Pro",Georgia,serif;border-radius:4px;margin-bottom:16px}');
+  d.write('.search-bar:focus{border-color:#c5a442;outline:none}');
+  d.write('.help-section{margin-bottom:20px;padding:12px 16px;background:#222;border:1px solid #333;border-radius:6px}');
+  d.write('em{color:#c5a442}');
+  d.write('</style></head><body>');
+  d.write('<h2>Vehicle Forge — Reference Guide</h2>');
+  d.write('<input type="text" class="search-bar" id="popSearch" placeholder="Search reference guide..." oninput="filterPop()">');
+  d.write(buildHelp());
+  d.write('<script>function filterPop(){var q=(document.getElementById("popSearch").value||"").toLowerCase();document.querySelectorAll(".help-section").forEach(function(s){if(!q){s.style.display="";return}var tags=(s.dataset.help||"")+" "+s.textContent.toLowerCase();s.style.display=tags.indexOf(q)>=0?"":"none"})}<\/script>');
+  d.write('</body></html>');
+  d.close();w.focus()}
+
 // ═══ TABS, SAVE/LOAD, UTILS ═══
 function switchTab(tab){document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===tab)});document.querySelectorAll('.panel').forEach(function(p){p.classList.toggle('active',p.id==='panel-'+tab)});if(tab==='output')renderOutput()}
-function newVehicle(){S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:S.saved,armourTech:0};document.getElementById('vName').value=S.name;document.getElementById('vDesc').value='';document.getElementById('vNotes').value='';document.getElementById('sizeSlider').value=6;clearImage();undoStack=[];redoStack=[];renderAll()}
+function newVehicle(){S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:S.saved,armourTech:0,specials:[],customSpecial:''};document.getElementById('vName').value=S.name;document.getElementById('vDesc').value='';document.getElementById('vNotes').value='';document.getElementById('sizeSlider').value=6;document.getElementById('customSpecialInput').value='';clearImage();undoStack=[];redoStack=[];renderAll()}
 function duplicateVehicle(){S.name=(S.name||'Vehicle')+' (copy)';document.getElementById('vName').value=S.name;saveVehicle();Audio.clunk()}
 function printStatBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco}),spd=calcSpeed();
   var used=calcModsUsed(),gained=calcModsGained(),left=((S.size*f.modMult+f.compactBonus)+gained)-used;
-  var notes=[];MODS.forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'× '+m.name:m.name)});
-  var wl=[];S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed Front':w.mount==='turret'?'Turret':'Pintle';wl.push(wp.name+' ('+ml+'): Range '+wp.range+', Damage '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof+(wp.notes?', '+wp.notes:''))}});
+  var notes=[];getAllMods().forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'× '+m.name:m.name)});
+  var wl=groupWeaponsForDisplay('full');
   var special=[];
   if(isHeavyArmor())special.push('Heavy Armor');if(loco)special.push(loco.name+': '+loco.notes);
   if(isWalker())special.push('Str '+walkerStr()+' melee (HW).');
-  if(S.mods.shields)special.push('Shields: '+Math.floor(calcWounds()/2)+' charges.');
-  if(S.mods.reactor)special.push('Reactor.');if(S.mods.stabilizer)special.push('Stabilizer.');if(S.mods.targeting)special.push('Targeting System.');
+  if(S.mods.deflection_field)special.push('Shields: '+Math.floor(calcWounds()/2)+' charges.');
+  if(S.mods.reactor)special.push('Reactor.');if(S.mods.gimballed)special.push('Stabilizer.');if(S.mods.fire_control)special.push('Targeting System.');
   if(S.mods.submersible)special.push('Submersible'+(S.mods.submersible>1?' (Deep)':'')+'.');
-  if(S.mods.composite_armor)special.push('Composite Armour.');
+  if(S.mods.composite_layering)special.push('Composite Armour.');
   if(S.armourTech>0){var ati=AT_INFO[S.armourTech];special.push(ati.name+' Armour (+'+S.armourTech+').'); }
   if(S.mods.road_vehicle)special.push('Road Speed '+calcRoadSpeed()+' ('+speedMPH(calcRoadSpeed())+' MPH).');
   if(S.mods.high_perf_engine)special.push('High-Perf Engine'+(S.mods.high_perf_engine>1?' ×'+S.mods.high_perf_engine:'')+'. Halve Energy.');
+  getSpecialText().forEach(function(t){special.push(t)});
   var imgTag=S.image?'<img src="'+S.image+'" style="max-width:100%;max-height:200px;display:block;margin:0 auto 8px">':'';
   var descLine=S.desc?'<p style="font-style:italic;margin:4px 0">'+esc(S.desc)+'</p>':'';
   var notesLine=S.notes?'<p style="font-size:11px;color:#666;margin-top:8px;border-top:1px solid #ccc;padding-top:6px"><strong>GM Notes:</strong> '+esc(S.notes)+'</p>':'';
-  var win=window.open('','_blank','width=700,height=900');
+  var win=window.open('''_blank''width=700,height=900');
   win.document.write('<!DOCTYPE html><html><head><title>'+esc(S.name)+' — Stat Block</title>'
     +'<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Georgia,serif;font-size:13px;line-height:1.5;padding:24px;color:#111;max-width:600px;margin:0 auto}'
     +'h1{font-size:20px;border-bottom:2px solid #333;padding-bottom:4px;margin-bottom:4px}'
@@ -847,7 +1108,7 @@ function printStatBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){ret
     +imgTag
     +'<h1>'+esc(S.name)+'</h1>'
     +descLine
-    +'<div class="type">Size '+S.size+' ('+f.cat+'), '+loco.name+', Handling '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)</div>'
+    +'<div class="type">'+vehicleClassLabel()+' — Size '+S.size+' ('+f.cat+')'+loco.name+', Handling '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)</div>'
     +'<hr>'
     +'<div class="line"><span class="label">Toughness:</span> '+calcTough()+' ('+calcArmor()+')</div>'
     +'<div class="line"><span class="label">Wounds:</span> '+calcWounds()+'</div>'
@@ -856,46 +1117,47 @@ function printStatBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){ret
     +'<div class="line"><span class="label">Energy:</span> '+calcEnergy()+' days</div>'
     +'<div class="line"><span class="label">Cost:</span> $'+fmtC(calcCost())+'</div>'
     +'<hr>'
-    +(notes.length?'<div class="line"><span class="label">Mods:</span> '+notes.join(', ')+'.</div>':'')
+    +(notes.length?'<div class="line"><span class="label">Mods:</span> '+notes.join('')+'.</div>':'')
     +(wl.length?'<div class="line"><span class="label">Weapons:</span></div>'+wl.map(function(w){return '<div class="line">&nbsp;&nbsp;• '+w+'</div>'}).join(''):'')
-    +(special.length?'<hr><div class="special"><span class="label">Special:</span> '+special.join(' ')+'</div>':'')
+    +(special.length?'<hr><div class="special"><span class="label">Special:</span>'+special.map(function(s){return '<div style="margin:2px 0 2px 12px">&bull; '+s+'</div>'}).join('')+'</div>':'')
     +notesLine
     +'<div class="watermark">Built with DiceForge Vehicle Forge · diceforgestudios.pages.dev</div>'
     +'<script>window.onload=function(){window.print()}<\/script>'
     +'</body></html>');
   win.document.close()}
 function buildStatHTML(v){
-  var origState={name:S.name,desc:S.desc,notes:S.notes,image:S.image,size:S.size,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons)),armourTech:S.armourTech};
-  S.name=v.name;S.desc=v.desc||'';S.notes=v.notes||'';S.image=v.image||'';S.size=v.size;S.loco=v.loco;S.mods=JSON.parse(JSON.stringify(v.mods));S.weapons=JSON.parse(JSON.stringify(v.weapons));S.armourTech=v.armourTech||0;
+  var origState={name:S.name,desc:S.desc,notes:S.notes,image:S.image,size:S.size,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons)),armourTech:S.armourTech,specials:S.specials.slice(),customSpecial:S.customSpecial};
+  S.name=v.name;S.desc=v.desc||'';S.notes=v.notes||'';S.image=v.image||'';S.size=v.size;S.loco=v.loco;S.mods=JSON.parse(JSON.stringify(v.mods));S.weapons=JSON.parse(JSON.stringify(v.weapons));S.armourTech=v.armourTech||0;S.specials=v.specials||[];S.customSpecial=v.customSpecial||'';
   var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco}),spd=calcSpeed();
-  var notes=[];MODS.forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'× '+m.name:m.name)});
-  var wl=[];S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed':w.mount==='turret'?'Turret':'Pintle';wl.push(wp.name+' ('+ml+'): '+wp.range+', '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof+(wp.notes?', '+wp.notes:''))}});
+  var notes=[];getAllMods().forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'× '+m.name:m.name)});
+  var wl=groupWeaponsForDisplay('compact');
   var special=[];
   if(isHeavyArmor())special.push('Heavy Armor');if(loco)special.push(loco.name);
   if(isWalker())special.push('Str '+walkerStr()+' melee (HW)');
-  if(S.mods.shields)special.push('Shields '+Math.floor(calcWounds()/2));if(S.mods.reactor)special.push('Reactor');
-  if(S.mods.stabilizer)special.push('Stabilizer');if(S.mods.targeting)special.push('Targeting');
+  if(S.mods.deflection_field)special.push('Shields '+Math.floor(calcWounds()/2));if(S.mods.reactor)special.push('Reactor');
+  if(S.mods.gimballed)special.push('Stabilizer');if(S.mods.fire_control)special.push('Targeting');
   if(S.mods.submersible)special.push('Submersible'+(S.mods.submersible>1?' (Deep)':''));
-  if(S.mods.composite_armor)special.push('Composite Armour');
+  if(S.mods.composite_layering)special.push('Composite Armour');
   if(S.armourTech>0)special.push(AT_INFO[S.armourTech].name+' AT (+'+S.armourTech+')');
   if(S.mods.road_vehicle)special.push('Road Spd '+calcRoadSpeed()+' ('+speedMPH(calcRoadSpeed())+' MPH)');
   if(S.mods.high_perf_engine)special.push('Hi-Perf'+(S.mods.high_perf_engine>1?' ×'+S.mods.high_perf_engine:''));
+  getSpecialText().forEach(function(t){special.push(t)});
   var h='<div class="card"><h2>'+esc(S.name)+'</h2>';
   if(S.desc)h+='<p class="desc">'+esc(S.desc)+'</p>';
-  h+='<div class="type">Size '+S.size+' ('+f.cat+'), '+(loco?loco.name:'?')+', H'+(calcHand()>=0?'+':'')+calcHand()+', Spd '+spd+' ('+speedMPH(spd)+' MPH)</div>';
+  h+='<div class="type">'+vehicleClassLabel()+' — Size '+S.size+' ('+f.cat+')'+(loco?loco.name:'?')+', H'+(calcHand()>=0?'+':'')+calcHand()+', Spd '+spd+' ('+speedMPH(spd)+' MPH)</div>';
   h+='<div class="stats"><span><b>Tough:</b> '+calcTough()+'('+calcArmor()+')</span><span><b>Wounds:</b> '+calcWounds()+'</span><span><b>Crew:</b> '+f.crew+'</span>';
   if(isWalker())h+='<span><b>Str:</b> '+walkerStr()+'</span>';
   h+='<span><b>Cost:</b> $'+fmtC(calcCost())+'</span></div>';
-  if(notes.length)h+='<div class="mods"><b>Mods:</b> '+notes.join(', ')+'</div>';
+  if(notes.length)h+='<div class="mods"><b>Mods:</b> '+notes.join('')+'</div>';
   if(wl.length)h+='<div class="wpns"><b>Weapons:</b> '+wl.join('; ')+'</div>';
-  if(special.length)h+='<div class="spec"><b>Special:</b> '+special.join(', ')+'</div>';
+  if(special.length)h+='<div class="spec"><b>Special:</b>'+special.map(function(s){return '<div style="margin:1px 0 1px 10px">&bull; '+s+'</div>'}).join('')+'</div>';
   if(S.notes)h+='<div class="gm"><b>GM:</b> '+esc(S.notes)+'</div>';
   h+='</div>';
-  S.name=origState.name;S.desc=origState.desc;S.notes=origState.notes;S.image=origState.image;S.size=origState.size;S.loco=origState.loco;S.mods=JSON.parse(JSON.stringify(origState.mods));S.weapons=JSON.parse(JSON.stringify(origState.weapons));S.armourTech=origState.armourTech;
+  S.name=origState.name;S.desc=origState.desc;S.notes=origState.notes;S.image=origState.image;S.size=origState.size;S.loco=origState.loco;S.mods=JSON.parse(JSON.stringify(origState.mods));S.weapons=JSON.parse(JSON.stringify(origState.weapons));S.armourTech=origState.armourTech;S.specials=origState.specials;S.customSpecial=origState.customSpecial;
   return h}
 function printAll(){if(!S.saved.length){alert('No saved vehicles to print.');return}
   var cards=S.saved.map(function(v){return buildStatHTML(v)}).join('');
-  var win=window.open('','_blank','width=800,height=900');
+  var win=window.open('''_blank''width=800,height=900');
   win.document.write('<!DOCTYPE html><html><head><title>Vehicle Pack — '+S.saved.length+' Vehicles</title>'
     +'<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Georgia,serif;font-size:11px;line-height:1.4;padding:16px;color:#111}'
     +'.card{border:2px solid #333;padding:10px 12px;margin-bottom:12px;page-break-inside:avoid;max-width:600px}'
@@ -913,8 +1175,8 @@ function printAll(){if(!S.saved.length){alert('No saved vehicles to print.');ret
     +'<script>window.onload=function(){window.print()}<\\/script>'
     +'</body></html>');
   win.document.close()}
-function saveVehicle(){var d={name:S.name,desc:S.desc,notes:S.notes,image:S.image,size:S.size,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons)),armourTech:S.armourTech};var i=S.saved.findIndex(function(s){return s.name===S.name});if(i>=0)S.saved[i]=d;else S.saved.push(d);localStorage.setItem('diceforge-cvf',JSON.stringify(S.saved));renderSaved();Audio.click()}
-function loadVehicle(i){var d=S.saved[i];S.name=d.name;S.desc=d.desc||'';S.notes=d.notes||'';S.image=d.image||'';S.size=d.size;S.loco=d.loco;S.mods=JSON.parse(JSON.stringify(d.mods));S.weapons=JSON.parse(JSON.stringify(d.weapons));S.armourTech=d.armourTech||0;document.getElementById('vName').value=S.name;document.getElementById('vDesc').value=S.desc;document.getElementById('vNotes').value=S.notes;document.getElementById('sizeSlider').value=S.size;showImage();renderAll()}
+function saveVehicle(){var d={name:S.name,desc:S.desc,notes:S.notes,image:S.image,size:S.size,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons)),armourTech:S.armourTech,specials:S.specials.slice(),customSpecial:S.customSpecial};var i=S.saved.findIndex(function(s){return s.name===S.name});if(i>=0)S.saved[i]=d;else S.saved.push(d);localStorage.setItem('diceforge-cvf',JSON.stringify(S.saved));renderSaved();Audio.click()}
+function loadVehicle(i){var d=S.saved[i];S.name=d.name;S.desc=d.desc||'';S.notes=d.notes||'';S.image=d.image||'';S.size=d.size;S.loco=d.loco;S.mods=JSON.parse(JSON.stringify(d.mods));S.weapons=JSON.parse(JSON.stringify(d.weapons));S.armourTech=d.armourTech||0;S.specials=d.specials||[];S.customSpecial=d.customSpecial||'';document.getElementById('vName').value=S.name;document.getElementById('vDesc').value=S.desc;document.getElementById('vNotes').value=S.notes;document.getElementById('sizeSlider').value=S.size;document.getElementById('customSpecialInput').value=S.customSpecial;showImage();renderAll()}
 function deleteSaved(i){S.saved.splice(i,1);localStorage.setItem('diceforge-cvf',JSON.stringify(S.saved));renderSaved()}
 function renderSaved(){var list=document.getElementById('savedList');
   if(!S.saved.length){list.innerHTML='<div class="empty-state"><p>No saved builds yet.</p></div>';return}
@@ -922,7 +1184,41 @@ function renderSaved(){var list=document.getElementById('savedList');
     return '<div class="saved-item" onclick="loadVehicle('+i+')"><span class="si-name">'+esc(s.name)+'</span><span class="si-chassis">Size '+s.size+' '+(loco?loco.name:'')+'</span><button class="si-delete" onclick="event.stopPropagation();deleteSaved('+i+')">&times;</button></div>'}).join('')}
 function fmtN(n){return n.toLocaleString()}
 function fmtC(n){if(n>=1e9)return(n/1e9).toFixed(2)+'B';if(n>=1e6)return(n/1e6).toFixed(n%1e6===0?0:2)+'M';if(n>=1e3)return(n/1e3).toFixed(n%1e3===0?0:1)+'K';return n.toString()}
-function renderAll(){renderFrameInfo();renderLocoGrid();renderAT();renderEraFilter();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderStats();renderOutput();renderSaved()}
+function renderSpecials(){
+  var grid=document.getElementById('specialsGrid');
+  var cats={};getAllSpecials().forEach(function(sa){if(!cats[sa.cat])cats[sa.cat]=[];cats[sa.cat].push(sa)});
+  var h='';
+  Object.keys(cats).forEach(function(cat){
+    h+='<div style="margin-bottom:12px"><h4 style="font-size:12px;color:var(--gold);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">'+cat+'</h4>';
+    h+='<div style="display:flex;flex-wrap:wrap;gap:4px">';
+    cats[cat].forEach(function(sa){
+      var active=S.specials.indexOf(sa.id)>=0;
+      h+='<div class="loco-btn'+(active?' active':'')+'" style="font-size:11px;padding:4px 8px;cursor:pointer" onclick="toggleSpecial(\''+sa.id+'\')" title="'+sa.desc.replace(/"/g'&quot;')+'">'+sa.name+'</div>';
+    });
+    h+='</div></div>';
+  });
+  grid.innerHTML=h;
+  // Active list
+  var al=document.getElementById('activeSpecialsList');
+  var active=S.specials.map(function(id){return findSpecial(id)}).filter(Boolean);
+  if(!active.length&&!S.customSpecial){al.innerHTML='None selected.';return}
+  var lh='';
+  active.forEach(function(sa){lh+='<div style="margin-bottom:4px"><strong>'+sa.name+':</strong> '+sa.desc+'</div>'});
+  if(S.customSpecial)lh+='<div style="margin-bottom:4px"><strong>Custom:</strong> '+esc(S.customSpecial)+'</div>';
+  al.innerHTML=lh;
+}
+function toggleSpecial(id){
+  var idx=S.specials.indexOf(id);
+  if(idx>=0)S.specials.splice(idx,1);else S.specials.push(id);
+  Audio.click();renderSpecials();renderOutput();
+}
+function getSpecialText(){
+  var parts=[];
+  S.specials.forEach(function(id){var sa=findSpecial(id);if(sa)parts.push(sa.name+': '+sa.desc)});
+  if(S.customSpecial)parts.push(S.customSpecial);
+  return parts;
+}
+function renderAll(){renderFrameInfo();renderLocoGrid();renderAT();renderEraFilter();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderStats();renderSpecials();renderOutput();renderSaved()}
 
 // ═══ NAV BAR ═══
 (function(){var tools=[{id:'foundry',label:'🏭 The Foundry',url:'foundry'},{id:'adventure-vault',label:'🎭 Adventure Vault',url:'adventure-vault'},{id:'character-vault',label:'👤 Character Vault',url:'character-vault'},{id:'cvf',label:'⚙ Vehicle Forge',url:'combat-vehicle-forge'},{id:'pa-forge',label:'🛡 Power Armour Forge',url:'pa-forge'}];
@@ -931,8 +1227,8 @@ function renderAll(){renderFrameInfo();renderLocoGrid();renderAT();renderEraFilt
   document.getElementById('toolNavContainer').appendChild(nav)})();
 
 // ═══ BOOT ═══
-(function(){function unlock(){Audio.init();if(Audio.ctx.state==='suspended')Audio.ctx.resume();var buf=Audio.ctx.createBuffer(1,1,Audio.ctx.sampleRate);var src=Audio.ctx.createBufferSource();src.buffer=buf;src.connect(Audio.ctx.destination);src.start(0);['touchstart','touchend','mousedown','click'].forEach(function(e){document.removeEventListener(e,unlock,true)})}
-  ['touchstart','touchend','mousedown','click'].forEach(function(e){document.addEventListener(e,unlock,true)})})();
+(function(){function unlock(){Audio.init();if(Audio.ctx.state==='suspended')Audio.ctx.resume();var buf=Audio.ctx.createBuffer(1,1,Audio.ctx.sampleRate);var src=Audio.ctx.createBufferSource();src.buffer=buf;src.connect(Audio.ctx.destination);src.start(0);['touchstart''touchend''mousedown''click'].forEach(function(e){document.removeEventListener(e,unlock,true)})}
+  ['touchstart''touchend''mousedown''click'].forEach(function(e){document.addEventListener(e,unlock,true)})})();
 try{var sd=localStorage.getItem('diceforge-cvf');if(sd)S.saved=JSON.parse(sd)}catch(e){}
 document.getElementById('vName').addEventListener('input',function(e){S.name=e.target.value||'Untitled Vehicle'});
 document.getElementById('vDesc').addEventListener('input',function(e){S.desc=e.target.value||''});
