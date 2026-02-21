@@ -313,6 +313,7 @@ var MODS=[
   {id:'bone_shaker',name:'Bone Shaker',cat:'Drawbacks',max:1,mods:-1,costFn:function(s){return -8000*s},desc:'Unstable Platform penalty is -3 instead of -2.'},
   {id:'death_trap',name:'Death Trap',cat:'Drawbacks',max:1,mods:-1,costFn:function(s){return -8000*s},desc:'Full collision damage. Eject at -2. Crew take +2 damage from penetrating hits.'},
   {id:'lightweight',name:'Lightweight Build',cat:'Drawbacks',max:3,mods:-1,costFn:function(s){return -8000*s},desc:'-2 base Toughness per take. Plywood, canvas, aluminium, fibreglass.'},
+  {id:'light_frame',name:'Light Frame',cat:'Drawbacks',max:3,mods:0,costFn:function(s){return -4000*s},desc:'-1 base Toughness per take. Thinner gauge, lighter materials, or less structural mass than typical for this size. Not damaged — just built lighter.'},
   // ═══ CORE SYSTEMS ═══
   {id:'machine_intel',name:'Machine Intelligence',cat:'Core Systems',max:3,mods:2,costFn:function(s){return 8000*s},desc:'AI companion. 1st: d6+Wild Die. 2nd: d8. 3rd: d10 + one free action per round for ship systems.'},
   {id:'enhanced_sensors',name:'Enhanced Sensors',cat:'Core Systems',max:1,mods:1,costFn:function(){return 12000},desc:'30× magnification, ignore 2 Illumination, +1 Notice. +2 vs Stealth at night.'},
@@ -623,7 +624,7 @@ document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key
 function modSlots(m,sz){if(m.mods==='comfort'){var tk=S.mods[m.id]||0;if(tk<=0)return 2;if(tk===1)return 3;return 5}if(m.mods==='sizehalf')return Math.max(1,Math.ceil(sz/2));if(m.mods==='half')return Math.ceil(sz/2);if(m.mods==='halfneg')return -Math.ceil(sz/2);if(m.mods==='size')return sz;return m.mods}
 function weaponMountMods(w,mount){var mc=w.mods;if(mount==='fixed')mc=Math.ceil(mc/2);if(mount==='turret')mc=mc*2;return mc}
 function maxArmorTakes(){var f=getFrame(S.size);return Math.floor((f.maxArmor-f.baseTough)/2)}
-function calcTough(){var f=getFrame(S.size),t=f.baseTough;if(S.mods.war_worn)t-=1*S.mods.war_worn;if(S.mods.lightweight)t-=2*S.mods.lightweight;if(S.mods.composite_hull)t+=1*S.mods.composite_hull;return Math.max(0,t)}
+function calcTough(){var f=getFrame(S.size),t=f.baseTough;if(S.mods.war_worn)t-=1*S.mods.war_worn;if(S.mods.lightweight)t-=2*S.mods.lightweight;if(S.mods.light_frame)t-=1*S.mods.light_frame;if(S.mods.composite_hull)t+=1*S.mods.composite_hull;return Math.max(0,t)}
 function calcVehicleClass(){var sz=S.size;if(sz<=3)return 'L';if(sz<=7)return 'M';if(sz<=11)return 'H';if(sz<=20)return 'S';if(sz<=25)return 'C';return 'T'}
 function frameTypeLabel(){var ft=S.frameType||'civilian';if(ft==='civilian')return'Civilian';if(ft==='rugged')return'Rugged';return'Military'}
 function vehicleClassLabel(){var c=calcVehicleClass();var names={L:'Light',M:'Medium',H:'Heavy',S:'Super-Heavy',C:'Capital',T:'Titan'};return names[c]||c};return names[c]||c}
