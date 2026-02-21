@@ -785,11 +785,12 @@ function renderWeaponCatalogue(){var cats={};
 function renderWeaponBay(animId){var bay=document.getElementById('weaponBay');
   if(!S.weapons.length){bay.innerHTML='<div class="empty-bay">Drag weapons here to mount them</div>';return}
   bay.innerHTML=S.weapons.map(function(w,i){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(!wp)return '';
-    var mc=weaponMountMods(wp,w.mount);var ml=w.mount==='fixed'?'Fixed Front':w.mount==='turret'?'Turret':'Pintle';
+    var mc=weaponMountMods(wp,w.mount);var ml=w.mount==='fixed'?'Fixed':w.mount==='turret'?'Turret':'Pintle';
+    var mbg=w.mount==='fixed'?'#3a6a8a':w.mount==='turret'?'#3a7a4a':'#8a6a2a';var mfg='#fff';
     return '<div class="weapon-bay-item '+(w.weaponId===animId&&i===S.weapons.length-1?'snap-in':'')+'">'
       +'<div class="wbi-info"><div class="wbi-name">'+wp.name+' <span style="color:var(--accent);font-weight:700;font-size:12px">Grade '+weaponGradeLabel(wp)+'</span></div>'
       +'<div class="wbi-stats">'+wp.range+' · '+wp.damage+' · AP '+wp.ap+' · '+wp.notes+'</div>'
-      +'<div class="wbi-mount"><span onclick="cycleMount('+i+')" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px" title="Click to change mount type">'+ml+'</span> · '+mc+' mod'+(mc!==1?'s':'')+' · $'+fmtN(wp.cost)
+      +'<div class="wbi-mount"><span onclick="cycleMount('+i+')" style="cursor:pointer;display:inline-block;background:'+mbg+';color:'+mfg+';padding:1px 8px;border-radius:3px;font-size:11px;font-weight:700;letter-spacing:.5px;user-select:none" title="Click to cycle mount type">'+ml+'</span> · '+mc+' mod'+(mc!==1?'s':'')+' · $'+fmtN(wp.cost)
       +' <span style="margin-left:8px"><span onclick="dupeWeapon('+i+')" style="cursor:pointer;color:var(--accent);font-size:14px;padding:0 4px" title="Add another">+</span>'
       +'<span onclick="removeWeapon('+i+')" style="cursor:pointer;color:#c44;font-size:14px;padding:0 4px" title="Remove one">\u2212</span></span>'
       +'</div></div>'
