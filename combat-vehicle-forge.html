@@ -349,7 +349,8 @@ var MODS=[
   // ═══ STRUCTURAL & WALKER ═══
   {id:'vehicle_bay',name:'Vehicle Bay',cat:'Structural',max:'U',mods:4,costFn:function(s){return 50000*s},desc:'Carry up to 8 Size points (max 1/3 your Size) per take. Includes fuelling and maintenance.'},
   {id:'jump_jets',name:'Jump Jets',cat:'Walker Systems',max:1,mods:1,costFn:function(){return 10000},desc:'Move as VTOL once per encounter. Walker only.'},
-  {id:'dual_cockpit',name:'Dual Cockpit',cat:'Walker Systems',max:1,mods:-1,costFn:function(){return 0},desc:'Requires two pilots. Walker only.'}];
+  {id:'dual_cockpit',name:'Dual Cockpit',cat:'Walker Systems',max:1,mods:-1,costFn:function(){return 0},
+  {id:'compact_eng',name:'Compact Engineering',cat:'structural',mods:-1,max:3,costFn:function(s){return 20000*s},desc:'Miniaturised components and premium engineering free up internal space. Each take grants +1 Mod slot.'},desc:'Requires two pilots. Walker only.'}];
 // ═══ WEAPON CATALOGUE — DiceForge originals by era, SW compatible ═══
 // Eras: ancient, medieval, blackpowder, industrial, modern, future, advanced
 var WEAPONS=[
