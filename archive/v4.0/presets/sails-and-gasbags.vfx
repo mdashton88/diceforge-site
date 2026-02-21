@@ -1,0 +1,31 @@
+{
+  "id": "sails-and-gasbags",
+  "name": "Sails & Gasbags",
+  "version": "1.0",
+  "description": "Skyships & Lighter-Than-Air — The wind fills the envelope. The city shrinks below. The sky is yours.",
+  "author": "DiceForge Studios",
+  "weapons": [
+    {"id":"sg_incendiary","name":"Incendiary Round","cat":"Anti-Gasbag","era":"industrial","range":"30/60/120","damage":"2d8 (I)","ap":0,"rof":1,"shots":20,"minSize":1,"mods":0,"cost":500,"notes":"Anti-gasbag specialist. Incendiary. On raise vs gasbag vessel: ignites gas cells (catastrophic)."},
+    {"id":"sg_boarding_harpoon","name":"Boarding Harpoon","cat":"Aerial Boarding","era":"blackpowder","range":"10/20/40","damage":"2d8 (I)","ap":2,"rof":1,"shots":4,"minSize":2,"mods":0,"cost":800,"notes":"Grapple + zipline. Opposed Piloting to latch. Boarding party can cross on success."},
+    {"id":"sg_bomb_drop","name":"Aerial Bomb Drop","cat":"Ordnance","era":"industrial","range":"—","damage":"4d8 (II)","ap":4,"rof":1,"shots":8,"minSize":6,"mods":1,"cost":3000,"notes":"Drop from altitude. MBT. Piloting -2 for accuracy. LTA aircraft only."},
+    {"id":"sg_signal_rocket","name":"Signal Rocket","cat":"Utility","era":"blackpowder","range":"24/48/96","damage":"2d6 (I)","ap":0,"rof":1,"shots":6,"minSize":1,"mods":0,"cost":100,"notes":"Illumination and signalling. Incendiary on direct hit. Visible for miles."},
+    {"id":"sg_gondola_gun","name":"Gondola Battery","cat":"Aerial Guns","era":"industrial","range":"30/60/120","damage":"2d10 (I)","ap":4,"rof":2,"shots":100,"minSize":4,"mods":1,"cost":3000,"notes":"Ventral-mounted. Fires downward. +1 Shooting vs ground targets from altitude."}
+  ],
+  "mods": [
+    {"id":"sg_gas_cells","name":"Gas Cell Armour","cat":"Lighter-Than-Air","max":2,"mods":2,"costFn":"function(s){return 5000*s}","desc":"Fire-resistant envelope. Halve fire/incendiary damage to gas cells. Each take applies separately. Critical for hydrogen-filled vessels."},
+    {"id":"sg_ballast","name":"Ballast System","cat":"Lighter-Than-Air","max":1,"mods":1,"costFn":"function(s){return 3000*s}","desc":"Rapid altitude change. Drop ballast as free action for immediate +2 altitude bands. Takes 2 rounds to regain ballast."},
+    {"id":"sg_sail_rig","name":"Sail Rig","cat":"Lighter-Than-Air","max":1,"mods":1,"costFn":"function(s){return 2000*s}","desc":"Hybrid sail-gas propulsion. Wind adds +1 Speed Rating when favourable. Silent running possible (no engine noise)."},
+    {"id":"sg_mooring","name":"Mooring Mast","cat":"Lighter-Than-Air","max":1,"mods":0,"costFn":"function(s){return 1000}","desc":"Nose-mount mooring point. Can dock at towers, masts, and purpose-built stations without landing."},
+    {"id":"sg_observation","name":"Observation Gondola","cat":"Lighter-Than-Air","max":1,"mods":1,"costFn":"function(s){return 5000}","desc":"Suspended platform below main hull. +2 to Notice from altitude. Observer is exposed to attack from below."}
+  ],
+  "specials": [
+    {"id":"sg_fireproof_env","name":"Fireproof Envelope","cat":"Lighter-Than-Air","desc":"The gasbag is helium-filled or otherwise fire-resistant. Immune to incendiary catastrophe. Safe but expensive."},
+    {"id":"sg_cloud_runner","name":"Cloud Runner","cat":"Lighter-Than-Air","desc":"The crew knows how to use clouds. While in cloud cover: -4 to detect, +1 to disengage from combat. Experienced skyfarers."},
+    {"id":"sg_leviathan","name":"Leviathan","cat":"Lighter-Than-Air","desc":"Enormous and terrifying. The shadow alone causes Fear checks (Spirit -2) for ground troops. The sky darkens when this vessel passes."}
+  ],
+  "prebuilts": [
+    {"name":"Observation Balloon","size":4,"loco":"vtol","mods":{"sg_observation":1,"reduced_speed":2},"weapons":[],"specials":["open_top","unpowered"],"armourTech":0},
+    {"name":"Patrol Dirigible","size":8,"loco":"vtol","mods":{"sg_gas_cells":1,"sg_ballast":1,"sg_mooring":1},"weapons":[{"weaponId":"hmg","mount":"pintle"},{"weaponId":"hmg","mount":"pintle"},{"weaponId":"sg_gondola_gun","mount":"fixed"}],"specials":["enclosed","long_range","sg_cloud_runner"],"armourTech":0},
+    {"name":"War Zeppelin","size":14,"loco":"vtol","mods":{"sg_gas_cells":2,"sg_ballast":1,"sg_mooring":1,"armor":2,"sg_observation":1,"crew_seat":1},"weapons":[{"weaponId":"sg_gondola_gun","mount":"fixed"},{"weaponId":"sg_gondola_gun","mount":"fixed"},{"weaponId":"hmg","mount":"pintle"},{"weaponId":"hmg","mount":"pintle"},{"weaponId":"hmg","mount":"pintle"},{"weaponId":"hmg","mount":"pintle"},{"weaponId":"sg_bomb_drop","mount":"fixed"}],"specials":["enclosed","sg_leviathan","long_range"],"armourTech":0}
+  ]
+}

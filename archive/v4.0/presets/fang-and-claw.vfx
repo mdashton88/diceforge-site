@@ -1,0 +1,31 @@
+{
+  "id": "fang-and-claw",
+  "name": "Fang & Claw",
+  "version": "1.0",
+  "description": "Mechs & Walkers — Pilot bonding, arena combat, and sixty tons of walking destruction.",
+  "author": "DiceForge Studios",
+  "weapons": [
+    {"id":"fc_chainsaw","name":"Chainsaw Arm","cat":"Walker Melee","era":"future","range":"—","damage":"Str+3d8","ap":4,"rof":0,"shots":0,"minSize":4,"mods":2,"cost":15000,"notes":"Melee. +2 damage on raise. Unreliable: snake eyes = jam (Repair to clear). Walker only."},
+    {"id":"fc_pile_bunker","name":"Pile Bunker","cat":"Walker Melee","era":"future","range":"—","damage":"Str+4d10","ap":20,"rof":0,"shots":0,"minSize":6,"mods":3,"cost":30000,"notes":"Melee. Single devastating strike. Recharge 2 rounds after use. Walker only."},
+    {"id":"fc_shoulder","name":"Shoulder Launcher","cat":"Walker Ranged","era":"future","range":"50/100/200","damage":"4d8 (II)","ap":6,"rof":2,"shots":12,"minSize":4,"mods":1,"cost":8000,"notes":"SBT. Fires over cover without exposing main body. Walker only."},
+    {"id":"fc_head_vulcan","name":"Head Vulcan","cat":"Walker Ranged","era":"future","range":"30/60/120","damage":"2d8 (I)","ap":2,"rof":4,"shots":200,"minSize":4,"mods":0,"cost":5000,"notes":"Point defence weapon. Pt Def, Rxn Fire. Mounted in head unit. Walker only."},
+    {"id":"fc_heat_hawk","name":"Heat Weapon","cat":"Walker Melee","era":"future","range":"—","damage":"Str+2d10","ap":8,"rof":0,"shots":0,"minSize":3,"mods":1,"cost":10000,"notes":"Melee. Superheated blade, axe, or mace. Incendiary on raise. Walker only."}
+  ],
+  "mods": [
+    {"id":"fc_neural","name":"Neural Interface","cat":"Walker Systems","max":1,"mods":2,"costFn":"function(s){return 20000*s}","desc":"Direct neural link between pilot and walker. +1 to Piloting and Fighting rolls. Pilot takes Fatigue when walker is Wounded."},
+    {"id":"fc_gyro","name":"Gyro Stabiliser","cat":"Walker Systems","max":1,"mods":1,"costFn":"function(s){return 10000*s}","desc":"Advanced stabilisation. +2 to resist knockdown from ram, melee, or Death From Above attacks."},
+    {"id":"fc_melee_shield","name":"Melee Shield","cat":"Walker Systems","max":1,"mods":2,"costFn":"function(s){return 8000*s}","desc":"+2 Parry vs melee attacks. Can also be used to shield bash (Str+d6, no AP). Walker only."},
+    {"id":"fc_ejector_pod","name":"Ejector Pod","cat":"Walker Systems","max":1,"mods":1,"costFn":"function(s){return 15000}","desc":"Emergency cockpit ejection. As free action, pilot launches clear. Piloting roll to land safely."},
+    {"id":"fc_overcharge","name":"Overcharge Reactor","cat":"Walker Systems","max":1,"mods":0,"costFn":"function(s){return 25000*s}","desc":"Once per encounter: +2 to all damage rolls for 3 rounds. After: walker Shaken automatically, 50% chance of system shutdown."}
+  ],
+  "specials": [
+    {"id":"fc_arena_champ","name":"Arena Champion","cat":"Walker","desc":"This mech is famous in the fighting pits. Crowd roars grant +1 to Spirit rolls. Sponsors pay well. Enemies want the glory of destroying it."},
+    {"id":"fc_salvage","name":"Salvage Frame","cat":"Walker","desc":"Built from scavenged parts. Mismatched components give it character. Repair at -1, but replacement parts can be cannibalised from any wreck."},
+    {"id":"fc_berserker","name":"Berserker Mode","cat":"Walker","desc":"Overclocked combat systems. Activate as action: +2 to Fighting and damage, but Piloting at -2 and cannot retreat. Lasts until combat ends or walker is Incapacitated."}
+  ],
+  "prebuilts": [
+    {"name":"Scout Frame","size":6,"loco":"legs_biped","mods":{"fc_neural":1,"boosters":1},"weapons":[{"weaponId":"fc_head_vulcan","mount":"fixed"},{"weaponId":"fc_shoulder","mount":"pintle"},{"weaponId":"fc_heat_hawk","mount":"fixed"}],"specials":["stealth","night_ops"],"armourTech":0},
+    {"name":"Assault Frame","size":10,"loco":"legs_biped","mods":{"fc_neural":1,"fc_gyro":1,"fc_melee_shield":1,"armor":3},"weapons":[{"weaponId":"fc_chainsaw","mount":"fixed"},{"weaponId":"fc_shoulder","mount":"pintle"},{"weaponId":"fc_shoulder","mount":"pintle"},{"weaponId":"fc_head_vulcan","mount":"fixed"},{"weaponId":"plasma_cannon_med","mount":"turret"}],"specials":["enclosed","fc_arena_champ"],"armourTech":4},
+    {"name":"Siege Platform","size":12,"loco":"legs_quad","mods":{"fc_gyro":1,"armor":4,"reactor":1},"weapons":[{"weaponId":"fc_pile_bunker","mount":"fixed"},{"weaponId":"plasma_cannon_heavy","mount":"turret"},{"weaponId":"fc_shoulder","mount":"pintle"},{"weaponId":"fc_shoulder","mount":"pintle"},{"weaponId":"fc_head_vulcan","mount":"fixed"},{"weaponId":"fc_head_vulcan","mount":"fixed"}],"specials":["enclosed","loud"],"armourTech":4}
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "dread-and-ruin",
+  "name": "Dread & Ruin",
+  "version": "1.0",
+  "description": "Horror & Supernatural Vehicles — It doesn't have a driver. It has a hunger.",
+  "author": "DiceForge Studios",
+  "weapons": [
+    {"id":"dr_soul_cannon","name":"Soul Cannon","cat":"Eldritch Weapons","era":"future","range":"50/100/200","damage":"4d6 (II)","ap":0,"rof":1,"shots":0,"minSize":4,"mods":2,"cost":0,"notes":"Supernatural. Ignores physical armour entirely. Targets Spirit instead of Vigour for Wounds. Ammunition is souls."},
+    {"id":"dr_ghost_ram","name":"Spectral Ram","cat":"Eldritch Weapons","era":"medieval","range":"—","damage":"Str+3d8","ap":0,"rof":0,"shots":0,"minSize":4,"mods":1,"cost":0,"notes":"Melee. Supernatural. Ignores physical armour. The prow passes through hulls and strikes the crew directly."},
+    {"id":"dr_scream","name":"Banshee Whistle","cat":"Eldritch Weapons","era":"industrial","range":"Cone","damage":"—","ap":0,"rof":1,"shots":0,"minSize":2,"mods":1,"cost":0,"notes":"Fear effect. All targets in cone: Spirit -2 or Panicked. Usable once per round. The sound should not be possible."},
+    {"id":"dr_blood_spray","name":"Blood Spray","cat":"Eldritch Weapons","era":"modern","range":"Cone","damage":"2d8 (I)","ap":0,"rof":1,"shots":0,"minSize":1,"mods":0,"cost":0,"notes":"Incendiary (supernatural). Targets in cone: Spirit -2 or Shaken (horror). The vehicle bleeds when it wants to."}
+  ],
+  "mods": [
+    {"id":"dr_soul_engine","name":"Soul Engine","cat":"Supernatural","max":1,"mods":0,"costFn":"function(s){return 0}","desc":"The vehicle runs on suffering. No fuel cost. When Wounded, nearby living beings take 1 Fatigue (Spirit -2 to resist). 5\" radius."},
+    {"id":"dr_ghost_armour","name":"Ghost Armour","cat":"Supernatural","max":1,"mods":0,"costFn":"function(s){return 0}","desc":"Incorporeal defence. Physical weapons deal half damage. Magical/blessed/supernatural weapons deal full. The hull shimmers and bullets pass through."},
+    {"id":"dr_blood_fuel","name":"Blood Fuel Tank","cat":"Supernatural","max":1,"mods":0,"costFn":"function(s){return 0}","desc":"Vehicle requires blood to operate. 1 Wound worth of blood per day of operation. Can be animal, human, or worse."},
+    {"id":"dr_regenerate","name":"Unholy Regeneration","cat":"Supernatural","max":1,"mods":0,"costFn":"function(s){return 0}","desc":"Vehicle heals 1 Wound per hour. Can only be permanently destroyed by fire, holy water, or specific ritual. Otherwise reforms in 1d6 days."},
+    {"id":"dr_possession","name":"Possession Matrix","cat":"Supernatural","max":1,"mods":0,"costFn":"function(s){return 0}","desc":"A spirit inhabits this vehicle. Spirit d8, Smarts d4. Can lock doors, steer independently, refuse to start for unwanted operators. May be appeased or exorcised."}
+  ],
+  "specials": [
+    {"id":"dr_possessed","name":"Possessed","cat":"Horror","desc":"A malevolent intelligence inhabits this vehicle. It has goals of its own. The GM controls the vehicle when the spirit asserts itself (draw a card each scene: black = spirit acts)."},
+    {"id":"dr_cursed_ex","name":"Doom-Cursed","cat":"Horror","desc":"This vehicle brings misfortune. Owners suffer -1 to all non-combat rolls while within 12\". Selling or abandoning it: the vehicle returns within 1d6 days."},
+    {"id":"dr_undying","name":"Undying","cat":"Horror","desc":"This vehicle cannot be permanently destroyed by normal means. Reduce to 0 Wounds and it falls silent, but rebuilds itself over 1d6 days unless properly destroyed (GM decides method)."},
+    {"id":"dr_hungry","name":"Hungry","cat":"Horror","desc":"The vehicle feeds. Specify what it consumes: fuel, blood, fear, memories, or something worse. If not fed, it grows... irritable."}
+  ],
+  "prebuilts": [
+    {"name":"Haunted Tiger","size":7,"loco":"tracked","mods":{"armor":2,"dr_possession":1,"dr_regenerate":1},"weapons":[{"weaponId":"tank_gun_heavy","mount":"turret"},{"weaponId":"hmg","mount":"pintle"},{"weaponId":"dr_scream","mount":"fixed"}],"specials":["enclosed","dr_possessed","haunted"],"armourTech":0},
+    {"name":"Ghost Ship","size":10,"loco":"water_jet","mods":{"dr_ghost_armour":1,"dr_soul_engine":1,"dr_regenerate":1},"weapons":[{"weaponId":"heavy_cannon_bp","mount":"pintle"},{"weaponId":"heavy_cannon_bp","mount":"pintle"},{"weaponId":"heavy_cannon_bp","mount":"pintle"},{"weaponId":"heavy_cannon_bp","mount":"pintle"},{"weaponId":"dr_ghost_ram","mount":"fixed"}],"specials":["dr_undying","dr_possessed","haunted"],"armourTech":0},
+    {"name":"Possessed Sedan","size":4,"loco":"wheeled","mods":{"dr_possession":1,"dr_regenerate":1,"handling":1,"inc_speed":1},"weapons":[],"specials":["dr_possessed","dr_hungry","sentient"],"armourTech":0}
+  ]
+}

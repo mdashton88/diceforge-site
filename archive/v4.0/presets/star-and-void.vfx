@@ -1,0 +1,33 @@
+{
+  "id": "star-and-void",
+  "name": "Star & Void",
+  "version": "1.0",
+  "description": "Starships & Space — Crew stations, sensor sweeps, and the silence between the stars.",
+  "author": "DiceForge Studios",
+  "weapons": [
+    {"id":"sv_plasma_torp","name":"Plasma Torpedo","cat":"Capital Weapons","era":"future","range":"100/200/400","damage":"6d10 (V)","ap":20,"rof":1,"shots":4,"minSize":8,"mods":3,"cost":80000,"notes":"Guided. Slow (can be shot down: Shooting -2 vs torpedo). LBT on impact."},
+    {"id":"sv_tractor","name":"Tractor Beam","cat":"Utility Weapons","era":"future","range":"50/100/200","damage":"—","ap":0,"rof":1,"shots":0,"minSize":6,"mods":3,"cost":50000,"notes":"Opposed Electronics vs target Piloting. Success: target Speed 0 until beam broken."},
+    {"id":"sv_emp_pulse","name":"EMP Pulse","cat":"Electronic Warfare","era":"future","range":"Cone","damage":"—","ap":0,"rof":1,"shots":3,"minSize":4,"mods":2,"cost":30000,"notes":"MBT cone. All electronic systems in area: Electronics -4 or shut down for 1d4 rounds."},
+    {"id":"sv_spinal","name":"Spinal Lance","cat":"Capital Weapons","era":"advanced","range":"200/400/800","damage":"8d10 (VI)","ap":30,"rof":1,"shots":6,"minSize":14,"mods":8,"cost":200000,"notes":"Fixed only. Full-round charge required. LBT. The main gun."},
+    {"id":"sv_flak","name":"Flak Battery","cat":"Point Defence","era":"future","range":"30/60/120","damage":"2d8 (I)","ap":2,"rof":6,"shots":500,"minSize":4,"mods":2,"cost":15000,"notes":"Pt Def only. Auto-fire vs torpedoes, fighters, and missiles. Area suppression."},
+    {"id":"sv_boarding_pod","name":"Boarding Pod Launcher","cat":"Assault Systems","era":"future","range":"50/100/200","damage":"—","ap":0,"rof":1,"shots":4,"minSize":8,"mods":2,"cost":20000,"notes":"Launches boarding pod with 5 troops. Opposed Electronics vs Piloting to latch on."}
+  ],
+  "mods": [
+    {"id":"sv_jump_drive","name":"Jump Drive","cat":"FTL Systems","max":1,"mods":"half","costFn":"function(s){return 50000*s}","desc":"Instantaneous point-to-point FTL. Requires Navigation roll. Failure: arrive off-target by 1d6 × 10,000 miles."},
+    {"id":"sv_warp","name":"Warp Drive","cat":"FTL Systems","max":1,"mods":"half","costFn":"function(s){return 40000*s}","desc":"Sustained FTL cruise. Piloting roll to enter/exit safely. Speed measured in light-years per week."},
+    {"id":"sv_sensor_suite","name":"Advanced Sensors","cat":"Electronic Systems","max":1,"mods":3,"costFn":"function(s){return 30000*s}","desc":"Long-range detection. Electronics roll to scan: Success reveals vessel class, shields, weapons. Raise reveals specific loadout."},
+    {"id":"sv_hangar","name":"Fighter Hangar","cat":"Structural Systems","max":"U","mods":5,"costFn":"function(s){return 100000}","desc":"Launch/recover up to 4 fighters per round. Each hangar holds 10 Size points of craft."},
+    {"id":"sv_medbay","name":"Medical Bay","cat":"Personnel Systems","max":1,"mods":2,"costFn":"function(s){return 50000}","desc":"Full medical facility. Healing rolls at +2. Can stabilise Incapacitated crew."},
+    {"id":"sv_brig","name":"Brig","cat":"Personnel Systems","max":1,"mods":1,"costFn":"function(s){return 10000}","desc":"Secure holding cells. Holds up to 10 prisoners. -4 to escape attempts."}
+  ],
+  "specials": [
+    {"id":"sv_cloaking","name":"Cloaking Device","cat":"Electronic Warfare","desc":"Activate as action. Vehicle invisible to sensors and visual detection. Drops when firing weapons or taking damage. Electronics -6 to detect."},
+    {"id":"sv_sentient_ai","name":"Sentient AI","cat":"Ship Systems","desc":"The ship has a full personality. Spirit d8, Smarts d10. Can operate all crew stations simultaneously at -2. May have opinions about orders."},
+    {"id":"sv_experimental","name":"Experimental Drive","cat":"Ship Systems","desc":"Prototype propulsion. +2 Speed Rating but roll a d6 each use: on 1, drive malfunctions spectacularly. GM decides consequences."}
+  ],
+  "prebuilts": [
+    {"name":"Patrol Corvette","size":8,"loco":"jet","mods":{"sv_warp":1,"sv_sensor_suite":1,"sealed":1,"shields":1,"armor":2},"weapons":[{"weaponId":"plasma_cannon_med","mount":"turret"},{"weaponId":"plasma_cannon_med","mount":"turret"},{"weaponId":"laser_med","mount":"fixed"},{"weaponId":"laser_med","mount":"fixed"},{"weaponId":"sv_flak","mount":"pintle"},{"weaponId":"sv_flak","mount":"pintle"}],"specials":["enclosed","pressurised","long_range"],"armourTech":4},
+    {"name":"Heavy Cruiser","size":16,"loco":"jet","mods":{"sv_jump_drive":1,"sv_sensor_suite":1,"sealed":1,"shields":1,"armor":4,"reactor":1,"sv_medbay":1,"crew_seat":2},"weapons":[{"weaponId":"sv_spinal","mount":"fixed"},{"weaponId":"plasma_cannon_heavy","mount":"turret"},{"weaponId":"plasma_cannon_heavy","mount":"turret"},{"weaponId":"sv_plasma_torp","mount":"fixed"},{"weaponId":"sv_plasma_torp","mount":"fixed"},{"weaponId":"sv_flak","mount":"pintle"},{"weaponId":"sv_flak","mount":"pintle"},{"weaponId":"sv_flak","mount":"pintle"},{"weaponId":"sv_flak","mount":"pintle"}],"specials":["enclosed","pressurised"],"armourTech":8},
+    {"name":"Fleet Carrier","size":20,"loco":"jet","mods":{"sv_jump_drive":1,"sv_sensor_suite":1,"sealed":1,"shields":1,"armor":3,"reactor":1,"sv_hangar":3,"sv_medbay":1,"crew_seat":3},"weapons":[{"weaponId":"sv_flak","mount":"pintle"},{"weaponId":"sv_flak","mount":"pintle"},{"weaponId":"sv_flak","mount":"pintle"},{"weaponId":"sv_flak","mount":"pintle"},{"weaponId":"sv_flak","mount":"pintle"},{"weaponId":"sv_flak","mount":"pintle"}],"specials":["enclosed","pressurised","long_range"],"armourTech":8}
+  ]
+}

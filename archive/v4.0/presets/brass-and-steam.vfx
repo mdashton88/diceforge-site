@@ -1,0 +1,29 @@
+{
+  "id": "brass-and-steam",
+  "name": "Brass & Steam",
+  "version": "1.0",
+  "description": "Steampunk & Victorian — Pressure rising. Boiler screaming. Rivets popping. Full speed ahead.",
+  "author": "DiceForge Studios",
+  "weapons": [
+    {"id":"bs_pneumatic","name":"Pneumatic Launcher","cat":"Steam Weapons","era":"blackpowder","range":"12/24/48","damage":"2d8 (I)","ap":2,"rof":1,"shots":10,"minSize":2,"mods":1,"cost":600,"notes":"Compressed air propulsion. Silent (no gunpowder flash/smoke). Reload 1. Versatile ammunition."},
+    {"id":"bs_tesla","name":"Tesla Coil","cat":"Steam Weapons","era":"blackpowder","range":"15/30/60","damage":"3d6 (I)","ap":0,"rof":1,"shots":0,"minSize":3,"mods":2,"cost":2000,"notes":"Electrical discharge. Targets in metal armour: +2 damage. Chains to adjacent target on raise. Requires Reactor or Boiler."},
+    {"id":"bs_steam_cannon","name":"Steam Cannon","cat":"Steam Weapons","era":"blackpowder","range":"20/40/80","damage":"3d8 (I)","ap":4,"rof":1,"shots":0,"minSize":4,"mods":2,"cost":1500,"notes":"Superheated steam projectile. No gunpowder required. Reload 2. Requires Boiler."},
+    {"id":"bs_rivet_gun","name":"Rivet Gun","cat":"Steam Weapons","era":"blackpowder","range":"10/20/40","damage":"2d6 (I)","ap":4,"rof":2,"shots":50,"minSize":1,"mods":0,"cost":300,"notes":"Industrial tool weaponised. High AP, low damage. Cheap, reliable, terrifying up close."}
+  ],
+  "mods": [
+    {"id":"bs_boiler","name":"Pressure Boiler","cat":"Steam Systems","max":1,"mods":2,"costFn":"function(s){return 5000*s}","desc":"Steam power source. Build pressure as action (3 rounds to full). Overpressure risk: on critical failure, boiler explodes (3d10 to all aboard, LBT)."},
+    {"id":"bs_clockwork","name":"Clockwork Engine","cat":"Steam Systems","max":1,"mods":1,"costFn":"function(s){return 8000*s}","desc":"Wind-up power. No fuel required. Limited runtime: 1 hour per 10 minutes of winding. Silent operation."},
+    {"id":"bs_ornamental","name":"Ornamental Fittings","cat":"Steam Systems","max":2,"mods":0,"costFn":"function(s){return 2000*s}","desc":"Brass, mahogany, crystal, and velvet. +1 to Persuasion per take when impressing others. Purely aesthetic but socially powerful."},
+    {"id":"bs_whistle","name":"Steam Whistle","cat":"Steam Systems","max":1,"mods":0,"costFn":"function(s){return 500}","desc":"Deafening steam whistle. As action: Fear check (Spirit -2) for all within 6\". Signal audible for miles. Requires Boiler."},
+    {"id":"bs_difference","name":"Difference Engine","cat":"Steam Systems","max":1,"mods":2,"costFn":"function(s){return 20000}","desc":"Mechanical computer. +2 to Knowledge and Electronics rolls performed aboard. Targeting calculations: +1 Shooting with linked weapons."}
+  ],
+  "specials": [
+    {"id":"bs_experimental","name":"Experimental","cat":"Victorian","desc":"Cutting-edge Victorian engineering. This vehicle does something nothing else can (GM defines). Repair at -2 (no manual exists). Spare parts must be custom-fabricated."},
+    {"id":"bs_clockwork_heart","name":"Clockwork Heart","cat":"Victorian","desc":"The engine ticks like a giant pocket watch. Hypnotic rhythm. Crew aboard gain +1 to resist Fear effects. The sound is strangely comforting."},
+    {"id":"bs_temperamental_engine","name":"Temperamental Engine","cat":"Victorian","desc":"The boiler has moods. On odd-numbered rounds, +1 Speed. On even-numbered rounds, -1 Speed. Chief engineer can smooth this with Repair roll each round."}
+  ],
+  "prebuilts": [
+    {"name":"Steam Carriage","size":4,"loco":"wheeled","mods":{"bs_boiler":1,"bs_ornamental":1},"weapons":[],"specials":["enclosed","loud","bs_temperamental_engine"],"armourTech":0},
+    {"name":"Ironclad Monitor","size":10,"loco":"water_jet","mods":{"bs_boiler":1,"armor":3,"sealed":1},"weapons":[{"weaponId":"heavy_cannon_bp","mount":"turret"},{"weaponId":"heavy_cannon_bp","mount":"turret"},{"weaponId":"hmg","mount":"pintle"},{"weaponId":"hmg","mount":"pintle"}],"specials":["enclosed","deep_draft","loud"],"armourTech":4}
+  ]
+}

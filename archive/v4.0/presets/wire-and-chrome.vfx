@@ -1,0 +1,31 @@
+{
+  "id": "wire-and-chrome",
+  "name": "Wire & Chrome",
+  "version": "1.0",
+  "description": "Cyberpunk & Near-Future — Everything is networked. Everything can be hacked. Everything is for sale.",
+  "author": "DiceForge Studios",
+  "weapons": [
+    {"id":"wc_emp_proj","name":"EMP Projector","cat":"Electronic Warfare","era":"future","range":"30/60/120","damage":"—","ap":0,"rof":1,"shots":6,"minSize":2,"mods":1,"cost":10000,"notes":"Target vehicle: Electronics -4 or all systems shut down 1d4 rounds. No effect on non-electronic vehicles."},
+    {"id":"wc_smart_gun","name":"Smart-Link Turret","cat":"Networked Weapons","era":"future","range":"50/100/200","damage":"2d10 (I)","ap":4,"rof":3,"shots":200,"minSize":2,"mods":2,"cost":15000,"notes":"AI-assisted targeting. +1 Shooting. Can fire autonomously at -2 if crew incapacitated. Hackable."},
+    {"id":"wc_drone_swarm","name":"Micro-Drone Swarm","cat":"Drone Systems","era":"future","range":"25/50/100","damage":"2d6 (I)","ap":0,"rof":1,"shots":3,"minSize":2,"mods":1,"cost":8000,"notes":"Deploy swarm as action. Autonomous LBT area denial for 3 rounds. Can be jammed (Electronics roll)."},
+    {"id":"wc_taser_net","name":"Taser Net Launcher","cat":"Non-Lethal","era":"future","range":"10/20/40","damage":"—","ap":0,"rof":1,"shots":2,"minSize":1,"mods":0,"cost":3000,"notes":"Target vehicle: Vigour -4 or driver Stunned. Non-lethal. Vehicle slows but undamaged. Corporate-approved."},
+    {"id":"wc_sonic","name":"Sonic Disruptor","cat":"Non-Lethal","era":"future","range":"Cone","damage":"—","ap":0,"rof":1,"shots":0,"minSize":3,"mods":1,"cost":12000,"notes":"Cone. All personnel in area: Vigour -2 or Distracted and Vulnerable. Non-lethal. Crowd control."}
+  ],
+  "mods": [
+    {"id":"wc_chameleon","name":"Chameleon Coating","cat":"Cyberpunk Systems","max":1,"mods":2,"costFn":"function(s){return 20000*s}","desc":"Active camouflage. -4 to visual Notice at range >12\". Disrupted by damage (drops for 1 round when Wounded)."},
+    {"id":"wc_drone_bay","name":"Drone Bay","cat":"Cyberpunk Systems","max":2,"mods":2,"costFn":"function(s){return 10000}","desc":"Launch/recover up to 4 small drones per bay. Drones operate within 1 mile. Requires Electronics roll to coordinate."},
+    {"id":"wc_firewall","name":"Anti-Hack Firewall","cat":"Cyberpunk Systems","max":2,"mods":1,"costFn":"function(s){return 5000}","desc":"+2 to Electronics rolls to resist hacking per take. Essential for networked vehicles in hostile digital environments."},
+    {"id":"wc_ew_suite","name":"Electronic Warfare Suite","cat":"Cyberpunk Systems","max":1,"mods":3,"costFn":"function(s){return 30000}","desc":"Full EW capability. Jam enemy comms, spoof sensors, hack enemy vehicles (opposed Electronics). Offensive and defensive."},
+    {"id":"wc_autopilot","name":"Advanced Autopilot","cat":"Cyberpunk Systems","max":1,"mods":1,"costFn":"function(s){return 10000}","desc":"AI-driven navigation. Piloting d8 for autonomous driving. Hackable (opposed Electronics to hijack). Can be overridden manually."}
+  ],
+  "specials": [
+    {"id":"wc_autonomous","name":"Autonomous","cat":"Cyberpunk","desc":"Fully self-driving. Piloting d8, can operate without crew. Follows programmed routes or responds to remote commands. Hackable."},
+    {"id":"wc_networked","name":"Networked","cat":"Cyberpunk","desc":"Connected to the grid. Can receive real-time traffic, targeting, and tactical data. +1 to Notice from data feeds. Hackable (and trackable)."},
+    {"id":"wc_off_grid","name":"Off-Grid","cat":"Cyberpunk","desc":"No network connection. Cannot be hacked, tracked, or remotely disabled. Also cannot receive data feeds, GPS, or remote assistance. Invisible to the system."},
+    {"id":"wc_corporate","name":"Corporate Registered","cat":"Cyberpunk","desc":"Registered to a megacorp. Corporate security responds to distress calls within 1d6 rounds. Tampering triggers corporate response. They will find you."}
+  ],
+  "prebuilts": [
+    {"name":"Corporate Interceptor","size":4,"loco":"wheeled","mods":{"wc_firewall":2,"wc_autopilot":1,"armor":2,"handling":1},"weapons":[{"weaponId":"wc_smart_gun","mount":"turret"},{"weaponId":"wc_taser_net","mount":"fixed"}],"specials":["enclosed","wc_networked","wc_corporate","stealth"],"armourTech":4},
+    {"name":"Drone Carrier","size":6,"loco":"hover","mods":{"wc_drone_bay":2,"wc_ew_suite":1,"wc_firewall":1,"sealed":1},"weapons":[{"weaponId":"wc_drone_swarm","mount":"pintle"},{"weaponId":"wc_drone_swarm","mount":"pintle"},{"weaponId":"wc_emp_proj","mount":"fixed"}],"specials":["enclosed","wc_networked","night_ops"],"armourTech":4}
+  ]
+}

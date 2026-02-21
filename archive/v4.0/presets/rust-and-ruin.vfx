@@ -1,0 +1,28 @@
+{
+  "id": "rust-and-ruin",
+  "name": "Rust & Ruin",
+  "version": "1.0",
+  "description": "Post-Apocalypse Campaign — Fuel is life. Scrap is currency. The road is all that's left.",
+  "author": "DiceForge Studios",
+  "weapons": [
+    {"id":"rr_flame_belcher","name":"Flame Belcher","cat":"Improvised","era":"modern","range":"Cone","damage":"2d8 (I)","ap":0,"rof":1,"shots":6,"minSize":1,"mods":0,"cost":200,"notes":"Improvised flamethrower. Incendiary. Unreliable: snake eyes = backfire (1d6 fire damage to own vehicle)."},
+    {"id":"rr_junk_launcher","name":"Junk Launcher","cat":"Improvised","era":"modern","range":"12/24/48","damage":"2d6 (I)","ap":0,"rof":1,"shots":10,"minSize":2,"mods":0,"cost":100,"notes":"Launches debris, rocks, scrap. Unreliable: snake eyes = jam. Ammo is free (it's trash)."},
+    {"id":"rr_spike_dropper","name":"Spike Dropper","cat":"Improvised","era":"modern","range":"—","damage":"—","ap":0,"rof":1,"shots":6,"minSize":1,"mods":0,"cost":50,"notes":"Deploy behind. Wheeled pursuers: Driving -2, blowout on 1-2. Cheaper than caltrops. Made from scrap."},
+    {"id":"rr_thunderstick","name":"Thunderstick","cat":"Improvised","era":"modern","range":"—","damage":"3d6 (I)","ap":0,"rof":0,"shots":1,"minSize":1,"mods":0,"cost":50,"notes":"Explosive lance. Melee. One-use. Ram attack + detonation. User takes 2d6 blast damage. Suicide weapon."}
+  ],
+  "mods": [
+    {"id":"rr_scrap_armour","name":"Scrap Armour","cat":"Wasteland","max":3,"mods":0,"costFn":"function(s){return 500*s}","desc":"+1 Armour per take. Ugly, heavy, unreliable. On critical hit: scrap armour destroyed (lose all takes)."},
+    {"id":"rr_jury_engine","name":"Jury-Rigged Engine","cat":"Wasteland","max":1,"mods":0,"costFn":"function(s){return 500*s}","desc":"Engine from a different vehicle. Works, barely. -1 to Repair. Can run on multiple fuel types (diesel, ethanol, cooking oil)."},
+    {"id":"rr_water_collector","name":"Water Collector","cat":"Wasteland","max":1,"mods":0,"costFn":"function(s){return 200}","desc":"Condenser unit. Produces 1 day's water per 24 hours of travel. Life-saving in the wastes."},
+    {"id":"rr_rad_shield","name":"Rad Shielding","cat":"Wasteland","max":1,"mods":1,"costFn":"function(s){return 3000*s}","desc":"Lead-lined interior. Crew immune to radiation while sealed inside. Adds weight: -1 Speed Rating."}
+  ],
+  "specials": [
+    {"id":"rr_frankenstein","name":"Frankenstein","cat":"Wasteland","desc":"Built from multiple wrecks. No two panels match. Repair at -1 (non-standard parts), but can cannibalise any wreck for spares."},
+    {"id":"rr_road_legend","name":"Road Legend","cat":"Wasteland","desc":"This vehicle's name is known in the wastes. Traders offer better prices. Raiders think twice. +2 to Persuasion and Intimidation from the driver's seat."},
+    {"id":"rr_cursed_fuel","name":"Cursed Fuel","cat":"Wasteland","desc":"The fuel in this tank is tainted. Engine runs hot, smells wrong, glows faintly. +1 Speed Rating but vehicle takes 1 Fatigue equivalent per day (cumulative Repair needed)."}
+  ],
+  "prebuilts": [
+    {"name":"Scrap Buggy","size":3,"loco":"wheeled","mods":{"rr_scrap_armour":1,"battered":1,"exposed":1,"rr_jury_engine":1},"weapons":[{"weaponId":"rr_junk_launcher","mount":"pintle"}],"specials":["rr_frankenstein","unsafe"],"armourTech":0},
+    {"name":"Salvage Crawler","size":8,"loco":"tracked","mods":{"rr_scrap_armour":2,"rr_rad_shield":1,"rr_water_collector":1,"battered":1},"weapons":[{"weaponId":"hmg","mount":"pintle"},{"weaponId":"rr_flame_belcher","mount":"pintle"}],"specials":["rr_frankenstein","towing","cargo_bay"],"armourTech":0}
+  ]
+}

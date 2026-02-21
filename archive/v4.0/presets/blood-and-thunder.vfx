@@ -1,0 +1,32 @@
+{
+  "id": "blood-and-thunder",
+  "name": "Blood & Thunder",
+  "version": "1.0",
+  "description": "Ships & the Sea — Broadsides, boarding actions, and the fury of the open sea.",
+  "author": "DiceForge Studios",
+  "weapons": [
+    {"id":"bt_chain_shot","name":"Chain Shot","cat":"Naval Specials","era":"blackpowder","range":"15/30/60","damage":"3d6 (I)","ap":0,"rof":1,"shots":0,"minSize":3,"mods":0,"cost":200,"notes":"Anti-rigging. Reload 3. Targets mast/locomotion only. Cripples rather than sinks."},
+    {"id":"bt_heated_shot","name":"Heated Shot","cat":"Naval Specials","era":"blackpowder","range":"20/40/80","damage":"3d6+1 (I)","ap":4,"rof":1,"shots":0,"minSize":4,"mods":1,"cost":800,"notes":"Reload 4. Incendiary. Requires furnace mod. Devastating vs wooden hulls."},
+    {"id":"bt_grape","name":"Grape Canister","cat":"Naval Specials","era":"blackpowder","range":"Cone","damage":"3d6 (I)","ap":0,"rof":1,"shots":0,"minSize":3,"mods":0,"cost":100,"notes":"Anti-personnel cone. Reload 2. Devastating against boarding parties and exposed crew."},
+    {"id":"bt_bow_chaser","name":"Bow Chaser","cat":"Naval Specials","era":"blackpowder","range":"25/50/100","damage":"3d6+1 (I)","ap":4,"rof":1,"shots":0,"minSize":4,"mods":1,"cost":700,"notes":"Fixed front. Long-range pursuit gun. +1 Shooting at Long Range."},
+    {"id":"bt_stern_chaser","name":"Stern Chaser","cat":"Naval Specials","era":"blackpowder","range":"25/50/100","damage":"3d6 (I)","ap":4,"rof":1,"shots":0,"minSize":4,"mods":1,"cost":600,"notes":"Fixed rear. Pursuit deterrent. Fires while fleeing."},
+    {"id":"bt_fire_ship","name":"Fire Ship Charges","cat":"Naval Specials","era":"blackpowder","range":"—","damage":"4d10 (III)","ap":0,"rof":0,"shots":1,"minSize":4,"mods":2,"cost":500,"notes":"One-use. LBT. Incendiary. Vessel is consumed. Set alight and aim at enemy fleet."}
+  ],
+  "mods": [
+    {"id":"bt_copper_sheath","name":"Copper Sheathing","cat":"Naval Systems","max":1,"mods":1,"costFn":"function(s){return 5000*s}","desc":"Hull protected from marine growth. +1 Speed Rating on water. Reduces maintenance."},
+    {"id":"bt_marines","name":"Marine Complement","cat":"Naval Systems","max":3,"mods":2,"costFn":"function(s){return 3000*s}","desc":"Trained marines aboard. Each take provides 5 Extras (d6 Fighting, d6 Shooting) for boarding actions."},
+    {"id":"bt_oar_banks","name":"Oar Banks","cat":"Naval Systems","max":1,"mods":2,"costFn":"function(s){return 2000*s}","desc":"Secondary propulsion. Move at Speed 2 in calm or against wind. Requires crew."},
+    {"id":"bt_shot_furnace","name":"Shot Furnace","cat":"Naval Systems","max":1,"mods":1,"costFn":"function(s){return 3000*s}","desc":"Heats cannonballs for incendiary fire. Required for Heated Shot weapon. Fire risk aboard own vessel."},
+    {"id":"bt_grapple_hooks","name":"Grappling Hooks","cat":"Naval Systems","max":1,"mods":0,"costFn":"function(s){return 500*s}","desc":"Deploy hooks as action. Opposed Boating roll to latch onto adjacent vessel. Enables boarding."}
+  ],
+  "specials": [
+    {"id":"bt_weatherly","name":"Weatherly","cat":"Naval","desc":"Sails closer to the wind than other vessels. Can tack where others cannot. +1 effective Speed Rating when sailing into the wind."},
+    {"id":"bt_notorious","name":"Notorious","cat":"Naval","desc":"This vessel is feared. Enemy crews must make Spirit rolls or suffer -1 to all actions when this ship closes to broadside range."},
+    {"id":"bt_razee","name":"Razee","cat":"Naval","desc":"Cut down from a larger vessel. Faster and more nimble than its hull suggests, but less cargo capacity. +1 Handling, -1 Wound."}
+  ],
+  "prebuilts": [
+    {"name":"12-Gun Sloop","size":6,"loco":"water_jet","mods":{"bt_copper_sheath":1,"bt_grapple_hooks":1},"weapons":[{"weaponId":"med_cannon_bp","mount":"pintle"},{"weaponId":"med_cannon_bp","mount":"pintle"},{"weaponId":"med_cannon_bp","mount":"pintle"},{"weaponId":"med_cannon_bp","mount":"pintle"},{"weaponId":"med_cannon_bp","mount":"pintle"},{"weaponId":"med_cannon_bp","mount":"pintle"},{"weaponId":"swivel_gun","mount":"pintle"},{"weaponId":"swivel_gun","mount":"pintle"},{"weaponId":"swivel_gun","mount":"pintle"},{"weaponId":"swivel_gun","mount":"pintle"},{"weaponId":"swivel_gun","mount":"pintle"},{"weaponId":"swivel_gun","mount":"pintle"}],"specials":["bt_weatherly","shallow_draft"],"armourTech":0},
+    {"name":"32-Gun Frigate","size":10,"loco":"water_jet","mods":{"bt_copper_sheath":1,"bt_marines":2,"bt_grapple_hooks":1},"weapons":[{"weaponId":"heavy_cannon_bp","mount":"pintle"},{"weaponId":"heavy_cannon_bp","mount":"pintle"},{"weaponId":"heavy_cannon_bp","mount":"pintle"},{"weaponId":"heavy_cannon_bp","mount":"pintle"},{"weaponId":"heavy_cannon_bp","mount":"pintle"},{"weaponId":"heavy_cannon_bp","mount":"pintle"},{"weaponId":"heavy_cannon_bp","mount":"pintle"},{"weaponId":"heavy_cannon_bp","mount":"pintle"},{"weaponId":"med_cannon_bp","mount":"pintle"},{"weaponId":"med_cannon_bp","mount":"pintle"},{"weaponId":"med_cannon_bp","mount":"pintle"},{"weaponId":"med_cannon_bp","mount":"pintle"},{"weaponId":"med_cannon_bp","mount":"pintle"},{"weaponId":"med_cannon_bp","mount":"pintle"},{"weaponId":"med_cannon_bp","mount":"pintle"},{"weaponId":"med_cannon_bp","mount":"pintle"},{"weaponId":"swivel_gun","mount":"pintle"},{"weaponId":"swivel_gun","mount":"pintle"},{"weaponId":"swivel_gun","mount":"pintle"},{"weaponId":"swivel_gun","mount":"pintle"},{"weaponId":"swivel_gun","mount":"pintle"},{"weaponId":"swivel_gun","mount":"pintle"},{"weaponId":"swivel_gun","mount":"pintle"},{"weaponId":"swivel_gun","mount":"pintle"}],"specials":["bt_notorious","deep_draft"],"armourTech":0},
+    {"name":"WWII Destroyer","size":10,"loco":"water_jet","mods":{"armor":3,"sealed":1},"weapons":[{"weaponId":"naval_gun_ww","mount":"turret"},{"weaponId":"naval_gun_ww","mount":"turret"},{"weaponId":"torpedo_ww","mount":"fixed"},{"weaponId":"torpedo_ww","mount":"fixed"},{"weaponId":"depth_charge_ww","mount":"pintle"},{"weaponId":"hmg","mount":"pintle"},{"weaponId":"hmg","mount":"pintle"},{"weaponId":"hmg","mount":"pintle"},{"weaponId":"hmg","mount":"pintle"}],"specials":["long_range","enclosed"],"armourTech":4}
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "chrome-and-fury",
+  "name": "Chrome & Fury",
+  "version": "1.0",
+  "description": "Chases & Pursuit — Burning rubber, shattered glass, and the road that never ends.",
+  "author": "DiceForge Studios",
+  "weapons": [
+    {"id":"cf_harpoon","name":"Harpoon Gun","cat":"Pursuit Weapons","era":"modern","range":"10/20/40","damage":"2d8 (I)","ap":2,"rof":1,"shots":1,"minSize":1,"mods":0,"cost":500,"notes":"Grapple at speed. Opposed Driving vs target Driving to latch. Tethered vehicles dragged together."},
+    {"id":"cf_oil_slick","name":"Oil Slick Dispenser","cat":"Pursuit Weapons","era":"modern","range":"—","damage":"—","ap":0,"rof":1,"shots":3,"minSize":1,"mods":0,"cost":1000,"notes":"Deploy behind as free action. Pursuing vehicles: Driving -4 or Out of Control. Lasts 3 rounds."},
+    {"id":"cf_caltrops","name":"Caltrop Dispenser","cat":"Pursuit Weapons","era":"modern","range":"—","damage":"—","ap":0,"rof":1,"shots":3,"minSize":1,"mods":0,"cost":500,"notes":"Deploy behind as free action. Wheeled pursuers: Driving -2, flat tyre on critical failure. Lasts until cleared."},
+    {"id":"cf_flame_belch","name":"Rear Flamer","cat":"Pursuit Weapons","era":"modern","range":"Cone","damage":"2d10 (I)","ap":0,"rof":1,"shots":6,"minSize":2,"mods":1,"cost":2000,"notes":"Rear-facing cone. Incendiary. Devastating against close pursuers. Short range but terrifying."},
+    {"id":"cf_side_blade","name":"Sideswipe Blades","cat":"Pursuit Weapons","era":"modern","range":"—","damage":"Str+2d6","ap":2,"rof":0,"shots":0,"minSize":2,"mods":0,"cost":800,"notes":"Melee. Activates on sideswipe attacks. +2 damage to adjacent vehicles during parallel pursuit."}
+  ],
+  "mods": [
+    {"id":"cf_nitrous","name":"Nitrous Injector","cat":"Pursuit Systems","max":2,"mods":0,"costFn":"function(s){return 2000*s}","desc":"+2 Speed Rating for 3 rounds. After: Driving -2 for 1 round (engine stress). Burnout risk on critical failure. Each take is one charge."},
+    {"id":"cf_ram_plate","name":"Reinforced Ram Plate","cat":"Pursuit Systems","max":1,"mods":1,"costFn":"function(s){return 3000*s}","desc":"Upgraded ram. +4 damage on ram attacks (stacks with Ram Plate special). Vehicle takes quarter ram damage."},
+    {"id":"cf_roll_cage","name":"Roll Cage","cat":"Pursuit Systems","max":1,"mods":1,"costFn":"function(s){return 2000*s}","desc":"Crew protection on rollover. Crew takes half damage from crash/rollover events. +2 to crew survival rolls."},
+    {"id":"cf_turbo_boost","name":"Turbo Boost","cat":"Pursuit Systems","max":1,"mods":1,"costFn":"function(s){return 5000*s}","desc":"Jump capability. Once per encounter: vehicle launches airborne. Clears obstacles up to 3\" high, 6\" long. Piloting -2 to land safely."},
+    {"id":"cf_bull_bar","name":"Bull Bar","cat":"Pursuit Systems","max":1,"mods":0,"costFn":"function(s){return 1000*s}","desc":"Reinforced front bumper. +2 damage on head-on collisions with smaller vehicles. Halve damage from hitting obstacles."}
+  ],
+  "specials": [
+    {"id":"cf_road_legend","name":"Road Legend","cat":"Pursuit","desc":"This vehicle is known on the roads. Other drivers recognise it. +2 to Intimidation when ramming or pursuing. Enemies may flee rather than fight."},
+    {"id":"cf_pursuit_spec","name":"Pursuit Specialist","cat":"Pursuit","desc":"Built for the chase. Reroll one failed Driving roll per chase scene. The vehicle was born to hunt."},
+    {"id":"cf_road_warrior","name":"Road Warrior","cat":"Pursuit","desc":"This vehicle has survived more crashes than most vehicles survive service. Ignore the first ram damage each encounter."}
+  ],
+  "prebuilts": [
+    {"name":"Interceptor","size":4,"loco":"wheeled","mods":{"cf_nitrous":2,"cf_ram_plate":1,"handling":1,"inc_speed":1},"weapons":[],"specials":["cf_pursuit_spec","cf_road_warrior"],"armourTech":0},
+    {"name":"War Rig","size":9,"loco":"wheeled","mods":{"cf_bull_bar":1,"cf_roll_cage":1,"armor":2,"reduced_hand":1,"battered":1},"weapons":[{"weaponId":"hmg","mount":"pintle"},{"weaponId":"hmg","mount":"pintle"},{"weaponId":"cf_flame_belch","mount":"fixed"}],"specials":["cf_road_legend","towing","cargo_bay"],"armourTech":0},
+    {"name":"Armoured Stagecoach","size":4,"loco":"wheeled","mods":{"armor":1,"cf_roll_cage":1},"weapons":[{"weaponId":"hmg","mount":"pintle"}],"specials":["enclosed"],"armourTech":0}
+  ]
+}

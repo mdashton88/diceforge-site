@@ -1,0 +1,32 @@
+{
+  "id": "iron-and-steel",
+  "name": "Iron & Steel",
+  "version": "1.0",
+  "description": "Armoured Ground War — Platoon tactics, hull-down positions, and the thunder of tank guns.",
+  "author": "DiceForge Studios",
+  "weapons": [
+    {"id":"is_panzerfaust","name":"Panzerfaust Rack","cat":"Anti-Tank","era":"industrial","range":"12/24/48","damage":"4d10 (III)","ap":16,"rof":1,"shots":4,"minSize":1,"mods":0,"cost":500,"notes":"External rack. Infantry weapon adapted for vehicle mount. Disposable. HW."},
+    {"id":"is_heat","name":"HEAT Round","cat":"Anti-Tank","era":"modern","range":"75/150/300","damage":"5d10 (IV)","ap":"half","rof":1,"shots":10,"minSize":4,"mods":0,"cost":5000,"notes":"AP = half target's total Armour (round down). Loaded as alternate ammo for tank guns."},
+    {"id":"is_canister","name":"Canister Shot","cat":"Anti-Infantry","era":"industrial","range":"Cone","damage":"3d8 (I)","ap":0,"rof":1,"shots":10,"minSize":3,"mods":0,"cost":1000,"notes":"Anti-personnel cone from tank gun. Devastating in close. Loaded as alternate ammo."},
+    {"id":"is_smoke_launcher","name":"Smoke Launcher","cat":"Defensive","era":"industrial","range":"12/24/48","damage":"—","ap":0,"rof":1,"shots":8,"minSize":2,"mods":0,"cost":500,"notes":"Deploy smoke screen as free action. LBT obscuration lasting 3 rounds. No damage."},
+    {"id":"is_coax_mg","name":"Coaxial Machine Gun","cat":"Machine Guns","era":"industrial","range":"30/60/120","damage":"2d8 (I)","ap":2,"rof":3,"shots":2000,"minSize":3,"mods":0,"cost":500,"notes":"Paired to main gun. Uses gunner's action. No separate crew required."},
+    {"id":"is_flare_mortar","name":"Signal Mortar","cat":"Defensive","era":"industrial","range":"24/48/96","damage":"—","ap":0,"rof":1,"shots":6,"minSize":2,"mods":0,"cost":200,"notes":"Illumination or signal flare. Illuminates LBT for 3 rounds. No damage."}
+  ],
+  "mods": [
+    {"id":"is_schurzen","name":"Schürzen","cat":"Armoured Warfare","max":1,"mods":1,"costFn":"function(s){return 3000*s}","desc":"Spaced armour skirts. HEAT rounds and shaped charges suffer -4 AP against this vehicle."},
+    {"id":"is_mine_plough","name":"Mine Plough","cat":"Armoured Warfare","max":1,"mods":1,"costFn":"function(s){return 5000*s}","desc":"Front-mounted mine clearance. Vehicle can traverse minefields safely at half Speed."},
+    {"id":"is_dozer_blade","name":"Dozer Blade","cat":"Armoured Warfare","max":1,"mods":1,"costFn":"function(s){return 5000*s}","desc":"Front-mounted blade for earthworks. Can create hull-down position in 2 rounds (Repair roll)."},
+    {"id":"is_ext_fuel","name":"External Fuel Tanks","cat":"Armoured Warfare","max":2,"mods":0,"costFn":"function(s){return 1000*s}","desc":"Double operational range per take. Jettisoned as free action. If hit: Incendiary explosion (3d6 to own vehicle)."},
+    {"id":"is_infantry_phone","name":"Infantry Telephone","cat":"Armoured Warfare","max":1,"mods":0,"costFn":"function(s){return 200}","desc":"External phone on rear hull. Dismounted infantry can communicate with crew without radio. Combined arms coordination."}
+  ],
+  "specials": [
+    {"id":"is_battle_hardened","name":"Battle-Hardened Crew","cat":"Military","desc":"This crew has seen action. +1 to Spirit rolls to resist Shaken. The crew doesn't panic easily."},
+    {"id":"is_factory_fresh","name":"Factory Fresh","cat":"Military","desc":"Straight from the production line. All systems at peak performance. +1 to Repair rolls, but crew has no combat experience (-1 Shooting first engagement)."},
+    {"id":"is_war_weary","name":"War-Weary","cat":"Military","desc":"This vehicle has been through hell. -1 to Repair rolls (worn parts), but the crew knows every rattle and groan. +1 to Piloting."}
+  ],
+  "prebuilts": [
+    {"name":"M4 Sherman","size":6,"loco":"tracked","mods":{"armor":2,"is_coax_mg":1},"weapons":[{"weaponId":"tank_gun_med","mount":"turret"},{"weaponId":"hmg","mount":"pintle"},{"weaponId":"is_coax_mg","mount":"fixed"}],"specials":["enclosed"],"armourTech":0},
+    {"name":"Panzer IV Ausf. H","size":6,"loco":"tracked","mods":{"armor":2,"is_schurzen":1},"weapons":[{"weaponId":"tank_gun_med","mount":"turret"},{"weaponId":"hmg","mount":"pintle"},{"weaponId":"is_coax_mg","mount":"fixed"}],"specials":["enclosed"],"armourTech":0},
+    {"name":"T-34/85","size":6,"loco":"tracked","mods":{"armor":2,"sloped":1},"weapons":[{"weaponId":"tank_gun_med","mount":"turret"},{"weaponId":"hmg","mount":"pintle"}],"specials":["enclosed","is_battle_hardened"],"armourTech":0}
+  ]
+}
