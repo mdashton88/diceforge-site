@@ -276,7 +276,14 @@ else if(sz<=25){cat='Capital';hand=-3;wounds=7;crew=100;energy=60}
 else{cat='Titan';hand=-4;wounds=8;crew=500;energy=100}
 return{cat:cat,hand:hand,baseTough:baseTough,maxArmor:maxArmor,wounds:wounds,crew:crew,energy:energy,modSlots:mods,costBase:cost,frameType:ft,compactBonus:0}};
 
-  var LOCOS=[
+  
+// ═══ THREAT GRADE SYSTEM ═══
+function weaponGrade(avg,ap){var t=avg+ap;if(t<6)return'A-';if(t<12)return'A';if(t<18)return'A+';if(t<21)return'B-';if(t<24)return'B';if(t<28)return'B+';if(t<33)return'C-';if(t<37)return'C';if(t<42)return'C+';if(t<48)return'D-';if(t<54)return'D';if(t<60)return'D+';if(t<67)return'E-';if(t<73)return'E';if(t<80)return'E+';if(t<100)return'F-';if(t<130)return'F';return'F+'}
+function vehicleGrade(sz){if(sz<=3)return'A';if(sz<=7)return'B';if(sz<=11)return'C';if(sz<=20)return'D';if(sz<=25)return'E';return'F'}
+function gradeLabel(g){var labels={'A':'Light','B':'Medium','C':'Heavy','D':'Super-Heavy','E':'Capital','F':'Titan'};return labels[g.charAt(0)]||'Unknown'}
+function quickStrikeResult(wGrade,vGrade){var letters=['A','B','C','D','E','F'];var wIdx=letters.indexOf(wGrade.charAt(0));var vIdx=letters.indexOf(vGrade);var diff=wIdx-vIdx;if(diff<=-3)return{result:'No Effect',desc:'Weapon grade too low to affect this target'};if(diff===-2)return{result:'Desperate',desc:'Shake only on a raise'};if(diff===-1)return{result:'Outmatched',desc:'Shake normally; Wound on a raise'};if(diff===0)return{result:'Effective',desc:'Normal damage rules apply'};if(diff===1)return{result:'Overkill',desc:'+d6 bonus damage'};return{result:'Devastating',desc:'Automatic Wound + Critical Hit'}}
+
+var LOCOS=[
   {id:'wheeled',name:'Wheeled',speed:4,costMult:1000,notes:'Standard wheels.',group:'ground'},
   {id:'tracked',name:'Tracked',speed:3,costMult:5000,notes:'Ignores Difficult Ground.',group:'ground'},
   {id:'hover',name:'Hover',speed:5,costMult:10000,notes:'Ignores low obstacles and water.',group:'ground'},
@@ -687,6 +694,8 @@ function dropMod(id){var m=findMod(id);var max=m.max==='U'?99:m.max==='frame'?ma
 function dropWeapon(id){var w=getAllWeapons().find(function(x){return x.id===id});if(!w||w.minSize>S.size)return;
   pushUndo();S.weapons.push({weaponId:id,mount:S.currentMount});Audio.clunk();renderWeaponBay(id);renderStats();renderOutput()}
 // ═══ WEAPON GROUPING HELPER ═══
+
+function avgDmg(dstr){if(!dstr||dstr==='—')return 0;var total=0;var parts=dstr.replace(/[()]/g,'').split('+');for(var i=0;i<parts.length;i++){var p=parts[i].trim();if(p.indexOf('d')>-1){var dd=p.split('d');var n=parseInt(dd[0])||1;var d=parseInt(dd[1])||6;total+=n*((d+1)/2)}else{total+=parseFloat(p)||0}}return total}
 function groupWeaponsForDisplay(mode){
   // mode: 'full' for stat block'compact' for print-all
   var groups=[];S.weapons.forEach(function(w){var key=w.weaponId+'|'+w.mount;var g=groups.find(function(x){return x.key===key});if(g)g.count++;else groups.push({key:key,weaponId:w.weaponId,mount:w.mount,count:1})});
@@ -694,7 +703,7 @@ function groupWeaponsForDisplay(mode){
     var ml=g.mount==='fixed'?(mode==='compact'?'Fixed':'Fixed Front'):g.mount==='turret'?'Turret':'Pintle';
     var prefix=(g.count>1?g.count+'× ':'')+wp.name+' ('+ml+')';
     if(mode==='compact')return prefix+': '+wp.range+''+wp.damage+', AP '+wp.ap+', RoF '+wp.rof+(wp.notes?''+wp.notes:'');
-    return prefix+': Range '+wp.range+', Damage '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof+(wp.notes?''+wp.notes:'');
+    var wg=weaponGrade(avgDmg(wp.damage),wp.ap);return prefix+': Range '+wp.range+', Damage '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof+', Grade '+wg+(wp.notes?' — '+wp.notes:'');
   }).filter(Boolean);
 }
 // ═══ RENDER FUNCTIONS ═══
@@ -765,7 +774,7 @@ function renderWeaponCatalogue(){var cats={};
       h+='<div class="weapon-drag-item" style="'+(ok?'':'opacity:.4;pointer-events:none')+'" onmousedown="startDrag(event,\'weapon\',\''+w.id+'\',\''+w.name+'\')" ontouchstart="startDrag(event,\'weapon\',\''+w.id+'\',\''+w.name+'\')">'
         +'<span class="drag-handle" style="color:var(--text-dim);font-size:14px;opacity:.4">&#x2807;</span>'
         +'<div class="wdi-info"><div class="wdi-name">'+w.name+(ok?'':' (Min Size '+w.minSize+')')+(w._ext?'<span style="background:var(--accent);color:var(--bg-deep);font-size:8px;padding:1px 4px;margin-left:4px;font-family:Cinzel,serif;letter-spacing:0.5px">'+w._extName+'</span>':'')+(w.era&&currentEra==='all'?'<span style="font-size:10px;color:var(--text-dim);font-weight:400"> — '+(ERA_LABELS[w.era]||'Custom')+'</span>':'')+'</div>'
-        +'<div class="wdi-stats">'+w.range+' · '+w.damage+' · AP '+w.ap+' · RoF '+w.rof+'</div>'
+        +'<div class="wdi-stats">'+w.range+' · '+w.damage+' · AP '+w.ap+' · RoF '+w.rof+' · Grade '+weaponGrade(avgDmg(w.damage),w.ap)+'</div>'
         +'<div class="wdi-stats">'+w.notes+'</div></div>'
         +'<div class="wdi-meta"><div class="wdi-mods">'+w.mods+' mod'+(w.mods!==1?'s':'')+'</div>'
         +'<div class="wdi-price">$'+fmtN(w.cost)+'</div></div></div>'})}
@@ -821,6 +830,7 @@ function renderStats(){var f=getFrame(S.size),used=calcModsUsed(),gained=calcMod
   document.getElementById('statsGrid').innerHTML=
     '<div class="stat-box"><div class="stat-label">Toughness</div><div class="stat-value">'+calcTough()+' ('+calcArmor()+')</div></div>'
     +'<div class="stat-box"><div class="stat-label">Weight Class</div><div class="stat-value" style="color:var(--accent)">'+vehicleClassLabel()+'</div></div>'
+    +'<div class="stat-box"><div class="stat-label">Defence Grade</div><div class="stat-value" style="color:var(--accent);font-size:24px;font-weight:700">'+vehicleGrade(S.size)+'</div></div>'
     +'<div class="stat-box"><div class="stat-label">Wounds</div><div class="stat-value">'+calcWounds()+'</div></div>'
     +'<div class="stat-box"><div class="stat-label">Handling</div><div class="stat-value">'+(calcHand()>=0?'+':'')+calcHand()+'</div></div>'
     +'<div class="stat-box"><div class="stat-label">'+spdLabel+'</div><div class="stat-value">'+spd+' ('+speedMPH(spd)+' MPH)</div></div>'
@@ -863,6 +873,7 @@ function renderOutput(){var p=document.getElementById('outputContent'),f=getFram
     +'<div class="sb-type">'+vehicleClassLabel()+' '+frameTypeLabel()+' — Size '+S.size+' ('+f.cat+')'+loco.name+', Handling '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)</div>'
     +'<hr class="sb-divider">'
     +'<div class="sb-line"><span class="sb-label">Toughness:</span> '+calcTough()+' ('+calcArmor()+')</div>'
+    +'<div class="sb-line"><span class="sb-label">Defence Grade:</span> '+vehicleGrade(S.size)+' ('+gradeLabel(vehicleGrade(S.size))+')</div>'
     +'<div class="sb-line"><span class="sb-label">Wounds:</span> '+calcWounds()+'</div>'
     +'<div class="sb-line"><span class="sb-label">Crew:</span> '+f.crew+'</div>'
     +(isWalker()?'<div class="sb-line"><span class="sb-label">Strength:</span> '+walkerStr()+'</div>':'')
@@ -1014,18 +1025,28 @@ function buildHelp(){
   h+='<p><span class="rule-key">Chase Rules:</span> Use Speed Ratings to determine chase positions. Piloting/Driving rolls each round to gain or lose ground.</p></div>';
 
   // SECTION: Weight Class
-  h+='<div class="help-section" data-help="weight class rating I II III IV V VI sci-fi scale weapon compatibility"><h3>Weight Class Rating</h3>';
-  h+='<p>The Weight Class is a sci-fi classification system that matches weapon scale to vehicle durability. A MediumI weapon reliably threatens a MediumI vehicle. One class below is a disadvantage. Two classes below is futile. The class is calculated automatically from total Toughness (armoured value).</p>';
-  h+='<table><tr><th>Class</th><th>Toughness</th><th>Examples</th></tr>';
-  h+='<tr><td>I</td><td>5–15</td><td>Motorcycle, car, light truck, small boat, shuttle</td></tr>';
-  h+='<tr><td>II</td><td>16–25</td><td>APC, WWII tank, fighter, armed yacht, scout ship</td></tr>';
-  h+='<tr><td>III</td><td>26–35</td><td>Modern MBT, heavy tank, corvette, heavy fighter</td></tr>';
-  h+='<tr><td>IV</td><td>36–45</td><td>Frigate, destroyer, armoured cruiser, assault ship</td></tr>';
-  h+='<tr><td>V</td><td>46–55</td><td>Battleship, titan, dreadnought, star destroyer</td></tr>';
-  h+='<tr><td>VI</td><td>56–65</td><td>Star base, mega-titan, orbital platform</td></tr>';
-  h+='<tr><td>VII</td><td>66+</td><td>World-killer, planet cracker, ultra-capital</td></tr>';
+  h+='<div class="help-section" data-help="threat grade quick strike weapon vehicle A B C D E F combat"><h3>Threat Grades</h3>';
+  h+='<p>Every weapon and vehicle carries a Threat Grade from A (lightest) to F (heaviest). Compare the weapon\'s grade letter to the target\'s grade letter for an instant read on whether you can hurt it.</p>';
+  h+='<table><tr><th>Grade</th><th>Weight Class</th><th>Size</th><th>Examples</th></tr>';
+  h+='<tr><td>A</td><td>Light</td><td>1–3</td><td>Motorcycles, jet skis, biplanes, power armour</td></tr>';
+  h+='<tr><td>B</td><td>Medium</td><td>4–7</td><td>Cars, trucks, helicopters, fighters, patrol boats</td></tr>';
+  h+='<tr><td>C</td><td>Heavy</td><td>8–11</td><td>Tanks, bombers, gunships, corvettes</td></tr>';
+  h+='<tr><td>D</td><td>Super-Heavy</td><td>12–20</td><td>Warships, destroyers, heavy walkers, frigates</td></tr>';
+  h+='<tr><td>E</td><td>Capital</td><td>21–25</td><td>Battleships, carriers, star destroyers</td></tr>';
+  h+='<tr><td>F</td><td>Titan</td><td>26–30</td><td>Space stations, mega-walkers, world-killers</td></tr>';
   h+='</table>';
-  h+='<p>Weight Class ratings (L/M/H/S/C/D/T) indicate the vehicle scale category</p></div>';
+  h+='<p>Weapon grades use the same A–F scale with +/- modifiers for finer detail. The grade is calculated from average damage plus AP. The +/- adds flavour but does not change the Quick Strike result.</p>';
+  h+='<h4>Quick Strike Table</h4>';
+  h+='<p>An optional fast-play rule. Compare the weapon grade letter to the target grade letter:</p>';
+  h+='<table><tr><th>Comparison</th><th>Result</th><th>Effect</th></tr>';
+  h+='<tr><td>3+ letters below</td><td>No Effect</td><td>Weapon bounces harmlessly</td></tr>';
+  h+='<tr><td>2 letters below</td><td>Desperate</td><td>Shake only on a raise</td></tr>';
+  h+='<tr><td>1 letter below</td><td>Outmatched</td><td>Shake normally; Wound on raise</td></tr>';
+  h+='<tr><td>Matches target</td><td>Effective</td><td>Normal damage rules</td></tr>';
+  h+='<tr><td>1 letter above</td><td>Overkill</td><td>+d6 bonus damage</td></tr>';
+  h+='<tr><td>2+ letters above</td><td>Devastating</td><td>Automatic Wound + Critical Hit</td></tr>';
+  h+='</table>';
+  h+='<p>This replaces the need to calculate damage dice against Toughness during fast-paced vehicle combat. Full damage rolls always remain available for GMs who prefer detailed resolution.</p></div>';
 
   // SECTION: Heavy Metal Rules
   h+='<div class="help-section" data-help="heavy metal rules simplified damage wounds class weapon vehicle combat sci-fi"><h3>Heavy Metal Rules</h3>';
