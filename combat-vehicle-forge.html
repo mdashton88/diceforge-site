@@ -254,7 +254,27 @@ var SIZE_REF={
   27:{len:"1500'",ex:'Mega dreadnought',wt:'5M tons'},28:{len:"2000'",ex:'Titan, space station',wt:'10M tons'},
   29:{len:"2500'",ex:'Super titan, bulk transport',wt:'25M tons'},30:{len:"1 km",ex:'Star base, mega titan',wt:'50M tons'}};
 
-function getFrame(sz){// DiceForge Chassis Formula v5.2var baseTough=5+sz;var ft=S.frameType||'civilian';if(ft==='rugged')baseTough=Math.ceil(baseTough*1.25);else if(ft==='military')baseTough=Math.ceil(baseTough*1.5);var maxArmor=Math.max(1,Math.ceil(sz/2));var mods=Math.floor(sz*2.5);var cost=1000*sz*sz;if(ft==='rugged')cost=Math.ceil(cost*1.5);else if(ft==='military')cost=Math.ceil(cost*2.5);var cat,hand,wounds,crew,energy;if(sz<=3){cat='Light';hand=1;wounds=3;crew=1;energy=3}else if(sz<=7){cat='Medium';hand=0;wounds=4;crew=1;energy=5}else if(sz<=11){cat='Heavy';hand=-1;wounds=5;crew=5;energy=15}else if(sz<=20){cat='Super-Heavy';hand=-2;wounds=6;crew=20;energy=30}else if(sz<=25){cat='Capital';hand=-3;wounds=7;crew=100;energy=60}else{cat='Titan';hand=-4;wounds=8;crew=500;energy=100}return{cat:cat,hand:hand,baseTough:baseTough,maxArmor:maxArmor,wounds:wounds,crew:crew,energy:energy,modSlots:mods,costBase:cost,frameType:ft,compactBonus:0}};
+function getFrame(sz){// DiceForge Chassis Formula v5.3
+var ft=S.frameType||'civilian';var loco=S.loco||'wheeled';
+var baseTough=5+sz;
+// Locomotion modifier — lighter construction for airframes and hulls
+var airLocos=['vtol','turboprop','jet'];var waterLocos=['water_sail','water_turbo','water_jet'];
+if(airLocos.indexOf(loco)>=0)baseTough-=1;
+else if(waterLocos.indexOf(loco)>=0)baseTough-=2;
+// Frame type multiplier
+if(ft==='rugged')baseTough=Math.ceil(baseTough*1.25);
+else if(ft==='military')baseTough=Math.ceil(baseTough*1.5);
+var maxArmor=Math.max(1,Math.ceil(sz/2));var mods=Math.floor(sz*2.5);
+var costMult=ft==='rugged'?1.5:ft==='military'?2.5:1;
+var cost=Math.round(1000*sz*sz*costMult);
+var cat,hand,wounds,crew,energy;
+if(sz<=3){cat='Light';hand=1;wounds=3;crew=1;energy=3}
+else if(sz<=7){cat='Medium';hand=0;wounds=4;crew=1;energy=5}
+else if(sz<=11){cat='Heavy';hand=-1;wounds=5;crew=5;energy=15}
+else if(sz<=20){cat='Super-Heavy';hand=-2;wounds=6;crew=20;energy=30}
+else if(sz<=25){cat='Capital';hand=-3;wounds=7;crew=100;energy=60}
+else{cat='Titan';hand=-4;wounds=8;crew=500;energy=100}
+return{cat:cat,hand:hand,baseTough:baseTough,maxArmor:maxArmor,wounds:wounds,crew:crew,energy:energy,modSlots:mods,costBase:cost,frameType:ft,compactBonus:0}};
 
   if(sz<=11)return{cat:'Huge',hand:-1,baseTough:15,maxArmor:40,wounds:5,crew:5,energy:15,modMult:3,costMult:50000,compactBonus:0};
   return{cat:'Gargantuan',hand:-2,baseTough:20,maxArmor:50,wounds:6,crew:50,energy:30,modMult:4,costMult:1000000,compactBonus:0};}
