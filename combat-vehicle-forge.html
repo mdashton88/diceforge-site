@@ -152,7 +152,7 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
     <div class="sidebar-section">
       <h3>Size &amp; Frame</h3>
       <div class="size-picker"><span class="size-val" id="sizeVal">6</span><input type="range" id="sizeSlider" min="1" max="30" value="6" oninput="setSize(+this.value)"><span class="size-class" id="sizeClass">Large</span></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:6px 0"><div class="loco-btn" id="ft-civilian" onclick="setFrameType('civilian')">Civilian<span class="loco-speed">×1</span></div><div class="loco-btn" id="ft-rugged" onclick="setFrameType('rugged')">Rugged<span class="loco-speed">×1.15</span></div><div class="loco-btn" id="ft-military" onclick="setFrameType('military')">Military<span class="loco-speed">×1.25</span></div><div class="loco-btn" id="ft-futuristic" onclick="setFrameType('futuristic')">Futuristic<span class="loco-speed">×1.5</span></div></div><div id="frameInfo"></div>
+      <div id="frameInfo"></div>
     </div>
     <div class="sidebar-section">
       <h3>Main Locomotion</h3>
@@ -317,11 +317,10 @@ var SIZE_REF={
 
 
 function getFrame(sz){
-var ft=S.frameType||'civilian';var loco=S.loco||'wheeled';
+var loco=S.loco||'wheeled';
 var baseTough=5+sz;
 var maxArmor=Math.max(1,Math.ceil(sz/2));var mods=Math.max(3,Math.floor(sz*2.5));
-var costMult=ft==='rugged'?1.5:ft==='military'?2.5:ft==='futuristic'?4:1;
-var cost=Math.round(1000*sz*sz*costMult);
+var cost=Math.round(1000*sz*sz);
 var cat,hand,wounds,crew,energy;
 if(sz<=3){cat='Light';hand=1;wounds=3;crew=1;energy=3}
 else if(sz<=7){cat='Medium';hand=0;wounds=4;crew=1;energy=5}
@@ -329,7 +328,7 @@ else if(sz<=11){cat='Heavy';hand=-1;wounds=5;crew=5;energy=15}
 else if(sz<=20){cat='Super-Heavy';hand=-2;wounds=6;crew=20;energy=30}
 else if(sz<=25){cat='Capital';hand=-3;wounds=7;crew=100;energy=60}
 else{cat='Titan';hand=-4;wounds=8;crew=500;energy=100}
-return{cat:cat,hand:hand,baseTough:baseTough,maxArmor:maxArmor,wounds:wounds,crew:crew,energy:energy,modSlots:mods,costBase:cost,frameType:ft,compactBonus:0}}
+return{cat:cat,hand:hand,baseTough:baseTough,wounds:wounds,crew:crew,energy:energy,modSlots:mods,costBase:cost,compactBonus:0}}
 
 var LOCOS=[
   {id:'wheeled',name:'Wheeled',speed:4,costMult:1000,notes:'Standard wheels.',group:'ground'},
@@ -626,7 +625,7 @@ function showExtensionManager(){
 function getAllMods(){return MODS.concat(extMods)}
 function getAllSpecials(){return SPECIALS.concat(extSpecials)}
 
-var S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,frameType:'civilian',loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:[],toughLevel:0,armourLevel:0,specials:[],customSpecial:''};
+var S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:[],toughLevel:0,armourLevel:0,specials:[],customSpecial:''};
 var undoStack=[],redoStack=[],maxUndo=50;
 function snapState(){return{mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons)),size:S.size,loco:S.loco,specials:S.specials.slice(),customSpecial:S.customSpecial,toughLevel:S.toughLevel,armourLevel:S.armourLevel}}
 function pushUndo(){redoStack=[];undoStack.push(snapState());if(undoStack.length>maxUndo)undoStack.shift()}
@@ -659,12 +658,9 @@ function defenceGradeLabel(){var t=calcTotalTough(),g=defenceGrade();var bands={
 function weaponThreat(w){var m=w.damage.match(/(\d+)d(\d+)([+-]\d+)?/);if(!m)return 0;var n=+m[1],d=+m[2],mod=m[3]?+m[3]:0;return n*(d+1)/2+mod+(w.ap||0)}
 function weaponGrade(w){var t=weaponThreat(w);if(t>=56)return 'F';if(t>=46)return 'E';if(t>=36)return 'D';if(t>=26)return 'C';if(t>=16)return 'B';if(t>0)return 'A';return '\u2014'}
 function weaponGradeLabel(w){var t=weaponThreat(w),g=weaponGrade(w);if(g==='\u2014')return g;var bands={A:[1,15],B:[16,25],C:[26,35],D:[36,45],E:[46,55],F:[56,999]};var b=bands[g];if(!b)return g;var range=b[1]-b[0]+1;var pos=(t-b[0])/range;if(pos>=0.67)return g+'+';if(pos<=0.33)return g+'\u2212';return g}
-function frameTypeLabel(){var ft=S.frameType||'civilian';if(ft==='civilian')return 'Civilian';if(ft==='rugged')return 'Rugged';if(ft==='futuristic')return 'Futuristic';return 'Military'}
 function isWalker(){return S.loco==='legs_biped'||S.loco==='legs_quad'}
 function walkerStr(){return 'd12+'+S.size}
 function isHeavyArmor(){return S.size>=5||isWalker()}
-function setFrameType(ft){S.frameType=ft;Audio.click();renderFrameType();renderFrameInfo();renderStats();renderOutput()}
-function renderFrameType(){document.querySelectorAll('[id^=ft-]').forEach(function(el){el.classList.toggle('active',el.id==='ft-'+S.frameType)})}
 
 // ═══ IMAGE HANDLING ═══
 // ═══ IMAGE HANDLING ═══
@@ -736,7 +732,7 @@ function setArmourLevel(v){pushUndo();S.armourLevel=v;Audio.click();renderSlider
 function adjTough(d){setToughLevel(S.toughLevel+d)}
 function adjArmour(d){setArmourLevel(S.armourLevel+d)}
 function renderSliders(){var ts=document.getElementById('toughSlider'),as=document.getElementById('armourSlider');if(ts){ts.value=Math.max(-5,Math.min(5,S.toughLevel));document.getElementById('toughLabel').textContent=toughLabel(S.toughLevel);document.getElementById('toughVal').textContent=(S.toughLevel>=0?'+':'')+S.toughLevel;document.getElementById('toughDesc').textContent=toughDesc(S.toughLevel)}if(as){as.value=Math.max(-5,Math.min(5,S.armourLevel));document.getElementById('armourLabel').textContent=armourLabel(S.armourLevel);document.getElementById('armourVal').textContent=(S.armourLevel>=0?'+':'')+S.armourLevel;document.getElementById('armourDesc').textContent=armourDesc(S.armourLevel);var ab=armourBase(),ast=armourStep(),bonus=ab+S.armourLevel*ast;document.getElementById('armourBonus').innerHTML='Armour: <b>'+Math.max(0,bonus)+'</b> (base '+ab+', step \u00b1'+ast+')'}}
-function setSize(sz){S.size=sz;S.mods={};S.weapons=[];document.getElementById('sizeVal').textContent=sz;document.getElementById('sizeClass').textContent=getFrame(sz).cat;renderFrameInfo();renderFrameType();renderLocoGrid();renderSliders();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderSpecials();renderStats();renderOutput()}
+function setSize(sz){S.size=sz;S.mods={};S.weapons=[];document.getElementById('sizeVal').textContent=sz;document.getElementById('sizeClass').textContent=getFrame(sz).cat;renderFrameInfo();renderLocoGrid();renderSliders();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderSpecials();renderStats();renderOutput()}
 function renderFrameInfo(){var f=getFrame(S.size);var ref=SIZE_REF[S.size]||{len:'?',ex:'—',wt:'?'};
   document.getElementById('sizeVal').textContent=S.size;document.getElementById('sizeClass').textContent=f.cat;
   document.getElementById('frameInfo').innerHTML='<div style="font-size:12px;color:var(--text-dim);font-style:italic;margin-bottom:6px;line-height:1.4">~'+ref.len+' long, ~'+ref.wt+' — <span style="color:var(--text)">'+ref.ex+'</span></div><div class="frame-stats">'
@@ -1092,7 +1088,7 @@ function filterHelp(){var q=(document.getElementById('helpSearch').value||'').to
 
 // ═══ TABS, SAVE/LOAD, UTILS ═══
 function switchTab(tab){document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===tab)});document.querySelectorAll('.panel').forEach(function(p){p.classList.toggle('active',p.id==='panel-'+tab)});if(tab==='output')renderOutput()}
-function newVehicle(){S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,frameType:'civilian',loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:S.saved,toughLevel:0,armourLevel:0,specials:[],customSpecial:''};document.getElementById('vName').value=S.name;document.getElementById('vDesc').value='';document.getElementById('vNotes').value='';document.getElementById('sizeSlider').value=6;var ci=document.getElementById('customSpecialInput');if(ci)ci.value='';clearImage();undoStack=[];redoStack=[];renderAll()}
+function newVehicle(){S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:S.saved,toughLevel:0,armourLevel:0,specials:[],customSpecial:''};document.getElementById('vName').value=S.name;document.getElementById('vDesc').value='';document.getElementById('vNotes').value='';document.getElementById('sizeSlider').value=6;var ci=document.getElementById('customSpecialInput');if(ci)ci.value='';clearImage();undoStack=[];redoStack=[];renderAll()}
 function duplicateVehicle(){S.name=(S.name||'Vehicle')+' (copy)';document.getElementById('vName').value=S.name;saveVehicle();Audio.clunk()}
 function printStatBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco}),spd=calcSpeed();
   var used=calcModsUsed(),gained=calcModsGained(),left=(f.modSlots+gained)-used;
@@ -1190,8 +1186,8 @@ function printAll(){if(!S.saved.length){alert('No saved vehicles to print.');ret
     +'<script>window.onload=function(){window.print()}<\\/script>'
     +'</body></html>');
   win.document.close()}
-function saveVehicle(){var d={name:S.name,desc:S.desc,notes:S.notes,image:S.image,size:S.size,frameType:S.frameType,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons)),toughLevel:S.toughLevel,armourLevel:S.armourLevel,specials:S.specials.slice(),customSpecial:S.customSpecial};var i=S.saved.findIndex(function(s){return s.name===S.name});if(i>=0)S.saved[i]=d;else S.saved.push(d);localStorage.setItem('diceforge-cvf',JSON.stringify(S.saved));renderSaved();Audio.click()}
-function loadVehicle(i){var d=S.saved[i];S.name=d.name;S.desc=d.desc||'';S.notes=d.notes||'';S.image=d.image||'';S.size=d.size;S.frameType=d.frameType||'civilian';S.loco=d.loco;S.mods=JSON.parse(JSON.stringify(d.mods));S.weapons=JSON.parse(JSON.stringify(d.weapons));S.toughLevel=d.toughLevel||0;S.armourLevel=d.armourLevel||0;S.specials=d.specials||[];S.customSpecial=d.customSpecial||'';document.getElementById('vName').value=S.name;document.getElementById('vDesc').value=S.desc;document.getElementById('vNotes').value=S.notes;document.getElementById('sizeSlider').value=S.size;showImage();renderAll()}
+function saveVehicle(){var d={name:S.name,desc:S.desc,notes:S.notes,image:S.image,size:S.size,loco:S.loco,mods:JSON.parse(JSON.stringify(S.mods)),weapons:JSON.parse(JSON.stringify(S.weapons)),toughLevel:S.toughLevel,armourLevel:S.armourLevel,specials:S.specials.slice(),customSpecial:S.customSpecial};var i=S.saved.findIndex(function(s){return s.name===S.name});if(i>=0)S.saved[i]=d;else S.saved.push(d);localStorage.setItem('diceforge-cvf',JSON.stringify(S.saved));renderSaved();Audio.click()}
+function loadVehicle(i){var d=S.saved[i];S.name=d.name;S.desc=d.desc||'';S.notes=d.notes||'';S.image=d.image||'';S.size=d.size;S.loco=d.loco;S.mods=JSON.parse(JSON.stringify(d.mods));S.weapons=JSON.parse(JSON.stringify(d.weapons));S.toughLevel=d.toughLevel||0;S.armourLevel=d.armourLevel||0;S.specials=d.specials||[];S.customSpecial=d.customSpecial||'';document.getElementById('vName').value=S.name;document.getElementById('vDesc').value=S.desc;document.getElementById('vNotes').value=S.notes;document.getElementById('sizeSlider').value=S.size;showImage();renderAll()}
 function deleteSaved(i){S.saved.splice(i,1);localStorage.setItem('diceforge-cvf',JSON.stringify(S.saved));renderSaved()}
 function renderSaved(){var list=document.getElementById('savedList');
   if(!S.saved.length){list.innerHTML='<div class="empty-state"><p>No saved builds yet.</p></div>';return}
@@ -1199,7 +1195,7 @@ function renderSaved(){var list=document.getElementById('savedList');
     return '<div class="saved-item" onclick="loadVehicle('+i+')"><span class="si-name">'+esc(s.name)+'</span><span class="si-chassis">Size '+s.size+' '+(loco?loco.name:'')+'</span><button class="si-delete" onclick="event.stopPropagation();deleteSaved('+i+')">&times;</button></div>'}).join('')}
 function fmtN(n){return n.toLocaleString()}
 function fmtC(n){if(n>=1e9)return(n/1e9).toFixed(2)+'B';if(n>=1e6)return(n/1e6).toFixed(n%1e6===0?0:2)+'M';if(n>=1e3)return(n/1e3).toFixed(n%1e3===0?0:1)+'K';return n.toString()}
-function renderAll(){renderFrameInfo();renderFrameType();renderLocoGrid();renderSliders();renderEraFilter();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderSpecials();renderStats();renderOutput();renderSaved()}
+function renderAll(){renderFrameInfo();renderLocoGrid();renderSliders();renderEraFilter();renderModCatalogue();renderModBay();renderWeaponCatalogue();renderWeaponBay();renderSpecials();renderStats();renderOutput();renderSaved()}
 
 
 // ═══ SPECIALS RENDERING ═══
