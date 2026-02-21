@@ -796,7 +796,7 @@ function renderWeaponBay(animId){var bay=document.getElementById('weaponBay');
       +'<div class="wbi-info"><div class="wbi-name">'+wp.name+lkLabel+' <span style="color:var(--accent);font-weight:700;font-size:12px">Grade '+weaponGradeLabel(wp)+'</span>'+lkBadge+'</div>'
       +'<div class="wbi-stats">'+wp.range+' · '+wp.damage+' · AP '+wp.ap+' · '+wp.notes+'</div>'
       +'<div class="wbi-mount"><span onclick="cycleMount('+i+')" style="cursor:pointer;display:inline-block;background:'+mbg+';color:'+mfg+';padding:1px 8px;border-radius:3px;font-size:11px;font-weight:700;letter-spacing:.5px;user-select:none" title="Click to cycle mount type">'+ml+'</span> · '+mc+' mod'+(mc!==1?'s':'')+' · $'+fmtN(wp.cost*(w.mount==='turret'?2:1)*(1+lk))
-      +(canLink?' · <span onclick="cycleLink('+i+')" style="cursor:pointer;color:'+(lk>0?'#e8b04a':'var(--text-dim)');+';font-size:11px;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px" title="Cycle: Single → Dual → Quad">'+(lk===0?'Link':lk===1?'Dual':'Quad')+'</span>':'')
+      +(canLink?' · <span onclick="cycleLink('+i+')" style="cursor:pointer;color:'+(lk>0?'#e8b04a':'var(--text-dim)')+';font-size:11px;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px" title="Cycle: Single → Dual → Quad">'+(lk===0?'Link':lk===1?'Dual':'Quad')+'</span>':'')
       +' <span style="margin-left:4px"><span onclick="dupeWeapon('+i+')" style="cursor:pointer;color:var(--accent);font-size:14px;padding:0 4px" title="Add another">+</span>'
       +'<span onclick="removeWeapon('+i+')" style="cursor:pointer;color:#c44;font-size:14px;padding:0 4px" title="Remove one">\u2212</span></span>'
       +'</div></div>'
