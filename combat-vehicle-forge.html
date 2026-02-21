@@ -300,7 +300,7 @@ var SPD_TABLE={1:4,2:8,3:16,4:25,5:40,6:60,7:80,8:100,9:120,10:160,11:200,12:250
 function speedMPH(r){return SPD_TABLE[r]||(r+'?')}
 var MODS=[
   // ═══ DRAWBACKS ═══
-  {id:'war_worn',name:'War-Worn',cat:'Drawbacks',max:2,mods:-2,costFn:function(s){return -8000*s},desc:'-1 Toughness per take. -1 Persuasion when trying to impress.'},
+  {id:'weak',name:'Weak',cat:'Drawbacks',max:5,mods:0,costFn:function(s){return -4000*s},desc:'-1 base Toughness per take. The vehicle is flimsier than typical for its size.'},
   {id:'unmanned',name:'Unmanned',cat:'Drawbacks',max:1,mods:-2,costFn:function(s){return -5000*s},desc:'No crew. Requires Remote Operator or Machine Intelligence.'},
   {id:'open_crew',name:'Open Crew',cat:'Drawbacks',max:3,mods:-1,costFn:function(s){return -5000*s},desc:'Take 1: Medium Cover (-4). Take 2: Light Cover (-2). Take 3: No Cover, ignore vehicle Toughness/Armour.'},
   {id:'temperamental',name:'Temperamental',cat:'Drawbacks',max:2,mods:-2,costFn:function(s){return -10000*s},desc:'Repair at -1 per take. Snake eyes on any vehicle roll: random system shorts for 1 round.'},
@@ -312,8 +312,7 @@ var MODS=[
   {id:'underpowered',name:'Underpowered',cat:'Drawbacks',max:3,mods:-1,costFn:function(s){return -8000*s},desc:'-1 Speed Rating per take. Cannot reduce below 1.'},
   {id:'bone_shaker',name:'Bone Shaker',cat:'Drawbacks',max:1,mods:-1,costFn:function(s){return -8000*s},desc:'Unstable Platform penalty is -3 instead of -2.'},
   {id:'death_trap',name:'Death Trap',cat:'Drawbacks',max:1,mods:-1,costFn:function(s){return -8000*s},desc:'Full collision damage. Eject at -2. Crew take +2 damage from penetrating hits.'},
-  {id:'lightweight',name:'Lightweight Build',cat:'Drawbacks',max:3,mods:-1,costFn:function(s){return -8000*s},desc:'-2 base Toughness per take. Plywood, canvas, aluminium, fibreglass.'},
-  {id:'light_frame',name:'Light Frame',cat:'Drawbacks',max:3,mods:0,costFn:function(s){return -4000*s},desc:'-1 base Toughness per take. Thinner gauge, lighter materials, or less structural mass than typical for this size. Not damaged — just built lighter.'},
+  {id:'tough',name:'Tough',cat:'Defensive Systems',max:5,mods:0,costFn:function(s){return 5000*s},desc:'+1 base Toughness per take. The vehicle is sturdier than typical for its size.'},
   // ═══ CORE SYSTEMS ═══
   {id:'machine_intel',name:'Machine Intelligence',cat:'Core Systems',max:3,mods:2,costFn:function(s){return 8000*s},desc:'AI companion. 1st: d6+Wild Die. 2nd: d8. 3rd: d10 + one free action per round for ship systems.'},
   {id:'enhanced_sensors',name:'Enhanced Sensors',cat:'Core Systems',max:1,mods:1,costFn:function(){return 12000},desc:'30× magnification, ignore 2 Illumination, +1 Notice. +2 vs Stealth at night.'},
@@ -327,7 +326,6 @@ var MODS=[
   {id:'composite_layering',name:'Composite Layering',cat:'Defensive Systems',max:'frame',mods:1,costFn:function(s){return 8000*s},desc:'+3 Toughness per take. Reactive tiles, spall liners, layered ceramics. Stacks with Hull Plating.'},
   {id:'sloped_armour',name:'Sloped Armour',cat:'Defensive Systems',max:1,mods:3,costFn:function(s){return 10000*s},desc:'-2 enemy Shooting (direct-fire energy/kinetic only).'},
   {id:'reinforced_frame',name:'Reinforced Frame',cat:'Defensive Systems',max:4,mods:1,costFn:function(s){return 6000*s},desc:'+2 Armour per take. Internal bracing, keel reinforcement.'},
-  {id:'composite_hull',name:'Composite Hull',cat:'Defensive Systems',max:5,mods:1,costFn:function(s){return 10000*s},desc:'+1 base Toughness per take. Layered composites, reactive armour integration, or advanced hull materials that strengthen the structure itself rather than adding plate on top.'},
   {id:'countermeasure_suite',name:'Countermeasure Suite',cat:'Defensive Systems',max:1,mods:1,costFn:function(s){return 5000*s},desc:'+2 vs Guided Weapons. One free Evasion reroll per encounter.'},
   {id:'surge_protection',name:'Surge Protection',cat:'Defensive Systems',max:1,mods:2,costFn:function(s){return 5000*s},desc:'Halve EMP penalties (round down). Faraday caging, hardened circuits.'},
   {id:'crew_escape',name:'Crew Escape',cat:'Defensive Systems',max:1,mods:2,costFn:function(s){return 2000*s},desc:'Ejection (Size 6-) or pods (Size 7+). Agility/Smarts at -1. Pods hold 8, 20 days supplies.'},
@@ -624,7 +622,7 @@ document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key
 function modSlots(m,sz){if(m.mods==='comfort'){var tk=S.mods[m.id]||0;if(tk<=0)return 2;if(tk===1)return 3;return 5}if(m.mods==='sizehalf')return Math.max(1,Math.ceil(sz/2));if(m.mods==='half')return Math.ceil(sz/2);if(m.mods==='halfneg')return -Math.ceil(sz/2);if(m.mods==='size')return sz;return m.mods}
 function weaponMountMods(w,mount){var mc=w.mods;if(mount==='fixed')mc=Math.ceil(mc/2);if(mount==='turret')mc=mc*2;return mc}
 function maxArmorTakes(){var f=getFrame(S.size);return Math.floor((f.maxArmor-f.baseTough)/2)}
-function calcTough(){var f=getFrame(S.size),t=f.baseTough;if(S.mods.war_worn)t-=1*S.mods.war_worn;if(S.mods.lightweight)t-=2*S.mods.lightweight;if(S.mods.light_frame)t-=1*S.mods.light_frame;if(S.mods.composite_hull)t+=1*S.mods.composite_hull;return Math.max(0,t)}
+function calcTough(){var f=getFrame(S.size),t=f.baseTough;if(S.mods.weak)t-=1*S.mods.weak;if(S.mods.tough)t+=1*S.mods.tough;return Math.max(0,t)}
 function calcVehicleClass(){var sz=S.size;if(sz<=3)return 'L';if(sz<=7)return 'M';if(sz<=11)return 'H';if(sz<=20)return 'S';if(sz<=25)return 'C';return 'T'}
 function frameTypeLabel(){var ft=S.frameType||'civilian';if(ft==='civilian')return'Civilian';if(ft==='rugged')return'Rugged';return'Military'}
 function vehicleClassLabel(){var c=calcVehicleClass();var names={L:'Light',M:'Medium',H:'Heavy',S:'Super-Heavy',C:'Capital',T:'Titan'};return names[c]||c};return names[c]||c}
@@ -859,7 +857,6 @@ function renderOutput(){var p=document.getElementById('outputContent'),f=getFram
   if(S.mods.fire_control)special.push('Targeting: -2 Shooting penalties.');
   if(S.mods.submersible)special.push('Submersible'+(S.mods.submersible>1?' (Deep Dive)':'')+': Submerge as action. -4 to detect when submerged.');
   if(S.mods.composite_layering)special.push('Composite Armour: Advanced armour composition.');
-  if(S.mods.composite_hull)special.push('Composite Hull: Structural reinforcement integrated into hull materials.');
   if(S.armourTech>0){var ati=AT_INFO[S.armourTech];special.push(ati.name+' Armour Technology: +'+S.armourTech+' Armour. Cost ×'+ati.cost+'.'); }
   if(S.mods.road_vehicle)special.push('Road Vehicle: Speed '+calcRoadSpeed()+' ('+speedMPH(calcRoadSpeed())+' MPH) on paved roads.');
   if(S.mods.high_perf_engine)special.push('High-Performance Engine'+(S.mods.high_perf_engine>1?' ×'+S.mods.high_perf_engine:'')+': Halve Energy per take.');
@@ -908,7 +905,6 @@ function copyBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l
   if(S.mods.submersible)special.push('Submersible'+(S.mods.submersible>1?' (Deep)':'')+'.');
   if(S.mods.composite_layering)special.push('Composite Armour.');
   if(S.armourTech>0){var ati=AT_INFO[S.armourTech];special.push(ati.name+' Armour (+'+S.armourTech+').');}
-  if(S.mods.composite_hull)special.push('Composite Hull.');
   if(S.mods.road_vehicle)special.push('Road Speed '+calcRoadSpeed()+' ('+speedMPH(calcRoadSpeed())+' MPH).');
   if(S.mods.high_perf_engine)special.push('Hi-Perf Engine'+(S.mods.high_perf_engine>1?' x'+S.mods.high_perf_engine:'')+'.');
   getSpecialText().forEach(function(s){special.push(s)});
@@ -1155,7 +1151,6 @@ function printStatBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){ret
   if(S.mods.submersible)special.push('Submersible'+(S.mods.submersible>1?' (Deep)':'')+'.');
   if(S.mods.composite_layering)special.push('Composite Armour.');
   if(S.armourTech>0){var ati=AT_INFO[S.armourTech];special.push(ati.name+' Armour (+'+S.armourTech+').'); }
-  if(S.mods.composite_hull)special.push('Composite Hull.');
   if(S.mods.road_vehicle)special.push('Road Speed '+calcRoadSpeed()+' ('+speedMPH(calcRoadSpeed())+' MPH).');
   if(S.mods.high_perf_engine)special.push('High-Perf Engine'+(S.mods.high_perf_engine>1?' ×'+S.mods.high_perf_engine:'')+'. Halve Energy.');
   getSpecialText().forEach(function(t){special.push(t)});
@@ -1206,7 +1201,6 @@ function buildStatHTML(v){
   if(S.mods.submersible)special.push('Submersible'+(S.mods.submersible>1?' (Deep)':''));
   if(S.mods.composite_layering)special.push('Composite Armour');
   if(S.armourTech>0)special.push(AT_INFO[S.armourTech].name+' AT (+'+S.armourTech+')');
-  if(S.mods.composite_hull)special.push('Composite Hull');
   if(S.mods.road_vehicle)special.push('Road Spd '+calcRoadSpeed()+' ('+speedMPH(calcRoadSpeed())+' MPH)');
   if(S.mods.high_perf_engine)special.push('Hi-Perf'+(S.mods.high_perf_engine>1?' ×'+S.mods.high_perf_engine:''));
   getSpecialText().forEach(function(t){special.push(t)});
