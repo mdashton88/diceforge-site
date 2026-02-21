@@ -152,7 +152,7 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
     <div class="sidebar-section">
       <h3>Size &amp; Frame</h3>
       <div class="size-picker"><span class="size-val" id="sizeVal">6</span><input type="range" id="sizeSlider" min="1" max="30" value="6" oninput="setSize(+this.value)"><span class="size-class" id="sizeClass">Large</span></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin:8px 0"><div class="loco-btn" id="ft-civilian" onclick="setFrameType('civilian')">Civilian<span class="loco-speed">×1</span></div><div class="loco-btn" id="ft-rugged" onclick="setFrameType('rugged')">Rugged<span class="loco-speed">×1.15</span></div><div class="loco-btn" id="ft-military" onclick="setFrameType('military')">Military<span class="loco-speed">×1.25</span></div></div><div id="frameInfo"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin:8px 0"><div class="loco-btn" id="ft-civilian" onclick="setFrameType('civilian')">Civilian<span class="loco-speed">×1</span></div><div class="loco-btn" id="ft-rugged" onclick="setFrameType('rugged')">Rugged<span class="loco-speed">×1.15</span></div><div class="loco-btn" id="ft-military" onclick="setFrameType('military')">Military<span class="loco-speed">×1.25</span></div><div class="loco-btn" id="ft-futuristic" onclick="setFrameType('futuristic')">Futuristic<span class="loco-speed">×1.5</span></div></div><div id="frameInfo"></div>
     </div>
     <div class="sidebar-section">
       <h3>Main Locomotion</h3>
@@ -264,8 +264,9 @@ else if(waterLocos.indexOf(loco)>=0)baseTough-=2;
 // Frame type multiplier
 if(ft==='rugged')baseTough=Math.ceil(baseTough*1.15);
 else if(ft==='military')baseTough=Math.ceil(baseTough*1.25);
+else if(ft==='futuristic')baseTough=Math.ceil(baseTough*1.5);
 var maxArmor=Math.max(1,Math.ceil(sz/2));var mods=Math.max(3,Math.floor(sz*2.5));
-var costMult=ft==='rugged'?1.5:ft==='military'?2.5:1;
+var costMult=ft==='rugged'?1.5:ft==='military'?2.5:ft==='futuristic'?4:1;
 var cost=Math.round(1000*sz*sz*costMult);
 var cat,hand,wounds,crew,energy;
 if(sz<=3){cat='Light';hand=1;wounds=3;crew=1;energy=3}
@@ -624,7 +625,7 @@ function weaponMountMods(w,mount){var mc=w.mods;if(mount==='fixed')mc=Math.ceil(
 function maxArmorTakes(){var f=getFrame(S.size);return Math.floor((f.maxArmor-f.baseTough)/2)}
 function calcTough(){var f=getFrame(S.size),t=f.baseTough;if(S.mods.weak)t-=1*S.mods.weak;if(S.mods.tough)t+=1*S.mods.tough;return Math.max(0,t)}
 function calcVehicleClass(){var sz=S.size;if(sz<=3)return 'L';if(sz<=7)return 'M';if(sz<=11)return 'H';if(sz<=20)return 'S';if(sz<=25)return 'C';return 'T'}
-function frameTypeLabel(){var ft=S.frameType||'civilian';if(ft==='civilian')return'Civilian';if(ft==='rugged')return'Rugged';return'Military'}
+function frameTypeLabel(){var ft=S.frameType||'civilian';if(ft==='civilian')return'Civilian';if(ft==='rugged')return'Rugged';if(ft==='futuristic')return'Futuristic';return'Military'}
 function vehicleClassLabel(){var c=calcVehicleClass();var names={L:'Light',M:'Medium',H:'Heavy',S:'Super-Heavy',C:'Capital',T:'Titan'};return names[c]||c};return names[c]||c}
 function calcArmor(){var f=getFrame(S.size),tierBonus=[1,2,3,4,6,8],hpPerTake=tierBonus[S.armourTech]||1,a=f.baseTough;if(S.mods.hull_plating)a+=hpPerTake*S.mods.hull_plating;if(S.mods.composite_layering)a+=3*S.mods.composite_layering;if(S.mods.reinforced_frame)a+=2*S.mods.reinforced_frame;return a}
 function calcWounds(){var f=getFrame(S.size),w=f.wounds;if(S.mods.weak_frame)w-=S.mods.weak_frame;return Math.max(1,w)}
@@ -712,7 +713,7 @@ function renderLocoGrid(){var el=document.getElementById('locoGrid');
 function setLoco(id){S.loco=id;Audio.click();renderLocoGrid();renderStats();renderOutput();renderModCatalogue()}
 var AT_INFO={0:{name:'Primitive',desc:'Hide, wicker, wood, leather over frame. +1 Armour per Hull Plating. Cost ×1.',cost:1},1:{name:'Forged',desc:'Iron plate, bronze, oak planking. +2 Armour per Hull Plating. Cost ×1.5.',cost:1.5},2:{name:'Industrial',desc:'Steel plate, case-hardened armour. +3 Armour per Hull Plating. Cost ×2.',cost:2},3:{name:'Composite',desc:'Ceramic-metallic, reactive tiles, Chobham. +4 Armour per Hull Plating. Cost ×3.',cost:3},4:{name:'Nanoweave',desc:'Molecular composites, smart materials. +6 Armour per Hull Plating. Cost ×5.',cost:5},5:{name:'Exotic',desc:'Phase materials, force matrices, alien tech, magical wards. +8 Armour per Hull Plating. Cost ×8.',cost:8}};
 function setFrameType(ft){S.frameType=ft;Audio.click();renderFrameType();renderFrameInfo();renderStats();renderOutput()}
-function renderFrameType(){var btns=["civilian","rugged","military"];btns.forEach(function(b){var el=document.getElementById("ft-"+b);if(el){if(b===S.frameType){el.classList.add("active")}else{el.classList.remove("active")}}})}
+function renderFrameType(){var btns=["civilian","rugged","military","futuristic"];btns.forEach(function(b){var el=document.getElementById("ft-"+b);if(el){if(b===S.frameType){el.classList.add("active")}else{el.classList.remove("active")}}})}
 function setAT(v){S.armourTech=v;Audio.click();renderAT();renderStats();renderOutput()}
 function renderAT(){var info=AT_INFO[S.armourTech]||AT_INFO[0];
   for(var i=0;i<6;i++){var el=document.getElementById('at'+i);if(el)el.classList.toggle('active',S.armourTech===i)}
@@ -935,7 +936,7 @@ function buildHelp(){
   h+='<tr><td>Capital</td><td>21–25</td><td>−3</td><td>26–30</td><td>7</td><td>100</td><td>60</td><td>52–62</td></tr>';
   h+='<tr><td>Titan</td><td>26–30</td><td>−4</td><td>31–35</td><td>8</td><td>500</td><td>100</td><td>65–75</td></tr>';
   h+='</table>';
-  h+='<p><span class="rule-key">Base Toughness</span> = 5 + Size, modified by Locomotion (Aircraft −1, Watercraft −2) and Frame Type (Civilian ×1, Rugged ×1.15, Military ×1.25). Armour added separately via Hull Plating and other mods.</p>';
+  h+='<p><span class="rule-key">Base Toughness</span> = 5 + Size, modified by Locomotion (Aircraft −1, Watercraft −2) and Frame Type (Civilian ×1, Rugged ×1.15, Military ×1.25, Futuristic ×1.5). Armour added separately via Hull Plating and other mods.</p>';
   h+='<p><span class="rule-key">Frame Cost</span> = $1K × Size² × Frame Multiplier (Civilian ×1, Rugged ×1.5, Military ×2.5).</p>';
   h+='<p><span class="rule-key">Mod Slots</span> = Size × 2.5 (minimum 3). Compact Engineering grants additional slots.</p>';
   h+='<p><span class="rule-key">Heavy Armor:</span> All vehicles Size 4+ and all walkers have Heavy Armor — only Heavy Weapons can damage them.</p>';
@@ -945,6 +946,7 @@ function buildHelp(){
   h+='<tr><td>Civilian</td><td>×1.0</td><td>×1.0</td><td>Cars, civilian aircraft, fishing boats, freighters</td></tr>';
   h+='<tr><td>Rugged</td><td>×1.15</td><td>×1.5</td><td>APCs, patrol boats, bombers, armoured cars</td></tr>';
   h+='<tr><td>Military</td><td>×1.25</td><td>×2.5</td><td>Main battle tanks, warships, gunships</td></tr>';
+  h+='<tr><td>Futuristic</td><td>×1.5</td><td>×4.0</td><td>Hover tanks, war walkers, sci-fi combat vehicles</td></tr>';
   h+='</table>';
   h+='<h4>Locomotion Modifier</h4>';
   h+='<table><tr><th>Type</th><th>Toughness</th><th>Reason</th></tr>';
