@@ -1,0 +1,2565 @@
+{
+  "source": "SWADE Core Rules + Science Fiction Companion",
+  "version": "1.0.0",
+  "gradeSystem": {
+    "version": "5.4.1",
+    "vehicleBands": {
+      "A": "1-17",
+      "B": "18-27",
+      "C": "28-41",
+      "D": "42-59",
+      "E": "60-79",
+      "F": "80+"
+    },
+    "weaponBands": {
+      "A-": "0-5",
+      "A": "6-11",
+      "A+": "12-17",
+      "B-": "18-20",
+      "B": "21-23",
+      "B+": "24-27",
+      "C-": "28-32",
+      "C": "33-36",
+      "C+": "37-41",
+      "D-": "42-47",
+      "D": "48-53",
+      "D+": "54-59",
+      "E-": "60-66",
+      "E": "67-72",
+      "E+": "73-79",
+      "F-": "80-99",
+      "F": "100-129",
+      "F+": "130+"
+    },
+    "quickStrike": {
+      "0": "Effective",
+      "-3": "No Effect",
+      "-2": "Desperate",
+      "-1": "Outmatched",
+      "+1": "Overkill",
+      "+2": "Devastating"
+    }
+  },
+  "vehicles": [
+    {
+      "name": "Bicycle",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "ground",
+      "size": -1,
+      "toughness": 4,
+      "armour": 0,
+      "handling": 1,
+      "topSpeed": 16,
+      "crew": "1",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "50% shot hits rider"
+    },
+    {
+      "name": "Carriage",
+      "source": "SWADE",
+      "era": "historical",
+      "type": "ground",
+      "size": 3,
+      "toughness": 6,
+      "armour": 0,
+      "handling": -2,
+      "topSpeed": 16,
+      "crew": "1+3",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "Horse-drawn"
+    },
+    {
+      "name": "Early Car",
+      "source": "SWADE",
+      "era": "early20c",
+      "type": "ground",
+      "size": 3,
+      "toughness": 7,
+      "armour": 0,
+      "handling": -1,
+      "topSpeed": 40,
+      "crew": "1+3",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "Street Bike",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "ground",
+      "size": 1,
+      "toughness": 8,
+      "armour": 0,
+      "handling": 1,
+      "topSpeed": 120,
+      "crew": "1+1",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "50% shot hits rider"
+    },
+    {
+      "name": "Dirt Bike",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "ground",
+      "size": 0,
+      "toughness": 7,
+      "armour": 0,
+      "handling": 1,
+      "topSpeed": 80,
+      "crew": "1",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "4WD"
+    },
+    {
+      "name": "Compact Car",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "ground",
+      "size": 4,
+      "toughness": 10,
+      "armour": 2,
+      "handling": 1,
+      "topSpeed": 120,
+      "crew": "1+3",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "Mid-Sized Car",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "ground",
+      "size": 4,
+      "toughness": 11,
+      "armour": 2,
+      "handling": 0,
+      "topSpeed": 120,
+      "crew": "1+4",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "Minivan",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "ground",
+      "size": 4,
+      "toughness": 12,
+      "armour": 2,
+      "handling": 0,
+      "topSpeed": 90,
+      "crew": "1+7",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "SUV",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "ground",
+      "size": 5,
+      "toughness": 14,
+      "armour": 2,
+      "handling": 0,
+      "topSpeed": 120,
+      "crew": "1+7",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "4WD"
+    },
+    {
+      "name": "Sports Car",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "ground",
+      "size": 4,
+      "toughness": 10,
+      "armour": 2,
+      "handling": 2,
+      "topSpeed": 160,
+      "crew": "1+3",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "Semi-Truck",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "ground",
+      "size": 9,
+      "toughness": 14,
+      "armour": 2,
+      "handling": 0,
+      "topSpeed": 75,
+      "crew": "1+1",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "Trailer: Size 7, Tough 14(2)"
+    },
+    {
+      "name": "WW2 Jeep",
+      "source": "SWADE",
+      "era": "ww2",
+      "type": "ground",
+      "size": 4,
+      "toughness": 10,
+      "armour": 2,
+      "handling": 1,
+      "topSpeed": 65,
+      "crew": "2+3",
+      "grade": "A",
+      "weapons": [
+        {
+          "name": "Heavy MG",
+          "avgDmg": 11,
+          "ap": 4,
+          "rof": 3,
+          "mount": "Pintle",
+          "grade": "A+",
+          "threat": 15
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy MG",
+        "grade": "A+",
+        "threat": 15
+      },
+      "notes": "4WD"
+    },
+    {
+      "name": "M4 Sherman",
+      "source": "SWADE",
+      "era": "ww2",
+      "type": "ground",
+      "size": 8,
+      "toughness": 24,
+      "armour": 8,
+      "handling": -1,
+      "topSpeed": 30,
+      "crew": "5",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "75mm Tank Gun",
+          "avgDmg": 22,
+          "ap": 6,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "C-",
+          "threat": 28
+        },
+        {
+          "name": "Heavy MG",
+          "avgDmg": 11,
+          "ap": 4,
+          "rof": 3,
+          "mount": "Pintle",
+          "grade": "A+",
+          "threat": 15
+        },
+        {
+          "name": "Medium MG",
+          "avgDmg": 9,
+          "ap": 2,
+          "rof": 3,
+          "mount": "Fixed Front",
+          "grade": "A",
+          "threat": 11
+        }
+      ],
+      "primaryWeapon": {
+        "name": "75mm Tank Gun",
+        "grade": "C-",
+        "threat": 28
+      },
+      "notes": "Heavy Armor, Tracked"
+    },
+    {
+      "name": "M5A1 Stuart",
+      "source": "SWADE",
+      "era": "ww2",
+      "type": "ground",
+      "size": 7,
+      "toughness": 21,
+      "armour": 7,
+      "handling": 0,
+      "topSpeed": 36,
+      "crew": "4",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "37mm Tank Gun",
+          "avgDmg": 18,
+          "ap": 3,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "B",
+          "threat": 21
+        },
+        {
+          "name": "Heavy MG",
+          "avgDmg": 11,
+          "ap": 4,
+          "rof": 3,
+          "mount": "Pintle",
+          "grade": "A+",
+          "threat": 15
+        }
+      ],
+      "primaryWeapon": {
+        "name": "37mm Tank Gun",
+        "grade": "B",
+        "threat": 21
+      },
+      "notes": "Heavy Armor, Tracked"
+    },
+    {
+      "name": "T-34/76",
+      "source": "SWADE",
+      "era": "ww2",
+      "type": "ground",
+      "size": 7,
+      "toughness": 24,
+      "armour": 8,
+      "handling": -1,
+      "topSpeed": 35,
+      "crew": "4",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "76mm Tank Gun",
+          "avgDmg": 22,
+          "ap": 10,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "C-",
+          "threat": 32
+        }
+      ],
+      "primaryWeapon": {
+        "name": "76mm Tank Gun",
+        "grade": "C-",
+        "threat": 32
+      },
+      "notes": "Heavy Armor, Sloped Armor (front), Tracked"
+    },
+    {
+      "name": "Pz IVJ",
+      "source": "SWADE",
+      "era": "ww2",
+      "type": "ground",
+      "size": 7,
+      "toughness": 26,
+      "armour": 10,
+      "handling": -1,
+      "topSpeed": 25,
+      "crew": "5",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "75mm Gun",
+          "avgDmg": 22,
+          "ap": 6,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "C-",
+          "threat": 28
+        }
+      ],
+      "primaryWeapon": {
+        "name": "75mm Gun",
+        "grade": "C-",
+        "threat": 28
+      },
+      "notes": "Heavy Armor, Tracked"
+    },
+    {
+      "name": "Pz VI Tiger II",
+      "source": "SWADE",
+      "era": "ww2",
+      "type": "ground",
+      "size": 8,
+      "toughness": 34,
+      "armour": 16,
+      "handling": -2,
+      "topSpeed": 25,
+      "crew": "5",
+      "grade": "C",
+      "weapons": [
+        {
+          "name": "88mm Tank Gun",
+          "avgDmg": 23,
+          "ap": 16,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "C+",
+          "threat": 39
+        }
+      ],
+      "primaryWeapon": {
+        "name": "88mm Tank Gun",
+        "grade": "C+",
+        "threat": 39
+      },
+      "notes": "Heavy Armor, Tracked"
+    },
+    {
+      "name": "M1A1 Abrams",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "ground",
+      "size": 9,
+      "toughness": 57,
+      "armour": 37,
+      "handling": -1,
+      "topSpeed": 40,
+      "crew": "4",
+      "grade": "D",
+      "weapons": [
+        {
+          "name": "120mm Tank Gun",
+          "avgDmg": 27.5,
+          "ap": 31,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "D+",
+          "threat": 58.5
+        },
+        {
+          "name": "Heavy MG",
+          "avgDmg": 11,
+          "ap": 4,
+          "rof": 3,
+          "mount": "Pintle",
+          "grade": "A+",
+          "threat": 15
+        }
+      ],
+      "primaryWeapon": {
+        "name": "120mm Tank Gun",
+        "grade": "D+",
+        "threat": 58.5
+      },
+      "notes": "Heavy Armor, Night Vision, Tracked"
+    },
+    {
+      "name": "M2 Bradley",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "ground",
+      "size": 7,
+      "toughness": 22,
+      "armour": 6,
+      "handling": 0,
+      "topSpeed": 40,
+      "crew": "3+7",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "25mm Autocannon",
+          "avgDmg": 13.5,
+          "ap": 4,
+          "rof": 3,
+          "mount": "Turret",
+          "grade": "A+",
+          "threat": 17.5
+        },
+        {
+          "name": "TOW Launcher",
+          "avgDmg": 22,
+          "ap": 16,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "C+",
+          "threat": 38
+        }
+      ],
+      "primaryWeapon": {
+        "name": "TOW Launcher",
+        "grade": "C+",
+        "threat": 38
+      },
+      "notes": "Heavy Armor, Night Vision, Tracked"
+    },
+    {
+      "name": "T-72 MBT",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "ground",
+      "size": 9,
+      "toughness": 43,
+      "armour": 25,
+      "handling": -1,
+      "topSpeed": 50,
+      "crew": "3",
+      "grade": "D",
+      "weapons": [
+        {
+          "name": "125mm Tank Gun",
+          "avgDmg": 27.5,
+          "ap": 30,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "D+",
+          "threat": 57.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "125mm Tank Gun",
+        "grade": "D+",
+        "threat": 57.5
+      },
+      "notes": "Heavy Armor, Tracked"
+    },
+    {
+      "name": "T-80 MBT",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "ground",
+      "size": 8,
+      "toughness": 52,
+      "armour": 32,
+      "handling": -1,
+      "topSpeed": 43,
+      "crew": "3",
+      "grade": "D",
+      "weapons": [
+        {
+          "name": "125mm Tank Gun",
+          "avgDmg": 27.5,
+          "ap": 30,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "D+",
+          "threat": 57.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "125mm Tank Gun",
+        "grade": "D+",
+        "threat": 57.5
+      },
+      "notes": "Heavy Armor, Night Vision, Tracked"
+    },
+    {
+      "name": "BTR-70 APC",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "ground",
+      "size": 6,
+      "toughness": 20,
+      "armour": 5,
+      "handling": -1,
+      "topSpeed": 49,
+      "crew": "2+8",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "Heavy MG",
+          "avgDmg": 11,
+          "ap": 4,
+          "rof": 3,
+          "mount": "Turret",
+          "grade": "A+",
+          "threat": 15
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy MG",
+        "grade": "A+",
+        "threat": 15
+      },
+      "notes": "Amphibious, 4WD, Heavy Armor"
+    },
+    {
+      "name": "Hover Tank (SWADE)",
+      "source": "SWADE",
+      "era": "futuristic",
+      "type": "hover",
+      "size": 7,
+      "toughness": 38,
+      "armour": 22,
+      "handling": 0,
+      "topSpeed": 45,
+      "crew": "4",
+      "grade": "C",
+      "weapons": [
+        {
+          "name": "Heavy Laser",
+          "avgDmg": 22,
+          "ap": 30,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "D",
+          "threat": 52
+        },
+        {
+          "name": "Gatling Laser",
+          "avgDmg": 14.5,
+          "ap": 4,
+          "rof": 4,
+          "mount": "Fixed Front",
+          "grade": "B-",
+          "threat": 18.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy Laser",
+        "grade": "D",
+        "threat": 52
+      },
+      "notes": "Heavy Armor, Hover, Night Vision"
+    },
+    {
+      "name": "Hover APC (SWADE)",
+      "source": "SWADE",
+      "era": "futuristic",
+      "type": "hover",
+      "size": 7,
+      "toughness": 26,
+      "armour": 10,
+      "handling": 0,
+      "topSpeed": 75,
+      "crew": "2+14",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "Gatling Laser",
+          "avgDmg": 14.5,
+          "ap": 4,
+          "rof": 4,
+          "mount": "Fixed Front",
+          "grade": "B-",
+          "threat": 18.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Gatling Laser",
+        "grade": "B-",
+        "threat": 18.5
+      },
+      "notes": "Heavy Armor, Hover"
+    },
+    {
+      "name": "Biplane (Civilian)",
+      "source": "SWADE",
+      "era": "early20c",
+      "type": "air",
+      "size": 4,
+      "toughness": 12,
+      "armour": 1,
+      "handling": 1,
+      "topSpeed": 125,
+      "crew": "1",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "Cessna Skyhawk",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "air",
+      "size": 5,
+      "toughness": 12,
+      "armour": 2,
+      "handling": 1,
+      "topSpeed": 140,
+      "crew": "1+3",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "Helicopter (Civilian)",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "air",
+      "size": 7,
+      "toughness": 12,
+      "armour": 2,
+      "handling": 0,
+      "topSpeed": 130,
+      "crew": "1+3",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "Learjet",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "air",
+      "size": 8,
+      "toughness": 16,
+      "armour": 2,
+      "handling": 2,
+      "topSpeed": 540,
+      "crew": "2+10",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "Space Shuttle",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "air",
+      "size": 13,
+      "toughness": 20,
+      "armour": 4,
+      "handling": -1,
+      "topSpeed": 17000,
+      "crew": "1+40",
+      "grade": "B",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "B-17 Flying Fortress",
+      "source": "SWADE",
+      "era": "ww2",
+      "type": "air",
+      "size": 10,
+      "toughness": 19,
+      "armour": 2,
+      "handling": -2,
+      "topSpeed": 115,
+      "crew": "10",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "2x Linked Heavy MG (multiple turrets)",
+          "avgDmg": 13,
+          "ap": 6,
+          "rof": 3,
+          "mount": "Turret",
+          "grade": "B-",
+          "threat": 19
+        }
+      ],
+      "primaryWeapon": {
+        "name": "2x Linked Heavy MG (multiple turrets)",
+        "grade": "B-",
+        "threat": 19
+      },
+      "notes": null
+    },
+    {
+      "name": "Bf-109",
+      "source": "SWADE",
+      "era": "ww2",
+      "type": "air",
+      "size": 6,
+      "toughness": 13,
+      "armour": 2,
+      "handling": 1,
+      "topSpeed": 380,
+      "crew": "1",
+      "grade": "A",
+      "weapons": [
+        {
+          "name": "20mm Cannon",
+          "avgDmg": 13,
+          "ap": 4,
+          "rof": 4,
+          "mount": "Fixed Front",
+          "grade": "A+",
+          "threat": 17
+        },
+        {
+          "name": "2x Linked Heavy MG",
+          "avgDmg": 13,
+          "ap": 6,
+          "rof": 3,
+          "mount": "Fixed Front",
+          "grade": "B-",
+          "threat": 19
+        }
+      ],
+      "primaryWeapon": {
+        "name": "2x Linked Heavy MG",
+        "grade": "B-",
+        "threat": 19
+      },
+      "notes": null
+    },
+    {
+      "name": "P-51 Mustang",
+      "source": "SWADE",
+      "era": "ww2",
+      "type": "air",
+      "size": 7,
+      "toughness": 14,
+      "armour": 2,
+      "handling": 1,
+      "topSpeed": 437,
+      "crew": "1",
+      "grade": "A",
+      "weapons": [
+        {
+          "name": "6x Heavy MG",
+          "avgDmg": 15,
+          "ap": 8,
+          "rof": 3,
+          "mount": "Fixed Front",
+          "grade": "B",
+          "threat": 23
+        }
+      ],
+      "primaryWeapon": {
+        "name": "6x Heavy MG",
+        "grade": "B",
+        "threat": 23
+      },
+      "notes": null
+    },
+    {
+      "name": "Japanese Zero",
+      "source": "SWADE",
+      "era": "ww2",
+      "type": "air",
+      "size": 6,
+      "toughness": 12,
+      "armour": 2,
+      "handling": 1,
+      "topSpeed": 350,
+      "crew": "1",
+      "grade": "A",
+      "weapons": [
+        {
+          "name": "2x Linked 20mm Cannon",
+          "avgDmg": 15,
+          "ap": 6,
+          "rof": 4,
+          "mount": "Fixed Front",
+          "grade": "B",
+          "threat": 21
+        },
+        {
+          "name": "2x Linked Medium MG",
+          "avgDmg": 11,
+          "ap": 4,
+          "rof": 3,
+          "mount": "Fixed Front",
+          "grade": "A+",
+          "threat": 15
+        }
+      ],
+      "primaryWeapon": {
+        "name": "2x Linked 20mm Cannon",
+        "grade": "B",
+        "threat": 21
+      },
+      "notes": null
+    },
+    {
+      "name": "Spitfire Mk IIA",
+      "source": "SWADE",
+      "era": "ww2",
+      "type": "air",
+      "size": 6,
+      "toughness": 14,
+      "armour": 1,
+      "handling": 1,
+      "topSpeed": 360,
+      "crew": "1",
+      "grade": "A",
+      "weapons": [
+        {
+          "name": "8x Linked Medium MG",
+          "avgDmg": 13,
+          "ap": 6,
+          "rof": 3,
+          "mount": "Fixed Front",
+          "grade": "B-",
+          "threat": 19
+        }
+      ],
+      "primaryWeapon": {
+        "name": "8x Linked Medium MG",
+        "grade": "B-",
+        "threat": 19
+      },
+      "notes": null
+    },
+    {
+      "name": "AH-64 Apache",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "air",
+      "size": 8,
+      "toughness": 20,
+      "armour": 4,
+      "handling": 0,
+      "topSpeed": 225,
+      "crew": "2",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "30mm Cannon",
+          "avgDmg": 13.5,
+          "ap": 6,
+          "rof": 3,
+          "mount": "Fixed Front",
+          "grade": "B-",
+          "threat": 19.5
+        },
+        {
+          "name": "16x Hellfire Missiles",
+          "avgDmg": 22,
+          "ap": 16,
+          "rof": 1,
+          "mount": "Fixed",
+          "grade": "C+",
+          "threat": 38
+        }
+      ],
+      "primaryWeapon": {
+        "name": "16x Hellfire Missiles",
+        "grade": "C+",
+        "threat": 38
+      },
+      "notes": "Helicopter, Night Vision"
+    },
+    {
+      "name": "AV-8B Harrier",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "air",
+      "size": 7,
+      "toughness": 17,
+      "armour": 3,
+      "handling": 1,
+      "topSpeed": 630,
+      "crew": "1",
+      "grade": "A",
+      "weapons": [
+        {
+          "name": "25mm Cannon",
+          "avgDmg": 13.5,
+          "ap": 4,
+          "rof": 3,
+          "mount": "Fixed Front",
+          "grade": "A+",
+          "threat": 17.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "25mm Cannon",
+        "grade": "A+",
+        "threat": 17.5
+      },
+      "notes": "VTOL"
+    },
+    {
+      "name": "F-15 Eagle",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "air",
+      "size": 9,
+      "toughness": 18,
+      "armour": 4,
+      "handling": 2,
+      "topSpeed": 1875,
+      "crew": "1",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "20mm Cannon",
+          "avgDmg": 13,
+          "ap": 4,
+          "rof": 4,
+          "mount": "Fixed Front",
+          "grade": "A+",
+          "threat": 17
+        }
+      ],
+      "primaryWeapon": {
+        "name": "20mm Cannon",
+        "grade": "A+",
+        "threat": 17
+      },
+      "notes": "Night Vision"
+    },
+    {
+      "name": "SU-27",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "air",
+      "size": 9,
+      "toughness": 16,
+      "armour": 4,
+      "handling": 1,
+      "topSpeed": 1550,
+      "crew": "1",
+      "grade": "A",
+      "weapons": [
+        {
+          "name": "30mm Cannon",
+          "avgDmg": 13.5,
+          "ap": 6,
+          "rof": 3,
+          "mount": "Fixed Front",
+          "grade": "B-",
+          "threat": 19.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "30mm Cannon",
+        "grade": "B-",
+        "threat": 19.5
+      },
+      "notes": "Night Vision"
+    },
+    {
+      "name": "UH-1 Huey",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "air",
+      "size": 7,
+      "toughness": 14,
+      "armour": 2,
+      "handling": 2,
+      "topSpeed": 120,
+      "crew": "4+12",
+      "grade": "A",
+      "weapons": [
+        {
+          "name": "Medium MG",
+          "avgDmg": 9,
+          "ap": 2,
+          "rof": 3,
+          "mount": "Fixed",
+          "grade": "A",
+          "threat": 11
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Medium MG",
+        "grade": "A",
+        "threat": 11
+      },
+      "notes": "Helicopter"
+    },
+    {
+      "name": "Galleon",
+      "source": "SWADE",
+      "era": "medieval",
+      "type": "water",
+      "size": 14,
+      "toughness": 20,
+      "armour": 4,
+      "handling": -2,
+      "topSpeed": 9,
+      "crew": "20+80",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "Cannon Broadside",
+          "avgDmg": 11.5,
+          "ap": 4,
+          "rof": 1,
+          "mount": "Fixed Left/Right",
+          "grade": "A+",
+          "threat": 15.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Cannon Broadside",
+        "grade": "A+",
+        "threat": 15.5
+      },
+      "notes": "Heavy Armor"
+    },
+    {
+      "name": "Galley",
+      "source": "SWADE",
+      "era": "ancient",
+      "type": "water",
+      "size": 13,
+      "toughness": 20,
+      "armour": 4,
+      "handling": -1,
+      "topSpeed": 20,
+      "crew": "20+100",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "Catapult",
+          "avgDmg": 18,
+          "ap": 0,
+          "rof": 1,
+          "mount": "Fixed Front",
+          "grade": "B-",
+          "threat": 18
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Catapult",
+        "grade": "B-",
+        "threat": 18
+      },
+      "notes": "Heavy Armor, Oars+Sails"
+    },
+    {
+      "name": "Hydrofoil",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "water",
+      "size": 10,
+      "toughness": 15,
+      "armour": 3,
+      "handling": 0,
+      "topSpeed": 70,
+      "crew": "1+9",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "Patrol Boat, River",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "water",
+      "size": 7,
+      "toughness": 15,
+      "armour": 4,
+      "handling": 1,
+      "topSpeed": 32,
+      "crew": "4",
+      "grade": "A",
+      "weapons": [
+        {
+          "name": "2x Linked Heavy MG",
+          "avgDmg": 13,
+          "ap": 6,
+          "rof": 3,
+          "mount": "Pintle",
+          "grade": "B-",
+          "threat": 19
+        }
+      ],
+      "primaryWeapon": {
+        "name": "2x Linked Heavy MG",
+        "grade": "B-",
+        "threat": 19
+      },
+      "notes": "Heavy Armor"
+    },
+    {
+      "name": "PT Boat",
+      "source": "SWADE",
+      "era": "ww2",
+      "type": "water",
+      "size": 12,
+      "toughness": 14,
+      "armour": 2,
+      "handling": 1,
+      "topSpeed": 40,
+      "crew": "10",
+      "grade": "A",
+      "weapons": [
+        {
+          "name": ".50 cal MG",
+          "avgDmg": 11,
+          "ap": 4,
+          "rof": 3,
+          "mount": "Pintle",
+          "grade": "A+",
+          "threat": 15
+        },
+        {
+          "name": "4x Torpedo",
+          "avgDmg": 27.5,
+          "ap": 10,
+          "rof": 1,
+          "mount": "Fixed Front",
+          "grade": "C+",
+          "threat": 37.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "4x Torpedo",
+        "grade": "C+",
+        "threat": 37.5
+      },
+      "notes": "Heavy Armor"
+    },
+    {
+      "name": "Rowboat",
+      "source": "SWADE",
+      "era": "historical",
+      "type": "water",
+      "size": 0,
+      "toughness": 8,
+      "armour": 1,
+      "handling": -2,
+      "topSpeed": 5,
+      "crew": "1+3",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "Speed Boat",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "water",
+      "size": 4,
+      "toughness": 10,
+      "armour": 1,
+      "handling": 1,
+      "topSpeed": 90,
+      "crew": "1+3",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "Small Yacht",
+      "source": "SWADE",
+      "era": "modern",
+      "type": "water",
+      "size": 8,
+      "toughness": 14,
+      "armour": 2,
+      "handling": 0,
+      "topSpeed": 35,
+      "crew": "1+9",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "Hover Bike (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "hover",
+      "size": 1,
+      "toughness": 7,
+      "armour": 0,
+      "handling": 3,
+      "topSpeed": "11",
+      "crew": "1",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "Exposed Crew, Fragile"
+    },
+    {
+      "name": "Exploration Rover",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "ground",
+      "size": 3,
+      "toughness": 7,
+      "armour": 0,
+      "handling": 1,
+      "topSpeed": "6",
+      "crew": "1",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "Sealed, Amphibious"
+    },
+    {
+      "name": "Hover Limousine",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "hover",
+      "size": 5,
+      "toughness": 12,
+      "armour": 2,
+      "handling": 0,
+      "topSpeed": "8",
+      "crew": "1+4",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "Hover Truck",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "hover",
+      "size": 6,
+      "toughness": 14,
+      "armour": 0,
+      "handling": 0,
+      "topSpeed": "9",
+      "crew": "1+2",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": null
+    },
+    {
+      "name": "Hover Skiff (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "hover",
+      "size": 3,
+      "toughness": 9,
+      "armour": 4,
+      "handling": 1,
+      "topSpeed": "9",
+      "crew": "1",
+      "grade": "A",
+      "weapons": [
+        {
+          "name": "Gatling Laser",
+          "avgDmg": 14.5,
+          "ap": 4,
+          "rof": 4,
+          "mount": "Pintle",
+          "grade": "B-",
+          "threat": 18.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Gatling Laser",
+        "grade": "B-",
+        "threat": 18.5
+      },
+      "notes": null
+    },
+    {
+      "name": "Hover Jeep (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "hover",
+      "size": 4,
+      "toughness": 20,
+      "armour": 8,
+      "handling": 0,
+      "topSpeed": "8",
+      "crew": "1+2",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "Gatling Laser",
+          "avgDmg": 14.5,
+          "ap": 4,
+          "rof": 4,
+          "mount": "Pintle",
+          "grade": "B-",
+          "threat": 18.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Gatling Laser",
+        "grade": "B-",
+        "threat": 18.5
+      },
+      "notes": null
+    },
+    {
+      "name": "Wheeled APC (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "ground",
+      "size": 5,
+      "toughness": 18,
+      "armour": 8,
+      "handling": 0,
+      "topSpeed": "6",
+      "crew": "3+10",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "Medium Cannon",
+          "avgDmg": 22,
+          "ap": 10,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "C-",
+          "threat": 32
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Medium Cannon",
+        "grade": "C-",
+        "threat": 32
+      },
+      "notes": "Sealed"
+    },
+    {
+      "name": "Hover Tank (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "hover",
+      "size": 8,
+      "toughness": 29,
+      "armour": 10,
+      "handling": -1,
+      "topSpeed": "6",
+      "crew": "5",
+      "grade": "C",
+      "weapons": [
+        {
+          "name": "Medium Laser",
+          "avgDmg": 16.5,
+          "ap": 20,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "C",
+          "threat": 36.5
+        },
+        {
+          "name": "Gatling Laser",
+          "avgDmg": 14.5,
+          "ap": 4,
+          "rof": 4,
+          "mount": "Pintle",
+          "grade": "B-",
+          "threat": 18.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Medium Laser",
+        "grade": "C",
+        "threat": 36.5
+      },
+      "notes": null
+    },
+    {
+      "name": "Main Battle Tank (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "ground",
+      "size": 8,
+      "toughness": 42,
+      "armour": 22,
+      "handling": -2,
+      "topSpeed": "4",
+      "crew": "5",
+      "grade": "D",
+      "weapons": [
+        {
+          "name": "Heavy Cannon",
+          "avgDmg": 27.5,
+          "ap": 20,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "D-",
+          "threat": 47.5
+        },
+        {
+          "name": "Gatling Laser",
+          "avgDmg": 14.5,
+          "ap": 4,
+          "rof": 4,
+          "mount": "Turret",
+          "grade": "B-",
+          "threat": 18.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy Cannon",
+        "grade": "D-",
+        "threat": 47.5
+      },
+      "notes": null
+    },
+    {
+      "name": "Patrol Boat (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "water",
+      "size": 8,
+      "toughness": 23,
+      "armour": 8,
+      "handling": -1,
+      "topSpeed": "6",
+      "crew": "5+5",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "Medium Autocannon",
+          "avgDmg": 18,
+          "ap": 6,
+          "rof": 4,
+          "mount": "Turret",
+          "grade": "B+",
+          "threat": 24
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Medium Autocannon",
+        "grade": "B+",
+        "threat": 24
+      },
+      "notes": null
+    },
+    {
+      "name": "Naval Destroyer (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "water",
+      "size": 12,
+      "toughness": 60,
+      "armour": 40,
+      "handling": -2,
+      "topSpeed": "5",
+      "crew": "50",
+      "grade": "E",
+      "weapons": [
+        {
+          "name": "2x DL Heavy Laser",
+          "avgDmg": 24,
+          "ap": 32,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "D+",
+          "threat": 56
+        },
+        {
+          "name": "Heavy Missiles x8",
+          "avgDmg": 28,
+          "ap": 32,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "E-",
+          "threat": 60
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy Missiles x8",
+        "grade": "E-",
+        "threat": 60
+      },
+      "notes": null
+    },
+    {
+      "name": "Attack Submarine (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "water",
+      "size": 16,
+      "toughness": 45,
+      "armour": 20,
+      "handling": -2,
+      "topSpeed": "5",
+      "crew": "50",
+      "grade": "D",
+      "weapons": [
+        {
+          "name": "Heavy Torpedo x10",
+          "avgDmg": 46,
+          "ap": 40,
+          "rof": 1,
+          "mount": "Fixed Front",
+          "grade": "F-",
+          "threat": 86
+        },
+        {
+          "name": "Medium Missiles x20",
+          "avgDmg": 24.5,
+          "ap": 24,
+          "rof": 2,
+          "mount": "Turret",
+          "grade": "D",
+          "threat": 48.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy Torpedo x10",
+        "grade": "F-",
+        "threat": 86
+      },
+      "notes": null
+    },
+    {
+      "name": "Battleship (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "water",
+      "size": 16,
+      "toughness": 68,
+      "armour": 48,
+      "handling": -4,
+      "topSpeed": "5",
+      "crew": "50+50",
+      "grade": "E",
+      "weapons": [
+        {
+          "name": "2x DL SH Cannon",
+          "avgDmg": 46,
+          "ap": 42,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "F-",
+          "threat": 88
+        },
+        {
+          "name": "Heavy Missiles x6",
+          "avgDmg": 28,
+          "ap": 32,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "E-",
+          "threat": 60
+        }
+      ],
+      "primaryWeapon": {
+        "name": "2x DL SH Cannon",
+        "grade": "F-",
+        "threat": 88
+      },
+      "notes": null
+    },
+    {
+      "name": "Light Carrier (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "water",
+      "size": 20,
+      "toughness": 40,
+      "armour": 20,
+      "handling": -6,
+      "topSpeed": "5",
+      "crew": "150+50",
+      "grade": "C",
+      "weapons": [
+        {
+          "name": "Quad Linked Gatling Laser x4",
+          "avgDmg": 18.5,
+          "ap": 8,
+          "rof": 4,
+          "mount": "Turret",
+          "grade": "B+",
+          "threat": 26.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Quad Linked Gatling Laser x4",
+        "grade": "B+",
+        "threat": 26.5
+      },
+      "notes": null
+    },
+    {
+      "name": "VTOL Patrol Craft (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "air",
+      "size": 6,
+      "toughness": 16,
+      "armour": 6,
+      "handling": 1,
+      "topSpeed": "10",
+      "crew": "1+2",
+      "grade": "A",
+      "weapons": [
+        {
+          "name": "DL Light Lasers",
+          "avgDmg": 12,
+          "ap": 12,
+          "rof": 3,
+          "mount": "Turret",
+          "grade": "B+",
+          "threat": 24
+        },
+        {
+          "name": "Light Missiles x24",
+          "avgDmg": 21,
+          "ap": 16,
+          "rof": 4,
+          "mount": "Fixed",
+          "grade": "C+",
+          "threat": 37
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Light Missiles x24",
+        "grade": "C+",
+        "threat": 37
+      },
+      "notes": null
+    },
+    {
+      "name": "Interceptor (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "space",
+      "size": 4,
+      "toughness": 21,
+      "armour": 6,
+      "handling": 2,
+      "topSpeed": "18",
+      "crew": "1",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "DL Light Lasers",
+          "avgDmg": 12,
+          "ap": 12,
+          "rof": 3,
+          "mount": "Fixed Front",
+          "grade": "B+",
+          "threat": 24
+        },
+        {
+          "name": "Light Missiles x24",
+          "avgDmg": 21,
+          "ap": 16,
+          "rof": 4,
+          "mount": "Fixed",
+          "grade": "C+",
+          "threat": 37
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Light Missiles x24",
+        "grade": "C+",
+        "threat": 37
+      },
+      "notes": null
+    },
+    {
+      "name": "Starfighter (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "space",
+      "size": 6,
+      "toughness": 19,
+      "armour": 4,
+      "handling": 2,
+      "topSpeed": "18",
+      "crew": "2",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "DL Light Particle Cannons",
+          "avgDmg": 18,
+          "ap": 5,
+          "rof": 3,
+          "mount": "Fixed",
+          "grade": "B",
+          "threat": 23
+        },
+        {
+          "name": "Light Missiles x24",
+          "avgDmg": 21,
+          "ap": 16,
+          "rof": 4,
+          "mount": "Fixed",
+          "grade": "C+",
+          "threat": 37
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Light Missiles x24",
+        "grade": "C+",
+        "threat": 37
+      },
+      "notes": null
+    },
+    {
+      "name": "Dropship (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "space",
+      "size": 10,
+      "toughness": 40,
+      "armour": 20,
+      "handling": -2,
+      "topSpeed": "17",
+      "crew": "5",
+      "grade": "C",
+      "weapons": [
+        {
+          "name": "DL Medium Lasers",
+          "avgDmg": 18,
+          "ap": 22,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "C+",
+          "threat": 40
+        },
+        {
+          "name": "DL Gatling Lasers",
+          "avgDmg": 16.5,
+          "ap": 6,
+          "rof": 4,
+          "mount": "Turret",
+          "grade": "B",
+          "threat": 22.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "DL Medium Lasers",
+        "grade": "C+",
+        "threat": 40
+      },
+      "notes": null
+    },
+    {
+      "name": "Heavy Fighter (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "space",
+      "size": 8,
+      "toughness": 40,
+      "armour": 20,
+      "handling": 0,
+      "topSpeed": "17",
+      "crew": "2",
+      "grade": "C",
+      "weapons": [
+        {
+          "name": "DL Med Particle Cannons",
+          "avgDmg": 27,
+          "ap": 10,
+          "rof": 3,
+          "mount": "Fixed",
+          "grade": "C+",
+          "threat": 37
+        },
+        {
+          "name": "Heavy Missiles x8",
+          "avgDmg": 28,
+          "ap": 32,
+          "rof": 1,
+          "mount": "Fixed",
+          "grade": "E-",
+          "threat": 60
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy Missiles x8",
+        "grade": "E-",
+        "threat": 60
+      },
+      "notes": null
+    },
+    {
+      "name": "Corvette (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "space",
+      "size": 15,
+      "toughness": 45,
+      "armour": 20,
+      "handling": -2,
+      "topSpeed": "17",
+      "crew": "50",
+      "grade": "D",
+      "weapons": [
+        {
+          "name": "DL Medium Lasers",
+          "avgDmg": 18,
+          "ap": 22,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "C+",
+          "threat": 40
+        },
+        {
+          "name": "Heavy Missiles x18",
+          "avgDmg": 28,
+          "ap": 32,
+          "rof": 1,
+          "mount": "Fixed",
+          "grade": "E-",
+          "threat": 60
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy Missiles x18",
+        "grade": "E-",
+        "threat": 60
+      },
+      "notes": null
+    },
+    {
+      "name": "Heavy Frigate (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "space",
+      "size": 17,
+      "toughness": 42,
+      "armour": 12,
+      "handling": -2,
+      "topSpeed": "17",
+      "crew": "50",
+      "grade": "D",
+      "weapons": [
+        {
+          "name": "DL Heavy Lasers",
+          "avgDmg": 24,
+          "ap": 32,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "D+",
+          "threat": 56
+        },
+        {
+          "name": "Heavy Missiles x28",
+          "avgDmg": 28,
+          "ap": 32,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "E-",
+          "threat": 60
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy Missiles x28",
+        "grade": "E-",
+        "threat": 60
+      },
+      "notes": null
+    },
+    {
+      "name": "Stealth Cruiser (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "space",
+      "size": 20,
+      "toughness": 45,
+      "armour": 20,
+      "handling": -2,
+      "topSpeed": "16",
+      "crew": "50",
+      "grade": "D",
+      "weapons": [
+        {
+          "name": "DL Super Laser",
+          "avgDmg": 29,
+          "ap": 32,
+          "rof": 1,
+          "mount": "Fixed",
+          "grade": "E-",
+          "threat": 61
+        },
+        {
+          "name": "Heavy Torpedo x10",
+          "avgDmg": 46,
+          "ap": 40,
+          "rof": 1,
+          "mount": "Fixed",
+          "grade": "F-",
+          "threat": 86
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy Torpedo x10",
+        "grade": "F-",
+        "threat": 86
+      },
+      "notes": null
+    },
+    {
+      "name": "Cruiser (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "space",
+      "size": 20,
+      "toughness": 55,
+      "armour": 30,
+      "handling": -2,
+      "topSpeed": "16",
+      "crew": "100",
+      "grade": "D",
+      "weapons": [
+        {
+          "name": "DL Heavy Laser",
+          "avgDmg": 24,
+          "ap": 32,
+          "rof": 1,
+          "mount": "Fixed",
+          "grade": "D+",
+          "threat": 56
+        },
+        {
+          "name": "Heavy Torpedo x7",
+          "avgDmg": 46,
+          "ap": 40,
+          "rof": 1,
+          "mount": "Fixed",
+          "grade": "F-",
+          "threat": 86
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy Torpedo x7",
+        "grade": "F-",
+        "threat": 86
+      },
+      "notes": null
+    },
+    {
+      "name": "Planetary Assault Ship (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "space",
+      "size": 20,
+      "toughness": 50,
+      "armour": 20,
+      "handling": -2,
+      "topSpeed": "16",
+      "crew": "100+450",
+      "grade": "D",
+      "weapons": [
+        {
+          "name": "DL Heavy Laser",
+          "avgDmg": 24,
+          "ap": 32,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "D+",
+          "threat": 56
+        }
+      ],
+      "primaryWeapon": {
+        "name": "DL Heavy Laser",
+        "grade": "D+",
+        "threat": 56
+      },
+      "notes": "Atmospheric"
+    },
+    {
+      "name": "Battlecruiser (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "space",
+      "size": 21,
+      "toughness": 50,
+      "armour": 20,
+      "handling": -4,
+      "topSpeed": "17",
+      "crew": "500",
+      "grade": "D",
+      "weapons": [
+        {
+          "name": "SH Laser",
+          "avgDmg": 33,
+          "ap": 40,
+          "rof": 1,
+          "mount": "Fixed",
+          "grade": "E+",
+          "threat": 73
+        },
+        {
+          "name": "Heavy Torpedo x14",
+          "avgDmg": 46,
+          "ap": 40,
+          "rof": 1,
+          "mount": "Fixed",
+          "grade": "F-",
+          "threat": 86
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy Torpedo x14",
+        "grade": "F-",
+        "threat": 86
+      },
+      "notes": null
+    },
+    {
+      "name": "Galactic Explorer (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "space",
+      "size": 22,
+      "toughness": 50,
+      "armour": 20,
+      "handling": -4,
+      "topSpeed": "16",
+      "crew": "500",
+      "grade": "D",
+      "weapons": [
+        {
+          "name": "2x Super Laser",
+          "avgDmg": 27.5,
+          "ap": 30,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "D+",
+          "threat": 57.5
+        },
+        {
+          "name": "Heavy Torpedo x14",
+          "avgDmg": 46,
+          "ap": 40,
+          "rof": 1,
+          "mount": "Fixed",
+          "grade": "F-",
+          "threat": 86
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy Torpedo x14",
+        "grade": "F-",
+        "threat": 86
+      },
+      "notes": null
+    },
+    {
+      "name": "Dreadnought (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "space",
+      "size": 25,
+      "toughness": 60,
+      "armour": 30,
+      "handling": -5,
+      "topSpeed": "16",
+      "crew": "550",
+      "grade": "E",
+      "weapons": [
+        {
+          "name": "SH Laser",
+          "avgDmg": 33,
+          "ap": 40,
+          "rof": 1,
+          "mount": "Fixed",
+          "grade": "E+",
+          "threat": 73
+        },
+        {
+          "name": "2x QL Heavy Particle Cannon",
+          "avgDmg": 52,
+          "ap": 24,
+          "rof": 3,
+          "mount": "Turret",
+          "grade": "E+",
+          "threat": 76
+        },
+        {
+          "name": "Heavy Torpedo x10",
+          "avgDmg": 46,
+          "ap": 40,
+          "rof": 1,
+          "mount": "Fixed",
+          "grade": "F-",
+          "threat": 86
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy Torpedo x10",
+        "grade": "F-",
+        "threat": 86
+      },
+      "notes": null
+    },
+    {
+      "name": "World Killer (SFC)",
+      "source": "SFC",
+      "era": "scifi",
+      "type": "space",
+      "size": 40,
+      "toughness": 70,
+      "armour": 40,
+      "handling": -4,
+      "topSpeed": "15",
+      "crew": "5600",
+      "grade": "E",
+      "weapons": [
+        {
+          "name": "10x Heavy Particle Cannon",
+          "avgDmg": 36,
+          "ap": 20,
+          "rof": 3,
+          "mount": "Turret",
+          "grade": "D+",
+          "threat": 56
+        }
+      ],
+      "primaryWeapon": {
+        "name": "10x Heavy Particle Cannon",
+        "grade": "D+",
+        "threat": 56
+      },
+      "notes": "Planet-killer (plot device)"
+    }
+  ],
+  "weapons": [
+    {
+      "name": "Medium MG",
+      "source": "SWADE",
+      "damage": "2d8+1",
+      "avgDmg": 9,
+      "ap": 2,
+      "rof": 3,
+      "range": "30/60/120",
+      "threat": 11,
+      "grade": "A"
+    },
+    {
+      "name": "Heavy MG",
+      "source": "SWADE",
+      "damage": "2d10",
+      "avgDmg": 11,
+      "ap": 4,
+      "rof": 3,
+      "range": "50/100/200",
+      "threat": 15,
+      "grade": "A+"
+    },
+    {
+      "name": "Heavy Flamethrower",
+      "source": "SWADE",
+      "damage": "3d8",
+      "avgDmg": 13.5,
+      "ap": 0,
+      "rof": 1,
+      "range": "Cone/MBT",
+      "threat": 13.5,
+      "grade": "A+"
+    },
+    {
+      "name": "20mm Cannon",
+      "source": "SWADE",
+      "damage": "2d12",
+      "avgDmg": 13,
+      "ap": 4,
+      "rof": 4,
+      "range": "50/100/200",
+      "threat": 17,
+      "grade": "A+"
+    },
+    {
+      "name": "25mm Cannon",
+      "source": "SWADE",
+      "damage": "3d8",
+      "avgDmg": 13.5,
+      "ap": 4,
+      "rof": 3,
+      "range": "50/100/200",
+      "threat": 17.5,
+      "grade": "A+"
+    },
+    {
+      "name": "30mm Cannon",
+      "source": "SWADE",
+      "damage": "3d8",
+      "avgDmg": 13.5,
+      "ap": 6,
+      "rof": 3,
+      "range": "50/100/200",
+      "threat": 19.5,
+      "grade": "B-"
+    },
+    {
+      "name": "40mm Cannon (AP)",
+      "source": "SWADE",
+      "damage": "4d8",
+      "avgDmg": 18,
+      "ap": 5,
+      "rof": 4,
+      "range": "75/150/300",
+      "threat": 23,
+      "grade": "B"
+    },
+    {
+      "name": "2pdr AT Gun",
+      "source": "SWADE",
+      "damage": "4d8",
+      "avgDmg": 18,
+      "ap": 5,
+      "rof": 1,
+      "range": "75/150/300",
+      "threat": 23,
+      "grade": "B"
+    },
+    {
+      "name": "37mm AT Gun",
+      "source": "SWADE",
+      "damage": "4d8",
+      "avgDmg": 18,
+      "ap": 3,
+      "rof": 1,
+      "range": "50/100/200",
+      "threat": 21,
+      "grade": "B"
+    },
+    {
+      "name": "57mm AT Gun",
+      "source": "SWADE",
+      "damage": "4d8",
+      "avgDmg": 18,
+      "ap": 5,
+      "rof": 1,
+      "range": "75/150/300",
+      "threat": 23,
+      "grade": "B"
+    },
+    {
+      "name": "75mm Tank Gun",
+      "source": "SWADE",
+      "damage": "4d10",
+      "avgDmg": 22,
+      "ap": 6,
+      "rof": 1,
+      "range": "75/150/300",
+      "threat": 28,
+      "grade": "C-"
+    },
+    {
+      "name": "76mm Tank Gun",
+      "source": "SWADE",
+      "damage": "4d10",
+      "avgDmg": 22,
+      "ap": 10,
+      "rof": 1,
+      "range": "75/150/300",
+      "threat": 32,
+      "grade": "C-"
+    },
+    {
+      "name": "88mm Tank Gun",
+      "source": "SWADE",
+      "damage": "4d10+1",
+      "avgDmg": 23,
+      "ap": 16,
+      "rof": 1,
+      "range": "100/200/400",
+      "threat": 39,
+      "grade": "C+"
+    },
+    {
+      "name": "120mm Tank Gun",
+      "source": "SWADE",
+      "damage": "5d10",
+      "avgDmg": 27.5,
+      "ap": 31,
+      "rof": 1,
+      "range": "100/200/400",
+      "threat": 58.5,
+      "grade": "D+"
+    },
+    {
+      "name": "125mm Tank Gun",
+      "source": "SWADE",
+      "damage": "5d10",
+      "avgDmg": 27.5,
+      "ap": 30,
+      "rof": 1,
+      "range": "100/200/400",
+      "threat": 57.5,
+      "grade": "D+"
+    },
+    {
+      "name": "Gatling Laser",
+      "source": "SWADE",
+      "damage": "3d6+4",
+      "avgDmg": 14.5,
+      "ap": 4,
+      "rof": 4,
+      "range": "50/100/200",
+      "threat": 18.5,
+      "grade": "B-"
+    },
+    {
+      "name": "Heavy Laser",
+      "source": "SWADE",
+      "damage": "4d10",
+      "avgDmg": 22,
+      "ap": 30,
+      "rof": 1,
+      "range": "150/300/600",
+      "threat": 52,
+      "grade": "D"
+    },
+    {
+      "name": "Light Laser",
+      "source": "SFC",
+      "damage": "2d10",
+      "avgDmg": 11,
+      "ap": 10,
+      "rof": 3,
+      "range": "150/300/600",
+      "threat": 21,
+      "grade": "B"
+    },
+    {
+      "name": "Medium Laser",
+      "source": "SFC",
+      "damage": "3d10",
+      "avgDmg": 16.5,
+      "ap": 20,
+      "rof": 1,
+      "range": "150/300/600",
+      "threat": 36.5,
+      "grade": "C"
+    },
+    {
+      "name": "Super Laser",
+      "source": "SFC",
+      "damage": "5d10",
+      "avgDmg": 27.5,
+      "ap": 30,
+      "rof": 1,
+      "range": "150/300/600",
+      "threat": 57.5,
+      "grade": "D+"
+    },
+    {
+      "name": "Super Heavy Laser",
+      "source": "SFC",
+      "damage": "6d10",
+      "avgDmg": 33,
+      "ap": 40,
+      "rof": 1,
+      "range": "150/300/600",
+      "threat": 73,
+      "grade": "E+"
+    },
+    {
+      "name": "Light Particle Cannon",
+      "source": "SFC",
+      "damage": "2d6+2",
+      "avgDmg": 9,
+      "ap": 5,
+      "rof": 3,
+      "range": "100/200/400",
+      "threat": 14,
+      "grade": "A+"
+    },
+    {
+      "name": "Medium Particle Cannon",
+      "source": "SFC",
+      "damage": "3d6+3",
+      "avgDmg": 13.5,
+      "ap": 10,
+      "rof": 3,
+      "range": "100/200/400",
+      "threat": 23.5,
+      "grade": "B"
+    },
+    {
+      "name": "Heavy Particle Cannon",
+      "source": "SFC",
+      "damage": "4d6+4",
+      "avgDmg": 18,
+      "ap": 20,
+      "rof": 3,
+      "range": "100/200/400",
+      "threat": 38,
+      "grade": "C+"
+    },
+    {
+      "name": "Medium Cannon (SFC)",
+      "source": "SFC",
+      "damage": "4d10",
+      "avgDmg": 22,
+      "ap": 10,
+      "rof": 1,
+      "range": "75/150/300",
+      "threat": 32,
+      "grade": "C-"
+    },
+    {
+      "name": "Heavy Cannon (SFC)",
+      "source": "SFC",
+      "damage": "5d10",
+      "avgDmg": 27.5,
+      "ap": 20,
+      "rof": 1,
+      "range": "100/200/400",
+      "threat": 47.5,
+      "grade": "D-"
+    },
+    {
+      "name": "Super Heavy Cannon",
+      "source": "SFC",
+      "damage": "8d10",
+      "avgDmg": 44,
+      "ap": 40,
+      "rof": 1,
+      "range": "150/300/600",
+      "threat": 84,
+      "grade": "F-"
+    },
+    {
+      "name": "Medium Autocannon",
+      "source": "SFC",
+      "damage": "4d8",
+      "avgDmg": 18,
+      "ap": 6,
+      "rof": 4,
+      "range": "50/100/200",
+      "threat": 24,
+      "grade": "B+"
+    },
+    {
+      "name": "Light Missiles",
+      "source": "SFC",
+      "damage": "6d6",
+      "avgDmg": 21,
+      "ap": 16,
+      "rof": 4,
+      "range": "100/200/400",
+      "threat": 37,
+      "grade": "C+"
+    },
+    {
+      "name": "Medium Missiles",
+      "source": "SFC",
+      "damage": "7d6",
+      "avgDmg": 24.5,
+      "ap": 24,
+      "rof": 2,
+      "range": "150/300/600",
+      "threat": 48.5,
+      "grade": "D"
+    },
+    {
+      "name": "Heavy Missiles",
+      "source": "SFC",
+      "damage": "8d6",
+      "avgDmg": 28,
+      "ap": 32,
+      "rof": 1,
+      "range": "200/400/800",
+      "threat": 60,
+      "grade": "E-"
+    },
+    {
+      "name": "Heavy Torpedo",
+      "source": "SFC",
+      "damage": "8d12",
+      "avgDmg": 52,
+      "ap": 40,
+      "rof": 1,
+      "range": "300/600/1200",
+      "threat": 92,
+      "grade": "F-"
+    }
+  ]
+}

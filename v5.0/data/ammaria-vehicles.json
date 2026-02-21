@@ -1,0 +1,280 @@
+{
+  "source": "The Tribute Lands: Paradise Lost — Ammaria",
+  "version": "1.0.0",
+  "gradeSystem": {
+    "version": "5.4.1",
+    "vehicleBands": {
+      "A": "1-17",
+      "B": "18-27",
+      "C": "28-41",
+      "D": "42-59",
+      "E": "60-79",
+      "F": "80+"
+    },
+    "weaponBands": {
+      "A-": "0-5",
+      "A": "6-11",
+      "A+": "12-17",
+      "B-": "18-20",
+      "B": "21-23",
+      "B+": "24-27",
+      "C-": "28-32",
+      "C": "33-36",
+      "C+": "37-41",
+      "D-": "42-47",
+      "D": "48-53",
+      "D+": "54-59",
+      "E-": "60-66",
+      "E": "67-72",
+      "E+": "73-79",
+      "F-": "80-99",
+      "F": "100-129",
+      "F+": "130+"
+    },
+    "quickStrike": {
+      "0": "Effective",
+      "-3": "No Effect",
+      "-2": "Desperate",
+      "-1": "Outmatched",
+      "+1": "Overkill",
+      "+2": "Devastating"
+    }
+  },
+  "vehicles": [
+    {
+      "name": "Peddler's Cart",
+      "source": "Ammaria",
+      "era": "medieval",
+      "type": "ground",
+      "size": 3,
+      "toughness": 9,
+      "armour": 1,
+      "handling": 1,
+      "topSpeed": 9,
+      "crew": "1",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "8 barrel cargo"
+    },
+    {
+      "name": "Merchant Wagon",
+      "source": "Ammaria",
+      "era": "medieval",
+      "type": "ground",
+      "size": 4,
+      "toughness": 11,
+      "armour": 2,
+      "handling": 0,
+      "topSpeed": 7,
+      "crew": "2",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "25 barrel cargo"
+    },
+    {
+      "name": "Heavy Wagon",
+      "source": "Ammaria",
+      "era": "medieval",
+      "type": "ground",
+      "size": 5,
+      "toughness": 12,
+      "armour": 2,
+      "handling": 0,
+      "topSpeed": 6,
+      "crew": "2",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "40 barrel cargo"
+    },
+    {
+      "name": "Guild Vault Wagon",
+      "source": "Ammaria",
+      "era": "medieval",
+      "type": "ground",
+      "size": 5,
+      "toughness": 14,
+      "armour": 3,
+      "handling": -1,
+      "topSpeed": 5,
+      "crew": "2+2",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "40 barrel cargo, secured"
+    },
+    {
+      "name": "Treasure Barge",
+      "source": "Ammaria",
+      "era": "medieval",
+      "type": "ground",
+      "size": 7,
+      "toughness": 16,
+      "armour": 4,
+      "handling": -2,
+      "topSpeed": 4,
+      "crew": "4+4",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "100 barrel cargo"
+    },
+    {
+      "name": "Ironclad Wagon",
+      "source": "Ammaria",
+      "era": "medieval",
+      "type": "ground",
+      "size": 5,
+      "toughness": 14,
+      "armour": 4,
+      "handling": -1,
+      "topSpeed": 5,
+      "crew": "2+4",
+      "grade": "A",
+      "weapons": [
+        {
+          "name": "Heavy Crossbow",
+          "avgDmg": 9,
+          "ap": 2,
+          "rof": 1,
+          "mount": "Turret",
+          "grade": "A",
+          "threat": 11
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Heavy Crossbow",
+        "grade": "A",
+        "threat": 11
+      },
+      "notes": null
+    },
+    {
+      "name": "War Wagon",
+      "source": "Ammaria",
+      "era": "medieval",
+      "type": "ground",
+      "size": 6,
+      "toughness": 16,
+      "armour": 4,
+      "handling": -1,
+      "topSpeed": 5,
+      "crew": "3+6",
+      "grade": "A",
+      "weapons": [
+        {
+          "name": "Ballista",
+          "avgDmg": 16.5,
+          "ap": 4,
+          "rof": 1,
+          "mount": "Fixed",
+          "grade": "B-",
+          "threat": 20.5
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Ballista",
+        "grade": "B-",
+        "threat": 20.5
+      },
+      "notes": null
+    },
+    {
+      "name": "Spike Wagon",
+      "source": "Ammaria",
+      "era": "medieval",
+      "type": "ground",
+      "size": 5,
+      "toughness": 13,
+      "armour": 3,
+      "handling": -1,
+      "topSpeed": 6,
+      "crew": "2+4",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "Anti-cavalry spikes"
+    },
+    {
+      "name": "Fortress Wagon",
+      "source": "Ammaria",
+      "era": "medieval",
+      "type": "ground",
+      "size": 7,
+      "toughness": 18,
+      "armour": 5,
+      "handling": -2,
+      "topSpeed": 4,
+      "crew": "4+10",
+      "grade": "B",
+      "weapons": [
+        {
+          "name": "Light Catapult",
+          "avgDmg": 18,
+          "ap": 0,
+          "rof": 1,
+          "mount": "Fixed",
+          "grade": "B-",
+          "threat": 18
+        }
+      ],
+      "primaryWeapon": {
+        "name": "Light Catapult",
+        "grade": "B-",
+        "threat": 18
+      },
+      "notes": null
+    },
+    {
+      "name": "Slave Cart",
+      "source": "Ammaria",
+      "era": "medieval",
+      "type": "ground",
+      "size": 2,
+      "toughness": 8,
+      "armour": 2,
+      "handling": 1,
+      "topSpeed": 8,
+      "crew": "1",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "6-8 slaves"
+    },
+    {
+      "name": "Slaver Wagon",
+      "source": "Ammaria",
+      "era": "medieval",
+      "type": "ground",
+      "size": 5,
+      "toughness": 12,
+      "armour": 2,
+      "handling": 0,
+      "topSpeed": 6,
+      "crew": "2",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "20-25 slaves"
+    },
+    {
+      "name": "Tribute Transport",
+      "source": "Ammaria",
+      "era": "medieval",
+      "type": "ground",
+      "size": 6,
+      "toughness": 14,
+      "armour": 3,
+      "handling": -1,
+      "topSpeed": 5,
+      "crew": "3",
+      "grade": "A",
+      "weapons": [],
+      "primaryWeapon": null,
+      "notes": "40-50 slaves"
+    }
+  ],
+  "weapons": []
+}

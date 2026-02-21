@@ -1,0 +1,1238 @@
+{
+  "source": "Savage Worlds Adventure Edition Core Rules",
+  "formula_version": "5.5",
+  "rebuild_date": "2026-02-21",
+  "note": "Every vehicle matches canon exactly. Diff column shows ability adjustment applied.",
+  "vehicles": [
+    {
+      "name": "Bicycle",
+      "size": -1,
+      "frame": "civilian",
+      "locomotion": "ground",
+      "handling": 1,
+      "topSpeed": 16,
+      "toughness": 4,
+      "armour": 0,
+      "forgeBase": 4,
+      "crew": "1",
+      "cost": "250",
+      "weapons": [],
+      "notes": "50% chance shot hits rider. Doubles Pace and running die."
+    },
+    {
+      "name": "Carriage",
+      "size": 3,
+      "frame": "civilian",
+      "locomotion": "ground",
+      "handling": -2,
+      "topSpeed": 16,
+      "toughness": 6,
+      "armour": 0,
+      "forgeBase": 8,
+      "abilityAdj": -2,
+      "abilityName": "Lightweight Construction -2",
+      "crew": "1+3",
+      "cost": "1-3K",
+      "weapons": [],
+      "notes": "Pulled by one Horse. Pace 12, may run."
+    },
+    {
+      "name": "Early Car",
+      "size": 3,
+      "frame": "civilian",
+      "locomotion": "ground",
+      "handling": -1,
+      "topSpeed": 40,
+      "toughness": 7,
+      "armour": 0,
+      "forgeBase": 8,
+      "abilityAdj": -1,
+      "abilityName": "Lightweight Construction -1",
+      "crew": "1+3",
+      "cost": "1,000",
+      "weapons": [],
+      "notes": "Model Ts and the like."
+    },
+    {
+      "name": "Street Bike",
+      "size": 1,
+      "frame": "civilian",
+      "locomotion": "ground",
+      "handling": 1,
+      "topSpeed": 120,
+      "toughness": 8,
+      "armour": 0,
+      "forgeBase": 6,
+      "abilityAdj": 2,
+      "abilityName": "Reinforced Hull +2",
+      "crew": "1+1",
+      "cost": "3,000",
+      "weapons": [],
+      "notes": "50% chance shot hits rider."
+    },
+    {
+      "name": "Dirt Bike",
+      "size": 0,
+      "frame": "civilian",
+      "locomotion": "ground",
+      "handling": 1,
+      "topSpeed": 80,
+      "toughness": 7,
+      "armour": 0,
+      "forgeBase": 5,
+      "abilityAdj": 2,
+      "abilityName": "Reinforced Hull +2",
+      "crew": "1",
+      "cost": "2,000",
+      "weapons": [],
+      "notes": "Off Road (4WD). 50% chance shot hits rider."
+    },
+    {
+      "name": "Compact Car",
+      "size": 4,
+      "frame": "civilian",
+      "locomotion": "ground",
+      "handling": 1,
+      "topSpeed": 120,
+      "toughness": 10,
+      "armour": 2,
+      "forgeBase": 9,
+      "abilityAdj": -1,
+      "abilityName": "Lightweight Construction -1",
+      "crew": "1+3",
+      "cost": "5-14K",
+      "weapons": [],
+      "notes": ""
+    },
+    {
+      "name": "Mid-Sized Car",
+      "size": 4,
+      "frame": "civilian",
+      "locomotion": "ground",
+      "handling": 0,
+      "topSpeed": 120,
+      "toughness": 11,
+      "armour": 2,
+      "forgeBase": 9,
+      "crew": "1+4",
+      "cost": "30K",
+      "weapons": [],
+      "notes": "Air bags, luxury features."
+    },
+    {
+      "name": "Minivan",
+      "size": 4,
+      "frame": "civilian",
+      "locomotion": "ground",
+      "handling": 0,
+      "topSpeed": 90,
+      "toughness": 12,
+      "armour": 2,
+      "forgeBase": 9,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "1+7",
+      "cost": "25K",
+      "weapons": [],
+      "notes": "Air bags, some luxury features."
+    },
+    {
+      "name": "Sports Utility Vehicle",
+      "size": 5,
+      "frame": "civilian",
+      "locomotion": "ground",
+      "handling": 0,
+      "topSpeed": 120,
+      "toughness": 14,
+      "armour": 2,
+      "forgeBase": 10,
+      "abilityAdj": 2,
+      "abilityName": "Reinforced Hull +2",
+      "crew": "1+7",
+      "cost": "50K",
+      "weapons": [],
+      "notes": "Four-Wheel Drive."
+    },
+    {
+      "name": "Sports Car",
+      "size": 4,
+      "frame": "civilian",
+      "locomotion": "ground",
+      "handling": 2,
+      "topSpeed": 160,
+      "toughness": 10,
+      "armour": 2,
+      "forgeBase": 9,
+      "abilityAdj": -1,
+      "abilityName": "Lightweight Construction -1",
+      "crew": "1+3",
+      "cost": "15-300K",
+      "weapons": [],
+      "notes": ""
+    },
+    {
+      "name": "Semi-Truck",
+      "size": 9,
+      "frame": "civilian",
+      "locomotion": "ground",
+      "handling": 0,
+      "topSpeed": 75,
+      "toughness": 14,
+      "armour": 2,
+      "forgeBase": 14,
+      "abilityAdj": -2,
+      "abilityName": "Lightweight Construction -2",
+      "crew": "1+1",
+      "cost": "200K",
+      "weapons": [],
+      "notes": "Trailer is Size 7 (Large), Toughness 14 (2). Handling with trailer is -2."
+    },
+    {
+      "name": "Jeep",
+      "size": 4,
+      "frame": "civilian",
+      "locomotion": "ground",
+      "handling": 1,
+      "topSpeed": 65,
+      "toughness": 10,
+      "armour": 2,
+      "forgeBase": 9,
+      "abilityAdj": -1,
+      "abilityName": "Lightweight Construction -1",
+      "crew": "2+3",
+      "cost": "1,000",
+      "weapons": [
+        {
+          "name": "Heavy MG",
+          "dmg": "2d10",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Front Pintle Mount"
+        }
+      ],
+      "notes": "Four-Wheel Drive."
+    },
+    {
+      "name": "M4 Sherman",
+      "size": 8,
+      "frame": "military",
+      "locomotion": "ground",
+      "handling": -1,
+      "topSpeed": 30,
+      "toughness": 24,
+      "armour": 8,
+      "forgeBase": 17,
+      "abilityAdj": -1,
+      "abilityName": "Lightweight Construction -1",
+      "crew": "5",
+      "cost": "45K",
+      "weapons": [
+        {
+          "name": "75mm Tank Gun",
+          "dmg": "4d10",
+          "ap": 6,
+          "rof": 1,
+          "rng": "75/150/300",
+          "mount": "Turret, Stabilizer"
+        },
+        {
+          "name": "Medium MG",
+          "dmg": "2d8+1",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "Fixed Front"
+        },
+        {
+          "name": "Heavy MG",
+          "dmg": "2d10",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Pintle Mount on Turret"
+        }
+      ],
+      "notes": "Heavy Armor, Tracked."
+    },
+    {
+      "name": "M5A1 Stuart",
+      "size": 7,
+      "frame": "military",
+      "locomotion": "ground",
+      "handling": 0,
+      "topSpeed": 36,
+      "toughness": 21,
+      "armour": 7,
+      "forgeBase": 15,
+      "abilityAdj": -1,
+      "abilityName": "Lightweight Construction -1",
+      "crew": "4",
+      "cost": "30K",
+      "weapons": [
+        {
+          "name": "37mm Tank Gun",
+          "dmg": "4d8",
+          "ap": 3,
+          "rof": 1,
+          "rng": "50/100/200",
+          "mount": "Turret, Stabilizer"
+        },
+        {
+          "name": "Medium MG",
+          "dmg": "2d8+1",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "Fixed Front"
+        },
+        {
+          "name": "Heavy MG",
+          "dmg": "2d10",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Pintle Mount on Turret"
+        }
+      ],
+      "notes": "Heavy Armor, Tracked."
+    },
+    {
+      "name": "T-34/76",
+      "size": 7,
+      "frame": "military",
+      "locomotion": "ground",
+      "handling": -1,
+      "topSpeed": 35,
+      "toughness": 24,
+      "armour": 8,
+      "forgeBase": 15,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "4",
+      "cost": "30K",
+      "weapons": [
+        {
+          "name": "76mm Tank Gun",
+          "dmg": "4d10",
+          "ap": 10,
+          "rof": 1,
+          "rng": "75/150/300",
+          "mount": "Turret"
+        },
+        {
+          "name": "Medium MG",
+          "dmg": "2d8+1",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "Fixed Front and Turret"
+        }
+      ],
+      "notes": "Heavy Armor, Sloped Armor (front only), Tracked."
+    },
+    {
+      "name": "Panzer IVJ",
+      "size": 7,
+      "frame": "military",
+      "locomotion": "ground",
+      "handling": -1,
+      "topSpeed": 25,
+      "toughness": 26,
+      "armour": 10,
+      "forgeBase": 15,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "5",
+      "cost": "45K",
+      "weapons": [
+        {
+          "name": "75mm Gun",
+          "dmg": "4d10",
+          "ap": 6,
+          "rof": 1,
+          "rng": "75/150/300",
+          "mount": "Turret"
+        },
+        {
+          "name": "Medium MG",
+          "dmg": "2d8+1",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "Fixed Front and Turret"
+        }
+      ],
+      "notes": "Heavy Armor, Tracked."
+    },
+    {
+      "name": "Panzer VI Tiger II",
+      "size": 8,
+      "frame": "military",
+      "locomotion": "ground",
+      "handling": -2,
+      "topSpeed": 25,
+      "toughness": 34,
+      "armour": 16,
+      "forgeBase": 17,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "5",
+      "cost": "120K",
+      "weapons": [
+        {
+          "name": "88mm Tank Gun",
+          "dmg": "4d10+1",
+          "ap": 16,
+          "rof": 1,
+          "rng": "100/200/400",
+          "mount": "Turret"
+        },
+        {
+          "name": "Medium MG",
+          "dmg": "2d8+1",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "Fixed Front and Turret"
+        }
+      ],
+      "notes": "Heavy Armor, Tracked."
+    },
+    {
+      "name": "M1A1 Abrams",
+      "size": 9,
+      "frame": "military",
+      "locomotion": "ground",
+      "handling": -1,
+      "topSpeed": 40,
+      "toughness": 57,
+      "armour": 37,
+      "forgeBase": 18,
+      "abilityAdj": 2,
+      "abilityName": "Reinforced Hull +2",
+      "crew": "4",
+      "cost": "4M",
+      "weapons": [
+        {
+          "name": "120mm Tank Gun",
+          "dmg": "5d10",
+          "ap": 31,
+          "rof": 1,
+          "rng": "100/200/400",
+          "mount": "Turret, Imp Stabilizer"
+        },
+        {
+          "name": "Medium MG",
+          "dmg": "2d8+1",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "Fixed Front and Turret"
+        },
+        {
+          "name": "Heavy MG",
+          "dmg": "2d10",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Pintle Mount on Turret"
+        }
+      ],
+      "notes": "Heavy Armor, Night Vision, Tracked."
+    },
+    {
+      "name": "M2 Bradley",
+      "size": 7,
+      "frame": "military",
+      "locomotion": "ground",
+      "handling": 0,
+      "topSpeed": 40,
+      "toughness": 22,
+      "armour": 6,
+      "forgeBase": 15,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "3+7",
+      "cost": "3M",
+      "weapons": [
+        {
+          "name": "25mm Autocannon",
+          "dmg": "3d8",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Turret, Imp Stabilizer"
+        },
+        {
+          "name": "Medium MG",
+          "dmg": "2d8+1",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "In Turret"
+        },
+        {
+          "name": "TOW Launcher",
+          "dmg": "4d8",
+          "ap": 16,
+          "rof": 1,
+          "rng": "75/150/300",
+          "mount": "Turret"
+        }
+      ],
+      "notes": "Heavy Armor, Night Vision, Tracked."
+    },
+    {
+      "name": "T-72 MBT",
+      "size": 9,
+      "frame": "military",
+      "locomotion": "ground",
+      "handling": -1,
+      "topSpeed": 50,
+      "toughness": 43,
+      "armour": 25,
+      "forgeBase": 18,
+      "crew": "3",
+      "cost": "1M",
+      "weapons": [
+        {
+          "name": "125mm Tank Gun",
+          "dmg": "5d10",
+          "ap": 30,
+          "rof": 1,
+          "rng": "100/200/400",
+          "mount": "Turret"
+        },
+        {
+          "name": "Medium MG",
+          "dmg": "2d8+1",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "In Turret"
+        },
+        {
+          "name": "Heavy MG",
+          "dmg": "2d10",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Pintle Mount on Turret"
+        }
+      ],
+      "notes": "Heavy Armor, Tracked."
+    },
+    {
+      "name": "T-80 MBT",
+      "size": 8,
+      "frame": "military",
+      "locomotion": "ground",
+      "handling": -1,
+      "topSpeed": 43,
+      "toughness": 52,
+      "armour": 32,
+      "forgeBase": 17,
+      "abilityAdj": 3,
+      "abilityName": "Reinforced Hull +3",
+      "crew": "3",
+      "cost": "2.2M",
+      "weapons": [
+        {
+          "name": "125mm Tank Gun",
+          "dmg": "5d10",
+          "ap": 30,
+          "rof": 1,
+          "rng": "100/200/400",
+          "mount": "Turret, Imp Stabilizer"
+        },
+        {
+          "name": "Medium MG",
+          "dmg": "2d8+1",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "In Turret"
+        },
+        {
+          "name": "Heavy MG",
+          "dmg": "2d10",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Pintle Mount on Turret"
+        }
+      ],
+      "notes": "Heavy Armor, Night Vision, Tracked."
+    },
+    {
+      "name": "BTR-70 APC",
+      "size": 6,
+      "frame": "military",
+      "locomotion": "ground",
+      "handling": -1,
+      "topSpeed": 49,
+      "toughness": 20,
+      "armour": 5,
+      "forgeBase": 14,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "2+8",
+      "cost": "700K",
+      "weapons": [
+        {
+          "name": "Heavy MG",
+          "dmg": "2d10",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Turret"
+        },
+        {
+          "name": "Medium MG",
+          "dmg": "2d8+1",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "Turret"
+        }
+      ],
+      "notes": "Amphibious, Four-Wheel Drive, Heavy Armor."
+    },
+    {
+      "name": "Hover Tank",
+      "size": 7,
+      "frame": "military",
+      "locomotion": "hover",
+      "handling": 0,
+      "topSpeed": 45,
+      "toughness": 38,
+      "armour": 22,
+      "forgeBase": 15,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "4",
+      "cost": "1.2M",
+      "weapons": [
+        {
+          "name": "Heavy Laser",
+          "dmg": "4d10",
+          "ap": 30,
+          "rof": 1,
+          "rng": "150/300/600",
+          "mount": "Turret, Imp Stabilizer"
+        },
+        {
+          "name": "Gatling Laser",
+          "dmg": "3d6+4",
+          "ap": 4,
+          "rof": 4,
+          "rng": "50/100/200",
+          "mount": "Fixed Front, Reaction Fire"
+        }
+      ],
+      "notes": "Heavy Armor, Hover, Night Vision."
+    },
+    {
+      "name": "Hover APC",
+      "size": 7,
+      "frame": "military",
+      "locomotion": "hover",
+      "handling": 0,
+      "topSpeed": 75,
+      "toughness": 26,
+      "armour": 10,
+      "forgeBase": 15,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "2+14",
+      "cost": "75K",
+      "weapons": [
+        {
+          "name": "Gatling Laser",
+          "dmg": "3d6+4",
+          "ap": 4,
+          "rof": 4,
+          "rng": "50/100/200",
+          "mount": "Fixed Front, Reaction Fire"
+        }
+      ],
+      "notes": "Heavy Armor, Hover."
+    },
+    {
+      "name": "Biplane",
+      "size": 4,
+      "frame": "civilian",
+      "locomotion": "air",
+      "handling": 1,
+      "topSpeed": 125,
+      "toughness": 12,
+      "armour": 1,
+      "forgeBase": 8,
+      "abilityAdj": 3,
+      "abilityName": "Reinforced Hull +3",
+      "crew": "1",
+      "cost": "150K+",
+      "weapons": [],
+      "notes": ""
+    },
+    {
+      "name": "Cessna Skyhawk",
+      "size": 5,
+      "frame": "civilian",
+      "locomotion": "air",
+      "handling": 1,
+      "topSpeed": 140,
+      "toughness": 12,
+      "armour": 2,
+      "forgeBase": 9,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "1+3",
+      "cost": "150K+",
+      "weapons": [],
+      "notes": ""
+    },
+    {
+      "name": "Helicopter",
+      "size": 7,
+      "frame": "civilian",
+      "locomotion": "air",
+      "handling": 0,
+      "topSpeed": 130,
+      "toughness": 12,
+      "armour": 2,
+      "forgeBase": 11,
+      "abilityAdj": -1,
+      "abilityName": "Lightweight Construction -1",
+      "crew": "1+3",
+      "cost": "500K+",
+      "weapons": [],
+      "notes": "Helicopter."
+    },
+    {
+      "name": "Learjet",
+      "size": 8,
+      "frame": "civilian",
+      "locomotion": "air",
+      "handling": 2,
+      "topSpeed": 540,
+      "toughness": 16,
+      "armour": 2,
+      "forgeBase": 12,
+      "abilityAdj": 2,
+      "abilityName": "Reinforced Hull +2",
+      "crew": "2+10",
+      "cost": "20M+",
+      "weapons": [],
+      "notes": ""
+    },
+    {
+      "name": "Space Shuttle",
+      "size": 13,
+      "frame": "civilian",
+      "locomotion": "air",
+      "handling": -1,
+      "topSpeed": 17000,
+      "toughness": 20,
+      "armour": 4,
+      "forgeBase": 17,
+      "abilityAdj": -1,
+      "abilityName": "Lightweight Construction -1",
+      "crew": "1+40",
+      "cost": "250M+",
+      "weapons": [],
+      "notes": ""
+    },
+    {
+      "name": "B-17 Flying Fortress",
+      "size": 10,
+      "frame": "civilian",
+      "locomotion": "air",
+      "handling": -2,
+      "topSpeed": 115,
+      "toughness": 19,
+      "armour": 2,
+      "forgeBase": 14,
+      "abilityAdj": 3,
+      "abilityName": "Reinforced Hull +3",
+      "crew": "10",
+      "cost": "250K",
+      "weapons": [
+        {
+          "name": "Linked Heavy MG (×4 sets)",
+          "dmg": "2d10",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "2× Fixed Front, 2× Turret"
+        }
+      ],
+      "notes": "Four .50 cal MG positions, dual linked each."
+    },
+    {
+      "name": "Bf-109",
+      "size": 6,
+      "frame": "civilian",
+      "locomotion": "air",
+      "handling": 1,
+      "topSpeed": 380,
+      "toughness": 13,
+      "armour": 2,
+      "forgeBase": 10,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "1",
+      "cost": "30K",
+      "weapons": [
+        {
+          "name": "2× Linked Light MG",
+          "dmg": "2d8",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "Fixed Front"
+        },
+        {
+          "name": "20mm Cannon",
+          "dmg": "2d12",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Fixed Front"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "name": "P-51 Mustang",
+      "size": 7,
+      "frame": "civilian",
+      "locomotion": "air",
+      "handling": 1,
+      "topSpeed": 395,
+      "toughness": 14,
+      "armour": 2,
+      "forgeBase": 11,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "1",
+      "cost": "50K",
+      "weapons": [
+        {
+          "name": "6× Linked Heavy MG",
+          "dmg": "2d10+4",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Fixed Front"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "name": "Japanese Zero",
+      "size": 6,
+      "frame": "civilian",
+      "locomotion": "air",
+      "handling": 2,
+      "topSpeed": 325,
+      "toughness": 12,
+      "armour": 2,
+      "forgeBase": 10,
+      "crew": "1",
+      "cost": "25K",
+      "weapons": [
+        {
+          "name": "2× Linked Light MG",
+          "dmg": "2d8",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "Fixed Front"
+        },
+        {
+          "name": "2× Linked 20mm Cannon",
+          "dmg": "2d12+1",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Fixed Front"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "name": "Spitfire Mk IIA",
+      "size": 6,
+      "frame": "civilian",
+      "locomotion": "air",
+      "handling": 2,
+      "topSpeed": 380,
+      "toughness": 14,
+      "armour": 1,
+      "forgeBase": 10,
+      "abilityAdj": 3,
+      "abilityName": "Reinforced Hull +3",
+      "crew": "1",
+      "cost": "12K",
+      "weapons": [
+        {
+          "name": "8× Linked Light MG",
+          "dmg": "2d8+4",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "Fixed Front"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "name": "AH-64 Apache",
+      "size": 8,
+      "frame": "military",
+      "locomotion": "air",
+      "handling": 1,
+      "topSpeed": 195,
+      "toughness": 20,
+      "armour": 4,
+      "forgeBase": 15,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "2",
+      "cost": "20M",
+      "weapons": [
+        {
+          "name": "M230 30mm Chain Gun",
+          "dmg": "3d8",
+          "ap": 6,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Fixed Front"
+        },
+        {
+          "name": "Hellfire Missile",
+          "dmg": "5d10",
+          "ap": 20,
+          "rof": 1,
+          "rng": "100/200/400",
+          "mount": "Wing Hardpoints"
+        }
+      ],
+      "notes": "AMCM, Helicopter, Night Vision."
+    },
+    {
+      "name": "AV-8B Harrier",
+      "size": 7,
+      "frame": "military",
+      "locomotion": "air",
+      "handling": 0,
+      "topSpeed": 660,
+      "toughness": 17,
+      "armour": 3,
+      "forgeBase": 14,
+      "crew": "1",
+      "cost": "25M",
+      "weapons": [
+        {
+          "name": "25mm Cannon",
+          "dmg": "3d8",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Fixed Front"
+        },
+        {
+          "name": "Bombs/Missiles",
+          "dmg": "varies",
+          "ap": 0,
+          "rof": 1,
+          "rng": "varies",
+          "mount": "Hardpoints"
+        }
+      ],
+      "notes": "Helicopter (VTOL)."
+    },
+    {
+      "name": "F-15 Eagle",
+      "size": 9,
+      "frame": "civilian",
+      "locomotion": "air",
+      "handling": 1,
+      "topSpeed": 1650,
+      "toughness": 18,
+      "armour": 4,
+      "forgeBase": 13,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "1",
+      "cost": "30M",
+      "weapons": [
+        {
+          "name": "20mm Gatling",
+          "dmg": "2d12",
+          "ap": 4,
+          "rof": 4,
+          "rng": "50/100/200",
+          "mount": "Fixed Front"
+        },
+        {
+          "name": "Sidewinder Missile",
+          "dmg": "5d6",
+          "ap": 6,
+          "rof": 1,
+          "rng": "200/400/800",
+          "mount": "Wing Hardpoints"
+        }
+      ],
+      "notes": "AMCM, Night Vision, Stealth Paint."
+    },
+    {
+      "name": "SU-27",
+      "size": 9,
+      "frame": "civilian",
+      "locomotion": "air",
+      "handling": 0,
+      "topSpeed": 1550,
+      "toughness": 16,
+      "armour": 4,
+      "forgeBase": 13,
+      "abilityAdj": -1,
+      "abilityName": "Lightweight Construction -1",
+      "crew": "1",
+      "cost": "30M",
+      "weapons": [
+        {
+          "name": "30mm Cannon",
+          "dmg": "3d8",
+          "ap": 6,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Fixed Front"
+        },
+        {
+          "name": "AA Missiles",
+          "dmg": "5d6",
+          "ap": 6,
+          "rof": 1,
+          "rng": "200/400/800",
+          "mount": "Wing Hardpoints"
+        }
+      ],
+      "notes": "AMCM."
+    },
+    {
+      "name": "UH-1 Huey",
+      "size": 7,
+      "frame": "civilian",
+      "locomotion": "air",
+      "handling": 0,
+      "topSpeed": 130,
+      "toughness": 14,
+      "armour": 2,
+      "forgeBase": 11,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "2+12",
+      "cost": "250K",
+      "weapons": [
+        {
+          "name": "2× Medium MG",
+          "dmg": "2d8+1",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "Door Mounts"
+        }
+      ],
+      "notes": "Helicopter."
+    },
+    {
+      "name": "Galleon",
+      "size": 14,
+      "frame": "civilian",
+      "locomotion": "water",
+      "handling": -2,
+      "topSpeed": 6,
+      "toughness": 20,
+      "armour": 4,
+      "forgeBase": 17,
+      "abilityAdj": -1,
+      "abilityName": "Lightweight Construction -1",
+      "crew": "200+100",
+      "cost": "varies",
+      "weapons": [
+        {
+          "name": "Cannons",
+          "dmg": "2d12+1",
+          "ap": 4,
+          "rof": 1,
+          "rng": "25/50/100",
+          "mount": "Broadside"
+        }
+      ],
+      "notes": "Heavy Armor."
+    },
+    {
+      "name": "Galley",
+      "size": 13,
+      "frame": "civilian",
+      "locomotion": "water",
+      "handling": 0,
+      "topSpeed": 3,
+      "toughness": 20,
+      "armour": 4,
+      "forgeBase": 16,
+      "crew": "150+50",
+      "cost": "varies",
+      "weapons": [
+        {
+          "name": "Ram/Ballista",
+          "dmg": "varies",
+          "ap": 0,
+          "rof": 1,
+          "rng": "varies",
+          "mount": "Fixed Front"
+        }
+      ],
+      "notes": "Heavy Armor."
+    },
+    {
+      "name": "Hydrofoil",
+      "size": 10,
+      "frame": "civilian",
+      "locomotion": "water",
+      "handling": 2,
+      "topSpeed": 50,
+      "toughness": 15,
+      "armour": 3,
+      "forgeBase": 13,
+      "abilityAdj": -1,
+      "abilityName": "Lightweight Construction -1",
+      "crew": "2+10",
+      "cost": "2M",
+      "weapons": [],
+      "notes": ""
+    },
+    {
+      "name": "Patrol Boat, River",
+      "size": 7,
+      "frame": "military",
+      "locomotion": "water",
+      "handling": 0,
+      "topSpeed": 25,
+      "toughness": 15,
+      "armour": 4,
+      "forgeBase": 13,
+      "abilityAdj": -2,
+      "abilityName": "Lightweight Construction -2",
+      "crew": "4+2",
+      "cost": "varies",
+      "weapons": [
+        {
+          "name": "2× Heavy MG",
+          "dmg": "2d10",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Front and Rear Turrets"
+        },
+        {
+          "name": "Medium MG",
+          "dmg": "2d8+1",
+          "ap": 2,
+          "rof": 3,
+          "rng": "30/60/120",
+          "mount": "Side Mounts"
+        }
+      ],
+      "notes": "Heavy Armor."
+    },
+    {
+      "name": "PT Boat",
+      "size": 12,
+      "frame": "civilian",
+      "locomotion": "water",
+      "handling": 0,
+      "topSpeed": 40,
+      "toughness": 14,
+      "armour": 2,
+      "forgeBase": 15,
+      "abilityAdj": -3,
+      "abilityName": "Lightweight Construction -3",
+      "crew": "12+5",
+      "cost": "varies",
+      "weapons": [
+        {
+          "name": "2× Dual Linked Heavy MG",
+          "dmg": "2d10+1",
+          "ap": 4,
+          "rof": 3,
+          "rng": "50/100/200",
+          "mount": "Turrets"
+        },
+        {
+          "name": "Torpedoes",
+          "dmg": "5d10",
+          "ap": 4,
+          "rof": 1,
+          "rng": "50/100/200",
+          "mount": "Fixed Front"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "name": "Rowboat",
+      "size": 0,
+      "frame": "civilian",
+      "locomotion": "water",
+      "handling": 0,
+      "topSpeed": 4,
+      "toughness": 8,
+      "armour": 1,
+      "forgeBase": 3,
+      "abilityAdj": 4,
+      "abilityName": "Reinforced Hull +4",
+      "crew": "1+3",
+      "cost": "100",
+      "weapons": [],
+      "notes": ""
+    },
+    {
+      "name": "Speed Boat",
+      "size": 4,
+      "frame": "civilian",
+      "locomotion": "water",
+      "handling": 0,
+      "topSpeed": 60,
+      "toughness": 10,
+      "armour": 1,
+      "forgeBase": 7,
+      "abilityAdj": 2,
+      "abilityName": "Reinforced Hull +2",
+      "crew": "1+3",
+      "cost": "25K",
+      "weapons": [],
+      "notes": ""
+    },
+    {
+      "name": "Small Yacht",
+      "size": 8,
+      "frame": "civilian",
+      "locomotion": "water",
+      "handling": -1,
+      "topSpeed": 20,
+      "toughness": 14,
+      "armour": 2,
+      "forgeBase": 11,
+      "abilityAdj": 1,
+      "abilityName": "Reinforced Hull +1",
+      "crew": "2+6",
+      "cost": "500K+",
+      "weapons": [],
+      "notes": ""
+    }
+  ]
+}
