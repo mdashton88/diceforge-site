@@ -650,7 +650,7 @@ function startDrag(e,type,id,label){e.preventDefault();Audio.init();var pt=getXY
 function onMove(e){if(!drag.active||!drag.ghost)return;if(e.cancelable)e.preventDefault();var pt=getXY(e);var bay=document.getElementById(drag.type==='mod'?'modBay':'weaponBay');if(bay){var r=bay.getBoundingClientRect();var inside=pt.x>=r.left&&pt.x<=r.right&&pt.y>=r.top&&pt.y<=r.bottom;bay.classList.toggle('drag-over',inside);drag.ghost.classList.toggle('near-target',!inside&&pt.x>=r.left-80&&pt.x<=r.right+80&&pt.y>=r.top-80&&pt.y<=r.bottom+80)}drag.ghost.style.left=pt.x+'px';drag.ghost.style.top=pt.y+'px'}
 function onEnd(e){document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onEnd);document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onEnd);document.removeEventListener('touchcancel',onEnd);if(drag.ghost)drag.ghost.remove();document.querySelectorAll('.dragging').forEach(function(el){el.classList.remove('dragging')});var pt=getXY(e);var bay=document.getElementById(drag.type==='mod'?'modBay':'weaponBay');if(bay){var r=bay.getBoundingClientRect();if(pt.x>=r.left&&pt.x<=r.right&&pt.y>=r.top&&pt.y<=r.bottom){if(drag.type==='mod')dropMod(drag.id);else dropWeapon(drag.id);bay.classList.remove('impact');void bay.offsetWidth;bay.classList.add('impact')}bay.classList.remove('drag-over')}drag={active:false,type:null,id:null,ghost:null}}
 function dropMod(id){var m=findMod(id);var max=m.max==='U'?99:m.max==='frame'?maxArmorTakes():m.max;var cur=S.mods[id]||0;
-  if(id==='inc_speed'&&S.mods.reduced_speed)return;if(id==='reduced_speed'&&S.mods.inc_speed)return;
+  if(id==='improved_speed'&&S.mods.underpowered)return;if(id==='underpowered'&&S.mods.improved_speed)return;
   if(id==='exposed'&&S.mods.sealed)return;if(id==='sealed'&&S.mods.exposed)return;
   if(id==='fwd'&&S.loco!=='wheeled')return;if(id==='road_vehicle'&&S.loco!=='wheeled')return;if(id==='jump_jets'&&!isWalker())return;if(id==='tandem_pilots'&&!isWalker())return;
   if(cur<max){pushUndo();S.mods[id]=cur+1;Audio.clunk();renderModBay(id);renderStats();renderOutput()}}
@@ -676,8 +676,8 @@ function renderFrameInfo(){var f=getFrame(S.size);var ref=SIZE_REF[S.size]||{len
     +'<div class="frame-stat"><div class="fs-label">Wounds</div><div class="fs-value">'+f.wounds+'</div></div>'
     +'<div class="frame-stat"><div class="fs-label">Crew</div><div class="fs-value">'+f.crew+'</div></div>'
     +'<div class="frame-stat"><div class="fs-label">Energy</div><div class="fs-value">'+f.energy+' days</div></div>'
-    +'<div class="frame-stat"><div class="fs-label">Base Mods</div><div class="fs-value">'+(S.size*f.modMult+f.compactBonus)+'</div></div>'
-    +'<div class="frame-stat"><div class="fs-label">Frame Cost</div><div class="fs-value">$'+fmtC(f.costMult*S.size)+'</div></div></div>'}
+    +'<div class="frame-stat"><div class="fs-label">Base Mods</div><div class="fs-value">'+f.modSlots+'</div></div>'
+    +'<div class="frame-stat"><div class="fs-label">Frame Cost</div><div class="fs-value">$'+fmtC(f.costBase)+'</div></div></div>'}
 
 function renderModCatalogue(){var el=document.getElementById('modCatalogue'),cats={};
   var q=(document.getElementById('modSearch').value||'').toLowerCase();
@@ -786,7 +786,7 @@ function renderStats(){var f=getFrame(S.size),used=calcModsUsed(),gained=calcMod
 
 function renderOutput(){var p=document.getElementById('outputContent'),f=getFrame(S.size);
   var loco=LOCOS.find(function(l){return l.id===S.loco});var spd=calcSpeed();
-  var used=calcModsUsed(),gained=calcModsGained(),left=((S.size*f.modMult+f.compactBonus)+gained)-used;
+  var used=calcModsUsed(),gained=calcModsGained(),left=(f.modSlots+gained)-used;
   var notes=[];MODS.forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'× '+m.name:m.name)});
   var wl=[];S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed Front':w.mount==='turret'?'Turret':'Pintle';
     wl.push(wp.name+' ('+ml+'): Range '+wp.range+', Damage '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof+(wp.notes?', '+wp.notes:''))}});
@@ -795,11 +795,11 @@ function renderOutput(){var p=document.getElementById('outputContent'),f=getFram
   if(loco)special.push(loco.name+': '+loco.notes);
   if(isWalker())special.push('Piloting skill. Parry 2 + ½ Piloting + Handling. Fighting = lower of Piloting/Fighting. Always armed (Str '+walkerStr()+' damage, HW).');
   if(S.mods.shields)special.push('Shields: '+Math.floor(calcWounds()/2)+' charges, Soak with Electronics.');
-  if(S.mods.reactor)special.push('Reactor: Energy ×10. Locomotion Crit on odd die = explosion.');
+  if(S.mods.fusion_core)special.push('Fusion Core: Energy ×8. Locomotion Crit 1-2 on d6 = core breach.');
   if(S.mods.stabilizer)special.push('Stabilizer: No Unstable Platform penalty.');
   if(S.mods.targeting)special.push('Targeting: -2 Shooting penalties.');
   if(S.mods.submersible)special.push('Submersible'+(S.mods.submersible>1?' (Deep Dive)':'')+': Submerge as action. -4 to detect when submerged.');
-  if(S.mods.composite_armor)special.push('Composite Armour: Advanced armour composition.');
+  if(S.mods.composite_layering)special.push('Composite Layering: Reactive tiles and layered ceramics.');
   if(S.armourTech>0){var ati=AT_INFO[S.armourTech];special.push(ati.name+' Armour Technology: +'+S.armourTech+' Armour. Cost ×'+ati.cost+'.'); }
   if(S.mods.road_vehicle)special.push('Road Vehicle: Speed '+calcRoadSpeed()+' ('+speedMPH(calcRoadSpeed())+' MPH) on paved roads.');
   if(S.mods.high_perf_engine)special.push('High-Performance Engine'+(S.mods.high_perf_engine>1?' ×'+S.mods.high_perf_engine:'')+': Halve Energy per take.');
@@ -830,7 +830,7 @@ function renderOutput(){var p=document.getElementById('outputContent'),f=getFram
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}
 
 function copyBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco});var spd=calcSpeed();
-  var left=((S.size*f.modMult+f.compactBonus)+calcModsGained())-calcModsUsed();
+  var left=(f.modSlots+calcModsGained())-calcModsUsed();
   var notes=[],wl=[];
   MODS.forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'x '+m.name:m.name)});
   S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed':w.mount==='turret'?'Turret':'Pintle';wl.push('  * '+wp.name+' ('+ml+'): '+wp.range+', '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof)}});
@@ -979,16 +979,16 @@ function switchTab(tab){document.querySelectorAll('.tab').forEach(function(t){t.
 function newVehicle(){S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,frameType:'civilian',loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:S.saved,armourTech:0,specials:[],customSpecial:''};document.getElementById('vName').value=S.name;document.getElementById('vDesc').value='';document.getElementById('vNotes').value='';document.getElementById('sizeSlider').value=6;var ci=document.getElementById('customSpecialInput');if(ci)ci.value='';clearImage();undoStack=[];redoStack=[];renderAll()}
 function duplicateVehicle(){S.name=(S.name||'Vehicle')+' (copy)';document.getElementById('vName').value=S.name;saveVehicle();Audio.clunk()}
 function printStatBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco}),spd=calcSpeed();
-  var used=calcModsUsed(),gained=calcModsGained(),left=((S.size*f.modMult+f.compactBonus)+gained)-used;
+  var used=calcModsUsed(),gained=calcModsGained(),left=(f.modSlots+gained)-used;
   var notes=[];MODS.forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'× '+m.name:m.name)});
   var wl=[];S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed Front':w.mount==='turret'?'Turret':'Pintle';wl.push(wp.name+' ('+ml+'): Range '+wp.range+', Damage '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof+(wp.notes?', '+wp.notes:''))}});
   var special=[];
   if(isHeavyArmor())special.push('Heavy Armor');if(loco)special.push(loco.name+': '+loco.notes);
   if(isWalker())special.push('Str '+walkerStr()+' melee (HW).');
   if(S.mods.shields)special.push('Shields: '+Math.floor(calcWounds()/2)+' charges.');
-  if(S.mods.reactor)special.push('Reactor.');if(S.mods.stabilizer)special.push('Stabilizer.');if(S.mods.targeting)special.push('Targeting System.');
+  if(S.mods.fusion_core)special.push('Fusion Core.');if(S.mods.stabilizer)special.push('Stabilizer.');if(S.mods.targeting)special.push('Targeting System.');
   if(S.mods.submersible)special.push('Submersible'+(S.mods.submersible>1?' (Deep)':'')+'.');
-  if(S.mods.composite_armor)special.push('Composite Armour.');
+  if(S.mods.composite_layering)special.push('Composite Layering.');
   if(S.armourTech>0){var ati=AT_INFO[S.armourTech];special.push(ati.name+' Armour (+'+S.armourTech+').'); }
   if(S.mods.road_vehicle)special.push('Road Speed '+calcRoadSpeed()+' ('+speedMPH(calcRoadSpeed())+' MPH).');
   if(S.mods.high_perf_engine)special.push('High-Perf Engine'+(S.mods.high_perf_engine>1?' ×'+S.mods.high_perf_engine:'')+'. Halve Energy.');
@@ -1034,10 +1034,10 @@ function buildStatHTML(v){
   var special=[];
   if(isHeavyArmor())special.push('Heavy Armor');if(loco)special.push(loco.name);
   if(isWalker())special.push('Str '+walkerStr()+' melee (HW)');
-  if(S.mods.shields)special.push('Shields '+Math.floor(calcWounds()/2));if(S.mods.reactor)special.push('Reactor');
+  if(S.mods.shields)special.push('Shields '+Math.floor(calcWounds()/2));if(S.mods.fusion_core)special.push('Fusion Core');
   if(S.mods.stabilizer)special.push('Stabilizer');if(S.mods.targeting)special.push('Targeting');
   if(S.mods.submersible)special.push('Submersible'+(S.mods.submersible>1?' (Deep)':''));
-  if(S.mods.composite_armor)special.push('Composite Armour');
+  if(S.mods.composite_layering)special.push('Composite Layering');
   if(S.armourTech>0)special.push(AT_INFO[S.armourTech].name+' AT (+'+S.armourTech+')');
   if(S.mods.road_vehicle)special.push('Road Spd '+calcRoadSpeed()+' ('+speedMPH(calcRoadSpeed())+' MPH)');
   if(S.mods.high_perf_engine)special.push('Hi-Perf'+(S.mods.high_perf_engine>1?' ×'+S.mods.high_perf_engine:''));
