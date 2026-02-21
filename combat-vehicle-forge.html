@@ -319,12 +319,6 @@ var SIZE_REF={
 function getFrame(sz){
 var ft=S.frameType||'civilian';var loco=S.loco||'wheeled';
 var baseTough=5+sz;
-var airLocos=['vtol','turboprop','jet'];var waterLocos=['water_sail','water_turbo','water_jet'];
-if(airLocos.indexOf(loco)>=0)baseTough-=1;
-else if(waterLocos.indexOf(loco)>=0)baseTough-=2;
-if(ft==='rugged')baseTough=Math.ceil(baseTough*1.15);
-else if(ft==='military')baseTough=Math.ceil(baseTough*1.25);
-else if(ft==='futuristic')baseTough=Math.ceil(baseTough*1.5);
 var maxArmor=Math.max(1,Math.ceil(sz/2));var mods=Math.max(3,Math.floor(sz*2.5));
 var costMult=ft==='rugged'?1.5:ft==='military'?2.5:ft==='futuristic'?4:1;
 var cost=Math.round(1000*sz*sz*costMult);
@@ -353,7 +347,6 @@ var SPD_TABLE={1:4,2:8,3:16,4:25,5:40,6:60,7:80,8:100,9:120,10:160,11:200,12:250
 function speedMPH(r){return SPD_TABLE[r]||(r+'?')}
 
 var MODS=[
-  {id:'weak',name:'Weak',cat:'Drawbacks',max:5,mods:0,costFn:function(s){return -4000*s},desc:'-1 base Toughness per take.'},
   {id:'unmanned',name:'Unmanned',cat:'Drawbacks',max:1,mods:-2,costFn:function(s){return -5000*s},desc:'No crew. Requires Remote Operator or Machine Intelligence.'},
   {id:'open_crew',name:'Open Crew',cat:'Drawbacks',max:3,mods:-1,costFn:function(s){return -5000*s},desc:'Take 1: Medium Cover (-4). Take 2: Light Cover (-2). Take 3: No Cover.'},
   {id:'temperamental',name:'Temperamental',cat:'Drawbacks',max:2,mods:-2,costFn:function(s){return -10000*s},desc:'Repair at -1 per take. Snake eyes on vehicle roll: random system shorts for 1 round.'},
@@ -365,7 +358,6 @@ var MODS=[
   {id:'underpowered',name:'Underpowered',cat:'Drawbacks',max:3,mods:-1,costFn:function(s){return -8000*s},desc:'-1 Speed Rating per take.'},
   {id:'bone_shaker',name:'Bone Shaker',cat:'Drawbacks',max:1,mods:-1,costFn:function(s){return -8000*s},desc:'Unstable Platform penalty is -3 instead of -2.'},
   {id:'death_trap',name:'Death Trap',cat:'Drawbacks',max:1,mods:-1,costFn:function(s){return -8000*s},desc:'Full collision damage. Eject at -2. Crew take +2 damage from penetrating hits.'},
-  {id:'tough',name:'Tough',cat:'Defensive Systems',max:5,mods:0,costFn:function(s){return 5000*s},desc:'+1 base Toughness per take.'},
   {id:'machine_intel',name:'Machine Intelligence',cat:'Core Systems',max:3,mods:2,costFn:function(s){return 8000*s},desc:'AI companion. 1st: d6+Wild Die. 2nd: d8. 3rd: d10 + one free action per round.'},
   {id:'enhanced_sensors',name:'Enhanced Sensors',cat:'Core Systems',max:1,mods:1,costFn:function(){return 12000},desc:'30x magnification, ignore 2 Illumination, +1 Notice.'},
   {id:'tactical_relay',name:'Tactical Relay',cat:'Core Systems',max:1,mods:2,costFn:function(){return 15000},desc:'Share sensory feeds with linked vehicles. +1 Battle rolls.'},
@@ -643,9 +635,8 @@ function redo(){if(!redoStack.length)return;undoStack.push(snapState());var next
 
 function modSlots(m,sz){if(m.mods==='half')return Math.ceil(sz/2);if(m.mods==='halfneg')return -Math.ceil(sz/2);if(m.mods==='size')return sz;if(m.mods==='sizehalf')return Math.ceil(sz/2);if(m.mods==='comfort'){var tk=S.mods.comfort||0;return tk<=1?2:tk===2?3:4}return m.mods}
 function weaponMountMods(w,mount){var mc=w.mods;if(mount==='fixed')mc=Math.ceil(mc/2);if(mount==='turret')mc=mc*2;return mc}
-function maxArmorTakes(){var f=getFrame(S.size);return Math.floor((f.maxArmor-f.baseTough)/2)}
 function calcStructural(){var base=S.size+5;return Math.max(1,base+S.toughLevel*toughStep())}
-function calcTough(){var s=calcStructural();if(S.mods.weak)s-=1*S.mods.weak;if(S.mods.tough)s+=1*S.mods.tough;return Math.max(0,s)}
+function calcTough(){return Math.max(1,calcStructural())}
 function calcArmourValue(){return Math.max(0,armourBase()+S.armourLevel*armourStep())}
 function calcTotalTough(){return calcTough()+calcArmourValue()}
 function calcWounds(){var f=getFrame(S.size),w=f.wounds;if(S.mods.weak_frame)w-=S.mods.weak_frame;return Math.max(1,w)}
@@ -717,7 +708,7 @@ var drag={active:false,type:null,id:null,ghost:null};
 function startDrag(e,type,id,label){e.preventDefault();Audio.init();var pt=getXY(e);drag={active:true,type:type,id:id,ghost:null};var ghost=document.createElement('div');ghost.className='drag-ghost';ghost.textContent=label;ghost.style.left=pt.x+'px';ghost.style.top=pt.y+'px';document.body.appendChild(ghost);drag.ghost=ghost;var src=e.target.closest('.drag-item')||e.target.closest('.weapon-drag-item');if(src)src.classList.add('dragging');document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onEnd);document.addEventListener('touchmove',onMove,{passive:false});document.addEventListener('touchend',onEnd);document.addEventListener('touchcancel',onEnd)}
 function onMove(e){if(!drag.active||!drag.ghost)return;if(e.cancelable)e.preventDefault();var pt=getXY(e);var bay=document.getElementById(drag.type==='mod'?'modBay':'weaponBay');if(bay){var r=bay.getBoundingClientRect();var inside=pt.x>=r.left&&pt.x<=r.right&&pt.y>=r.top&&pt.y<=r.bottom;bay.classList.toggle('drag-over',inside);drag.ghost.classList.toggle('near-target',!inside&&pt.x>=r.left-80&&pt.x<=r.right+80&&pt.y>=r.top-80&&pt.y<=r.bottom+80)}drag.ghost.style.left=pt.x+'px';drag.ghost.style.top=pt.y+'px'}
 function onEnd(e){document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onEnd);document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onEnd);document.removeEventListener('touchcancel',onEnd);if(drag.ghost)drag.ghost.remove();document.querySelectorAll('.dragging').forEach(function(el){el.classList.remove('dragging')});var pt=getXY(e);var bay=document.getElementById(drag.type==='mod'?'modBay':'weaponBay');if(bay){var r=bay.getBoundingClientRect();if(pt.x>=r.left&&pt.x<=r.right&&pt.y>=r.top&&pt.y<=r.bottom){if(drag.type==='mod')dropMod(drag.id);else dropWeapon(drag.id);bay.classList.remove('impact');void bay.offsetWidth;bay.classList.add('impact')}bay.classList.remove('drag-over')}drag={active:false,type:null,id:null,ghost:null}}
-function dropMod(id){var m=findMod(id);var max=m.max==='U'?99:m.max==='frame'?maxArmorTakes():m.max;var cur=S.mods[id]||0;
+function dropMod(id){var m=findMod(id);var max=m.max==='U'?99:m.max;var cur=S.mods[id]||0;
   if(id==='improved_speed'&&S.mods.underpowered)return;if(id==='underpowered'&&S.mods.improved_speed)return;
   if(id==='exposed'&&S.mods.sealed)return;if(id==='sealed'&&S.mods.exposed)return;
   if(id==='fwd'&&S.loco!=='wheeled')return;if(id==='road_vehicle'&&S.loco!=='wheeled')return;if(id==='jump_jets'&&!isWalker())return;if(id==='tandem_pilots'&&!isWalker())return;
