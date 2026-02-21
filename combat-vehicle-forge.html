@@ -6,7 +6,7 @@
 <title>Vehicle Forge — DiceForge Studios</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-:root{--bg-deep:#0E0C0A;--bg-dark:#141210;--bg-card:#1A1816;--bg-panel:#201E1A;--border:#3A3530;--border-light:#4A4540;--accent:#C4A44A;--accent-dim:#C4A44A40;--accent-glow:#C4A44A20;--text:#D4C8B0;--text-bright:#EDE4D4;--text-dim:#8A7A60;--green:#5A9A5A;--red:#8C3030;--red-bright:#B04040;--blue:#4A7A9A;--orange:#B07830}
+:root{--bg-deep:#0E0C0A;--bg-dark:#141210;--bg-card:#1A1816;--bg-panel:#201E1A;--border:#3A3530;--border-light:#4A4540;--accent:#C4A44A;--accent-dim:#C4A44A40;--accent-glow:#C4A44A20;--text:#DDD0B8;--text-bright:#F0E8D8;--text-dim:#9A8A68;--green:#5A9A5A;--red:#8C3030;--red-bright:#B04040;--blue:#4A7A9A;--orange:#B07830}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-size:15px;line-height:1.6}
 .tool-nav{display:flex;gap:0;background:#141210;border-bottom:1px solid #3A3530;padding:0 12px;font-family:'Cinzel',serif;flex-wrap:wrap}
@@ -207,6 +207,7 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
       <div class="tab" data-tab="specials" onclick="switchTab('specials')">Special</div>
       <div class="tab" data-tab="output" onclick="switchTab('output')">Stat Block</div>
       <div class="tab" data-tab="help" onclick="switchTab('help')">Reference Guide</div>
+      <div class="tab" data-tab="settings" onclick="switchTab('settings')" style="margin-left:auto;font-size:9px">⚙ SETTINGS</div>
     </div>
     <div class="panel active" id="panel-mods"><div class="dnd-layout"><div class="dnd-column"><h3>Modifications Catalogue</h3><input type="text" class="search-bar" id="modSearch" placeholder="Search modifications..." oninput="renderModCatalogue()"><div id="modCatalogue"></div></div><div class="dnd-column"><h3>Installed Modifications</h3><div class="drop-bay" id="modBay"><div class="empty-bay">Drag modifications here to install them</div></div></div></div></div>
     <div class="panel" id="panel-weapons"><div class="dnd-layout"><div class="dnd-column"><h3>Vehicular Weapons</h3><div id="eraFilter" style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px"></div><input type="text" class="search-bar" id="weaponSearch" placeholder="Search weapons..." oninput="renderWeaponCatalogue()"><div id="weaponCatalogue"></div><div style="margin-top:12px;padding-top:8px;border-top:1px solid var(--border)"><button class="header-btn" onclick="toggleCustomForm()" style="width:100%;text-align:center">+ Add Custom Weapon</button><div id="customForm" style="display:none;margin-top:8px"></div></div></div><div class="dnd-column"><h3>Weapon Hardpoints</h3><div class="mount-tabs"><div class="mount-tab active" data-mount="pintle" onclick="switchMount('pintle')">Pintle</div><div class="mount-tab" data-mount="fixed" onclick="switchMount('fixed')">Fixed (½)</div><div class="mount-tab" data-mount="turret" onclick="switchMount('turret')">Turret (×2)</div></div><div class="drop-bay" id="weaponBay"><div class="empty-bay">Drag weapons here to mount them</div></div></div></div></div>
@@ -223,6 +224,44 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
     </div>
     <div class="panel" id="panel-output"><div id="outputContent"></div></div>
     <div class="panel" id="panel-help"><div style="display:flex;gap:8px;margin-bottom:8px"><input type="text" class="search-bar help-search" id="helpSearch" placeholder="Search reference guide..." oninput="filterHelp()" style="flex:1;margin:0"><button class="btn" onclick="popOutHelp()" title="Open in new window" style="white-space:nowrap;padding:6px 14px">⧉ Pop Out</button></div><div id="helpContent"></div></div>
+    <div class="panel" id="panel-settings">
+      <div style="max-width:600px">
+        <h2 style="margin-bottom:16px;color:var(--accent)">Display Settings</h2>
+        <div style="margin-bottom:20px">
+          <label style="display:block;font-size:13px;color:var(--text-bright);margin-bottom:6px">Text Brightness</label>
+          <input type="range" id="settBrightness" min="40" max="100" value="78" oninput="applySettings()" style="width:100%">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim)"><span>Dim</span><span>Bright</span></div>
+        </div>
+        <div style="margin-bottom:20px">
+          <label style="display:block;font-size:13px;color:var(--text-bright);margin-bottom:6px">Text Size</label>
+          <input type="range" id="settFontSize" min="11" max="18" value="13" oninput="applySettings()" style="width:100%">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim)"><span>Compact</span><span>Large</span></div>
+        </div>
+        <div style="margin-bottom:20px">
+          <label style="display:block;font-size:13px;color:var(--text-bright);margin-bottom:6px">Text Warmth</label>
+          <input type="range" id="settWarmth" min="0" max="100" value="50" oninput="applySettings()" style="width:100%">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim)"><span>Cool (Silver)</span><span>Warm (Gold)</span></div>
+        </div>
+        <button class="header-btn" onclick="resetSettings()" style="margin-bottom:24px">Reset to Defaults</button>
+        <h2 style="margin-bottom:16px;color:var(--accent);padding-top:16px;border-top:1px solid var(--border)">Storage</h2>
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.6">
+          <p>Vehicles and settings are saved to your browser's local storage. Data persists between sessions but is specific to this browser and device.</p>
+          <div id="storageInfo" style="margin-top:12px;padding:12px;background:var(--bg-deep);border:1px solid var(--border)"></div>
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <button class="header-btn" onclick="exportAllData()">Export All Data</button>
+            <button class="header-btn" onclick="document.getElementById('importAllInput').click()">Import Data</button>
+            <input type="file" id="importAllInput" accept=".json" style="display:none" onchange="importAllData(event)">
+            <button class="header-btn" onclick="if(confirm('Clear ALL saved vehicles and settings? This cannot be undone.')){localStorage.removeItem('diceforge-cvf');localStorage.removeItem('diceforge-cvf-settings');localStorage.removeItem('diceforge-cvf-extensions');localStorage.removeItem('diceforge-cvf-custom-weapons');location.reload()}" style="color:var(--red-bright)">Clear All Data</button>
+          </div>
+        </div>
+        <h2 style="margin-bottom:16px;color:var(--accent);padding-top:16px;margin-top:24px;border-top:1px solid var(--border)">Audio</h2>
+        <div style="margin-bottom:20px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-bright);cursor:pointer">
+            <input type="checkbox" id="settAudio" checked onchange="applySettings()" style="width:16px;height:16px"> Enable click and drop sounds
+          </label>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <script>
@@ -1112,6 +1151,63 @@ function handleImageDrop(e){var files=e.dataTransfer.files;if(files.length>0){va
 // ═══ POP-OUT HELP ═══
 function popOutHelp(){var w=window.open('','Vehicle Forge Reference','width=800,height=600');var content=document.getElementById('helpContent');if(w&&content){w.document.write('<html><head><title>Vehicle Forge Reference</title><style>body{background:#141210;color:#D4C8B0;font-family:Crimson Pro,serif;padding:20px;line-height:1.6}h3{color:#C4A44A}code{background:#1A1816;padding:2px 6px}</style></head><body>'+content.innerHTML+'</body></html>');w.document.close()}}
 
+// ═══ SETTINGS ═══
+var dfSettings={brightness:78,fontSize:13,warmth:50,audio:true};
+try{var ss=localStorage.getItem('diceforge-cvf-settings');if(ss)dfSettings=JSON.parse(ss)}catch(e){}
+function applySettings(){
+  var b=document.getElementById('settBrightness');if(b)dfSettings.brightness=+b.value;
+  var f=document.getElementById('settFontSize');if(f)dfSettings.fontSize=+f.value;
+  var w=document.getElementById('settWarmth');if(w)dfSettings.warmth=+w.value;
+  var a=document.getElementById('settAudio');if(a)dfSettings.audio=a.checked;
+  var pct=dfSettings.brightness/100;
+  var warmth=dfSettings.warmth/100;
+  var r=Math.round(180+(warmth*40))*pct;
+  var g=Math.round(170+(warmth*20))*pct;
+  var bl=Math.round(160-(warmth*30))*pct;
+  document.documentElement.style.setProperty('--text','rgb('+Math.round(r)+','+Math.round(g)+','+Math.round(bl)+')');
+  var rb=Math.min(255,Math.round(r*1.2));var gb=Math.min(255,Math.round(g*1.15));var bb=Math.min(255,Math.round(bl*1.1));
+  document.documentElement.style.setProperty('--text-bright','rgb('+rb+','+gb+','+bb+')');
+  var rd=Math.round(r*0.6);var gd=Math.round(g*0.55);var bd=Math.round(bl*0.5);
+  document.documentElement.style.setProperty('--text-dim','rgb('+rd+','+gd+','+bd+')');
+  document.documentElement.style.fontSize=dfSettings.fontSize+'px';
+  localStorage.setItem('diceforge-cvf-settings',JSON.stringify(dfSettings));
+  renderStorageInfo()}
+function resetSettings(){dfSettings={brightness:78,fontSize:13,warmth:50,audio:true};
+  document.getElementById('settBrightness').value=78;
+  document.getElementById('settFontSize').value=13;
+  document.getElementById('settWarmth').value=50;
+  document.getElementById('settAudio').checked=true;
+  applySettings()}
+function renderStorageInfo(){var el=document.getElementById('storageInfo');if(!el)return;
+  var vehicles=0;try{var sv=localStorage.getItem('diceforge-cvf');if(sv)vehicles=JSON.parse(sv).length}catch(e){}
+  var exts=extensions.length;
+  var total=0;for(var k in localStorage){if(k.indexOf('diceforge')===0)total+=localStorage[k].length}
+  el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+    +'<div><strong>Saved Vehicles:</strong> '+vehicles+'</div>'
+    +'<div><strong>Extensions:</strong> '+exts+'</div>'
+    +'<div><strong>Storage Used:</strong> '+(total/1024).toFixed(1)+' KB</div>'
+    +'<div><strong>Storage Key:</strong> diceforge-cvf</div></div>'}
+function exportAllData(){var data={type:'diceforge-full-backup',version:'1.0',exported:new Date().toISOString(),
+  vehicles:S.saved,extensions:extensions,settings:dfSettings,customWeapons:customWeapons};
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;
+  a.download='diceforge-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(url)}
+function importAllData(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){
+  try{var data=JSON.parse(ev.target.result);
+    if(data.type==='diceforge-full-backup'){
+      if(data.vehicles){S.saved=data.vehicles;localStorage.setItem('diceforge-cvf',JSON.stringify(S.saved))}
+      if(data.extensions){extensions=data.extensions;saveExtensions();rebuildExtensionData()}
+      if(data.settings){dfSettings=data.settings;localStorage.setItem('diceforge-cvf-settings',JSON.stringify(dfSettings))}
+      if(data.customWeapons){customWeapons=data.customWeapons;localStorage.setItem('diceforge-cvf-custom-weapons',JSON.stringify(customWeapons))}
+      renderAll();applySettings();alert('Backup restored successfully!')}
+    else{alert('Not a valid DiceForge backup file.')}}
+  catch(err){alert('Error: '+err.message)}};reader.readAsText(file);e.target.value=''}
+// Override Audio to respect settings
+var _audioClick=Audio.click.bind(Audio),_audioClunk=Audio.clunk.bind(Audio),_audioRemove=Audio.remove.bind(Audio);
+Audio.click=function(){if(dfSettings.audio)_audioClick()};
+Audio.clunk=function(){if(dfSettings.audio)_audioClunk()};
+Audio.remove=function(){if(dfSettings.audio)_audioRemove()};
+
 // ═══ NAV BAR ═══
 (function(){var tools=[{id:'foundry',label:'🏭 The Foundry',url:'foundry'},{id:'adventure-vault',label:'🎭 Adventure Vault',url:'adventure-vault'},{id:'character-vault',label:'👤 Character Vault',url:'character-vault'},{id:'cvf',label:'⚙ Vehicle Forge',url:'combat-vehicle-forge'},{id:'pa-forge',label:'🛡 Power Armour Forge',url:'pa-forge'}];
   var nav=document.createElement('div');nav.className='tool-nav';
@@ -1127,6 +1223,12 @@ document.getElementById('vDesc').addEventListener('input',function(e){S.desc=e.t
 document.getElementById('vNotes').addEventListener('input',function(e){S.notes=e.target.value||''});
 document.getElementById('helpContent').innerHTML=buildHelp();
 renderAll();
+// Apply saved settings
+document.getElementById('settBrightness').value=dfSettings.brightness;
+document.getElementById('settFontSize').value=dfSettings.fontSize;
+document.getElementById('settWarmth').value=dfSettings.warmth;
+document.getElementById('settAudio').checked=dfSettings.audio;
+applySettings();
 </script>
 </body>
 </html>
