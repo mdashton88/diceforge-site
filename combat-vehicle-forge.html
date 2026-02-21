@@ -264,7 +264,7 @@ else if(waterLocos.indexOf(loco)>=0)baseTough-=2;
 // Frame type multiplier
 if(ft==='rugged')baseTough=Math.ceil(baseTough*1.25);
 else if(ft==='military')baseTough=Math.ceil(baseTough*1.5);
-var maxArmor=Math.max(1,Math.ceil(sz/2));var mods=Math.floor(sz*2.5);
+var maxArmor=Math.max(1,Math.ceil(sz/2));var mods=Math.max(3,Math.floor(sz*2.5));
 var costMult=ft==='rugged'?1.5:ft==='military'?2.5:1;
 var cost=Math.round(1000*sz*sz*costMult);
 var cat,hand,wounds,crew,energy;
@@ -276,10 +276,7 @@ else if(sz<=25){cat='Capital';hand=-3;wounds=7;crew=100;energy=60}
 else{cat='Titan';hand=-4;wounds=8;crew=500;energy=100}
 return{cat:cat,hand:hand,baseTough:baseTough,maxArmor:maxArmor,wounds:wounds,crew:crew,energy:energy,modSlots:mods,costBase:cost,frameType:ft,compactBonus:0}};
 
-  if(sz<=11)return{cat:'Huge',hand:-1,baseTough:15,maxArmor:40,wounds:5,crew:5,energy:15,modMult:3,costMult:50000,compactBonus:0};
-  return{cat:'Gargantuan',hand:-2,baseTough:20,maxArmor:50,wounds:6,crew:50,energy:30,modMult:4,costMult:1000000,compactBonus:0};}
-
-var LOCOS=[
+  var LOCOS=[
   {id:'wheeled',name:'Wheeled',speed:4,costMult:1000,notes:'Standard wheels.',group:'ground'},
   {id:'tracked',name:'Tracked',speed:3,costMult:5000,notes:'Ignores Difficult Ground.',group:'ground'},
   {id:'hover',name:'Hover',speed:5,costMult:10000,notes:'Ignores low obstacles and water.',group:'ground'},
@@ -718,7 +715,7 @@ function renderFrameInfo(){var f=getFrame(S.size);var ref=SIZE_REF[S.size]||{len
     +'<div class="frame-stat"><div class="fs-label">Wounds</div><div class="fs-value">'+f.wounds+'</div></div>'
     +'<div class="frame-stat"><div class="fs-label">Crew</div><div class="fs-value">'+f.crew+'</div></div>'
     +'<div class="frame-stat"><div class="fs-label">Energy</div><div class="fs-value">'+f.energy+' days</div></div>'
-    +'<div class="frame-stat"><div class="fs-label">Base Mods</div><div class="fs-value">'+(S.size*f.modMult+f.compactBonus)+'</div></div>'
+    +'<div class="frame-stat"><div class="fs-label">Base Mods</div><div class="fs-value">'+(f.modSlots)+'</div></div>'
     +'<div class="frame-stat"><div class="fs-label">Frame Cost</div><div class="fs-value">$'+fmtC(f.costMult*S.size)+'</div></div></div>'}
 
 function renderModCatalogue(){var el=document.getElementById('modCatalogue'),cats={};
@@ -819,7 +816,7 @@ function addCustomWeapon(){var n=document.getElementById('cw_name').value.trim()
   customWeapons.push(w);localStorage.setItem('diceforge-cvf-custom-weapons',JSON.stringify(customWeapons));
   Audio.clunk();document.getElementById('customForm').style.display='none';renderEraFilter();renderWeaponCatalogue()}
 // ═══ STATS & OUTPUT ═══
-function renderStats(){var f=getFrame(S.size),used=calcModsUsed(),gained=calcModsGained(),total=(S.size*f.modMult+f.compactBonus)+gained,left=total-used;var spd=calcSpeed();var rspd=calcRoadSpeed();var spdLabel=rspd>spd?'Off-Road':'Top Speed';var spdExtra=rspd>spd?'<div class="stat-box"><div class="stat-label">Road Speed</div><div class="stat-value">'+rspd+' ('+speedMPH(rspd)+' MPH)</div></div>':'';
+function renderStats(){var f=getFrame(S.size),used=calcModsUsed(),gained=calcModsGained(),total=(f.modSlots)+gained,left=total-used;var spd=calcSpeed();var rspd=calcRoadSpeed();var spdLabel=rspd>spd?'Off-Road':'Top Speed';var spdExtra=rspd>spd?'<div class="stat-box"><div class="stat-label">Road Speed</div><div class="stat-value">'+rspd+' ('+speedMPH(rspd)+' MPH)</div></div>':'';
   document.getElementById('statsGrid').innerHTML=
     '<div class="stat-box"><div class="stat-label">Toughness</div><div class="stat-value">'+calcTough()+' ('+calcArmor()+')</div></div>'
     +'<div class="stat-box"><div class="stat-label">Weight Class</div><div class="stat-value" style="color:var(--accent)">'+vehicleClassLabel()+'</div></div>'
@@ -836,7 +833,7 @@ function renderStats(){var f=getFrame(S.size),used=calcModsUsed(),gained=calcMod
 
 function renderOutput(){var p=document.getElementById('outputContent'),f=getFrame(S.size);
   var loco=LOCOS.find(function(l){return l.id===S.loco});var spd=calcSpeed();
-  var used=calcModsUsed(),gained=calcModsGained(),left=((S.size*f.modMult+f.compactBonus)+gained)-used;
+  var used=calcModsUsed(),gained=calcModsGained(),left=((f.modSlots)+gained)-used;
   var notes=[];getAllMods().forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'× '+m.name:m.name)});
   var wl=groupWeaponsForDisplay('full');
   var special=[];
@@ -881,7 +878,7 @@ function renderOutput(){var p=document.getElementById('outputContent'),f=getFram
 function esc(s){return s.replace(/&/g'&amp;').replace(/</g'&lt;').replace(/>/g'&gt;').replace(/\n/g'<br>')}
 
 function copyBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco});var spd=calcSpeed();
-  var left=((S.size*f.modMult+f.compactBonus)+calcModsGained())-calcModsUsed();
+  var left=((f.modSlots)+calcModsGained())-calcModsUsed();
   var notes=[],wl=[];
   getAllMods().forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'x '+m.name:m.name)});
   groupWeaponsForDisplay('compact').forEach(function(line){wl.push('  * '+line)});
@@ -1101,7 +1098,7 @@ function switchTab(tab){document.querySelectorAll('.tab').forEach(function(t){t.
 function newVehicle(){S={name:'Untitled Vehicle',desc:'',notes:'',image:'',size:6,frameType:'civilian',loco:'wheeled',mods:{},weapons:[],currentMount:'pintle',saved:S.saved,armourTech:0,specials:[],customSpecial:''};document.getElementById('vName').value=S.name;document.getElementById('vDesc').value='';document.getElementById('vNotes').value='';document.getElementById('sizeSlider').value=6;document.getElementById('customSpecialInput').value='';clearImage();undoStack=[];redoStack=[];renderAll()}
 function duplicateVehicle(){S.name=(S.name||'Vehicle')+' (copy)';document.getElementById('vName').value=S.name;saveVehicle();Audio.clunk()}
 function printStatBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco}),spd=calcSpeed();
-  var used=calcModsUsed(),gained=calcModsGained(),left=((S.size*f.modMult+f.compactBonus)+gained)-used;
+  var used=calcModsUsed(),gained=calcModsGained(),left=((f.modSlots)+gained)-used;
   var notes=[];getAllMods().forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'× '+m.name:m.name)});
   var wl=groupWeaponsForDisplay('full');
   var special=[];
