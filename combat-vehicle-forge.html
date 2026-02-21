@@ -787,12 +787,16 @@ function renderWeaponBay(animId){var bay=document.getElementById('weaponBay');
   bay.innerHTML=S.weapons.map(function(w,i){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(!wp)return '';
     var mc=weaponMountMods(wp,w.mount);var ml=w.mount==='fixed'?'Fixed Front':w.mount==='turret'?'Turret':'Pintle';
     return '<div class="weapon-bay-item '+(w.weaponId===animId&&i===S.weapons.length-1?'snap-in':'')+'">'
-      +'<div class="wbi-info"><div class="wbi-name">'+wp.name+'</div>'
+      +'<div class="wbi-info"><div class="wbi-name">'+wp.name+' <span style="color:var(--accent);font-weight:700;font-size:12px">Grade '+weaponGradeLabel(wp)+'</span></div>'
       +'<div class="wbi-stats">'+wp.range+' · '+wp.damage+' · AP '+wp.ap+' · '+wp.notes+'</div>'
-      +'<div class="wbi-mount"><span onclick="cycleMount('+i+')" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px" title="Click to change mount type">'+ml+'</span> · '+mc+' mod'+(mc!==1?'s':'')+' · $'+fmtN(wp.cost)+'</div></div>'
+      +'<div class="wbi-mount"><span onclick="cycleMount('+i+')" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px" title="Click to change mount type">'+ml+'</span> · '+mc+' mod'+(mc!==1?'s':'')+' · $'+fmtN(wp.cost)
+      +' <span style="margin-left:8px"><span onclick="dupeWeapon('+i+')" style="cursor:pointer;color:var(--accent);font-size:14px;padding:0 4px" title="Add another">+</span>'
+      +'<span onclick="removeWeapon('+i+')" style="cursor:pointer;color:#c44;font-size:14px;padding:0 4px" title="Remove one">\u2212</span></span>'
+      +'</div></div>'
       +'<span class="wbi-remove" onclick="removeWeapon('+i+')">&times;</span></div>'}).join('')}
 function switchMount(m){S.currentMount=m;document.querySelectorAll('.mount-tab').forEach(function(t){t.classList.toggle('active',t.dataset.mount===m)})}
 function removeWeapon(i){pushUndo();S.weapons.splice(i,1);Audio.remove();renderWeaponBay();renderStats();renderOutput()}
+function dupeWeapon(i){pushUndo();var w=S.weapons[i];S.weapons.splice(i+1,0,{weaponId:w.weaponId,mount:w.mount});Audio.clunk();renderWeaponBay(w.weaponId);renderStats();renderOutput()}
 function cycleMount(i){pushUndo();var order=['pintle','fixed','turret'];var cur=order.indexOf(S.weapons[i].mount);S.weapons[i].mount=order[(cur+1)%3];Audio.click();renderWeaponBay();renderStats();renderOutput()}
 function toggleCustomForm(){var el=document.getElementById('customForm');
   if(el.style.display==='none'){el.style.display='block';
