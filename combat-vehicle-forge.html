@@ -629,7 +629,7 @@ function modSlots(m,sz){if(m.mods==='half')return Math.ceil(sz/2);if(m.mods==='h
 function weaponMountMods(w,mount){var mc=w.mods;if(mount==='fixed')mc=Math.ceil(mc/2);if(mount==='turret')mc=mc*2;return mc}
 function maxArmorTakes(){var f=getFrame(S.size);return Math.floor((f.maxArmor-f.baseTough)/2)}
 function calcTough(){var f=getFrame(S.size),t=f.baseTough;if(S.mods.weak)t-=1*S.mods.weak;if(S.mods.tough)t+=1*S.mods.tough;return Math.max(0,t)}
-function calcArmor(){var f=getFrame(S.size),tierBonus=[1,2,3,4,6,8],hpPerTake=tierBonus[S.armourTech]||1,a=f.baseTough;if(S.mods.hull_plating)a+=hpPerTake*S.mods.hull_plating;if(S.mods.composite_layering)a+=3*S.mods.composite_layering;if(S.mods.reinforced_frame)a+=2*S.mods.reinforced_frame;return a}
+function calcArmor(){var t=calcTough(),tierBonus=[1,2,3,4,6,8],hpPerTake=tierBonus[S.armourTech]||1,a=t;if(S.mods.hull_plating)a+=hpPerTake*S.mods.hull_plating;if(S.mods.composite_layering)a+=3*S.mods.composite_layering;if(S.mods.reinforced_frame)a+=2*S.mods.reinforced_frame;return a}
 function calcWounds(){var f=getFrame(S.size),w=f.wounds;if(S.mods.weak_frame)w-=S.mods.weak_frame;return Math.max(1,w)}
 function calcHand(){var f=getFrame(S.size),h=f.hand;if(S.mods.improved_handling)h+=S.mods.improved_handling;if(S.mods.sluggish)h-=S.mods.sluggish;return h}
 function calcSpeed(){var loco=LOCOS.find(function(l){return l.id===S.loco});var s=loco?loco.speed:4;if(S.mods.improved_speed)s+=S.mods.improved_speed;if(S.mods.underpowered)s-=S.mods.underpowered;if(S.mods.high_perf_engine)s+=2*S.mods.high_perf_engine;return Math.max(1,s)}
@@ -895,14 +895,23 @@ function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g
 
 function copyBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco});var spd=calcSpeed();
   var left=(f.modSlots+calcModsGained())-calcModsUsed();
-  var notes=[],wl=[];
-  MODS.forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'x '+m.name:m.name)});
-  S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed':w.mount==='turret'?'Turret':'Pintle';wl.push('  * '+wp.name+' ('+ml+'): '+wp.range+', '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof)}});
+  var notes=[],wl=[],special=[];
+  MODS.forEach(function(m){if(S.mods[m.id]>0)notes.push(S.mods[m.id]>1?S.mods[m.id]+'\u00d7 '+m.name:m.name)});
+  S.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp){var ml=w.mount==='fixed'?'Fixed Front':w.mount==='turret'?'Turret':'Pintle';
+    var lk=w.linked||0;var lkTxt=lk===1?' \u00d72 Linked':lk>=3?' \u00d74 Linked':'';var lkBonus=lk===1?' (+1 Shooting, +2 damage)':lk>=3?' (+2 Shooting, +4 damage)':'';
+    wl.push('  \u2022 '+wp.name+lkTxt+' ('+ml+'): Range '+wp.range+', Damage '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof+(wp.notes?', '+wp.notes:'')+lkBonus)}});
+  if(isHeavyArmor())special.push('Heavy Armor.');
+  if(loco)special.push(loco.name+': '+loco.notes);
+  if(isWalker())special.push('Piloting skill. Parry 2 + \u00bd Piloting + Handling. Fighting = lower of Piloting/Fighting. Always armed (Str '+walkerStr()+' damage, HW).');
+  if(S.mods.shields)special.push('Shields: '+Math.floor(calcWounds()/2)+' charges, Soak with Electronics.');
+  if(S.armourTech>0){var ati=AT_INFO[S.armourTech];special.push(ati.name+' Armour Technology: +'+S.armourTech+' Armour. Cost \u00d7'+ati.cost+'.');}
   var t=S.name+'\n';if(S.desc)t+=S.desc+'\n';
-  t+='Size '+S.size+' ('+f.cat+'), '+loco.name+', Hand '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)\nTough '+calcTough()+' ('+calcArmor()+'), Wounds '+calcWounds()+', Crew '+f.crew+(isWalker()?', Str '+walkerStr():'')+'\nEnergy '+calcEnergy()+' days, Cost $'+fmtC(calcCost())+', Mods '+left+' remaining\n';
+  t+='Grade '+defenceGradeLabel()+' \u2014 Size '+S.size+' ('+f.cat+'), '+loco.name+', Handling '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)\n';
+  t+='Toughness: '+calcTough()+' ('+calcArmor()+')\nWounds: '+calcWounds()+'\nCrew: '+f.crew+(isWalker()?'\nStrength: '+walkerStr():'')+('\nEnergy: '+calcEnergy()+' days\nCost: $'+fmtC(calcCost())+', Mods '+left+' remaining\n');
   if(notes.length)t+='Mods: '+notes.join(', ')+'.\n';if(wl.length)t+='Weapons:\n'+wl.join('\n')+'\n';
-  if(isHeavyArmor())t+='Special: Heavy Armor.';if(isWalker())t+=' Walker rules apply.';
-  t+='\n— Built with DiceForge Vehicle Forge';
+  if(special.length)t+='Special: '+special.join(' ')+'\n';
+  if(S.notes)t+='GM Notes: '+S.notes+'\n';
+  t+='\u2014 Built with DiceForge Vehicle Forge';
   navigator.clipboard.writeText(t).then(function(){var btn=event.target;btn.textContent='Copied!';btn.style.borderColor='var(--green)';btn.style.color='var(--green)';setTimeout(function(){btn.textContent='Copy to Clipboard';btn.style.borderColor='';btn.style.color=''},1500)})}
 // ═══ COMPREHENSIVE HELP/REFERENCE PANEL ═══
 function buildHelp(){
