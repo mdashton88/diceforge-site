@@ -914,15 +914,35 @@ function buildHelp(){
   h+='</div>';
 
   // SECTION: Vehicle Frames
-  h+='<div class="help-section" data-help="frames size category normal large huge gargantuan toughness wounds crew energy mods cost"><h3>Vehicle Frames</h3>';
-  h+='<p>Every vehicle begins with a frame determined by its Size. The frame sets base Toughness, maximum Armor, Wounds, Crew capacity, Energy, available Mod slots, and base cost.</p>';
-  h+='<table><tr><th>Category</th><th>Size</th><th>Hand</th><th>Tough (Max)</th><th>Wounds</th><th>Crew</th><th>Energy</th><th>Mods</th><th>Cost</th></tr>';
-  h+='<tr><td>Normal</td><td>1–3</td><td>+1</td><td>5 (20)</td><td>3</td><td>1</td><td>3</td><td>Size×3</td><td>$10K×Size</td></tr>';
-  h+='<tr><td>Large</td><td>4–7</td><td>0</td><td>10 (30)</td><td>4</td><td>3</td><td>5</td><td>Size×3</td><td>$30K×Size</td></tr>';
-  h+='<tr><td>Huge</td><td>8–11</td><td>-1</td><td>15 (40)</td><td>5</td><td>5</td><td>15</td><td>Size×3</td><td>$50K×Size</td></tr>';
-  h+='<tr><td>Gargantuan</td><td>12–20</td><td>-2</td><td>20 (50)</td><td>6</td><td>50</td><td>30</td><td>Size×4</td><td>$1M×Size</td></tr>';
-  h+='</table><p><span class="rule-key">Heavy Armor:</span> All vehicles Size 4+ and all walkers have Heavy Armor — only Heavy Weapons can damage them.</p>';
-  h+='<p><span class="rule-key">Unused Mods</span> represent cargo space — approximately 125 cubic feet per unused slot.</p></div>';
+  h+='<div class="help-section" data-help="frames size category light medium heavy super-heavy capital titan toughness wounds crew energy mods cost frame type civilian rugged military locomotion aircraft watercraft"><h3>Vehicle Frames</h3>';
+  h+='<p>Every vehicle begins with a <span class="rule-key">Size</span> (1–30), a <span class="rule-key">Frame Type</span> (Civilian, Rugged, or Military), and a <span class="rule-key">Locomotion</span>. Together these determine base Toughness, Wounds, Handling, Mod slots, and cost. The table below shows base ranges for Civilian ground vehicles — Frame Type and Locomotion shift these values.</p>'
+  h+='<table><tr><th>Weight Class</th><th>Size</th><th>Hand</th><th>Base Tough</th><th>Wounds</th><th>Crew</th><th>Energy</th><th>Mods</th></tr>';
+  h+='<tr><td>Light</td><td>1–3</td><td>+1</td><td>6–8</td><td>3</td><td>1</td><td>3</td><td>3–7</td></tr>';
+  h+='<tr><td>Medium</td><td>4–7</td><td>0</td><td>9–12</td><td>4</td><td>1</td><td>5</td><td>10–17</td></tr>';
+  h+='<tr><td>Heavy</td><td>8–11</td><td>−1</td><td>13–16</td><td>5</td><td>5</td><td>15</td><td>20–27</td></tr>';
+  h+='<tr><td>Super-Heavy</td><td>12–20</td><td>−2</td><td>17–25</td><td>6</td><td>20</td><td>30</td><td>30–50</td></tr>';
+  h+='<tr><td>Capital</td><td>21–25</td><td>−3</td><td>26–30</td><td>7</td><td>100</td><td>60</td><td>52–62</td></tr>';
+  h+='<tr><td>Titan</td><td>26–30</td><td>−4</td><td>31–35</td><td>8</td><td>500</td><td>100</td><td>65–75</td></tr>';
+  h+='</table>';
+  h+='<p><span class="rule-key">Base Toughness</span> = 5 + Size, modified by Locomotion (Aircraft −1, Watercraft −2) and Frame Type (Civilian ×1, Rugged ×1.25, Military ×1.5). Armour added separately via Hull Plating and other mods.</p>';
+  h+='<p><span class="rule-key">Frame Cost</span> = $1K × Size² × Frame Multiplier (Civilian ×1, Rugged ×1.5, Military ×2.5).</p>';
+  h+='<p><span class="rule-key">Mod Slots</span> = Size × 2.5 (minimum 3). Compact Engineering grants additional slots.</p>';
+  h+='<p><span class="rule-key">Heavy Armor:</span> All vehicles Size 4+ and all walkers have Heavy Armor — only Heavy Weapons can damage them.</p>';
+  h+='<p><span class="rule-key">Unused Mods</span> represent cargo space — approximately 125 cubic feet per unused slot.</p>';
+  h+='<h4>Frame Types</h4>';
+  h+='<table><tr><th>Frame</th><th>Toughness</th><th>Cost</th><th>Examples</th></tr>';
+  h+='<tr><td>Civilian</td><td>×1.0</td><td>×1.0</td><td>Cars, civilian aircraft, fishing boats, freighters</td></tr>';
+  h+='<tr><td>Rugged</td><td>×1.25</td><td>×1.5</td><td>APCs, patrol boats, bombers, armoured cars</td></tr>';
+  h+='<tr><td>Military</td><td>×1.5</td><td>×2.5</td><td>Main battle tanks, warships, gunships</td></tr>';
+  h+='</table>';
+  h+='<h4>Locomotion Modifier</h4>';
+  h+='<table><tr><th>Type</th><th>Toughness</th><th>Reason</th></tr>';
+  h+='<tr><td>Ground / Tracked / Walker</td><td>+0</td><td>Heavy chassis, built to take punishment</td></tr>';
+  h+='<tr><td>Hover</td><td>+0</td><td>Reinforced skirt offsets lighter frame</td></tr>';
+  h+='<tr><td>Aircraft</td><td>−1</td><td>Airframes are lighter by necessity</td></tr>';
+  h+='<tr><td>Watercraft</td><td>−2</td><td>Hulls built to float, not resist fire</td></tr>';
+  h+='</table>';
+  h+='<p>The modifier is applied before the Frame Type multiplier: Base Toughness = ceil((5 + Size + Loco Mod) × Frame Mult).</p></div>';
 
   // SECTION: Size Reference
   h+='<div class="help-section" data-help="size reference length weight examples dimensions"><h3>Size Reference</h3>';
