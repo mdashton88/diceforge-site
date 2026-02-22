@@ -1485,7 +1485,7 @@ var _origClunk=Audio.clunk.bind(Audio),_origClick=Audio.click.bind(Audio),_origR
 Audio.clunk=function(){if(audioEnabled)_origClunk()};Audio.click=function(){if(audioEnabled)_origClick()};Audio.remove=function(){if(audioEnabled)_origRemove()};
 
 // ═══ NAV BAR ═══
-(function(){var tools=[{id:'foundry',label:'🏭 The Foundry',url:'foundry'},{id:'adventure-vault',label:'🎭 Adventure Vault',url:'adventure-vault'},{id:'character-vault',label:'👤 Character Vault',url:'character-vault'},{id:'cvf',label:'⚙ Vehicle Forge',url:'combat-vehicle-forge'},{id:'pa-forge',label:'🛡 Power Armour Forge',url:'pa-forge'}];
+(function(){var tools=[{id:'foundry',label:'🏭 The Foundry',url:'foundry'},{id:'adventure-vault',label:'🎭 Adventure Vault',url:'adventure-vault'},{id:'character-vault',label:'👤 Character Vault',url:'character-vault'},{id:'cvf',label:'⚙ Vehicle Forge',url:'vehicle-forge'},{id:'pa-forge',label:'🛡 Power Armour Forge',url:'pa-forge'}];
   var nav=document.createElement('div');nav.className='tool-nav';
   tools.forEach(function(t){var btn=document.createElement('button');btn.className='tool-nav-item'+(t.id==='cvf'?' active':'');btn.textContent=t.label;btn.onclick=function(){if(t.id!=='cvf')window.location.href=t.url};nav.appendChild(btn)});
   document.getElementById('toolNavContainer').appendChild(nav)})();

@@ -8,7 +8,7 @@ Deployed via Cloudflare Pages at [diceforgestudios.pages.dev](https://diceforges
 ```
 index.html                  Landing page — DiceForge Studios branding
 builder.html                Character Forge — free Savage Worlds character builder
-combat-vehicle-forge.html   Vehicle Forge — free Savage Worlds vehicle construction tool
+vehicle-forge.html   Vehicle Forge — free Savage Worlds vehicle construction tool
 vehicle-database.json       Vehicle database (47 SWADE core reference builds)
 vehicle-forge-manual.pdf    Vehicle Forge Companion Guide
 swade-core.js               Savage Worlds core rules data module
