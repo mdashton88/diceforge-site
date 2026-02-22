@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Forge — Free Savage Worlds Vehicle Builder | DiceForge Studios</title>
+<meta name="description" content="Free browser-based vehicle construction tool for Savage Worlds. Build anything from a bicycle to a battleship in minutes. 111 weapons, 47 reference builds, export to Fantasy Grounds, Foundry VTT, and more.">
+<meta property="og:title" content="Vehicle Forge — Free Savage Worlds Vehicle Builder">
+<meta property="og:description" content="Build any vehicle for Savage Worlds in minutes. 111 weapons, 47 reference builds, three export formats. Free, no login required.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://diceforgestudios.pages.dev/vehicle-forge-landing">
+<meta property="og:site_name" content="DiceForge Studios">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Vehicle Forge — Free Savage Worlds Vehicle Builder">
+<meta name="twitter:description" content="Build any vehicle for Savage Worlds in minutes. Free, browser-based, no login. Export to Fantasy Grounds, Foundry VTT, and print.">
+<link rel="canonical" href="https://diceforgestudios.pages.dev/vehicle-forge-landing">
+<meta name="keywords" content="Savage Worlds, vehicle builder, vehicle creator, SWADE, vehicle combat, Fantasy Grounds, Foundry VTT, free RPG tools, DiceForge Studios, vehicle forge, mech builder, starship builder">
+<meta name="robots" content="index, follow">
+<meta name="author" content="DiceForge Studios">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Vehicle Forge",
+  "applicationCategory": "GameApplication",
+  "operatingSystem": "Web browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "GBP"
+  },
+  "description": "Free browser-based vehicle construction tool for Savage Worlds. Build anything from a bicycle to a battleship with six sliders, 111 weapons, and three export formats.",
+  "url": "https://diceforgestudios.pages.dev/combat-vehicle-forge"
+}
+</script>
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚒</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#0A0908;--bg-card:#110F0D;--bg-elevated:#181513;--border:#2A2520;--border-light:#3A3530;
+  --gold:#C4A44A;--gold-dim:#8A7A3A;--gold-bright:#D4B45A;--gold-glow:#C4A44A30;
+  --text:#D4C9B8;--text-dim:#8A8070;--text-bright:#EAE0D0;
+  --green:#3A6A3A;--blue:#4A7A9A;--red:#8A3030;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',Georgia,serif;font-size:18px;line-height:1.7;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+
+/* NAV — minimal, just brand link */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:#0A0908E8;backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 40px;display:flex;align-items:center;height:64px}
+.nav-brand{font-family:'Cinzel',serif;font-weight:700;font-size:16px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-brand .anvil{font-size:22px;color:var(--gold-bright)}
+
+/* HERO */
+.hero{position:relative;min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 40px;overflow:hidden;margin-top:64px}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%, #1A150E 0%, var(--bg) 70%)}
+.hero-content{position:relative;max-width:800px}
+.hero-overline{font-family:'Cinzel',serif;font-size:12px;font-weight:600;letter-spacing:6px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:24px;opacity:0;animation:fadeUp 1s .2s forwards}
+.hero h1{font-family:'Cinzel',serif;font-size:clamp(36px,6vw,64px);font-weight:900;color:var(--gold-bright);line-height:1.15;letter-spacing:2px;margin-bottom:32px;opacity:0;animation:fadeUp 1s .4s forwards}
+.hero h1 span{display:block;font-size:.55em;font-weight:400;color:var(--text);letter-spacing:4px;margin-top:12px}
+.hero-desc{font-size:20px;color:var(--text);line-height:1.8;max-width:600px;margin:0 auto 48px;opacity:0;animation:fadeUp 1s .6s forwards}
+.hero-rule{width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 48px;opacity:0;animation:fadeUp 1s .5s forwards}
+.hero-cta{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp 1s .8s forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* BUTTONS */
+.btn{font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:16px 40px;border:1px solid var(--gold);background:transparent;color:var(--gold);cursor:pointer;text-decoration:none;transition:all .3s;display:inline-block}
+.btn:hover{background:var(--gold);color:var(--bg)}
+.btn-primary{background:var(--gold);color:var(--bg)}
+.btn-primary:hover{background:var(--gold-bright);border-color:var(--gold-bright)}
+.btn-small{padding:10px 24px;font-size:11px;letter-spacing:2px}
+
+/* SECTIONS */
+section{padding:100px 40px;max-width:1100px;margin:0 auto}
+.section-overline{font-family:'Cinzel',serif;font-size:11px;font-weight:600;letter-spacing:5px;text-transform:uppercase;color:var(--gold-dim);text-align:center;margin-bottom:16px}
+h2{font-family:'Cinzel',serif;font-size:clamp(28px,4vw,42px);font-weight:700;color:var(--gold-bright);text-align:center;margin-bottom:24px;letter-spacing:1px}
+h3{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);margin-bottom:16px;letter-spacing:1px}
+.section-intro{font-size:19px;color:var(--text);text-align:center;max-width:700px;margin:0 auto 60px;line-height:1.8}
+
+/* STATS BAR */
+.stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px;margin:60px 0}
+.stat-block{text-align:center;padding:32px 16px;background:var(--bg-card);border:1px solid var(--border)}
+.stat-number{font-family:'Cinzel',serif;font-size:42px;font-weight:900;color:var(--gold-bright);line-height:1}
+.stat-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);margin-top:8px}
+
+/* FEATURE CARDS */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px;margin-top:48px}
+.card{background:var(--bg-card);border:1px solid var(--border);padding:40px 32px;transition:border-color .3s,transform .3s}
+.card:hover{border-color:var(--gold-dim);transform:translateY(-4px)}
+.card h3{font-size:18px}
+.card p{color:var(--text-dim);font-size:16px;line-height:1.7}
+.card-icon{font-size:28px;margin-bottom:20px;display:block}
+
+/* QUOTE */
+.quote-block{border-left:2px solid var(--gold-dim);padding:24px 32px;margin:48px 0;background:var(--bg-card);font-style:italic;color:var(--text);font-size:19px;line-height:1.8}
+.quote-block cite{display:block;margin-top:12px;font-style:normal;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-dim)}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;margin-top:48px}
+
+/* FEATURE LIST */
+.feature-list{list-style:none;margin-top:24px}
+.feature-list li{padding:12px 0;border-bottom:1px solid var(--border);color:var(--text);font-size:16px;display:flex;align-items:baseline;gap:12px}
+.feature-list li::before{content:'◆';color:var(--gold-dim);font-size:8px;flex-shrink:0;position:relative;top:-2px}
+
+/* WEAPON ERAS */
+.era-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:24px}
+.era-tag{background:var(--bg-card);border:1px solid var(--border);padding:12px 16px;text-align:center;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim)}
+.era-tag span{display:block;font-size:22px;font-weight:700;color:var(--gold);margin-bottom:4px;font-family:'Cinzel',serif}
+
+/* EXPORT TABLE */
+.export-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px}
+.export-card{background:var(--bg-card);border:1px solid var(--border);padding:32px 24px;text-align:center}
+.export-card h4{font-family:'Cinzel',serif;font-size:14px;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+.export-card p{font-size:15px;color:var(--text-dim);line-height:1.6}
+
+/* DIVIDER */
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent 0%,var(--border) 20%,var(--border) 80%,transparent 100%);margin:80px 0}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:60px 40px;text-align:center}
+.footer-brand{font-family:'Cinzel',serif;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dim);margin-bottom:16px}
+footer p{font-size:13px;color:var(--text-dim);line-height:1.8;max-width:600px;margin:0 auto}
+footer a{color:var(--gold-dim);text-decoration:none}
+footer a:hover{color:var(--gold)}
+
+@media(max-width:768px){
+  nav{padding:0 20px}
+  section{padding:60px 20px}
+  .two-col{grid-template-columns:1fr;gap:40px}
+  .hero{padding:60px 20px}
+  .card-grid{grid-template-columns:1fr}
+  .export-grid{grid-template-columns:1fr}
+  .stats-bar{grid-template-columns:repeat(2,1fr)}
+  .era-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-brand">
+    <span class="anvil">⚒</span> DiceForge Studios
+  </a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-overline">DiceForge Studios</div>
+    <h1>Vehicle Forge<span>for Savage Worlds</span></h1>
+    <div class="hero-rule"></div>
+    <p class="hero-desc">Build anything from a bicycle to a battleship in minutes. Free, browser-based, no login required. The vehicle construction tool the Savage Worlds community has been waiting for.</p>
+    <div class="hero-cta">
+      <a href="/combat-vehicle-forge" class="btn btn-primary">Open Vehicle Forge</a>
+      <a href="/vehicle-forge-manual.pdf" class="btn">Companion Guide (PDF)</a>
+    </div>
+  </div>
+</div>
+
+<!-- BY THE NUMBERS -->
+<section>
+  <div class="stats-bar">
+    <div class="stat-block">
+      <div class="stat-number">111</div>
+      <div class="stat-label">Weapons</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-number">41</div>
+      <div class="stat-label">Modifications</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-number">47</div>
+      <div class="stat-label">Reference Builds</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-number">3</div>
+      <div class="stat-label">Export Formats</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-number">£0</div>
+      <div class="stat-label">Price. Forever.</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IT DOES -->
+<section>
+  <div class="section-overline">What It Does</div>
+  <h2>Six Sliders. Any Vehicle.</h2>
+  <p class="section-intro">Set Size, Toughness, Armour, Speed, Handling, and Wounds. Choose a locomotion type. Add weapons and modifications. The Forge does the maths, generates the stat block, and exports to your VTT. Three minutes from concept to table-ready.</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-icon">⚔</span>
+      <h3>111 Weapons, 7 Eras</h3>
+      <p>From scorpions and Greek fire to railguns and gravity cannons. Ancient, Medieval, Black Powder, Industrial, Modern, Future, and Advanced. Every weapon scaled and balanced. Add your own custom weapons for setting-specific armaments.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🛡</span>
+      <h3>41 Modifications</h3>
+      <p>Drawbacks that free up slots by imposing limitations. Defensive systems from sloped armour to deflection fields. Fusion cores, stealth systems, jump jets, and nanorepair. Every mod has a purpose. None are filler.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">⚙</span>
+      <h3>11 Locomotion Types</h3>
+      <p>Wheeled, tracked, hover, three aircraft types, three water types, and two walker modes (bipedal and multileg). Each locomotion type sets a base speed and unlocks type-specific options. Walkers get Jump Jets and Dual Cockpit.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">📋</span>
+      <h3>33 Special Abilities</h3>
+      <p>Amphibious, Four Wheel Drive, Sealed, Pressurised, Ram Plate, Smoke Screen, Stealth, Haunted, Sentient, Prototype. Toggle switches that define a vehicle's character without consuming mod slots.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🏛</span>
+      <h3>47 Canon Reference Builds</h3>
+      <p>Every vehicle from the Savage Worlds core rulebook, pre-built and locked as benchmarks. Clone any of them to create your own variant. When your custom Sherman feels wrong, load the canon Sherman and compare.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">📦</span>
+      <h3>Extension Packs (.vfx)</h3>
+      <p>The Forge grows through .vfx extension packs that add new weapons, modifications, special abilities, and pre-built vehicles. Install and uninstall cleanly. The architecture is built for an expanding content ecosystem.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WEAPON ERAS -->
+<section>
+  <div class="section-overline">Weapon Catalogue</div>
+  <h2>Seven Eras of Warfare</h2>
+  <p class="section-intro">Every weapon balanced for its era. Every era filtered with a single click. Build a Bronze Age war galley or a far-future dreadnought from the same tool.</p>
+  <div class="era-grid">
+    <div class="era-tag"><span>8</span>Ancient</div>
+    <div class="era-tag"><span>8</span>Medieval</div>
+    <div class="era-tag"><span>8</span>Black Powder</div>
+    <div class="era-tag"><span>11</span>Industrial</div>
+    <div class="era-tag"><span>14</span>Modern</div>
+    <div class="era-tag"><span>40</span>Future</div>
+    <div class="era-tag"><span>22</span>Advanced</div>
+  </div>
+</section>
+
+<!-- EXPORT -->
+<section>
+  <div class="section-overline">Export</div>
+  <h2>Build Once. Play Anywhere.</h2>
+  <p class="section-intro">Three export formats from a single source of truth. No retyping. No conversion errors. No format lock-in.</p>
+  <div class="export-grid">
+    <div class="export-card">
+      <h4>Pinnacle Stat Block</h4>
+      <p>The universal format. Paste into Foundry VTT, Roll20, a forum post, or print on index cards. Every GM recognises it. Every VTT importer can parse it.</p>
+    </div>
+    <div class="export-card">
+      <h4>Fantasy Grounds XML</h4>
+      <p>db.xml fragments for direct import into Fantasy Grounds Unity. Your vehicle appears in your campaign library ready to drag onto the combat tracker.</p>
+    </div>
+    <div class="export-card">
+      <h4>JSON Backup</h4>
+      <p>The Forge's native format. Batch export your entire Hangar. Share vehicles between users. Back up your fleet. Import with one click.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CLASS SYSTEM -->
+<section>
+  <div class="section-overline">The Class System</div>
+  <h2>Know What You Can Hurt</h2>
+  <div class="two-col">
+    <div>
+      <p>The DiceForge Class system rates both vehicles and weapons on the same A&ndash;Z scale. A vehicle's Class comes from its total Toughness. A weapon's Class comes from its average damage plus AP. Compare the letters and you know instantly whether a fight is fair, desperate, or hopeless.</p>
+      <p style="margin-top:16px;">Classes A through G map directly to the Science Fiction Companion's Classes I through VII. The parenthetical roman numeral in every stat block is provided for GMs using the SFC Heavy Metal rules. No conversion needed.</p>
+    </div>
+    <div>
+      <div class="quote-block">
+        "When your players ask 'can our guns hurt that thing?' you don't need to do the maths. If they're packing B-class weapons against a C-class target, the answer is 'barely.' If they're facing a D, the answer is 'run.' The Class system is a conversation shortcut disguised as a stat."
+        <cite>&mdash; Vehicle Forge Companion Guide</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU NEED -->
+<section>
+  <div class="section-overline">Requirements</div>
+  <h2>What You Need</h2>
+  <p class="section-intro">A web browser and the Savage Worlds core rules. That's it. The Forge builds vehicles compatible with the system but does not reproduce its rules. No installation, no account, no subscription. Open the URL and start building.</p>
+  <div style="text-align:center;margin-top:40px;">
+    <a href="/combat-vehicle-forge" class="btn btn-primary" style="font-size:15px;padding:20px 56px;">Open Vehicle Forge</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">DiceForge Studios</div>
+  <p>This tool references the Savage Worlds game system, available from <a href="https://www.peginc.com">Pinnacle Entertainment Group</a>. Savage Worlds and all associated logos and trademarks are copyrights of Pinnacle Entertainment Group. Used with permission. Pinnacle makes no representation or warranty as to the quality, viability, or suitability for purpose of this product.</p>
+  <p style="margin-top:12px;">Fantasy Grounds is a trademark of SmiteWorks USA, LLC. Foundry VTT is a trademark of Foundry Gaming LLC. This product is not affiliated with or endorsed by Pinnacle Entertainment Group, SmiteWorks, or Foundry Gaming.</p>
+  <p style="margin-top:12px;">Vehicle Forge &copy; 2026 DiceForge Studios Ltd. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
