@@ -1,0 +1,74 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Chrome & Fury — Supplement Pre-Builts",
+  "packId": "sup_chrome_fury",
+  "price": "$5.99",
+  "vehicleCount": 3,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "Muscle Car (Pursuit)",
+      "desc": "Classic pursuit vehicle. Big engine, narrow roads.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 3,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Police Interceptor",
+      "desc": "Law enforcement pursuit vehicle.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Armoured Convoy Truck",
+      "desc": "Escort vehicle. Protect the payload.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    }
+  ]
+}

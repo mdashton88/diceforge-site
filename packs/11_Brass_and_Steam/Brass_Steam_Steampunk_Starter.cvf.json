@@ -1,0 +1,250 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Brass & Steam — Steampunk Starter",
+  "packId": "steampunk_starter",
+  "price": "$2.99",
+  "vehicleCount": 10,
+  "publisher": "DiceForge Studios Ltd.",
+  "note": "Core weapons only. For boiler pressure, clockwork engines, steam burst, and aesthetics-as-mechanics, see the full Brass & Steam supplement.",
+  "vehicles": [
+    {
+      "name": "Steam Tank",
+      "desc": "Iron-hulled land cruiser. Coal-fired fury. Victorian shock and awe.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": -3,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Clockwork Spider",
+      "desc": "Brass automaton. Ticks and whirs and kills.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "legs_quad",
+      "mods": {
+        "unmanned": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Ornithopter",
+      "desc": "Flapping-wing aircraft. Improbable. Terrifying. Occasionally functional.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -3,
+      "speedLevel": -2,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Ironclad Monitor",
+      "desc": "River warship. Low profile, rotating turret, unsinkable confidence.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Walking Fortress",
+      "desc": "Steam-powered colossus. Two storeys of brass and bad intentions.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 2,
+      "speedLevel": -3,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Armoured Train",
+      "desc": "Rail-bound fortress. The Iron Road made literal.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": -5,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Steam Carriage",
+      "desc": "Self-propelled road vehicle. Boiler and pistons. Gentleman's transport.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": -2,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Aerial Gunboat",
+      "desc": "Light combat airship. Twin propellers, one gun, unlimited ambition.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Submarine (Nautilus)",
+      "desc": "Experimental submersible. Twenty thousand leagues of possibilities.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -2,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Difference Engine Walker",
+      "desc": "Analytical engine brain. Brass body. No soul. Probably.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "legs_quad",
+      "mods": {
+        "unmanned": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    }
+  ]
+}

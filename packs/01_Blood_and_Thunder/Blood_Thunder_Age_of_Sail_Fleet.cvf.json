@@ -1,0 +1,305 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Blood & Thunder — Age of Sail Fleet",
+  "packId": "age_of_sail",
+  "price": "$2.99",
+  "vehicleCount": 10,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "Sloop",
+      "desc": "Fast, single-masted warship. Favoured by pirates and revenue cutters.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "light_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -2,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Brigantine",
+      "desc": "Two-masted merchant raider. Good balance of speed and firepower.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Frigate (5th Rate)",
+      "desc": "Fast warship. The eyes of the fleet.",
+      "notes": "",
+      "image": "",
+      "size": 14,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Ship of the Line (3rd Rate)",
+      "desc": "74-gun two-decker. Backbone of any fleet.",
+      "notes": "",
+      "image": "",
+      "size": 18,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Galleon",
+      "desc": "Heavy cargo/warship. Treasure fleet escort.",
+      "notes": "",
+      "image": "",
+      "size": 16,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Bomb Ketch",
+      "desc": "Mortar vessel for shore bombardment.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "mortar_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "mortar_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -2,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Xebec",
+      "desc": "Barbary corsair vessel. Lateen-rigged and deadly fast.",
+      "notes": "",
+      "image": "",
+      "size": 11,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "light_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -2,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Fire Ship",
+      "desc": "Expendable vessel loaded with combustibles.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "East Indiaman",
+      "desc": "Armed merchant. Heavier than she looks.",
+      "notes": "",
+      "image": "",
+      "size": 15,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "light_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Man-o-War (1st Rate)",
+      "desc": "100+ gun flagship. Floating fortress.",
+      "notes": "",
+      "image": "",
+      "size": 20,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 3,
+      "speedLevel": -3,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    }
+  ]
+}

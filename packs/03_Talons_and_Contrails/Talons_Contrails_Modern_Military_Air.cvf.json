@@ -1,0 +1,305 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Talons & Contrails — Modern Military Air",
+  "packId": "modern_air",
+  "price": "$2.99",
+  "vehicleCount": 10,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "F-22 Raptor",
+      "desc": "US stealth fighter. Air dominance.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "jet",
+      "mods": {
+        "stealth_system": 1,
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 3,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "AH-64D Apache",
+      "desc": "US attack helicopter. Longbow radar.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "vtol",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "rocket_pod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "UH-60 Blackhawk",
+      "desc": "US utility helicopter.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "slug_med",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "F-35 Lightning II",
+      "desc": "US multirole stealth. STOVL variant.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "jet",
+      "mods": {
+        "stealth_system": 1,
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "bombs_mod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Su-57 Felon",
+      "desc": "Russian 5th gen fighter.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "jet",
+      "mods": {
+        "stealth_system": 1,
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 3,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "MiG-29 Fulcrum",
+      "desc": "Russian multirole fighter. Agile dogfighter.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "rocket_pod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "A-10 Thunderbolt II",
+      "desc": "US ground attack. The Warthog. GAU-8 Avenger.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "bombs_mod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": -3,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Eurofighter Typhoon",
+      "desc": "European multirole. Agile and fast.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 3,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "CH-47F Chinook",
+      "desc": "Heavy-lift transport. Updated avionics.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "MQ-9 Reaper",
+      "desc": "Armed UAV. Persistent surveillance.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "turboprop",
+      "mods": {
+        "unmanned": 1,
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "bombs_mod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": -3,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    }
+  ]
+}

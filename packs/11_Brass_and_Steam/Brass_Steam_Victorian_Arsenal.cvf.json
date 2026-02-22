@@ -1,0 +1,243 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Brass & Steam — Victorian Arsenal",
+  "packId": "victorian_arsenal",
+  "price": "$2.99",
+  "vehicleCount": 10,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "Steam Tank",
+      "desc": "Ironclad land fortress. Coal-fired fury.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "light_cannon_bp",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": -3,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Clockwork Spider",
+      "desc": "Precision automaton. Factory-built.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "legs_quad",
+      "mods": {
+        "unmanned": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Ornithopter",
+      "desc": "Mechanical flapping-wing aircraft.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -2,
+      "armourLevel": -3,
+      "speedLevel": -2,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Steam Carriage",
+      "desc": "Self-propelled road vehicle.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": -2,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Ironclad Monitor",
+      "desc": "River/coastal warship. Rotating turret.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Zeppelin (Victorian)",
+      "desc": "Rigid airship. Steam-powered gondola.",
+      "notes": "",
+      "image": "",
+      "size": 14,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "light_cannon_bp",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "bombs_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -2,
+      "speedLevel": -3,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Submarine (Nautilus)",
+      "desc": "Experimental submersible. Twenty Thousand Leagues.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -2,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Walking Fortress",
+      "desc": "Steam-powered colossus. Two storeys tall.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 2,
+      "speedLevel": -3,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Armoured Train",
+      "desc": "Rail-bound fortress. Gun carriages.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": -5,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Difference Engine Walker",
+      "desc": "Analytical engine-guided automaton.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "legs_quad",
+      "mods": {
+        "unmanned": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    }
+  ]
+}

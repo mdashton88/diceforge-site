@@ -1,0 +1,99 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Fang & Claw — Supplement Pre-Builts",
+  "packId": "sup_fang_claw",
+  "price": "$5.99",
+  "vehicleCount": 3,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "Scout Mech",
+      "desc": "Light reconnaissance walker.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_gat",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_light",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Heavy Battlemech",
+      "desc": "Main battle walker. Walking tank.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Assault Quad",
+      "desc": "Four-legged heavy. Ultra-stable platform.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "legs_quad",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 3,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Talons & Contrails — Supplement Pre-Builts",
+  "packId": "sup_talons",
+  "price": "$5.99",
+  "vehicleCount": 3,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "P-47 Thunderbolt",
+      "desc": "US fighter-bomber. The Jug.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        },
+        {
+          "weaponId": "bombs_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "F-16 Fighting Falcon",
+      "desc": "US multirole fighter. Light and agile.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "rocket_pod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 2,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Apache AH-64",
+      "desc": "US attack helicopter. Tank killer.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "vtol",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "rocket_pod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    }
+  ]
+}

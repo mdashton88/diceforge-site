@@ -1,0 +1,84 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Star & Void — Supplement Pre-Builts",
+  "packId": "sup_star_void",
+  "price": "$7.99",
+  "vehicleCount": 3,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "Light Freighter",
+      "desc": "Tramp trader. Han Solo territory.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Fighter (Snub)",
+      "desc": "Single-seat space superiority fighter.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_light",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_light",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -1,
+      "speedLevel": 3,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Assault Shuttle",
+      "desc": "Troop insertion craft. Armoured.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Saddle & Fang — Supplement Pre-Builts",
+  "packId": "sup_saddle_fang",
+  "price": "$5.99",
+  "vehicleCount": 3,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "Riding Horse",
+      "desc": "Standard mount. Every adventurer's first ride.",
+      "notes": "",
+      "image": "",
+      "size": 2,
+      "loco": "legs_quad",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Wyvern",
+      "desc": "Two-legged winged drake. Venomous tail.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "War Elephant",
+      "desc": "Armoured pachyderm with howdah.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "legs_quad",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 3,
+      "armourLevel": -1,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    }
+  ]
+}

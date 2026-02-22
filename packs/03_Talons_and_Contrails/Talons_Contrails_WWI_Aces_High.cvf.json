@@ -1,0 +1,271 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Talons & Contrails — WWI Aces High",
+  "packId": "ww1_aces",
+  "price": "$2.99",
+  "vehicleCount": 10,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "Sopwith Camel",
+      "desc": "British fighter. Killed more pilots than any other — friend and foe.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -4,
+      "speedLevel": -3,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Fokker Dr.I",
+      "desc": "German triplane. The Red Baron's mount.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -4,
+      "speedLevel": -3,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "SPAD XIII",
+      "desc": "French fighter. Fast diver. Rickenbacker's plane.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -4,
+      "speedLevel": -2,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Albatros D.III",
+      "desc": "German fighter. Elegant and deadly.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -4,
+      "speedLevel": -3,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "SE.5a",
+      "desc": "British fighter. Stable gun platform.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -4,
+      "speedLevel": -2,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Nieuport 17",
+      "desc": "French sesquiplane. Light and nimble.",
+      "notes": "",
+      "image": "",
+      "size": 3,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": -3,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Zeppelin L-33",
+      "desc": "German rigid airship. Strategic bomber.",
+      "notes": "",
+      "image": "",
+      "size": 18,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "bombs_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -4,
+      "speedLevel": -4,
+      "handlingLevel": -4,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Gotha G.V",
+      "desc": "German heavy bomber. London raider.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "bombs_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": -3,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "RE.8",
+      "desc": "British observation plane. \"Harry Tate\".",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -4,
+      "speedLevel": -4,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Bristol F.2B",
+      "desc": "British two-seat fighter. Best of the war.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": -2,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    }
+  ]
+}

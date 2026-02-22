@@ -1,0 +1,311 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Blood & Thunder — WWII Naval",
+  "packId": "ww2_naval",
+  "price": "$2.99",
+  "vehicleCount": 10,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "Fletcher-Class Destroyer",
+      "desc": "US fleet destroyer. Fast, versatile, deadly.",
+      "notes": "",
+      "image": "",
+      "size": 17,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "naval_gun_ww",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "naval_gun_ww",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "depth_charge_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 1
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Essex-Class Carrier",
+      "desc": "US fleet carrier. 90+ aircraft.",
+      "notes": "",
+      "image": "",
+      "size": 22,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 1
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Gato-Class Submarine",
+      "desc": "US fleet submarine. 24 torpedoes.",
+      "notes": "",
+      "image": "",
+      "size": 14,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "PT Boat (Elco)",
+      "desc": "US motor torpedo boat. Fast and expendable.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -3,
+      "speedLevel": 3,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Bismarck",
+      "desc": "German battleship. Terror of the Atlantic.",
+      "notes": "",
+      "image": "",
+      "size": 24,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "naval_gun_ww",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "naval_gun_ww",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "naval_gun_ww",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 1
+        }
+      ],
+      "toughLevel": 4,
+      "armourLevel": 5,
+      "speedLevel": -1,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Type VII U-Boat",
+      "desc": "German submarine. Atlantic wolf pack.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Liberty Ship",
+      "desc": "US mass-produced cargo ship. 2,710 built.",
+      "notes": "",
+      "image": "",
+      "size": 16,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": -3,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "S-Boot (E-Boat)",
+      "desc": "German fast attack craft. Torpedo and mine.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -2,
+      "speedLevel": 3,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Flower-Class Corvette",
+      "desc": "British escort. Atlantic convoy guardian.",
+      "notes": "",
+      "image": "",
+      "size": 13,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "naval_gun_ww",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "depth_charge_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "LCVP (Higgins Boat)",
+      "desc": "Landing craft. D-Day icon.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    }
+  ]
+}

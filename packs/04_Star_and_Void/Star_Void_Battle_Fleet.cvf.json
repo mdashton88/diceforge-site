@@ -1,0 +1,315 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Star & Void — Battle Fleet",
+  "packId": "battle_fleet",
+  "price": "$3.99",
+  "vehicleCount": 10,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "Light Cruiser",
+      "desc": "Fast fleet screening vessel.",
+      "notes": "",
+      "image": "",
+      "size": 17,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Heavy Cruiser",
+      "desc": "Independent operations. Main fleet combatant.",
+      "notes": "",
+      "image": "",
+      "size": 20,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 2,
+      "speedLevel": 0,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Battlecruiser",
+      "desc": "Speed and firepower over protection.",
+      "notes": "",
+      "image": "",
+      "size": 21,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 1
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 1,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Fleet Carrier",
+      "desc": "Capital ship. 80+ fighters.",
+      "notes": "",
+      "image": "",
+      "size": 22,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 1
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Destroyer",
+      "desc": "Multi-role fleet escort. Torpedo specialist.",
+      "notes": "",
+      "image": "",
+      "size": 15,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Assault Transport",
+      "desc": "Troop carrier. Drop pods.",
+      "notes": "",
+      "image": "",
+      "size": 18,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 1
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": -1,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Monitor",
+      "desc": "Orbital bombardment. Big gun, slow.",
+      "notes": "",
+      "image": "",
+      "size": 14,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": -3,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Torpedo Frigate",
+      "desc": "Alpha strike specialist.",
+      "notes": "",
+      "image": "",
+      "size": 14,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "missile_rack",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "EW Ship",
+      "desc": "Electronic warfare platform.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "jet",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Fleet Flagship",
+      "desc": "Command ship. Flag officer quarters.",
+      "notes": "",
+      "image": "",
+      "size": 22,
+      "loco": "jet",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": 0,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    }
+  ]
+}

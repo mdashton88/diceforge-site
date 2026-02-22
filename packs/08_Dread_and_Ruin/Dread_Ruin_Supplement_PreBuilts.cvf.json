@@ -1,0 +1,62 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Dread & Ruin — Supplement Pre-Builts",
+  "packId": "sup_dread_ruin",
+  "price": "$4.99",
+  "vehicleCount": 3,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "Phantom Stage",
+      "desc": "Ghostly stagecoach appearing on moonless nights.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Cursed Longship",
+      "desc": "Draugr-crewed vessel. Returns to shore endlessly.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "javelin_rack",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Demonic Chariot",
+      "desc": "Infernal war chariot. Nightmare steeds.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "legs_quad",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": 2,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    }
+  ]
+}

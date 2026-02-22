@@ -1,0 +1,200 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Dread & Ruin — Haunted Vehicles",
+  "packId": "haunted_vehicles",
+  "price": "$2.99",
+  "vehicleCount": 10,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "Death Coach",
+      "desc": "Phantom carriage. Appears at crossroads.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Ghost Ship",
+      "desc": "Spectral galleon. Crewed by the damned.",
+      "notes": "",
+      "image": "",
+      "size": 16,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Possessed Automobile",
+      "desc": "Christine territory. Hates the living.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Soul Engine Train",
+      "desc": "Locomotive fuelled by trapped spirits.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 3,
+      "armourLevel": 1,
+      "speedLevel": 2,
+      "handlingLevel": -5,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Bone Chariot",
+      "desc": "Necromantic war chariot. Skeletal steeds.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Cursed Submarine",
+      "desc": "The crew never left. Cannot surface.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Infernal War Machine",
+      "desc": "Hellfire-powered assault vehicle. Demon-bound.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 2,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Flying Dutchman",
+      "desc": "The eternal ship. Cannot be destroyed at sea.",
+      "notes": "",
+      "image": "",
+      "size": 18,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 4,
+      "armourLevel": 2,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Hearse of the Damned",
+      "desc": "Sentient hearse. Collects the dying.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Witch's Hut (Walking)",
+      "desc": "Baba Yaga's chicken-legged cottage.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 2,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    }
+  ]
+}

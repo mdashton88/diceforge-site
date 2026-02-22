@@ -1,0 +1,270 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Iron & Steel — WWII Western Front",
+  "packId": "ww2_western",
+  "price": "$2.99",
+  "vehicleCount": 10,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "M4A3E8 Sherman",
+      "desc": "Easy Eight. HVSS suspension, 76mm gun.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Tiger I",
+      "desc": "German heavy tank. 88mm terror.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 2,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Panther",
+      "desc": "German medium-heavy. Best all-round WW2 tank.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "tracked",
+      "mods": {
+        "sloped_armour": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "tank_gun_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 2,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Sd.Kfz 251 Halftrack",
+      "desc": "German APC. Open-topped.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Willys MB Jeep",
+      "desc": "US general-purpose vehicle. Go anywhere.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {
+        "offroad": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": 0,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Panzer IV Ausf H",
+      "desc": "German workhorse. Long 75mm gun.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 1,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Churchill Mk VII",
+      "desc": "British infantry tank. Incredibly tough.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "M10 Wolverine",
+      "desc": "US tank destroyer. Open-topped turret.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "StuG III",
+      "desc": "German assault gun. No turret.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_med",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 1,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Cromwell",
+      "desc": "British cruiser tank. Fast and reliable.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    }
+  ]
+}

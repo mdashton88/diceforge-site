@@ -1,0 +1,1308 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Vehicle Forge — Core Reference Builds",
+  "packId": "core",
+  "price": "FREE",
+  "vehicleCount": 64,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "Carriage",
+      "desc": "Horse-drawn carriage.",
+      "notes": "",
+      "image": "",
+      "size": 3,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -2,
+      "armourLevel": -3,
+      "speedLevel": -2,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Early Car (Model T)",
+      "desc": "Model Ts and the like.",
+      "notes": "",
+      "image": "",
+      "size": 3,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": -1,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Street Bike",
+      "desc": "Stock street bike.",
+      "notes": "",
+      "image": "",
+      "size": 1,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": -2,
+      "speedLevel": 2,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Dirt Bike",
+      "desc": "Off-road bike. 4WD.",
+      "notes": "",
+      "image": "",
+      "size": 0,
+      "loco": "wheeled",
+      "mods": {
+        "offroad": 1
+      },
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": -2,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Compact Car",
+      "desc": "Honda Civic or similar.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Mid-Sized Car",
+      "desc": "Air bags, luxury features.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Minivan",
+      "desc": "Family mini-van.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 2,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Sports Utility Vehicle",
+      "desc": "Luxury SUV, 4WD.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "wheeled",
+      "mods": {
+        "offroad": 1
+      },
+      "weapons": [],
+      "toughLevel": 2,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Sports Car",
+      "desc": "Mustang or similar stock sports car.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 3,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Semi-Truck",
+      "desc": "With trailer: Size 7, Tough 14(2), Hand -2.",
+      "notes": "",
+      "image": "",
+      "size": 9,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": -2,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "WW2 Jeep",
+      "desc": "Four-Wheel Drive.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {
+        "offroad": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "M4 Sherman",
+      "desc": "US medium tank. Heavy Armor.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "M5A1 Stuart",
+      "desc": "US light tank. Heavy Armor.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_light",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "T-34/76",
+      "desc": "Soviet medium tank. Sloped Armor (front).",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {
+        "sloped_armour": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "tank_gun_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Panzer IVJ",
+      "desc": "German medium tank.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 1,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Tiger II (King Tiger)",
+      "desc": "German heavy tank.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 2,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "M1A1 Abrams",
+      "desc": "US MBT. Night Vision.",
+      "notes": "",
+      "image": "",
+      "size": 9,
+      "loco": "tracked",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 4,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "M2 Bradley",
+      "desc": "US IFV. Night Vision.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "atgm",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "T-72 MBT",
+      "desc": "Soviet/Russian MBT.",
+      "notes": "",
+      "image": "",
+      "size": 9,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 2,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "T-80 MBT",
+      "desc": "Soviet advanced MBT. Night Vision.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "tracked",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 3,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "BTR-70 APC",
+      "desc": "Soviet APC. Amphibious, 4WD.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "wheeled",
+      "mods": {
+        "amphibious": 1,
+        "offroad": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Hover Tank",
+      "desc": "Future MBT. Night Vision.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "hover",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 3,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Hover APC",
+      "desc": "Future APC.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "hover",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_gat",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 2,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Biplane",
+      "desc": "Civilian biplane.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": -2,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Cessna Skyhawk",
+      "desc": "Single-engine Cessna.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": -2,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Helicopter (Civilian)",
+      "desc": "Typical civilian helicopter.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -2,
+      "armourLevel": -1,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Learjet",
+      "desc": "Private business jet.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": -2,
+      "speedLevel": -1,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Space Shuttle",
+      "desc": "Orbital re-entry vehicle.",
+      "notes": "",
+      "image": "",
+      "size": 13,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -2,
+      "armourLevel": -2,
+      "speedLevel": 5,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "B-17 Flying Fortress",
+      "desc": "US heavy bomber.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "bombs_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -2,
+      "speedLevel": -4,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "BF-109 Messerschmitt",
+      "desc": "German fighter.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "P-51 Mustang",
+      "desc": "US long-range fighter.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Spitfire",
+      "desc": "British fighter.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        },
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "PT Boat",
+      "desc": "Patrol/torpedo boat.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 2,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Pickup Truck",
+      "desc": "Workhorse vehicle. Bed for cargo.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "wheeled",
+      "mods": {
+        "offroad": 1
+      },
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": -2,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Luxury Sedan",
+      "desc": "Executive car. Comfortable and fast.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": 2,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "City Bus",
+      "desc": "Urban mass transit.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": -2,
+      "speedLevel": -1,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Speedboat",
+      "desc": "Civilian power boat. Fast on open water.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": -2,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Yacht",
+      "desc": "Luxury vessel. Comfortable cruising.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Fishing Trawler",
+      "desc": "Commercial fishing vessel. Seaworthy.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": -2,
+      "speedLevel": -2,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Jet Fighter (Modern)",
+      "desc": "Generic modern combat aircraft.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 3,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Attack Helicopter",
+      "desc": "Generic attack helicopter.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "vtol",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "rocket_pod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Transport Helicopter",
+      "desc": "Generic transport helicopter.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "APC (Generic)",
+      "desc": "Armoured personnel carrier.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Light Tank (Generic)",
+      "desc": "Light reconnaissance tank.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "MBT (Generic)",
+      "desc": "Main battle tank. Generic stats.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 2,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Sailing Ship (Generic)",
+      "desc": "General-purpose sailing vessel.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "light_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Rowboat",
+      "desc": "Small oar-powered boat.",
+      "notes": "",
+      "image": "",
+      "size": 2,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": -3,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Airliner",
+      "desc": "Commercial passenger aircraft.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Prop Cargo Plane",
+      "desc": "C-130 type transport.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": -2,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "ATV/Quad Bike",
+      "desc": "All-terrain vehicle. Recreation and utility.",
+      "notes": "",
+      "image": "",
+      "size": 1,
+      "loco": "wheeled",
+      "mods": {
+        "offroad": 1
+      },
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Panel Van",
+      "desc": "Delivery van. Cargo space.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Ambulance",
+      "desc": "Emergency medical vehicle.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Fire Engine",
+      "desc": "Firefighting vehicle. Heavy.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": -1,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Police Cruiser",
+      "desc": "Pursuit-rated police vehicle.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 2,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Bulldozer",
+      "desc": "Construction vehicle. Blade up front.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 3,
+      "armourLevel": -1,
+      "speedLevel": -4,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Motorboat",
+      "desc": "Small powered craft. Lake and river.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -2,
+      "armourLevel": -3,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Canoe",
+      "desc": "Paddle-powered. Light and portable.",
+      "notes": "",
+      "image": "",
+      "size": 1,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -4,
+      "armourLevel": -5,
+      "speedLevel": -3,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Snowmobile",
+      "desc": "Snow and ice terrain vehicle.",
+      "notes": "",
+      "image": "",
+      "size": 2,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Hang Glider",
+      "desc": "Unpowered personal glider.",
+      "notes": "",
+      "image": "",
+      "size": 1,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -4,
+      "armourLevel": -5,
+      "speedLevel": -3,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Hot Air Balloon",
+      "desc": "Lighter-than-air craft. Wind-dependent.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -3,
+      "armourLevel": -5,
+      "speedLevel": -5,
+      "handlingLevel": -4,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Stretch Limo",
+      "desc": "Luxury stretch limousine.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Dump Truck",
+      "desc": "Heavy construction truck.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 2,
+      "armourLevel": -2,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Hovercraft (Civilian)",
+      "desc": "Air-cushion vehicle. Land and water.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "hover",
+      "mods": {
+        "amphibious": 1
+      },
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": -2,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Ultralight",
+      "desc": "Single-seat microlight aircraft.",
+      "notes": "",
+      "image": "",
+      "size": 2,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -4,
+      "armourLevel": -5,
+      "speedLevel": -3,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    }
+  ]
+}

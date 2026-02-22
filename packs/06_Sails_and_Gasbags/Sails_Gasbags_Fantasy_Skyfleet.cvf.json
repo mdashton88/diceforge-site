@@ -1,0 +1,265 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Sails & Gasbags — Fantasy Skyfleet",
+  "packId": "fantasy_skyfleet",
+  "price": "$2.99",
+  "vehicleCount": 10,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "Sky Cutter",
+      "desc": "Fast patrol airship. Corsair favourite.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "light_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -2,
+      "speedLevel": 1,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Cloud Galleon",
+      "desc": "Heavy sky-trader. Broadside-armed.",
+      "notes": "",
+      "image": "",
+      "size": 14,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "War Zeppelin",
+      "desc": "Armoured dirigible. Bomber and troop carrier.",
+      "notes": "",
+      "image": "",
+      "size": 16,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "bombs_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -2,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Sky Skiff",
+      "desc": "One-person flyer. Scout and messenger.",
+      "notes": "",
+      "image": "",
+      "size": 3,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": 2,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Dwarven Ironclad",
+      "desc": "Steam-powered flying fortress. Heavily armoured.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 4,
+      "armourLevel": 4,
+      "speedLevel": -3,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Elven Windrunner",
+      "desc": "Graceful sky-yacht. Magic-assisted.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "bow_battery",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -2,
+      "speedLevel": 2,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Pirate Sky-Brig",
+      "desc": "Sky corsair. Boarding hooks.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Goblin Balloon Bomb",
+      "desc": "Improvised hot-air bomber. Unreliable.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "bombs_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -4,
+      "armourLevel": -5,
+      "speedLevel": -1,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Royal Flagship (Sky)",
+      "desc": "Floating palace-warship. Crown of the fleet.",
+      "notes": "",
+      "image": "",
+      "size": 18,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 2,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Dragon-Rider Platform",
+      "desc": "Howdah carrier for wyvern-back combat.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "bow_battery",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    }
+  ]
+}

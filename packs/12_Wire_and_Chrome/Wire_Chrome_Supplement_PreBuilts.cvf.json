@@ -1,0 +1,64 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Wire & Chrome — Supplement Pre-Builts",
+  "packId": "sup_wire_chrome",
+  "price": "$4.99",
+  "vehicleCount": 3,
+  "publisher": "DiceForge Studios Ltd.",
+  "vehicles": [
+    {
+      "name": "Corp Security Car",
+      "desc": "Armoured executive transport. AI-driven.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Delivery Drone (Armed)",
+      "desc": "Weaponised cargo drone. Corporate enforcement.",
+      "notes": "",
+      "image": "",
+      "size": 3,
+      "loco": "vtol",
+      "mods": {
+        "unmanned": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -2,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Netrunner Bike",
+      "desc": "Integrated matrix rig. Hack while you ride.",
+      "notes": "",
+      "image": "",
+      "size": 1,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    }
+  ]
+}

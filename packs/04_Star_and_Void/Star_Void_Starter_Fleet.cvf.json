@@ -1,0 +1,297 @@
+{
+  "formatVersion": "1.0",
+  "exportType": "batch",
+  "packName": "Star & Void — Starter Fleet",
+  "packId": "scifi_starter",
+  "price": "$2.99",
+  "vehicleCount": 10,
+  "publisher": "DiceForge Studios Ltd.",
+  "note": "Uses core weapons only. No .vfx extension required. For expanded fleet operations including crew stations, shields, FTL, and sensor ops, see the full Star & Void supplement.",
+  "vehicles": [
+    {
+      "name": "Scout Fighter",
+      "desc": "Single-seat interceptor. Fast, fragile, lethal in numbers. Every fleet needs expendable pilots.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_light",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_light",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -1,
+      "speedLevel": 3,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Light Freighter",
+      "desc": "Tramp trader. Enough cargo space to make a living, enough gun to discourage questions. The backbone of the frontier.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Corvette",
+      "desc": "Fast patrol vessel. Too small for fleet actions, perfect for pirate hunting, customs enforcement, and being where trouble starts.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Assault Shuttle",
+      "desc": "Armoured troop insertion craft. Puts boots on deck through hostile fire. The marines love it. The pilots hate it.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Gunboat",
+      "desc": "System defence craft. Big gun on a small hull. Stations one of these at every jump point and sleeps easier.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Blockade Runner",
+      "desc": "Fast transport. Smuggler's favourite. Outrun anything that outguns you, outgun anything that outruns you.",
+      "notes": "",
+      "image": "",
+      "size": 9,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -1,
+      "speedLevel": 3,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Destroyer",
+      "desc": "Multi-role fleet escort. Torpedo specialist. The workhorse of any navy — fast enough to screen, tough enough to fight.",
+      "notes": "",
+      "image": "",
+      "size": 15,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Heavy Cruiser",
+      "desc": "Independent operations vessel. Can patrol a sector alone for months. When diplomacy fails, this is what arrives.",
+      "notes": "",
+      "image": "",
+      "size": 18,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 2,
+      "speedLevel": 0,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Carrier",
+      "desc": "Fleet carrier. Sixty fighters and the infrastructure to keep them flying. The centrepiece of any task force.",
+      "notes": "",
+      "image": "",
+      "size": 20,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 1
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Armed Merchantman",
+      "desc": "Q-ship. Looks like a freighter until the hull plates slide back. Pirate bait, convoy escort, or deniable operations.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    }
+  ]
+}
