@@ -1,7 +1,7 @@
 {
   "formatVersion": "1.0",
   "exportType": "batch",
-  "packName": "Star & Void — Starter Fleet",
+  "packName": "Star & Void \u2014 Starter Fleet",
   "packId": "scifi_starter",
   "price": "$2.99",
   "vehicleCount": 10,
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "Scout Fighter",
-      "desc": "Single-seat interceptor. Fast, fragile, lethal in numbers. Every fleet needs expendable pilots.",
-      "notes": "",
+      "desc": "Single-seat, short-range, and armed with energy weapons that recharge from the reactor. She's the starfighter \u2014 the X-Wing, the Viper, the thing that launches from a carrier bay and makes the enemy's day considerably worse at close range.",
+      "notes": "The scout fighter is your dogfight vehicle. She's fast, agile, and fragile. One pilot, one ship, every hit matters. Use her for space combat encounters that feel personal rather than strategic. She's also the default player vehicle for fighter-jockey campaigns.",
       "image": "",
       "size": 5,
       "loco": "jet",
@@ -36,8 +36,8 @@
     },
     {
       "name": "Light Freighter",
-      "desc": "Tramp trader. Enough cargo space to make a living, enough gun to discourage questions. The backbone of the frontier.",
-      "notes": "",
+      "desc": "The tramp steamer of space. She carries just enough cargo to turn a profit, just enough weapons to discourage casual piracy, and just enough room for a crew of four to six who know each other too well and argue about the thermostat.",
+      "notes": "The light freighter is the classic campaign vessel. She's the Millennium Falcon, the Serenity, the Rocinante. Small enough that every crew member matters, versatile enough for any mission. Build your campaign around her and everything else scales naturally.",
       "image": "",
       "size": 10,
       "loco": "jet",
@@ -57,8 +57,8 @@
     },
     {
       "name": "Corvette",
-      "desc": "Fast patrol vessel. Too small for fleet actions, perfect for pirate hunting, customs enforcement, and being where trouble starts.",
-      "notes": "",
+      "desc": "The smallest proper warship. She's fast, lightly armed, and used for patrol, escort, and anti-piracy work. Her crew is small enough to be a family and her missions are dangerous enough to keep that family interesting.",
+      "notes": "The corvette is your starter warship for naval campaigns. She's big enough to have distinct crew roles \u2014 bridge, engineering, weapons, marines \u2014 but small enough that the players run everything. Use her for patrol campaigns where the crew handles whatever the sector throws at them.",
       "image": "",
       "size": 12,
       "loco": "jet",
@@ -88,8 +88,8 @@
     },
     {
       "name": "Assault Shuttle",
-      "desc": "Armoured troop insertion craft. Puts boots on deck through hostile fire. The marines love it. The pilots hate it.",
-      "notes": "",
+      "desc": "An armoured box with engines, designed to cross the gap between ships under fire and deliver a boarding party to the enemy hull. She's fast on approach, armoured against point defence, and disposable. Her crew don't expect to fly her home.",
+      "notes": "The assault shuttle is your boarding action vehicle. The approach is the terrifying part \u2014 point defence fire, debris, countermeasures \u2014 and then the hull breach and the fighting starts. Use her for boarding scenarios where the journey is as dangerous as the destination.",
       "image": "",
       "size": 8,
       "loco": "jet",
@@ -114,8 +114,8 @@
     },
     {
       "name": "Gunboat",
-      "desc": "System defence craft. Big gun on a small hull. Stations one of these at every jump point and sleeps easier.",
-      "notes": "",
+      "desc": "Bigger than a fighter, smaller than a corvette, and carrying weapons that hit far above her weight class. She's the PT boat of space \u2014 fast, fragile, and packing torpedoes that can cripple a cruiser if she gets close enough to fire them.",
+      "notes": "The gunboat is your glass cannon. She threatens capital ships but dies to their point defence. Use her in wolf-pack torpedo runs where the players coordinate attacks from multiple angles. The tension is surviving the approach long enough to fire.",
       "image": "",
       "size": 8,
       "loco": "jet",
@@ -140,8 +140,8 @@
     },
     {
       "name": "Blockade Runner",
-      "desc": "Fast transport. Smuggler's favourite. Outrun anything that outguns you, outgun anything that outruns you.",
-      "notes": "",
+      "desc": "Built for one thing: getting through. Oversized engines, minimal weapons, and a cargo bay just large enough for whatever absolutely must reach the other side of an enemy fleet. She's the ship they send when the message is too important for a transmission that could be intercepted.",
+      "notes": "The blockade runner is your speed-is-survival vessel. Every encounter is a chase, every hit is potentially fatal, and the cargo is always critical. Use her for wartime smuggling, intelligence delivery, and desperate resupply missions through hostile space.",
       "image": "",
       "size": 9,
       "loco": "jet",
@@ -161,8 +161,8 @@
     },
     {
       "name": "Destroyer",
-      "desc": "Multi-role fleet escort. Torpedo specialist. The workhorse of any navy — fast enough to screen, tough enough to fight.",
-      "notes": "",
+      "desc": "The fleet's knife fighter. She screens the capital ships against torpedo attacks, hunts submarines and raiders, and launches her own torpedo spreads against enemy heavies. She's fast, well-armed for her size, and the most versatile warship in any fleet.",
+      "notes": "The destroyer is your fleet combat player vessel. She's involved in everything \u2014 screening, scouting, torpedo runs, escort duty. Her captain makes decisions every round, which means the players are always engaged. She dies fast under capital ship fire, so positioning matters enormously.",
       "image": "",
       "size": 15,
       "loco": "jet",
@@ -197,8 +197,8 @@
     },
     {
       "name": "Heavy Cruiser",
-      "desc": "Independent operations vessel. Can patrol a sector alone for months. When diplomacy fails, this is what arrives.",
-      "notes": "",
+      "desc": "The enforcer of deep space. Enough guns to intimidate, enough armour to survive, and enough range to operate independently for months. She's the ship that arrives when a system has a problem too big for the local patrol to handle.",
+      "notes": "The heavy cruiser is your independent command vessel. She operates alone in frontier space, handling everything from piracy to first contact. Use her for campaigns where the players are far from fleet support and must make their own decisions.",
       "image": "",
       "size": 18,
       "loco": "jet",
@@ -233,8 +233,8 @@
     },
     {
       "name": "Carrier",
-      "desc": "Fleet carrier. Sixty fighters and the infrastructure to keep them flying. The centrepiece of any task force.",
-      "notes": "",
+      "desc": "A mobile base for strike craft, carrying fighter squadrons, bomber wings, and the support crews that keep them operational. She projects power across vast distances through her air wing rather than her own weapons.",
+      "notes": "The carrier is your base ship for fighter campaigns. The players launch, fight, and return to her. She's also a strategic target \u2014 protecting the carrier while executing missions creates constant split priorities. Her loss means the fighters have nowhere to land.",
       "image": "",
       "size": 20,
       "loco": "jet",
@@ -264,8 +264,8 @@
     },
     {
       "name": "Armed Merchantman",
-      "desc": "Q-ship. Looks like a freighter until the hull plates slide back. Pirate bait, convoy escort, or deniable operations.",
-      "notes": "",
+      "desc": "A freighter with hidden weapons \u2014 gun ports concealed behind cargo bay doors, military-grade shields behind civilian emissions profiles. She looks like a merchant. She fights like a warship. Every pirate who's attacked one and survived tells the story differently.",
+      "notes": "The armed merchantman is your ambush vessel and your Q-ship. She draws pirates in with a fat target, then drops the disguise and opens fire. Use her as a plot twist \u2014 the freighter the players are targeting is actually a naval vessel in disguise. Or give her to the players as a covert operations platform.",
       "image": "",
       "size": 12,
       "loco": "jet",

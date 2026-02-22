@@ -1,7 +1,7 @@
 {
   "formatVersion": "1.0",
   "exportType": "batch",
-  "packName": "Star & Void — Capital Ships of the Void",
+  "packName": "Star & Void \u2014 Capital Ships of the Void",
   "packId": "capital_ships",
   "price": "$3.99",
   "vehicleCount": 10,
@@ -9,8 +9,8 @@
   "vehicles": [
     {
       "name": "Escort Frigate",
-      "desc": "Light warship. Convoy protection.",
-      "notes": "",
+      "desc": "Point defence specialist. She carries flak batteries, interceptor missiles, and rapid-fire systems designed to shred incoming torpedoes, missiles, and strike craft before they reach the capital ships. She's not glamorous, but without her the fleet burns.",
+      "notes": "The escort frigate is your defensive screen. She protects the big ships from the attacks that bypass the main battery. Use her in fleet battles where the players command one and must prioritise which incoming threats to engage \u2014 you can't stop them all.",
       "image": "",
       "size": 14,
       "loco": "jet",
@@ -40,8 +40,8 @@
     },
     {
       "name": "Dreadnought",
-      "desc": "Capital ship. The iron fist of empire.",
-      "notes": "",
+      "desc": "The main battery of the fleet. All-big-gun armament, heavy armour, and the firepower to crack any other vessel in a single broadside. She stands in the line of battle and trades fire at ranges where lighter ships are irrelevant.",
+      "notes": "The dreadnought is your fleet benchmark. Everything is measured relative to her \u2014 cruisers avoid her, destroyers fear her, and only another dreadnought can match her. Use her for set-piece fleet actions where the big ships slug it out at range.",
       "image": "",
       "size": 25,
       "loco": "jet",
@@ -71,8 +71,8 @@
     },
     {
       "name": "Super Dreadnought",
-      "desc": "Ultimate warship. System-killer.",
-      "notes": "",
+      "desc": "The dreadnought's bigger, angrier sister. More guns, thicker armour, and the ability to anchor a battle line against anything short of another super dreadnought. She's hideously expensive, takes years to build, and her loss is a strategic catastrophe.",
+      "notes": "The super dreadnought is your campaign-level asset. Losing one changes the strategic balance. Use her as the fleet's centrepiece \u2014 she's too valuable to risk casually, which creates tension between aggressive tactics and preservation.",
       "image": "",
       "size": 27,
       "loco": "jet",
@@ -107,8 +107,8 @@
     },
     {
       "name": "Assault Carrier",
-      "desc": "200+ fighters. Fleet carrier supreme.",
-      "notes": "",
+      "desc": "A carrier designed for force projection rather than fleet defence. She carries ground forces, landing craft, and atmospheric strike fighters alongside her space superiority wings. She doesn't just control space \u2014 she takes planets.",
+      "notes": "The assault carrier is your invasion platform. She combines the carrier's air wing with the transport's ground force. Use her for planetary assault campaigns where the players coordinate space superiority, orbital bombardment, and ground operations simultaneously.",
       "image": "",
       "size": 24,
       "loco": "jet",
@@ -138,8 +138,8 @@
     },
     {
       "name": "Orbital Station",
-      "desc": "Space station. Permanent installation.",
-      "notes": "",
+      "desc": "She doesn't move \u2014 she doesn't need to. Anchored in orbit, she carries weapons, shields, and hangar bays that dwarf anything a mobile ship can mount. She controls the space around her world with the patient certainty of a fortress.",
+      "notes": "The orbital station is your fixed defensive position. She's too powerful to attack directly \u2014 the players need to disable her shields, jam her sensors, or bypass her entirely. Assaulting a station is a campaign climax, not a casual encounter.",
       "image": "",
       "size": 28,
       "loco": "jet",
@@ -169,8 +169,8 @@
     },
     {
       "name": "Colony Ship",
-      "desc": "Generation ship. City in the stars.",
-      "notes": "",
+      "desc": "A city in space. She carries tens of thousands of colonists in cryo-sleep, terraforming equipment, prefabricated settlements, and enough supplies to establish a self-sustaining colony on an alien world. She's the most valuable non-military vessel in existence.",
+      "notes": "The colony ship is your ultimate escort mission. She carries civilisation itself \u2014 if she's lost, entire generations are lost with her. She can't fight, she can barely manoeuvre, and she's the highest-value target in any theatre. Protecting her is the campaign.",
       "image": "",
       "size": 26,
       "loco": "jet",
@@ -184,8 +184,8 @@
     },
     {
       "name": "Battleship",
-      "desc": "Heavy capital. Broadsides in space.",
-      "notes": "",
+      "desc": "Heavier than a dreadnought, with layered armour, redundant systems, and weapons batteries that cover every arc. She's designed to survive punishment that would destroy lesser vessels and keep fighting. The battleship is what you build when cost is no longer a consideration.",
+      "notes": "The battleship is your super-heavy combatant. She's tougher than the dreadnought and carries more secondary batteries. Use her as the fleet commander's flagship or the enemy's most dangerous asset. A battleship duel is a grinding attritional fight where both sides take tremendous damage.",
       "image": "",
       "size": 24,
       "loco": "jet",
@@ -220,8 +220,8 @@
     },
     {
       "name": "Siege Platform",
-      "desc": "Orbital bombardment. Planet cracker.",
-      "notes": "",
+      "desc": "A mobile weapons emplacement the size of a space station. She carries planet-crackers \u2014 weapons designed to bombard surface installations from orbit through planetary shields. She moves slowly between targets and reduces them methodically. She is a war crime waiting to happen.",
+      "notes": "The siege platform is your orbital bombardment specialist. She's the threat that forces planetary surrender \u2014 'open the gates or we level the city from orbit.' Use her as the moral dilemma: the players might need her firepower, but using it against populated areas has consequences.",
       "image": "",
       "size": 22,
       "loco": "jet",
@@ -246,8 +246,8 @@
     },
     {
       "name": "Titan",
-      "desc": "Mobile fortress. Quarter-mile long.",
-      "notes": "",
+      "desc": "A vessel so large she has her own internal gravity, her own atmosphere recycling, and enough crew to populate a small city. She's a mobile strategic asset that carries enough firepower to contest an entire star system single-handedly. Only the wealthiest empires can afford to build one.",
+      "notes": "The titan is your Death Star equivalent \u2014 a strategic superweapon that reshapes the war when it arrives. She should never appear casually. Her arrival in a system is a campaign-defining event. The players either serve aboard her, fight alongside her, or spend the entire campaign trying to stop her.",
       "image": "",
       "size": 30,
       "loco": "jet",
@@ -282,8 +282,8 @@
     },
     {
       "name": "World Engine",
-      "desc": "Planet-killing superweapon. Campaign ender.",
-      "notes": "",
+      "desc": "The ultimate expression of industrial civilisation turned to war. She doesn't orbit worlds \u2014 she consumes them, stripping resources to fuel her systems and manufacture her weapons. She's a self-sustaining war machine on a planetary scale, and her existence is an existential threat to every inhabited system in her path.",
+      "notes": "The world engine is your campaign-ending threat. She's not something you fight in vehicle combat \u2014 she's something the campaign exists to stop. Use her as the distant, approaching doom that gives urgency to everything the players do. Every session, she's one system closer.",
       "image": "",
       "size": 30,
       "loco": "jet",
