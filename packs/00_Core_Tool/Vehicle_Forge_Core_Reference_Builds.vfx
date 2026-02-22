@@ -17,9 +17,9 @@
       "loco": "wheeled",
       "mods": {},
       "weapons": [],
-      "toughLevel": -1,
-      "armourLevel": -1,
-      "speedLevel": 0,
+      "toughLevel": 0,
+      "armourLevel": -5,
+      "speedLevel": -2,
       "handlingLevel": 0,
       "woundsLevel": 0,
       "specials": [
@@ -35,8 +35,8 @@
       "loco": "wheeled",
       "mods": {},
       "weapons": [],
-      "toughLevel": -2,
-      "armourLevel": -3,
+      "toughLevel": -1,
+      "armourLevel": -5,
       "speedLevel": -2,
       "handlingLevel": -3,
       "woundsLevel": 0,
@@ -55,7 +55,7 @@
       "mods": {},
       "weapons": [],
       "toughLevel": -1,
-      "armourLevel": -3,
+      "armourLevel": -5,
       "speedLevel": -1,
       "handlingLevel": -2,
       "woundsLevel": 0,
@@ -73,8 +73,8 @@
       "loco": "wheeled",
       "mods": {},
       "weapons": [],
-      "toughLevel": 1,
-      "armourLevel": -2,
+      "toughLevel": 2,
+      "armourLevel": -5,
       "speedLevel": 2,
       "handlingLevel": 0,
       "woundsLevel": 0,
@@ -93,9 +93,9 @@
         "offroad": 1
       },
       "weapons": [],
-      "toughLevel": 1,
-      "armourLevel": -2,
-      "speedLevel": 0,
+      "toughLevel": 2,
+      "armourLevel": -5,
+      "speedLevel": 1,
       "handlingLevel": 0,
       "woundsLevel": 0,
       "specials": [
@@ -112,8 +112,8 @@
       "loco": "wheeled",
       "mods": {},
       "weapons": [],
-      "toughLevel": 0,
-      "armourLevel": 0,
+      "toughLevel": -1,
+      "armourLevel": -1,
       "speedLevel": 1,
       "handlingLevel": 1,
       "woundsLevel": 0,
@@ -130,8 +130,8 @@
       "loco": "wheeled",
       "mods": {},
       "weapons": [],
-      "toughLevel": 1,
-      "armourLevel": 0,
+      "toughLevel": 0,
+      "armourLevel": -1,
       "speedLevel": 1,
       "handlingLevel": 0,
       "woundsLevel": 0,
@@ -149,8 +149,8 @@
       "loco": "wheeled",
       "mods": {},
       "weapons": [],
-      "toughLevel": 2,
-      "armourLevel": 0,
+      "toughLevel": 0,
+      "armourLevel": -1,
       "speedLevel": 0,
       "handlingLevel": 0,
       "woundsLevel": 0,
@@ -170,8 +170,8 @@
         "offroad": 1
       },
       "weapons": [],
-      "toughLevel": 2,
-      "armourLevel": 0,
+      "toughLevel": 0,
+      "armourLevel": -1,
       "speedLevel": 1,
       "handlingLevel": 0,
       "woundsLevel": 0,
@@ -190,8 +190,8 @@
       "loco": "wheeled",
       "mods": {},
       "weapons": [],
-      "toughLevel": 0,
-      "armourLevel": 0,
+      "toughLevel": -1,
+      "armourLevel": -1,
       "speedLevel": 3,
       "handlingLevel": 2,
       "woundsLevel": 0,
@@ -209,9 +209,9 @@
       "mods": {},
       "weapons": [],
       "toughLevel": -1,
-      "armourLevel": -2,
-      "speedLevel": 0,
-      "handlingLevel": 0,
+      "armourLevel": -4,
+      "speedLevel": -1,
+      "handlingLevel": 1,
       "woundsLevel": 0,
       "specials": [
         "enclosed",
@@ -237,8 +237,8 @@
           "linked": 0
         }
       ],
-      "toughLevel": 0,
-      "armourLevel": 0,
+      "toughLevel": -1,
+      "armourLevel": -1,
       "speedLevel": 0,
       "handlingLevel": 1,
       "woundsLevel": 0,
@@ -272,8 +272,8 @@
           "linked": 0
         }
       ],
-      "toughLevel": 0,
-      "armourLevel": -1,
+      "toughLevel": 1,
+      "armourLevel": -3,
       "speedLevel": 0,
       "handlingLevel": 0,
       "woundsLevel": 0,
@@ -303,10 +303,10 @@
           "linked": 0
         }
       ],
-      "toughLevel": 0,
-      "armourLevel": 0,
+      "toughLevel": 1,
+      "armourLevel": -2,
       "speedLevel": 0,
-      "handlingLevel": 0,
+      "handlingLevel": -1,
       "woundsLevel": 0,
       "specials": [
         "enclosed"
@@ -332,10 +332,10 @@
           "linked": 0
         }
       ],
-      "toughLevel": 0,
-      "armourLevel": 1,
+      "toughLevel": 1,
+      "armourLevel": -1,
       "speedLevel": -1,
-      "handlingLevel": 0,
+      "handlingLevel": -1,
       "woundsLevel": 0,
       "specials": [
         "enclosed"
@@ -361,8 +361,8 @@
           "linked": 0
         }
       ],
-      "toughLevel": 1,
-      "armourLevel": 2,
+      "toughLevel": 2,
+      "armourLevel": 0,
       "speedLevel": -1,
       "handlingLevel": -1,
       "woundsLevel": 0,
@@ -432,8 +432,8 @@
           "linked": 0
         }
       ],
-      "toughLevel": 2,
-      "armourLevel": 3,
+      "toughLevel": 3,
+      "armourLevel": 5,
       "speedLevel": 0,
       "handlingLevel": 0,
       "woundsLevel": 0,
@@ -465,9 +465,9 @@
           "linked": 0
         }
       ],
-      "toughLevel": 0,
-      "armourLevel": 0,
-      "speedLevel": 1,
+      "toughLevel": 1,
+      "armourLevel": -3,
+      "speedLevel": 0,
       "handlingLevel": -1,
       "woundsLevel": 0,
       "specials": [
@@ -498,7 +498,7 @@
           "linked": 0
         }
       ],
-      "toughLevel": 2,
+      "toughLevel": 1,
       "armourLevel": 3,
       "speedLevel": -1,
       "handlingLevel": 0,
@@ -523,8 +523,8 @@
           "linked": 0
         }
       ],
-      "toughLevel": 0,
-      "armourLevel": 0,
+      "toughLevel": 1,
+      "armourLevel": -1,
       "speedLevel": 2,
       "handlingLevel": 0,
       "woundsLevel": 0,
@@ -541,10 +541,10 @@
       "loco": "turboprop",
       "mods": {},
       "weapons": [],
-      "toughLevel": 0,
-      "armourLevel": -2,
+      "toughLevel": 1,
+      "armourLevel": -1,
       "speedLevel": -2,
-      "handlingLevel": 0,
+      "handlingLevel": 1,
       "woundsLevel": 0,
       "specials": [
         "open_top",
@@ -561,7 +561,7 @@
       "mods": {},
       "weapons": [],
       "toughLevel": 0,
-      "armourLevel": 0,
+      "armourLevel": -1,
       "speedLevel": -2,
       "handlingLevel": 1,
       "woundsLevel": 0,
@@ -584,9 +584,9 @@
           "linked": 0
         }
       ],
-      "toughLevel": 0,
-      "armourLevel": -1,
-      "speedLevel": -1,
+      "toughLevel": -1,
+      "armourLevel": -2,
+      "speedLevel": 0,
       "handlingLevel": 0,
       "woundsLevel": 0,
       "specials": [
@@ -603,9 +603,9 @@
       "loco": "jet",
       "mods": {},
       "weapons": [],
-      "toughLevel": -1,
-      "armourLevel": -2,
-      "speedLevel": -1,
+      "toughLevel": 1,
+      "armourLevel": -3,
+      "speedLevel": 0,
       "handlingLevel": 3,
       "woundsLevel": 0,
       "specials": [
@@ -623,8 +623,8 @@
       "loco": "jet",
       "mods": {},
       "weapons": [],
-      "toughLevel": -2,
-      "armourLevel": -2,
+      "toughLevel": 0,
+      "armourLevel": -3,
       "speedLevel": 5,
       "handlingLevel": 1,
       "woundsLevel": 0,
@@ -664,8 +664,8 @@
           "linked": 0
         }
       ],
-      "toughLevel": -2,
-      "armourLevel": -2,
+      "toughLevel": 1,
+      "armourLevel": -4,
       "speedLevel": -4,
       "handlingLevel": -1,
       "woundsLevel": 0,
@@ -695,8 +695,8 @@
         }
       ],
       "toughLevel": 0,
-      "armourLevel": 0,
-      "speedLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 1,
       "handlingLevel": 1,
       "woundsLevel": 0,
       "specials": [
@@ -729,8 +729,8 @@
         }
       ],
       "toughLevel": 0,
-      "armourLevel": 0,
-      "speedLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": 2,
       "handlingLevel": 1,
       "woundsLevel": 0,
       "specials": [
@@ -758,10 +758,10 @@
           "linked": 0
         }
       ],
-      "toughLevel": -2,
-      "armourLevel": -2,
-      "speedLevel": 2,
-      "handlingLevel": 2,
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
       "woundsLevel": 0,
       "specials": [
         "enclosed"
@@ -792,10 +792,10 @@
           "linked": 0
         }
       ],
-      "toughLevel": 0,
-      "armourLevel": 0,
-      "speedLevel": -1,
-      "handlingLevel": 2,
+      "toughLevel": 1,
+      "armourLevel": -5,
+      "speedLevel": 1,
+      "handlingLevel": 1,
       "woundsLevel": 0,
       "specials": [
         "enclosed"
@@ -828,9 +828,9 @@
           "linked": 0
         }
       ],
-      "toughLevel": 0,
-      "armourLevel": 0,
-      "speedLevel": 0,
+      "toughLevel": 1,
+      "armourLevel": -2,
+      "speedLevel": 1,
       "handlingLevel": 1,
       "woundsLevel": 0,
       "specials": [
@@ -853,9 +853,9 @@
           "linked": 0
         }
       ],
-      "toughLevel": 0,
-      "armourLevel": -1,
-      "speedLevel": 2,
+      "toughLevel": 1,
+      "armourLevel": -2,
+      "speedLevel": 3,
       "handlingLevel": 1,
       "woundsLevel": 0,
       "specials": [
@@ -884,9 +884,9 @@
         }
       ],
       "toughLevel": 0,
-      "armourLevel": 0,
+      "armourLevel": -3,
       "speedLevel": 3,
-      "handlingLevel": 2,
+      "handlingLevel": 3,
       "woundsLevel": 0,
       "specials": [
         "enclosed",
@@ -910,10 +910,10 @@
           "linked": 0
         }
       ],
-      "toughLevel": -1,
-      "armourLevel": -1,
+      "toughLevel": 0,
+      "armourLevel": -3,
       "speedLevel": 2,
-      "handlingLevel": 1,
+      "handlingLevel": 2,
       "woundsLevel": 0,
       "specials": [
         "enclosed",
@@ -935,7 +935,7 @@
           "linked": 0
         }
       ],
-      "toughLevel": -1,
+      "toughLevel": 0,
       "armourLevel": -2,
       "speedLevel": 0,
       "handlingLevel": 2,
@@ -959,7 +959,7 @@
           "linked": 0
         }
       ],
-      "toughLevel": 0,
+      "toughLevel": -1,
       "armourLevel": -2,
       "speedLevel": -1,
       "handlingLevel": 0,
@@ -983,10 +983,10 @@
           "linked": 0
         }
       ],
-      "toughLevel": 0,
-      "armourLevel": -1,
-      "speedLevel": -1,
-      "handlingLevel": 0,
+      "toughLevel": -1,
+      "armourLevel": -2,
+      "speedLevel": 0,
+      "handlingLevel": 1,
       "woundsLevel": 0,
       "specials": [
         "enclosed",
@@ -1003,7 +1003,7 @@
       "mods": {},
       "weapons": [],
       "toughLevel": -1,
-      "armourLevel": -1,
+      "armourLevel": -2,
       "speedLevel": 2,
       "handlingLevel": 1,
       "woundsLevel": 0,
@@ -1028,7 +1028,7 @@
       ],
       "toughLevel": 0,
       "armourLevel": 0,
-      "speedLevel": 1,
+      "speedLevel": 0,
       "handlingLevel": 1,
       "woundsLevel": 0,
       "specials": [
@@ -1055,10 +1055,10 @@
           "linked": 0
         }
       ],
-      "toughLevel": 0,
-      "armourLevel": 0,
-      "speedLevel": 2,
-      "handlingLevel": 0,
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 3,
       "woundsLevel": 0,
       "specials": [
         "enclosed"
@@ -1073,10 +1073,10 @@
       "loco": "water_turbo",
       "mods": {},
       "weapons": [],
-      "toughLevel": -2,
-      "armourLevel": -3,
-      "speedLevel": 1,
-      "handlingLevel": 1,
+      "toughLevel": 2,
+      "armourLevel": 0,
+      "speedLevel": -2,
+      "handlingLevel": -3,
       "woundsLevel": 0,
       "specials": [
         "open_top",
@@ -1092,10 +1092,10 @@
       "loco": "water_turbo",
       "mods": {},
       "weapons": [],
-      "toughLevel": -1,
-      "armourLevel": -2,
-      "speedLevel": 2,
-      "handlingLevel": 2,
+      "toughLevel": 0,
+      "armourLevel": -3,
+      "speedLevel": 3,
+      "handlingLevel": 1,
       "woundsLevel": 0,
       "specials": [
         "open_top"
@@ -1111,9 +1111,9 @@
       "mods": {},
       "weapons": [],
       "toughLevel": 0,
-      "armourLevel": -2,
+      "armourLevel": -1,
       "speedLevel": 0,
-      "handlingLevel": 0,
+      "handlingLevel": 1,
       "woundsLevel": 0,
       "specials": [
         "enclosed",
@@ -1129,7 +1129,7 @@
       "size": 7,
       "loco": "tracked",
       "toughLevel": 0,
-      "armourLevel": -1,
+      "armourLevel": -2,
       "speedLevel": 1,
       "handlingLevel": 0,
       "woundsLevel": 0,
@@ -1158,7 +1158,7 @@
       "size": 9,
       "loco": "tracked",
       "toughLevel": 2,
-      "armourLevel": 3,
+      "armourLevel": 5,
       "speedLevel": 0,
       "handlingLevel": 0,
       "woundsLevel": 0,
@@ -1189,8 +1189,8 @@
       "image": "",
       "size": 7,
       "loco": "tracked",
-      "toughLevel": 0,
-      "armourLevel": 0,
+      "toughLevel": 2,
+      "armourLevel": -3,
       "speedLevel": 1,
       "handlingLevel": 0,
       "woundsLevel": 0,
