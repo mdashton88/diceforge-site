@@ -1,7 +1,7 @@
 {
   "formatVersion": "1.0",
   "exportType": "batch",
-  "packName": "Rust & Ruin — Wasteland Survivors",
+  "packName": "Rust & Ruin \u2014 Wasteland Survivors",
   "packId": "wasteland_survivors",
   "price": "$2.99",
   "vehicleCount": 10,
@@ -9,8 +9,8 @@
   "vehicles": [
     {
       "name": "Salvage Truck",
-      "desc": "Armoured pickup. Tools and scrap.",
-      "notes": "",
+      "desc": "A flatbed truck fitted with a crane, cutting tools, and every mechanic's trick the wasteland has invented. She drives into the ruins of the old world and comes back carrying the parts that keep everything else alive.",
+      "notes": "The salvage truck is your resource-gathering vehicle. She goes into dangerous ruins and returns with the components the settlement needs. Escort her in, protect the crew while they work, escort her out. Every run is an adventure.",
       "image": "",
       "size": 6,
       "loco": "wheeled",
@@ -30,8 +30,8 @@
     },
     {
       "name": "Water Tanker",
-      "desc": "Most valuable vehicle in the wastes.",
-      "notes": "",
+      "desc": "She carries water. In the wasteland, that makes her more valuable than a weapons cache. Communities live and die based on whether the water tanker arrives. She is, quite literally, the vehicle that keeps people alive.",
+      "notes": "The water tanker is the fuel tanker's gentler sister. She's just as valuable, just as targeted, but her cargo saves lives rather than powers machines. Use her for the moral dimension \u2014 the players can sell the water or give it away, and the choice defines what kind of survivors they are.",
       "image": "",
       "size": 7,
       "loco": "wheeled",
@@ -45,8 +45,8 @@
     },
     {
       "name": "Farm Tractor (Armoured)",
-      "desc": "Welded plate. Slow but unstoppable.",
-      "notes": "",
+      "desc": "A John Deere with welded plate on the cab and a machine gun where the exhaust stack used to be. She ploughs fields, tows equipment, and defends the settlement's farmland against raiders who'd rather steal food than grow it.",
+      "notes": "The armoured tractor is your agricultural defender. She's slow and she's not a combat vehicle, but she represents something precious \u2014 the ability to grow food. Raiders attack farms because farms are targets. The tractor fights back.",
       "image": "",
       "size": 5,
       "loco": "wheeled",
@@ -66,8 +66,8 @@
     },
     {
       "name": "Jury-Rig Motorcycle",
-      "desc": "Held together with wire and hope.",
-      "notes": "",
+      "desc": "A motorcycle assembled from parts that were never designed to work together \u2014 a frame from one brand, an engine from another, wheels from a third. She runs, mostly. She stops, usually. She's what you ride when you can't find anything better.",
+      "notes": "The jury-rig motorcycle is your disposable scout vehicle. She's unreliable but available. Roll Repair when she's pushed hard. She breaks down at the worst possible moment, which is dramatic and historically accurate for improvised vehicles.",
       "image": "",
       "size": 1,
       "loco": "wheeled",
@@ -81,8 +81,8 @@
     },
     {
       "name": "Armoured Schoolbus",
-      "desc": "Community transport. Rolling shelter.",
-      "notes": "",
+      "desc": "A yellow schoolbus with steel plates welded over the windows, firing slits cut in the sides, and a ram bar on the front. She carries thirty survivors and she's painted in the colours of a world that doesn't exist anymore. The children's drawings are still on the inside walls.",
+      "notes": "The armoured schoolbus is the thunder bus variant with more personality. The children's drawings are a detail that makes the vehicle human. She's a mobile home for displaced people, and the players protect her because what she represents \u2014 community, innocence, hope \u2014 matters.",
       "image": "",
       "size": 7,
       "loco": "wheeled",
@@ -102,8 +102,8 @@
     },
     {
       "name": "Sail Cart",
-      "desc": "Wind-powered trader. No fuel needed.",
-      "notes": "",
+      "desc": "A cart with a mast and a sail, pulled by wind on flat ground and by hand when the wind dies. She carries trade goods between settlements at walking pace and costs nothing to operate. She's the camel caravan of the wasteland.",
+      "notes": "The sail cart is your zero-fuel trade vehicle. She moves slowly but she moves for free. Use her for trade caravans that cross the wasteland over weeks rather than days. The pace creates encounters \u2014 every night is a camp, every camp is a risk.",
       "image": "",
       "size": 3,
       "loco": "water_sail",
@@ -117,8 +117,8 @@
     },
     {
       "name": "Scrap Walker",
-      "desc": "Rebuilt from industrial mech parts.",
-      "notes": "",
+      "desc": "A bipedal walking machine assembled from excavator arms, hydraulic pistons, and the obsessive ingenuity of a mechanic who refused to accept that legs were impossible. She walks. Badly. But she walks over terrain that stops everything with wheels or tracks.",
+      "notes": "The scrap walker is your improvised mech. She's slow, she's unreliable, and she's the only thing that crosses the rubble fields. Use her for expeditions into terrain so broken that even tracked vehicles can't pass. She's ugly, she's wonderful, and she represents human refusal to quit.",
       "image": "",
       "size": 5,
       "loco": "legs_biped",
@@ -138,8 +138,8 @@
     },
     {
       "name": "River Barge (Armoured)",
-      "desc": "Armoured river transport. Trading post.",
-      "notes": "",
+      "desc": "A flat-bottomed barge with welded steel sides and a mounted weapon. She moves trade goods and people along rivers that are safer than roads \u2014 because on the river you can see the raiders coming and the current does most of the work.",
+      "notes": "The river barge is your waterway transport. Rivers are safer than roads in the wasteland because they're harder to ambush. Use her for river trade campaigns where the settlements along the waterway depend on the barge's regular route.",
       "image": "",
       "size": 8,
       "loco": "water_turbo",
@@ -159,8 +159,8 @@
     },
     {
       "name": "Pedal-Powered Cart",
-      "desc": "Human-powered. Silent. Desperate.",
-      "notes": "",
+      "desc": "A cart driven by pedals, like an enormous bicycle for four people. She makes no noise, she uses no fuel, and she's powered entirely by the legs of people who have nothing else. She's the ultimate expression of wasteland desperation and human ingenuity.",
+      "notes": "The pedal cart is the vehicle of absolute poverty. She represents communities with no fuel, no animals, and no resources except human muscles. Use her to show the bottom of the wasteland hierarchy \u2014 and to demonstrate that even the poorest survivors refuse to stop moving.",
       "image": "",
       "size": 2,
       "loco": "wheeled",
@@ -174,8 +174,8 @@
     },
     {
       "name": "Frankenstein APC",
-      "desc": "Three vehicles welded into one. Ugly and effective.",
-      "notes": "",
+      "desc": "The expansion version \u2014 heavier, better armed, and assembled from the remains of two different military vehicles that the mechanic somehow convinced to work together. She's the wasteland's castle on tracks.",
+      "notes": "The expansion APC is the upgraded heavy vehicle. She's tougher and carries more weapons than the starter version. She's still unreliable \u2014 the mechanical gods of the wasteland demand sacrifice. But when she works, nothing on the road can touch her.",
       "image": "",
       "size": 7,
       "loco": "tracked",

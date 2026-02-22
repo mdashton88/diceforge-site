@@ -1,7 +1,7 @@
 {
   "formatVersion": "1.0",
   "exportType": "batch",
-  "packName": "Wire & Chrome — Cyberpunk Starter",
+  "packName": "Wire & Chrome \u2014 Cyberpunk Starter",
   "packId": "cyberpunk_starter",
   "price": "$2.99",
   "vehicleCount": 10,
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "Corp AV",
-      "desc": "Corporate VTOL. Armoured, luxurious, morally bankrupt.",
-      "notes": "",
+      "desc": "Aerodyne vehicle. She lifts off from the corporate arcology roof, flies over the burning streets, and lands at the next arcology without ever touching the ground. Inside: leather seats, climate control, and executives who've never seen the city below.",
+      "notes": "The corp AV is the ultimate status vehicle. She represents the vertical divide \u2014 the rich fly over the streets the poor fight in. Use her as the extraction vehicle, the corporate transport, and the thing the players steal when the run goes sideways.",
       "image": "",
       "size": 5,
       "loco": "vtol",
@@ -25,8 +25,8 @@
     },
     {
       "name": "Street Racer",
-      "desc": "Illegal machine. Nitro tanks and no insurance.",
-      "notes": "",
+      "desc": "A ground car modified beyond the manufacturer's nightmares. Nitrous injection, stripped interior, and neural-link steering that connects the driver's reflexes directly to the chassis. She's illegal, she's fast, and she's the currency of street cred.",
+      "notes": "The street racer is your cyberpunk chase vehicle. Neural-link steering gives the driver a Handling bonus but means damage to the car feeds back as pain. Use her for neon-lit street races where the stakes are reputation, territory, and survival.",
       "image": "",
       "size": 3,
       "loco": "wheeled",
@@ -40,8 +40,8 @@
     },
     {
       "name": "Tactical Drone",
-      "desc": "Armed surveillance platform. Eye in the sky with a sting.",
-      "notes": "",
+      "desc": "A small rotary-wing drone carrying a camera, a targeting laser, and optionally a light weapon. She flies ahead of the team, scouts the target, and marks enemies for the netrunner to exploit. She's expendable and replaceable. The data she carries isn't.",
+      "notes": "The tactical drone is your scout and spotter. She provides real-time intelligence on enemy positions. The netrunner controls her while the rest of the team moves on the ground. If she's jammed or shot down, the team goes blind.",
       "image": "",
       "size": 2,
       "loco": "vtol",
@@ -63,8 +63,8 @@
     },
     {
       "name": "Merc APC",
-      "desc": "Private military transport. The corpo solution to democracy.",
-      "notes": "",
+      "desc": "A military surplus APC repurposed for corporate security, mercenary operations, and anyone who needs to move a fire team through hostile territory. She's armoured against small arms, she carries a squad, and she has no corporate markings. Officially, she doesn't exist.",
+      "notes": "The merc APC is your team transport for hot extractions. She gets the party in and out under fire. Her armour stops small arms but not anti-vehicle weapons. Use her for the insertion phase of corporate raids and the extraction when everything's gone loud.",
       "image": "",
       "size": 7,
       "loco": "wheeled",
@@ -89,8 +89,8 @@
     },
     {
       "name": "Spider Tank",
-      "desc": "Urban assault platform. Climbs walls. Ruins days.",
-      "notes": "",
+      "desc": "Six legs, a weapons turret, and the ability to climb over barricades, up buildings, and through urban terrain that stops wheeled vehicles. She's the corporate military's answer to street-level insurgency \u2014 go where the runners hide and flush them out.",
+      "notes": "The spider tank is your cyberpunk boss encounter. She climbs buildings, she sees through walls, and her weapons outclass anything the players carry. The players don't fight her \u2014 they run, they hack her, or they find an anti-armour weapon that shouldn't exist on the street.",
       "image": "",
       "size": 6,
       "loco": "legs_quad",
@@ -115,8 +115,8 @@
     },
     {
       "name": "Courier Bike",
-      "desc": "Electric, silent, fast. Data worth more than the rider.",
-      "notes": "",
+      "desc": "An electric motorcycle with a neural-link throttle and reaction-enhancement software. She splits lanes at two hundred kilometres an hour, she climbs stairways, and she delivers packages that can't be trusted to the net. The rider is faster than the traffic and cheaper than a drone.",
+      "notes": "The courier bike is your cyberpunk messenger vehicle. She carries a single operator and a small package through urban chaos. Use her for time-sensitive deliveries where the players must navigate traffic, gangs, and corporate checkpoints at speed.",
       "image": "",
       "size": 1,
       "loco": "wheeled",
@@ -130,8 +130,8 @@
     },
     {
       "name": "Armoured Riot Van",
-      "desc": "Corporate security's favourite toy. Crowd dispersal guaranteed.",
-      "notes": "",
+      "desc": "Corporate police vehicle. Water cannon, tear gas dispenser, and room for a riot squad in full armour. She rolls into protests, she clears streets, and she reminds the population who owns the city.",
+      "notes": "The riot van is your corporate enforcement vehicle. She appears when the players make too much noise. She's not designed to kill \u2014 she's designed to suppress, contain, and arrest. But 'non-lethal' depends heavily on who's driving.",
       "image": "",
       "size": 6,
       "loco": "wheeled",
@@ -151,8 +151,8 @@
     },
     {
       "name": "Hover Limo",
-      "desc": "CEO transport. Counter-measures, champagne, and contempt.",
-      "notes": "",
+      "desc": "A ground-effect limousine that glides above the street on a cushion of repulsor energy. She carries corporate executives in ballistic luxury between meetings that determine the fate of millions. The windows are blacked out. What happens inside stays inside.",
+      "notes": "The hover limo is the mobile meeting room for the powerful. She's where deals are made, betrayals are planned, and the players receive their mission briefing. She's also armoured \u2014 the executives inside have enemies. Use her as location and vehicle.",
       "image": "",
       "size": 6,
       "loco": "hover",
@@ -166,8 +166,8 @@
     },
     {
       "name": "Cargo Drone",
-      "desc": "Autonomous delivery. Easily repurposed. Frequently is.",
-      "notes": "",
+      "desc": "An autonomous aerial transport that carries shipping containers between arcologies without human intervention. She follows pre-programmed routes, she ignores everything below, and she's the backbone of the corporate supply chain.",
+      "notes": "The cargo drone is your hijack target. She carries corporate supplies on predictable routes \u2014 intercept her and you have medical supplies, weapons, or corporate secrets. She's autonomous and unarmed, which makes hijacking a hacking challenge rather than a combat one.",
       "image": "",
       "size": 4,
       "loco": "vtol",
@@ -183,8 +183,8 @@
     },
     {
       "name": "Security Sedan",
-      "desc": "Armoured executive car. AI-driven. Expendable occupants optional.",
-      "notes": "",
+      "desc": "An armoured sedan in corporate colours, carrying a two-person security team and enough surveillance equipment to monitor a city block. She cruises corporate zones, scanning for threats, checking identities, and calling in backup when she finds runners.",
+      "notes": "The security sedan is your patrol encounter. She rolls through the streets and if she spots the players, backup arrives in minutes. The players must avoid detection, bluff past her scanners, or disable her before she transmits. She's the first rung of corporate response.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
