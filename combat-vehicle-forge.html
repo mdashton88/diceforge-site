@@ -604,6 +604,13 @@ function rebuildExtensionData(){
     if(ext.weapons)ext.weapons.forEach(function(w){w._ext=ext.id;w._extName=ext.name;extWeapons.push(w)});
     if(ext.specials)ext.specials.forEach(function(s){s._ext=ext.id;s._extName=ext.name;extSpecials.push(s)})})}
 rebuildExtensionData();
+(function autoInstallCore(){
+  if(extensions.find(function(e){return e.id==='core'}))return;
+  fetch('packs/00_Core_Tool/Vehicle_Forge_Core_Reference_Builds.vfx')
+    .then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})
+    .then(function(data){installExtension(data);console.log('Core Reference Builds auto-installed ('+data.vehicles.length+' vehicles)')})
+    .catch(function(err){console.warn('Could not auto-install core pack:',err)})
+})();
 function importVFX(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){
   try{var data=JSON.parse(ev.target.result);installExtension(data)}catch(err){alert('Error reading .vfx file: '+err.message)}};reader.readAsText(file);e.target.value=''}
 function showExtensionManager(){
