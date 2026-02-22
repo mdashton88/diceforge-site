@@ -254,7 +254,11 @@
         "grade": "A+",
         "threat": 15
       },
-      "notes": "The jeep goes everywhere and carries everything. She's the workhorse of military campaigns from WWII to Vietnam \u2014 reconnaissance, command vehicle, ambulance, weapons platform. Open-topped and lightly armoured, which means the crew is always one burst away from disaster. Four-wheel drive."
+      "notes": "The jeep goes everywhere and carries everything. She's the workhorse of military campaigns from WWII to Vietnam \u2014 reconnaissance, command vehicle, ambulance, weapons platform. Open-topped and lightly armoured, which means the crew is always one burst away from disaster. Four-wheel drive.",
+      "specials": [
+        "open_top",
+        "four_wd"
+      ]
     },
     {
       "name": "M4 Sherman",
@@ -302,7 +306,10 @@
         "grade": "C-",
         "threat": 28
       },
-      "notes": "The workhorse of the Allied armoured forces. She wasn't the best tank of the war \u2014 the Germans outgunned her routinely \u2014 but there were always more Shermans. Use her as the reliable, available option that wins through numbers and logistics rather than individual superiority. Heavy Armor, Tracked."
+      "notes": "The workhorse of the Allied armoured forces. She wasn't the best tank of the war \u2014 the Germans outgunned her routinely \u2014 but there were always more Shermans. Use her as the reliable, available option that wins through numbers and logistics rather than individual superiority. Heavy Armor, Tracked.",
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "M5A1 Stuart",
@@ -341,7 +348,10 @@
         "grade": "B",
         "threat": 21
       },
-      "notes": "The Stuart is your light tank \u2014 fast, undergunned, and used for reconnaissance rather than direct engagement. She scouts ahead of the main force, finds the enemy, and calls in the Shermans. Players driving Stuarts should feel the tension of bringing a light tank to a heavy fight. Heavy Armor, Tracked."
+      "notes": "The Stuart is your light tank \u2014 fast, undergunned, and used for reconnaissance rather than direct engagement. She scouts ahead of the main force, finds the enemy, and calls in the Shermans. Players driving Stuarts should feel the tension of bringing a light tank to a heavy fight. Heavy Armor, Tracked.",
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "T-34/76",
@@ -371,7 +381,10 @@
         "grade": "C-",
         "threat": 32
       },
-      "notes": "The T-34 changed tank warfare. Her sloped armour deflected shots that would penetrate a flat-faced Sherman, and she was simple enough to build in staggering numbers. The backbone of the Soviet armoured force and the benchmark for medium tank design. Heavy Armor, Sloped Armor (front), Tracked."
+      "notes": "The T-34 changed tank warfare. Her sloped armour deflected shots that would penetrate a flat-faced Sherman, and she was simple enough to build in staggering numbers. The backbone of the Soviet armoured force and the benchmark for medium tank design. Heavy Armor, Sloped Armor (front), Tracked.",
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Pz IVJ",
@@ -401,7 +414,10 @@
         "grade": "C-",
         "threat": 28
       },
-      "notes": "The Panzer IV was Germany's reliable medium tank \u2014 not as famous as the Tiger, not as advanced as the Panther, but available in numbers and effective across the entire war. She's the opponent your players face most often in a European theatre campaign. Heavy Armor, Tracked."
+      "notes": "The Panzer IV was Germany's reliable medium tank \u2014 not as famous as the Tiger, not as advanced as the Panther, but available in numbers and effective across the entire war. She's the opponent your players face most often in a European theatre campaign. Heavy Armor, Tracked.",
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Pz VI Tiger II",
@@ -431,7 +447,11 @@
         "grade": "C+",
         "threat": 39
       },
-      "notes": "The King Tiger is your named threat. She outguns everything the Allies field and her frontal armour shrugs off most anti-tank weapons. Use her as a boss encounter \u2014 the players hear her coming, they plan around her, and they need a clever approach because a straight fight is suicide. Heavy Armor, Tracked."
+      "notes": "The King Tiger is your named threat. She outguns everything the Allies field and her frontal armour shrugs off most anti-tank weapons. Use her as a boss encounter \u2014 the players hear her coming, they plan around her, and they need a clever approach because a straight fight is suicide. Heavy Armor, Tracked.",
+      "specials": [
+        "enclosed",
+        "famous_infamous"
+      ]
     },
     {
       "name": "M1A1 Abrams",
@@ -470,7 +490,11 @@
         "grade": "D+",
         "threat": 58.5
       },
-      "notes": "The modern benchmark for main battle tanks. Her combination of composite armour, stabilised gun, and thermal imaging makes her dominant in open terrain. Use her to show players what modern military hardware can do \u2014 and to remind them that even the best tank is vulnerable in cities. Heavy Armor, Night Vision, Tracked."
+      "notes": "The modern benchmark for main battle tanks. Her combination of composite armour, stabilised gun, and thermal imaging makes her dominant in open terrain. Use her to show players what modern military hardware can do \u2014 and to remind them that even the best tank is vulnerable in cities. Heavy Armor, Night Vision, Tracked.",
+      "specials": [
+        "enclosed",
+        "night_ops"
+      ]
     },
     {
       "name": "M2 Bradley",
@@ -509,7 +533,11 @@
         "grade": "C+",
         "threat": 38
       },
-      "notes": "The Bradley is an infantry fighting vehicle \u2014 she carries troops and fights alongside them. Her autocannon shreds light vehicles and her TOW missiles threaten tanks. The players either ride in her or face her, and both experiences should feel dangerous. Heavy Armor, Night Vision, Tracked."
+      "notes": "The Bradley is an infantry fighting vehicle \u2014 she carries troops and fights alongside them. Her autocannon shreds light vehicles and her TOW missiles threaten tanks. The players either ride in her or face her, and both experiences should feel dangerous. Heavy Armor, Night Vision, Tracked.",
+      "specials": [
+        "enclosed",
+        "night_ops"
+      ]
     },
     {
       "name": "T-72 MBT",
@@ -539,7 +567,10 @@
         "grade": "D+",
         "threat": 57.5
       },
-      "notes": "The T-72 is the world's most exported tank. She shows up everywhere \u2014 every regional conflict, every arms deal, every third-world army. Not as capable as Western designs but available, affordable, and dangerous enough. Heavy Armor, Tracked."
+      "notes": "The T-72 is the world's most exported tank. She shows up everywhere \u2014 every regional conflict, every arms deal, every third-world army. Not as capable as Western designs but available, affordable, and dangerous enough. Heavy Armor, Tracked.",
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "T-80 MBT",
@@ -569,7 +600,11 @@
         "grade": "D+",
         "threat": 57.5
       },
-      "notes": "The T-80 is the Soviet answer to the Abrams \u2014 faster, lower-profile, and equipped with reactive armour. She represents the top tier of opposition for Cold War and modern campaigns. Heavy Armor, Night Vision, Tracked."
+      "notes": "The T-80 is the Soviet answer to the Abrams \u2014 faster, lower-profile, and equipped with reactive armour. She represents the top tier of opposition for Cold War and modern campaigns. Heavy Armor, Night Vision, Tracked.",
+      "specials": [
+        "enclosed",
+        "night_ops"
+      ]
     },
     {
       "name": "BTR-70 APC",
@@ -599,7 +634,12 @@
         "grade": "A+",
         "threat": 15
       },
-      "notes": "The BTR-70 carries infantry into combat and provides fire support with her turret-mounted weapons. She swims rivers without preparation, which changes the tactical map \u2014 obstacles that stop wheeled vehicles don't stop a BTR. Amphibious, 4WD, Heavy Armor."
+      "notes": "The BTR-70 carries infantry into combat and provides fire support with her turret-mounted weapons. She swims rivers without preparation, which changes the tactical map \u2014 obstacles that stop wheeled vehicles don't stop a BTR. Amphibious, 4WD, Heavy Armor.",
+      "specials": [
+        "enclosed",
+        "amphibious",
+        "four_wd"
+      ]
     },
     {
       "name": "Hover Tank (SWADE)",
@@ -638,7 +678,11 @@
         "grade": "D",
         "threat": 52
       },
-      "notes": "The hover tank represents the next generation of armoured warfare. She ignores terrain, crosses water without slowing, and positions faster than any tracked vehicle. The trade-off is that hover vehicles can't dig in \u2014 she fights on the move or not at all. Heavy Armor, Hover, Night Vision."
+      "notes": "The hover tank represents the next generation of armoured warfare. She ignores terrain, crosses water without slowing, and positions faster than any tracked vehicle. The trade-off is that hover vehicles can't dig in \u2014 she fights on the move or not at all. Heavy Armor, Hover, Night Vision.",
+      "specials": [
+        "enclosed",
+        "night_ops"
+      ]
     },
     {
       "name": "Hover APC (SWADE)",
@@ -668,7 +712,10 @@
         "grade": "B-",
         "threat": 18.5
       },
-      "notes": "The hover APC delivers troops across any terrain at speed. She's the future of mechanised infantry \u2014 rivers, rubble, swamp, and rough ground are no longer obstacles. Heavy Armor, Hover."
+      "notes": "The hover APC delivers troops across any terrain at speed. She's the future of mechanised infantry \u2014 rivers, rubble, swamp, and rough ground are no longer obstacles. Heavy Armor, Hover.",
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Biplane (Civilian)",
@@ -799,7 +846,11 @@
         "grade": "B-",
         "threat": 19
       },
-      "notes": "The Flying Fortress is your strategic bomber and your crew survival scenario. She carries ten men, she bristles with defensive guns, and she has to hold formation through flak and fighters for hours. Every mission is a survival horror session at 25,000 feet."
+      "notes": "The Flying Fortress is your strategic bomber and your crew survival scenario. She carries ten men, she bristles with defensive guns, and she has to hold formation through flak and fighters for hours. Every mission is a survival horror session at 25,000 feet.",
+      "specials": [
+        "enclosed",
+        "long_range"
+      ]
     },
     {
       "name": "Bf-109",
@@ -838,7 +889,10 @@
         "grade": "B-",
         "threat": 19
       },
-      "notes": "The Messerschmitt is Germany's primary fighter across the entire war. She's fast, she climbs well, and her cannon armament hits hard. The opposition your players face in every European air combat scenario from the Battle of Britain to Berlin."
+      "notes": "The Messerschmitt is Germany's primary fighter across the entire war. She's fast, she climbs well, and her cannon armament hits hard. The opposition your players face in every European air combat scenario from the Battle of Britain to Berlin.",
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "P-51 Mustang",
@@ -868,7 +922,11 @@
         "grade": "B",
         "threat": 23
       },
-      "notes": "The Mustang is the best all-round fighter of the war. She escorts bombers to Berlin and back, she dogfights anything the Luftwaffe sends up, and she strafes ground targets on the way home. The player character's fighter of choice."
+      "notes": "The Mustang is the best all-round fighter of the war. She escorts bombers to Berlin and back, she dogfights anything the Luftwaffe sends up, and she strafes ground targets on the way home. The player character's fighter of choice.",
+      "specials": [
+        "enclosed",
+        "long_range"
+      ]
     },
     {
       "name": "Japanese Zero",
@@ -907,7 +965,10 @@
         "grade": "B",
         "threat": 21
       },
-      "notes": "The Zero trades armour for agility. She turns inside anything the Allies fly, which makes her lethal in a dogfight \u2014 until the first bullet hits, because she has no armour and no self-sealing fuel tanks. Glass cannon in aircraft form."
+      "notes": "The Zero trades armour for agility. She turns inside anything the Allies fly, which makes her lethal in a dogfight \u2014 until the first bullet hits, because she has no armour and no self-sealing fuel tanks. Glass cannon in aircraft form.",
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Spitfire Mk IIA",
@@ -937,7 +998,10 @@
         "grade": "B-",
         "threat": 19
       },
-      "notes": "The Spitfire is Britain's finest. She matches the Bf-109 in speed, outturns it at most altitudes, and her elliptical wing is the most recognisable silhouette of the war. The Battle of Britain in one aircraft."
+      "notes": "The Spitfire is Britain's finest. She matches the Bf-109 in speed, outturns it at most altitudes, and her elliptical wing is the most recognisable silhouette of the war. The Battle of Britain in one aircraft.",
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "AH-64 Apache",
@@ -976,7 +1040,11 @@
         "grade": "C+",
         "threat": 38
       },
-      "notes": "The Apache is your modern attack helicopter \u2014 she finds targets with her sensor suite, kills them with Hellfire missiles, and moves on before anyone can shoot back. Use her to demonstrate the terrifying gap between infantry and modern air power. Helicopter, Night Vision."
+      "notes": "The Apache is your modern attack helicopter \u2014 she finds targets with her sensor suite, kills them with Hellfire missiles, and moves on before anyone can shoot back. Use her to demonstrate the terrifying gap between infantry and modern air power. Helicopter, Night Vision.",
+      "specials": [
+        "enclosed",
+        "night_ops"
+      ]
     },
     {
       "name": "AV-8B Harrier",
@@ -1006,7 +1074,11 @@
         "grade": "A+",
         "threat": 17.5
       },
-      "notes": "The Harrier operates from roads, clearings, and ships too small for conventional aircraft. Her VTOL capability means she can be anywhere the enemy doesn't expect close air support. Slow for a jet, devastating for anything on the ground. VTOL."
+      "notes": "The Harrier operates from roads, clearings, and ships too small for conventional aircraft. Her VTOL capability means she can be anywhere the enemy doesn't expect close air support. Slow for a jet, devastating for anything on the ground. VTOL.",
+      "specials": [
+        "enclosed",
+        "stol"
+      ]
     },
     {
       "name": "F-15 Eagle",
@@ -1036,7 +1108,11 @@
         "grade": "A+",
         "threat": 17
       },
-      "notes": "The Eagle has never been shot down in air-to-air combat. She's the benchmark for air superiority fighters \u2014 fast, well-armed, and equipped with sensors that let her fight beyond visual range. The thing your players hear about but never want to see. Night Vision."
+      "notes": "The Eagle has never been shot down in air-to-air combat. She's the benchmark for air superiority fighters \u2014 fast, well-armed, and equipped with sensors that let her fight beyond visual range. The thing your players hear about but never want to see. Night Vision.",
+      "specials": [
+        "enclosed",
+        "night_ops"
+      ]
     },
     {
       "name": "SU-27",
@@ -1066,7 +1142,11 @@
         "grade": "B-",
         "threat": 19.5
       },
-      "notes": "The Flanker is the Soviet answer to the F-15 \u2014 arguably more manoeuvrable, certainly more dramatic in appearance, and equipped to fight at every range. She represents peer-level opposition for any modern air combat campaign. Night Vision."
+      "notes": "The Flanker is the Soviet answer to the F-15 \u2014 arguably more manoeuvrable, certainly more dramatic in appearance, and equipped to fight at every range. She represents peer-level opposition for any modern air combat campaign. Night Vision.",
+      "specials": [
+        "enclosed",
+        "night_ops"
+      ]
     },
     {
       "name": "UH-1 Huey",
@@ -1096,7 +1176,10 @@
         "grade": "A",
         "threat": 11
       },
-      "notes": "The Huey is the sound of the Vietnam War. Her distinctive rotor beat tells everyone \u2014 friendly and hostile \u2014 that she's coming. She carries troops, she evacuates wounded, she provides fire support, and she defines the helicopter warfare era. Helicopter."
+      "notes": "The Huey is the sound of the Vietnam War. Her distinctive rotor beat tells everyone \u2014 friendly and hostile \u2014 that she's coming. She carries troops, she evacuates wounded, she provides fire support, and she defines the helicopter warfare era. Helicopter.",
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Galleon",
@@ -1126,7 +1209,10 @@
         "grade": "A+",
         "threat": 15.5
       },
-      "notes": "The galleon is your Age of Sail warship and your pirate campaign flagship. She carries dozens of guns, a crew of hundreds, and enough provisions for months at sea. She's a floating fortress, a mobile settlement, and a slow-moving target for anything faster. Heavy Armor."
+      "notes": "The galleon is your Age of Sail warship and your pirate campaign flagship. She carries dozens of guns, a crew of hundreds, and enough provisions for months at sea. She's a floating fortress, a mobile settlement, and a slow-moving target for anything faster. Heavy Armor.",
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Galley",
@@ -1156,7 +1242,11 @@
         "grade": "B-",
         "threat": 18
       },
-      "notes": "The galley is your ancient and medieval warship. Oars give her independence from wind \u2014 she moves when and where the captain commands, which makes her the dominant naval platform from Greece to Lepanto. Her ram is as dangerous as her weapons. Heavy Armor, Oars+Sails."
+      "notes": "The galley is your ancient and medieval warship. Oars give her independence from wind \u2014 she moves when and where the captain commands, which makes her the dominant naval platform from Greece to Lepanto. Her ram is as dangerous as her weapons. Heavy Armor, Oars+Sails.",
+      "specials": [
+        "enclosed",
+        "ram_plate"
+      ]
     },
     {
       "name": "Hydrofoil",
@@ -1205,7 +1295,10 @@
         "grade": "B-",
         "threat": 19
       },
-      "notes": "The PBR is your brown-water navy vessel \u2014 rivers, estuaries, coastlines. She's small enough to navigate shallow waterways that would ground larger craft, and armed enough to suppress fire from both banks. The Vietnam riverine warfare workhorse. Heavy Armor."
+      "notes": "The PBR is your brown-water navy vessel \u2014 rivers, estuaries, coastlines. She's small enough to navigate shallow waterways that would ground larger craft, and armed enough to suppress fire from both banks. The Vietnam riverine warfare workhorse. Heavy Armor.",
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "PT Boat",
@@ -1244,7 +1337,10 @@
         "grade": "C+",
         "threat": 37.5
       },
-      "notes": "The PT boat is your fast attack craft \u2014 she closes with the enemy at speed, launches torpedoes, and gets out before the return fire finds her. Small crew, high risk, enormous potential reward if the torpedoes hit. JFK commanded one. Heavy Armor."
+      "notes": "The PT boat is your fast attack craft \u2014 she closes with the enemy at speed, launches torpedoes, and gets out before the return fire finds her. Small crew, high risk, enormous potential reward if the torpedoes hit. JFK commanded one. Heavy Armor.",
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Rowboat",
