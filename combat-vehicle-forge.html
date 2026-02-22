@@ -223,15 +223,15 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
       <button class="header-btn" onclick="redo()" title="Redo (Ctrl+Y)">↪ Redo</button>
     </div>
     <div class="tabs">
-      <div class="tab active" data-tab="mods" onclick="switchTab('mods')">Modifications</div>
+      <div class="tab active" data-tab="output" onclick="switchTab('output')">Stat Block</div>
+      <div class="tab" data-tab="mods" onclick="switchTab('mods')">Modifications</div>
       <div class="tab" data-tab="weapons" onclick="switchTab('weapons')">Weapons</div>
       <div class="tab" data-tab="specials" onclick="switchTab('specials')">Special</div>
-      <div class="tab" data-tab="output" onclick="switchTab('output')">Stat Block</div>
       <div class="tab" data-tab="help" onclick="switchTab('help')">Reference Guide</div>
       <div class="tab" data-tab="settings" onclick="switchTab('settings')">⚙ Settings</div>
       <div class="tab" data-tab="settings" onclick="switchTab('settings')" style="margin-left:auto;font-size:9px">⚙ SETTINGS</div>
     </div>
-    <div class="panel active" id="panel-mods"><div class="dnd-layout"><div class="dnd-column"><h3>Modifications Catalogue</h3><input type="text" class="search-bar" id="modSearch" placeholder="Search modifications..." oninput="renderModCatalogue()"><div id="modCatalogue"></div></div><div class="dnd-column"><h3>Installed Modifications</h3><div class="drop-bay" id="modBay"><div class="empty-bay">Drag modifications here to install them</div></div></div></div></div>
+    <div class="panel" id="panel-mods"><div class="dnd-layout"><div class="dnd-column"><h3>Modifications Catalogue</h3><input type="text" class="search-bar" id="modSearch" placeholder="Search modifications..." oninput="renderModCatalogue()"><div id="modCatalogue"></div></div><div class="dnd-column"><h3>Installed Modifications</h3><div class="drop-bay" id="modBay"><div class="empty-bay">Drag modifications here to install them</div></div></div></div></div>
     <div class="panel" id="panel-weapons"><div class="dnd-layout"><div class="dnd-column"><h3>Vehicular Weapons</h3><div id="eraFilter" style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px"></div><input type="text" class="search-bar" id="weaponSearch" placeholder="Search weapons..." oninput="renderWeaponCatalogue()"><div id="weaponCatalogue"></div><div style="margin-top:12px;padding-top:8px;border-top:1px solid var(--border)"><button class="header-btn" onclick="toggleCustomForm()" style="width:100%;text-align:center">+ Add Custom Weapon</button><div id="customForm" style="display:none;margin-top:8px"></div></div></div><div class="dnd-column"><h3>Weapon Hardpoints</h3><div class="drop-bay" id="weaponBay"><div class="empty-bay">Drag weapons here to mount them</div></div></div></div></div>
     <div class="panel" id="panel-specials">
       <div style="max-width:800px">
@@ -244,7 +244,7 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
         </div>
       </div>
     </div>
-    <div class="panel" id="panel-output"><div id="outputContent"></div></div>
+    <div class="panel active" id="panel-output"><div id="outputContent"></div></div>
     <div class="panel" id="panel-help"><div style="display:flex;gap:8px;margin-bottom:8px"><input type="text" class="search-bar help-search" id="helpSearch" placeholder="Search reference guide..." oninput="filterHelp()" style="flex:1;margin:0"><button class="btn" onclick="popOutHelp()" title="Open in new window" style="white-space:nowrap;padding:6px 14px">⧉ Pop Out</button></div><div id="helpContent"></div></div>
     <div class="panel" id="panel-settings">
       <div style="max-width:600px">
