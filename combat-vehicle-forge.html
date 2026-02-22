@@ -188,8 +188,11 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
       </div>
       <div class="io-buttons">
         <button class="header-btn" onclick="exportJSON()">Export .json</button>
+        <button class="header-btn" onclick="exportStatBlock()" title="Export Pinnacle-format stat block (.txt)">Export Stat Block</button>
+        <button class="header-btn" onclick="exportFGXML()" title="Export Fantasy Grounds XML">Export FG XML</button>
         <button class="header-btn" onclick="document.getElementById('importInput').click()">Import .json</button>
         <button class="header-btn" onclick="showExtensionManager()" title="Install supplement extensions" style="border-color:var(--accent);color:var(--accent)">⚙ Extensions</button>
+        <a href="https://diceforgestudios.pages.dev/vehicle-forge-manual.pdf" target="_blank" class="header-btn" style="text-decoration:none;display:inline-block;border-color:var(--green);color:var(--green)" title="Open the Vehicle Forge Companion Guide (PDF)">📖 Manual</a>
         <input type="file" id="importInput" accept=".json,.cvf.json" style="display:none" onchange="importJSON(event)">
         <button class="header-btn" onclick="batchExport()" title="Export all saved vehicles as one file">Batch Export</button>
         <button class="header-btn" onclick="printAll()" title="Print all saved vehicles as stat blocks">Print All</button>
@@ -266,7 +269,7 @@ html,body{height:100%;background:var(--bg-deep);color:var(--text);font-family:'C
           </div>
         </div>
         <div style="padding-top:16px;border-top:1px solid var(--border);font-size:11px;color:var(--text-dim)">
-          Vehicle Forge v7.1 — DiceForge Studios Ltd<br>
+          Vehicle Forge v7.3 — DiceForge Studios Ltd<br>
           Compatible with Savage Worlds Adventure Edition
         </div>
       </div>
@@ -630,6 +633,13 @@ function calcTotalTough(){return calcTough()+calcArmourValue()}
 function calcWounds(){var f=getFrame(S.size);return Math.max(1,f.wounds+S.woundsLevel)}
 function calcHand(){var f=getFrame(S.size);return f.hand+S.handlingLevel}
 function calcSpeed(){var loco=LOCOS.find(function(l){return l.id===S.loco});return Math.max(1,(loco?loco.speed:4)+S.speedLevel)}
+function calcHandFor(v){var f=getFrame(v.size);return f.hand+(v.handlingLevel||0)}
+function calcSpeedFor(v){var loco=LOCOS.find(function(l){return l.id===v.loco});return Math.max(1,(loco?loco.speed:4)+(v.speedLevel||0))}
+function calcArmourFor(v){var f=getFrame(v.size);var base=f.cat==='Normal'?2:f.cat==='Large'?4:f.cat==='Huge'?6:8;var step=f.cat==='Normal'?1:f.cat==='Large'?2:f.cat==='Huge'?3:4;return Math.max(0,base+(v.armourLevel||0)*step)}
+function calcToughFor(v){var f=getFrame(v.size);var base=f.tough;var step=f.cat==='Normal'?2:f.cat==='Large'?3:f.cat==='Huge'?4:5;return base+(v.toughLevel||0)*step}
+function calcTotalToughFor(v){return calcToughFor(v)+calcArmourFor(v)}
+function calcWoundsFor(v){var f=getFrame(v.size);return Math.max(1,f.wounds+(v.woundsLevel||0))}
+function calcCostFor(v){var f=getFrame(v.size),loco=LOCOS.find(function(l){return l.id===v.loco});var base=f.baseCost;if(loco)base+=loco.costMult*v.size*1000;return base}
 function calcRoadSpeed(){var s=calcSpeed();if(S.mods.road_vehicle&&S.loco==='wheeled')s+=3;return s}
 function calcEnergy(){var f=getFrame(S.size),e=f.energy;if(S.mods.fusion_core)e*=8;if(S.mods.reserve_tanks)e=Math.ceil(e*Math.pow(1.5,S.mods.reserve_tanks));return e}
 function calcModsUsed(){var t=0;for(var id in S.mods){var m=findMod(id);if(m){var ms=modSlots(m,S.size);if(ms>0)t+=ms*S.mods[id]}}
@@ -905,7 +915,7 @@ function renderOutput(){var p=document.getElementById('outputContent'),f=getFram
     +notesHtml
     +'<div class="sb-watermark">Built with DiceForge Vehicle Forge · diceforgestudios.pages.dev</div>'
     +'</div>'
-    +'<div style="margin-top:16px;display:flex;gap:8px"><button class="header-btn" onclick="copyBlock()">Copy to Clipboard</button><button class="header-btn" onclick="exportJSON()">Export .json</button><button class="header-btn" onclick="printStatBlock()">Print</button></div>'}
+    +'<div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap"><button class="header-btn" onclick="copyBlock()">Copy to Clipboard</button><button class="header-btn" onclick="exportJSON()">Export .json</button><button class="header-btn" onclick="exportStatBlock()">Stat Block .txt</button><button class="header-btn" onclick="exportFGXML()">FG XML</button><button class="header-btn" onclick="printStatBlock()">Print</button></div>'}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}
 
 function copyBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l.id===S.loco});var spd=calcSpeed();
@@ -932,6 +942,93 @@ function copyBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l
   if(S.notes)t+='GM Notes: '+S.notes+'\n';
   t+='\u2014 Built with DiceForge Vehicle Forge';
   navigator.clipboard.writeText(t).then(function(){var btn=event.target;btn.textContent='Copied!';btn.style.borderColor='var(--green)';btn.style.color='var(--green)';setTimeout(function(){btn.textContent='Copy to Clipboard';btn.style.borderColor='';btn.style.color=''},1500)})}
+
+function genStatBlockText(v){
+  var sv=v||S;var f=getFrame(sv.size);var loco=LOCOS.find(function(l){return l.id===sv.loco});
+  var hand=calcHandFor(sv);var spd=calcSpeedFor(sv);var tough=calcTotalToughFor(sv);var arm=calcArmourFor(sv);var wounds=calcWoundsFor(sv);
+  var notes=[],wl=[];
+  MODS.forEach(function(m){if(sv.mods[m.id]>0)notes.push(sv.mods[m.id]>1?sv.mods[m.id]+'\u00d7 '+m.name:m.name)});
+  sv.weapons.forEach(function(w){var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(wp){
+    var ml=w.mount==='fixed'?'Fixed Front':w.mount==='turret'?'Turret':'Pintle';
+    var lk=w.linked||0;var lkTxt=lk===1?' \u00d72 Linked':lk>=3?' \u00d74 Linked':'';
+    var lkBonus=lk===1?' (+1 Shooting, +2 damage)':lk>=3?' (+2 Shooting, +4 damage)':'';
+    wl.push('  \u2022 '+wp.name+lkTxt+' ('+ml+'): Range '+wp.range+', Damage '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof+(wp.notes?', '+wp.notes:'')+lkBonus)}});
+  var t=sv.name+'\n';if(sv.desc)t+=sv.desc+'\n';
+  t+='Size '+sv.size+' ('+f.cat+'); Handling '+(hand>=0?'+':'')+hand+'; Top Speed '+spd+'; Toughness '+tough+' ('+arm+')\n';
+  t+='Crew: '+f.crew+'; Wounds: '+wounds+'\n';
+  if(notes.length)t+='Mods: '+notes.join(', ')+'\n';
+  if(wl.length)t+='Weapons:\n'+wl.join('\n')+'\n';
+  if(sv.notes)t+='Notes: '+sv.notes+'\n';
+  return t}
+
+function exportStatBlock(){
+  var t='';
+  if(S.saved.length>1){
+    t+='VEHICLE FORGE \u2014 STAT BLOCK EXPORT\n';
+    t+='Exported: '+new Date().toISOString().split('T')[0]+'\n';
+    t+='Vehicles: '+S.saved.length+'\n\n';
+    t+='This game references the Savage Worlds game system, available from\nPinnacle Entertainment Group at www.peginc.com. Savage Worlds and all\nassociated logos and trademarks are copyrights of Pinnacle Entertainment\nGroup. Used with permission.\n\n';
+    t+='\u2550'.repeat(60)+'\n\n';
+    S.saved.forEach(function(v,i){t+=genStatBlockText(v)+'\n'+'\u2500'.repeat(40)+'\n\n'})}
+  else{
+    t+=genStatBlockText()+'\n\nThis game references the Savage Worlds game system, available from\nPinnacle Entertainment Group at www.peginc.com.\n'}
+  var blob=new Blob([t],{type:'text/plain'});var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=(S.name||'vehicles').replace(/[^a-zA-Z0-9_-]/g,'_')+'_statblock.txt';a.click();URL.revokeObjectURL(url)}
+
+function exportFGXML(){
+  var vehicles=S.saved.length?S.saved:[S];
+  var xml='<?xml version="1.0" encoding="utf-8"?>\n';
+  xml+='<!-- Vehicle Forge FG Export \u2014 DiceForge Studios Ltd. -->\n';
+  xml+='<!-- Paste this into your campaign db.xml or module db.xml -->\n';
+  xml+='<!-- This game references the Savage Worlds game system, available from -->\n';
+  xml+='<!-- Pinnacle Entertainment Group at www.peginc.com. -->\n';
+  xml+='<!-- Fantasy Grounds is a trademark of SmiteWorks USA, LLC. -->\n';
+  xml+='<root>\n<vehicles static="true">\n';
+  vehicles.forEach(function(v,i){
+    var f=getFrame(v.size);var loco=LOCOS.find(function(l){return l.id===v.loco});
+    var hand=calcHandFor(v);var spd=calcSpeedFor(v);var tough=calcTotalToughFor(v);var arm=calcArmourFor(v);var wounds=calcWoundsFor(v);
+    var id='vf_'+v.name.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/_+$/,'');
+    xml+='  <'+id+'>\n';
+    xml+='    <name type="string">'+escXML(v.name)+'</name>\n';
+    xml+='    <text type="formattedtext"><p>'+escXML(v.desc||'')+'</p></text>\n';
+    xml+='    <size type="number">'+v.size+'</size>\n';
+    xml+='    <handling type="number">'+hand+'</handling>\n';
+    xml+='    <topspeed type="number">'+spd+'</topspeed>\n';
+    xml+='    <toughness type="number">'+tough+'</toughness>\n';
+    xml+='    <armor type="number">'+arm+'</armor>\n';
+    xml+='    <crew type="number">'+f.crew+'</crew>\n';
+    xml+='    <wounds type="number">'+wounds+'</wounds>\n';
+    xml+='    <cost type="string">$'+fmtC(calcCostFor(v))+'</cost>\n';
+    var mods=[];MODS.forEach(function(m){if(v.mods[m.id]>0)mods.push(v.mods[m.id]>1?v.mods[m.id]+'\u00d7 '+m.name:m.name)});
+    xml+='    <mods type="string">'+escXML(mods.join(', '))+'</mods>\n';
+    if(v.weapons&&v.weapons.length){
+      xml+='    <weaponlist>\n';
+      v.weapons.forEach(function(w,wi){
+        var wp=getAllWeapons().find(function(x){return x.id===w.weaponId});if(!wp)return;
+        var ml=w.mount==='fixed'?'Fixed Front':w.mount==='turret'?'Turret':'Pintle';
+        xml+='      <id-'+String(wi+1).padStart(5,'0')+'>\n';
+        xml+='        <name type="string">'+escXML(wp.name+' ('+ml+')')+'</name>\n';
+        xml+='        <damage type="string">'+escXML(wp.damage)+'</damage>\n';
+        xml+='        <damagedice type="dice">'+wp.damage.replace(/[^d0-9+]/g,'')+'</damagedice>\n';
+        xml+='        <armorpiercing type="number">'+wp.ap+'</armorpiercing>\n';
+        xml+='        <range type="string">'+escXML(wp.range)+'</range>\n';
+        xml+='        <traittype type="string">Ranged</traittype>\n';
+        xml+='        <traitcount type="number">0</traitcount>\n';
+        xml+='        <fumble type="number">1</fumble>\n';
+        xml+='        <damagebonus type="number">0</damagebonus>\n';
+        xml+='        <reach type="number">0</reach>\n';
+        xml+='        <notes type="string">'+escXML((wp.notes||'')+' RoF '+wp.rof)+'</notes>\n';
+        xml+='        <bonuslist />\n';
+        xml+='        <link type="windowreference"><class>weapon</class><recordname /></link>\n';
+        xml+='      </id-'+String(wi+1).padStart(5,'0')+'>\n'});
+      xml+='    </weaponlist>\n'}
+    if(v.notes)xml+='    <notes type="string">'+escXML(v.notes)+'</notes>\n';
+    xml+='  </'+id+'>\n'});
+  xml+='</vehicles>\n</root>\n';
+  var blob=new Blob([xml],{type:'application/xml'});var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=(S.name||'vehicles').replace(/[^a-zA-Z0-9_-]/g,'_')+'_FG.xml';a.click();URL.revokeObjectURL(url)}
+
+function escXML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 // ═══ COMPREHENSIVE HELP/REFERENCE PANEL ═══
 function buildHelp(){
   var h='';
@@ -1073,14 +1170,20 @@ function buildHelp(){
   h+='<div class="help-section" data-help="import export json save load file share"><h3>Saving, Loading &amp; Sharing</h3>';
   h+='<p><span class="rule-key">Save:</span> Stores the current vehicle in your browser\'s local storage. Saved vehicles appear in the sidebar list and persist between sessions.</p>';
   h+='<p><span class="rule-key">Export .json:</span> Downloads a .cvf.json file containing the complete vehicle build, including image, description, and notes. Share this file with other users.</p>';
+  h+='<p><span class="rule-key">Export Stat Block:</span> Downloads a Pinnacle-format text stat block (.txt). This is the universal format \u2014 paste it into Foundry VTT\'s stat block importer, print on index cards, or include in your adventures.</p>';
+  h+='<p><span class="rule-key">Export FG XML:</span> Downloads Fantasy Grounds Unity compatible XML. Paste the vehicle data into your campaign db.xml or module for direct use in FG.</p>';
+  h+='<p><span class="rule-key">\ud83d\udcd6 Full Manual:</span> Opens the Vehicle Forge Companion Guide (PDF) \u2014 the complete reference for the tool, all expansion packs, export formats, and one-sheet adventures. <a href="https://diceforgestudios.pages.dev/vehicle-forge-manual.pdf" target="_blank" style="color:var(--accent)">Open Manual</a></p>';
   h+='<p><span class="rule-key">Import .json:</span> Load a previously exported .cvf.json file. Restores all settings, mods, weapons, image, and notes.</p>';
   h+='<p><span class="rule-key">Custom Weapons:</span> Weapons you create via the "Add Custom Weapon" button are stored separately in your browser and appear across all vehicles.</p></div>';
 
   // SECTION: About
   h+='<div class="help-section" data-help="about credits diceforge studios savage worlds compatible"><h3>About Vehicle Forge</h3>';
-  h+='<p>Vehicle Forge is a universal vehicle construction toolkit fully compatible with Savage Worlds. It covers every vehicle type from ancient war chariots to far-future hover carriers — ground, air, water, and walker — in a single tool.</p>';
+  h+='<p>Vehicle Forge is a universal vehicle construction toolkit fully compatible with Savage Worlds. It covers every vehicle type from ancient war chariots to far-future hover carriers \u2014 ground, air, water, and walker \u2014 in a single tool.</p>';
   h+='<p>71 weapons across 7 historical eras (Ancient through Advanced), 40+ modifications, 10 locomotion types, and sizes from 1 (motorcycle) to 20 (mega-platform). Plus custom weapon entry for anything your setting needs.</p>';
-  h+='<p style="font-size:12px;color:var(--text-dim);margin-top:8px">This product is not affiliated with or endorsed by Pinnacle Entertainment Group. Savage Worlds and all related marks and logos are trademarks of Pinnacle Entertainment Group. Used with permission.</p></div>';
+  h+='<p><a href="https://diceforgestudios.pages.dev/vehicle-forge-manual.pdf" target="_blank" style="color:var(--accent)">Open the full Companion Guide (PDF)</a> for complete documentation, product catalogue, and one-sheet adventures.</p>';
+  h+='<p style="font-size:12px;color:var(--text-dim);margin-top:12px;border-top:1px solid var(--border);padding-top:12px">This game references the Savage Worlds game system, available from Pinnacle Entertainment Group at www.peginc.com. Savage Worlds and all associated logos and trademarks are copyrights of Pinnacle Entertainment Group. Used with permission. Pinnacle makes no representation or warranty as to the quality, viability, or suitability for purpose of this product.</p>';
+  h+='<p style="font-size:11px;color:var(--text-dim)">Fantasy Grounds is a trademark of SmiteWorks USA, LLC. Foundry Virtual Tabletop is a trademark of Foundry Gaming LLC. This product is not affiliated with or endorsed by Pinnacle Entertainment Group, SmiteWorks, or Foundry Gaming.</p>';
+  h+='<p style="font-size:11px;color:var(--text-dim)">Vehicle Forge \u00a9 2026 DiceForge Studios Ltd. All original content rights retained by the creator.</p></div>';
 
   return h}
 
