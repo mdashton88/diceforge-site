@@ -1,0 +1,282 @@
+{
+  "id": "vietnam_air",
+  "name": "Talons & Contrails — Vietnam Air Cav",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "UH-1 Huey",
+      "desc": "Iconic transport helicopter. Sound of Vietnam.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "slug_med",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -2,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "F-4 Phantom II",
+      "desc": "US multirole fighter. Mach 2 monster.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "bombs_mod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "MiG-21 Fishbed",
+      "desc": "Soviet interceptor. Fast, agile, simple.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "sam",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -2,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "A-1 Skyraider",
+      "desc": "US attack plane. The Spad. Massive ordnance.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "bombs_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "rocket_pod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": -1,
+      "speedLevel": -2,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "CH-47 Chinook",
+      "desc": "Heavy-lift helicopter. Flying banana.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "slug_med",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "AH-1 Cobra",
+      "desc": "First dedicated attack helicopter.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "minigun_modern",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "rocket_pod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "O-1 Bird Dog",
+      "desc": "Observation aircraft. Forward air control.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "rocket_pod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": -4,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "AC-130 Spectre",
+      "desc": "Gunship. Side-firing artillery platform.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "cannon_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "minigun_modern",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": -3,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "F-105 Thunderchief",
+      "desc": "US strike fighter. \"Thud\". Bomb truck.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "bombs_mod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 2,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "B-52 Stratofortress",
+      "desc": "Strategic bomber. Arc Light carpet bombing.",
+      "notes": "",
+      "image": "",
+      "size": 14,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "bombs_mod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    }
+  ]
+}

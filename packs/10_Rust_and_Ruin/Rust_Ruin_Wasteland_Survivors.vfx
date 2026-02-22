@@ -1,0 +1,203 @@
+{
+  "id": "wasteland_survivors",
+  "name": "Rust & Ruin — Wasteland Survivors",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Salvage Truck",
+      "desc": "Armoured pickup. Tools and scrap.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Water Tanker",
+      "desc": "Most valuable vehicle in the wastes.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Farm Tractor (Armoured)",
+      "desc": "Welded plate. Slow but unstoppable.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 1,
+      "speedLevel": -4,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Jury-Rig Motorcycle",
+      "desc": "Held together with wire and hope.",
+      "notes": "",
+      "image": "",
+      "size": 1,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -2,
+      "armourLevel": -4,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Armoured Schoolbus",
+      "desc": "Community transport. Rolling shelter.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Sail Cart",
+      "desc": "Wind-powered trader. No fuel needed.",
+      "notes": "",
+      "image": "",
+      "size": 3,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -2,
+      "armourLevel": -4,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Scrap Walker",
+      "desc": "Rebuilt from industrial mech parts.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -2,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "River Barge (Armoured)",
+      "desc": "Armoured river transport. Trading post.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Pedal-Powered Cart",
+      "desc": "Human-powered. Silent. Desperate.",
+      "notes": "",
+      "image": "",
+      "size": 2,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": -4,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Frankenstein APC",
+      "desc": "Three vehicles welded into one. Ugly and effective.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": -1,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    }
+  ]
+}

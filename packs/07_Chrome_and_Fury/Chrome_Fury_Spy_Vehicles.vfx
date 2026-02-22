@@ -1,0 +1,208 @@
+{
+  "id": "spy_vehicles",
+  "name": "Chrome & Fury — Spy Vehicles",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Spy Car (Classic)",
+      "desc": "Aston Martin with extras. Shaken, not stirred.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 1,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Stealth Motorcycle",
+      "desc": "Electric silent runner. Night ops.",
+      "notes": "",
+      "image": "",
+      "size": 1,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Pursuit Helicopter",
+      "desc": "Agency chopper. Fast and armed.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "vtol",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "rocket_pod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Submersible Car",
+      "desc": "Lotus Esprit territory.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {
+        "amphibious": 1
+      },
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Surveillance Van",
+      "desc": "Unmarked van. Full electronic suite.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "wheeled",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Armed Speedboat",
+      "desc": "Agency boat. Fast and lethal.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Gyrocopter",
+      "desc": "Little Nellie. Personal autogyro.",
+      "notes": "",
+      "image": "",
+      "size": 2,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "rocket_pod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": 0,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Armoured Limo",
+      "desc": "VIP transport. Bulletproof glass.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": 0,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Jet Pack",
+      "desc": "Personal flight. 30-second fuel.",
+      "notes": "",
+      "image": "",
+      "size": 0,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -4,
+      "armourLevel": -5,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Q-Branch Special",
+      "desc": "Prototype. Loaded with experimental tech.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 3,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    }
+  ]
+}

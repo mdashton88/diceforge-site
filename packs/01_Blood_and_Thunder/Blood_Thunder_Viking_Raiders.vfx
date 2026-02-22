@@ -1,0 +1,208 @@
+{
+  "id": "viking_raiders",
+  "name": "Blood & Thunder — Viking Raiders",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Longship (Drekar)",
+      "desc": "Dragon-prowed warship. Fast under oar or sail.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "javelin_rack",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -4,
+      "speedLevel": 1,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Snekkja",
+      "desc": "Swift scouting vessel. Twenty oars.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "javelin_rack",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": 2,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Skeid",
+      "desc": "Great ship. Sixty oars, shieldwall along the gunwale.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "javelin_rack",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "bow_battery",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Knarr",
+      "desc": "Norse cargo ship. Deep-hulled ocean trader.",
+      "notes": "",
+      "image": "",
+      "size": 9,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": -3,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Byzantine Chelandion",
+      "desc": "Byzantine dromon variant with Greek fire.",
+      "notes": "",
+      "image": "",
+      "size": 11,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "greek_fire_s",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "bow_battery",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Arab Dhow",
+      "desc": "Lateen-rigged trader. Fast on the wind.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -2,
+      "armourLevel": -4,
+      "speedLevel": 1,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Norman Ship",
+      "desc": "Invasion transport. Flat-bottomed for beaching.",
+      "notes": "",
+      "image": "",
+      "size": 9,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "bow_battery",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Fire Raft",
+      "desc": "Burning debris pushed toward enemy ships.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -4,
+      "armourLevel": -5,
+      "speedLevel": -2,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Cog",
+      "desc": "Northern European cargo vessel with castle.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "bow_battery",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": -2,
+      "speedLevel": -2,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Currach",
+      "desc": "Hide-covered boat. Surprisingly seaworthy.",
+      "notes": "",
+      "image": "",
+      "size": 3,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -4,
+      "armourLevel": -5,
+      "speedLevel": 0,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    }
+  ]
+}

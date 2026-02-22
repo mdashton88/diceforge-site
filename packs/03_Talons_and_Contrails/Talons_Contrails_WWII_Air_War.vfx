@@ -1,0 +1,317 @@
+{
+  "id": "ww2_air",
+  "name": "Talons & Contrails — WWII Air War",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Spitfire Mk IX",
+      "desc": "British fighter. The icon.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "P-51D Mustang",
+      "desc": "US escort fighter. Berlin and back.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Bf 109G",
+      "desc": "German fighter. Gustav variant.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "B-17G Flying Fortress",
+      "desc": "US heavy bomber. Chin turret version.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "bombs_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -2,
+      "speedLevel": -4,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Ju 87 Stuka",
+      "desc": "German dive bomber. Jericho Trumpets.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "bombs_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": -3,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "A6M Zero",
+      "desc": "Japanese fighter. Light, long-range, lethal.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        }
+      ],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": -1,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "F4U Corsair",
+      "desc": "US Navy fighter. Bent-wing bird.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Lancaster",
+      "desc": "British heavy bomber. Dam Buster.",
+      "notes": "",
+      "image": "",
+      "size": 9,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "turret",
+          "linked": 1
+        },
+        {
+          "weaponId": "bombs_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -2,
+      "speedLevel": -3,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Il-2 Shturmovik",
+      "desc": "Soviet ground attack. Flying tank.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "bombs_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "rocket_pod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -2,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Fw 190A",
+      "desc": "German fighter-bomber. Butcher Bird.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "turboprop",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 1
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    }
+  ]
+}

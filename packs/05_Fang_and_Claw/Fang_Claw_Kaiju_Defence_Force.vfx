@@ -1,0 +1,243 @@
+{
+  "id": "kaiju_defence",
+  "name": "Fang & Claw — Kaiju Defence Force",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Light Jaeger",
+      "desc": "Fast response Jaeger. Two-pilot neural link.",
+      "notes": "",
+      "image": "",
+      "size": 14,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Heavy Jaeger",
+      "desc": "Main battle Jaeger. Fist and beam.",
+      "notes": "",
+      "image": "",
+      "size": 18,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 3,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Anti-Kaiju Tank",
+      "desc": "Mobile maser cannon platform.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": 0,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Naval Destroyer (Refit)",
+      "desc": "Warship with anti-kaiju missiles.",
+      "notes": "",
+      "image": "",
+      "size": 17,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "missile_rack",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "VTOL Interceptor",
+      "desc": "Fast attack with maser pods.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_med",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Rescue Mech",
+      "desc": "Civilian extraction walker.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Artillery Walker (KDF)",
+      "desc": "Long-range maser batteries.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Mobile Command Post",
+      "desc": "Tactical HQ on tracks.",
+      "notes": "",
+      "image": "",
+      "size": 9,
+      "loco": "tracked",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Coastal Battery",
+      "desc": "Towed anti-kaiju emplacement.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": -5,
+      "handlingLevel": -5,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Bait Drone",
+      "desc": "Unmanned decoy. Pheromone emitter.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "vtol",
+      "mods": {
+        "unmanned": 1
+      },
+      "weapons": [],
+      "toughLevel": -4,
+      "armourLevel": -4,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    }
+  ]
+}

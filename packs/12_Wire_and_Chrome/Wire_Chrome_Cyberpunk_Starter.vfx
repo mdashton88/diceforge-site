@@ -1,0 +1,206 @@
+{
+  "id": "cyberpunk_starter",
+  "name": "Wire & Chrome — Cyberpunk Starter",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "Core weapons only. For vehicle hacking, drone operations, corporate escalation, and electronic warfare, see the full Wire & Chrome supplement.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Corp AV",
+      "desc": "Corporate VTOL. Armoured, luxurious, morally bankrupt.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Street Racer",
+      "desc": "Illegal machine. Nitro tanks and no insurance.",
+      "notes": "",
+      "image": "",
+      "size": 3,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": -2,
+      "speedLevel": 4,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Tactical Drone",
+      "desc": "Armed surveillance platform. Eye in the sky with a sting.",
+      "notes": "",
+      "image": "",
+      "size": 2,
+      "loco": "vtol",
+      "mods": {
+        "unmanned": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -3,
+      "armourLevel": -3,
+      "speedLevel": 1,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Merc APC",
+      "desc": "Private military transport. The corpo solution to democracy.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Spider Tank",
+      "desc": "Urban assault platform. Climbs walls. Ruins days.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "legs_quad",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Courier Bike",
+      "desc": "Electric, silent, fast. Data worth more than the rider.",
+      "notes": "",
+      "image": "",
+      "size": 1,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Armoured Riot Van",
+      "desc": "Corporate security's favourite toy. Crowd dispersal guaranteed.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Hover Limo",
+      "desc": "CEO transport. Counter-measures, champagne, and contempt.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "hover",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Cargo Drone",
+      "desc": "Autonomous delivery. Easily repurposed. Frequently is.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "vtol",
+      "mods": {
+        "unmanned": 1
+      },
+      "weapons": [],
+      "toughLevel": -2,
+      "armourLevel": -3,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Security Sedan",
+      "desc": "Armoured executive car. AI-driven. Expendable occupants optional.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    }
+  ]
+}

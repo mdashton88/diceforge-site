@@ -1,0 +1,312 @@
+{
+  "id": "naval_starter",
+  "name": "Blood & Thunder — Naval Starter",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "Core weapons only. For broadside arcs, boarding, weather gauge, crew quality, and submarine warfare, see the full Blood & Thunder supplement.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Patrol Boat",
+      "desc": "Fast coastal craft. First responder, last line of defence.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -2,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Corvette",
+      "desc": "Light escort. Convoy guardian. Submarine hunter.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Destroyer",
+      "desc": "Fleet workhorse. Fast, armed, expendable in the admiral's calculus.",
+      "notes": "",
+      "image": "",
+      "size": 16,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Heavy Cruiser",
+      "desc": "Independent operations. When one ship must do everything.",
+      "notes": "",
+      "image": "",
+      "size": 19,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Battleship",
+      "desc": "Capital ship. Big guns, heavy armour, unmistakable intent.",
+      "notes": "",
+      "image": "",
+      "size": 23,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 4,
+      "speedLevel": -2,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Carrier",
+      "desc": "Floating airfield. The centrepiece of modern naval power.",
+      "notes": "",
+      "image": "",
+      "size": 22,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Submarine",
+      "desc": "Unseen predator. The most feared vessel afloat — or below.",
+      "notes": "",
+      "image": "",
+      "size": 13,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Landing Craft",
+      "desc": "Beach assault. Drops the ramp, delivers the marines, prays.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Gunboat",
+      "desc": "River or coastal fire support. Big gun, small hull.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Fast Attack Craft",
+      "desc": "Missile boat. Hit fast, run faster, hope they don't shoot back.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -2,
+      "speedLevel": 3,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    }
+  ]
+}

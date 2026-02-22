@@ -1,0 +1,271 @@
+{
+  "id": "ww2_eastern",
+  "name": "Iron & Steel — WWII Eastern Front",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "T-34/76 (1942)",
+      "desc": "Soviet medium. Sloped armour revolutionary.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {
+        "sloped_armour": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "tank_gun_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "KV-1",
+      "desc": "Soviet heavy tank. Impervious in 1941.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "IS-2",
+      "desc": "Soviet breakthrough tank. 122mm gun.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 3,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "BM-13 Katyusha",
+      "desc": "Rocket artillery on a truck. Stalin's Organ.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "rocket_pod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -3,
+      "speedLevel": 0,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "BA-64 Armoured Car",
+      "desc": "Soviet light armoured car. Reconnaissance.",
+      "notes": "",
+      "image": "",
+      "size": 3,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "StuG III Ausf G",
+      "desc": "German assault gun. Eastern front workhorse.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {
+        "sloped_armour": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "tank_gun_med",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 1,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Panzer IV Ausf J",
+      "desc": "Final Panzer IV variant. Simplified production.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 1,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Partisan Wagon",
+      "desc": "Improvised fighting vehicle. Farm wagon with steel plate.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": -2,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "River Patrol Boat (Soviet)",
+      "desc": "Armoured river monitor. Volga defence.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "M3 Stuart (Lend-Lease)",
+      "desc": "US light tank in Soviet service.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "tank_gun_light",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    }
+  ]
+}

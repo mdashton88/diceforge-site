@@ -1,0 +1,225 @@
+{
+  "id": "wasteland_starter",
+  "name": "Rust & Ruin — Wasteland Starter",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "Core weapons only. For fuel-as-currency, salvage tables, jury-rig construction, and wasteland hazards, see the full Rust & Ruin supplement.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Survivor Pickup",
+      "desc": "Patched truck. Every dent earned. Every mile survived.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "War Rig",
+      "desc": "Armoured semi. The road belongs to whoever's biggest.",
+      "notes": "",
+      "image": "",
+      "size": 9,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Interceptor",
+      "desc": "V8 fury. Last of its kind. Worth killing for.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 4,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Death Bike",
+      "desc": "Two wheels, one gun, no future. Ride eternal.",
+      "notes": "",
+      "image": "",
+      "size": 1,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": 3,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Scrap Crawler",
+      "desc": "Tractor chassis with welded plate. Ugly. Effective.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Buzz Buggy",
+      "desc": "Dune buggy. Spikes optional. Screaming mandatory.",
+      "notes": "",
+      "image": "",
+      "size": 2,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -3,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Thunder Bus",
+      "desc": "Armoured school bus. Thirty passengers. One destiny.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Sand Yacht",
+      "desc": "Wind-powered. Silent. No fuel. The patient predator.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Fuel Tanker",
+      "desc": "Most valuable thing on wheels. Wars start over this.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": -1,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Frankenstein APC",
+      "desc": "Three vehicles welded into one. Ugly as sin. Refuses to die.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": -1,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    }
+  ]
+}

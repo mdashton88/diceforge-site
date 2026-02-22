@@ -1,0 +1,241 @@
+{
+  "id": "patrol_fleet",
+  "name": "Star & Void — Patrol Fleet",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Scout Corvette",
+      "desc": "Fast patrol vessel. Eyes of the fleet.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Armed Freighter",
+      "desc": "Merchant with teeth. Q-ship.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "System Patrol",
+      "desc": "In-system law enforcement.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_light",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": 0,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Blockade Runner",
+      "desc": "Fast transport. Contraband specialist.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -1,
+      "speedLevel": 3,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Pirate Raider",
+      "desc": "Armed corsair. Intimidation is half the weapon.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Courier",
+      "desc": "Fast message/VIP transport.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -3,
+      "armourLevel": -2,
+      "speedLevel": 4,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Mining Vessel",
+      "desc": "Asteroid miner. Industrial laser.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Science Vessel",
+      "desc": "Research ship. Sensor-heavy.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "jet",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Customs Cutter",
+      "desc": "Law enforcement interceptor.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_light",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": 0,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Personnel Shuttle",
+      "desc": "Short-range transport. Station to surface.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -2,
+      "armourLevel": -2,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    }
+  ]
+}

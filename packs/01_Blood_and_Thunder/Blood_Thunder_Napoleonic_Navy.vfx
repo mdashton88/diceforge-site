@@ -1,0 +1,282 @@
+{
+  "id": "napoleonic_navy",
+  "name": "Blood & Thunder — Napoleonic Navy",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "HMS Victory (1st Rate)",
+      "desc": "104-gun flagship. Nelson's immortal command.",
+      "notes": "",
+      "image": "",
+      "size": 20,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "carronade",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 3,
+      "speedLevel": -3,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "5th-Rate Frigate",
+      "desc": "38-gun frigate. Fast, independent command.",
+      "notes": "",
+      "image": "",
+      "size": 14,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "carronade",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Brig-Sloop",
+      "desc": "Two-masted warship for convoy escort and patrol.",
+      "notes": "",
+      "image": "",
+      "size": 9,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "light_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "carronade",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Revenue Cutter",
+      "desc": "Fast customs enforcement vessel.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "light_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -3,
+      "speedLevel": 2,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Gunboat",
+      "desc": "Shallow-draft gun platform for coastal defence.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "heavy_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": -2,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Bomb Vessel",
+      "desc": "Mortar ship. Reinforced hull for the recoil.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "mortar_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "mortar_bp",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 0,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Razee",
+      "desc": "Cut-down ship of the line. Fast and heavily armed.",
+      "notes": "",
+      "image": "",
+      "size": 13,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "carronade",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Schooner",
+      "desc": "Fore-and-aft rigged. Excellent windward performance.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "light_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -3,
+      "armourLevel": -3,
+      "speedLevel": 3,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Mortar Barge",
+      "desc": "Flat-bottomed bombardment platform.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "mortar_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "mortar_bp",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -4,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Ship's Longboat",
+      "desc": "Ship's boat for cutting-out expeditions.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    }
+  ]
+}

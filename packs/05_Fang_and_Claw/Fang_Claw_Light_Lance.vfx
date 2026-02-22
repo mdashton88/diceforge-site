@@ -1,0 +1,256 @@
+{
+  "id": "light_lance",
+  "name": "Fang & Claw — Light Lance",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Scout Walker",
+      "desc": "Fast recon mech. Hit and run.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_light",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -1,
+      "speedLevel": 2,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Striker",
+      "desc": "Medium assault mech. Balanced.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Medium Battlemech",
+      "desc": "Backbone of any mech force.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Recon Quad",
+      "desc": "Four-legged scout. Sensor platform.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "legs_quad",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Jump Mech",
+      "desc": "Jump-jet equipped striker.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_med",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_light",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Fire Support Mech",
+      "desc": "Indirect fire walker. Missile boat.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "missile_rack",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Command Mech",
+      "desc": "C3 walker. Tactical relay.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "legs_biped",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "laser_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Urban Assault Mech",
+      "desc": "Close-quarters specialist.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_gat",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Salvage Mech",
+      "desc": "Battlefield recovery walker.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "legs_biped",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Drone Controller",
+      "desc": "Electronic warfare. Manages combat drones.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "legs_biped",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "laser_light",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    }
+  ]
+}

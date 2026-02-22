@@ -1,0 +1,252 @@
+{
+  "id": "ancient_war_machines",
+  "name": "Iron & Steel — Ancient War Machines",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Egyptian Chariot",
+      "desc": "Light two-horse chariot. Archery platform.",
+      "notes": "",
+      "image": "",
+      "size": 2,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "bow_battery",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -4,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Hittite Heavy Chariot",
+      "desc": "Three-man chariot. Driver, archer, shieldbearer.",
+      "notes": "",
+      "image": "",
+      "size": 3,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "javelin_rack",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Siege Tower",
+      "desc": "Mobile assault tower. Pushed by muscle.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "bow_battery",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": -5,
+      "handlingLevel": -4,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Battering Ram",
+      "desc": "Covered ram on wheels. Gate-breaker.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "ram",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": -4,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "War Elephant",
+      "desc": "Armoured pachyderm. Tower on its back.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "legs_quad",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "javelin_rack",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": -1,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Helepolis",
+      "desc": "Siege tower of Demetrius. Nine storeys tall.",
+      "notes": "",
+      "image": "",
+      "size": 14,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "ballista",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "ballista",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "catapult",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 2,
+      "speedLevel": -5,
+      "handlingLevel": -5,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Trireme",
+      "desc": "Greek warship. Bronze ram, 170 oars.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "ram_ancient",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "bow_battery",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Quinquereme",
+      "desc": "Roman heavy warship. Corvus boarding bridge.",
+      "notes": "",
+      "image": "",
+      "size": 13,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "ram_ancient",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "ballista",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "bow_battery",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": -2,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Scorpion Cart",
+      "desc": "Mobile artillery. Horse-drawn bolt-thrower.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "scorpion",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -3,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Dromon",
+      "desc": "Byzantine warship. Greek fire siphon.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "greek_fire_s",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "bow_battery",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -2,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    }
+  ]
+}

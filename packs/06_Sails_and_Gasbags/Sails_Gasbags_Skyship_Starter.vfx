@@ -1,0 +1,253 @@
+{
+  "id": "skyship_starter",
+  "name": "Sails & Gasbags — Skyship Starter",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "Core weapons only. For buoyancy, gas cell vulnerability, aerial boarding, and altitude weather rules, see the full Sails & Gasbags supplement.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Sky Skiff",
+      "desc": "One-person flyer. Messenger, scout, or very brave corsair.",
+      "notes": "",
+      "image": "",
+      "size": 3,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": 2,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Cloud Cutter",
+      "desc": "Light patrol vessel. Fast enough to catch, armed enough to matter.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -1,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Sky Brig",
+      "desc": "Corsair favourite. Two masts of canvas, a hull full of ambition.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "War Galleon (Sky)",
+      "desc": "Heavy warship. Broadsides in three dimensions.",
+      "notes": "",
+      "image": "",
+      "size": 14,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "bombs_ww",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Dwarven Ironclad (Sky)",
+      "desc": "Steam-powered flying fortress. Slow, armoured, inevitable.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 4,
+      "armourLevel": 3,
+      "speedLevel": -3,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Observation Balloon",
+      "desc": "Tethered spotter. See everything. Dodge nothing.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": -5,
+      "handlingLevel": -4,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Transport Barge (Sky)",
+      "desc": "Cargo hauler. Slow, fat, profitable.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": -1,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Elven Windrunner",
+      "desc": "Graceful sky-yacht. Magic-assisted sails. Infuriatingly fast.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -2,
+      "armourLevel": -2,
+      "speedLevel": 2,
+      "handlingLevel": 3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Bomber Dirigible",
+      "desc": "Armoured gasbag. Rains death from above.",
+      "notes": "",
+      "image": "",
+      "size": 14,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "bombs_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": -2,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Royal Flagship (Sky)",
+      "desc": "Palace in the clouds. Crown of the fleet. Worth a kingdom's ransom.",
+      "notes": "",
+      "image": "",
+      "size": 16,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": -2,
+      "handlingLevel": -2,
+      "woundsLevel": 0
+    }
+  ]
+}

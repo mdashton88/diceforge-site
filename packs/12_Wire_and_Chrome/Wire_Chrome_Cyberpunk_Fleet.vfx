@@ -1,0 +1,197 @@
+{
+  "id": "cyberpunk_fleet",
+  "name": "Wire & Chrome — Cyberpunk Fleet",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Corp Executive AV",
+      "desc": "Corporate VTOL. Armoured and luxurious.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "vtol",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Street Racer",
+      "desc": "Illegal street machine. Nitro-boosted.",
+      "notes": "",
+      "image": "",
+      "size": 3,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": -2,
+      "speedLevel": 4,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Tactical Drone Swarm",
+      "desc": "Six networked combat drones.",
+      "notes": "",
+      "image": "",
+      "size": 2,
+      "loco": "vtol",
+      "mods": {
+        "unmanned": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -3,
+      "armourLevel": -3,
+      "speedLevel": 1,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Armoured Riot Van",
+      "desc": "Corporate security. Crowd control.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Courier Bike",
+      "desc": "Electric bike. Data courier.",
+      "notes": "",
+      "image": "",
+      "size": 1,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -1,
+      "armourLevel": -3,
+      "speedLevel": 2,
+      "handlingLevel": 2,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Merc APC",
+      "desc": "Private military transport.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Spider Tank",
+      "desc": "Urban assault platform. Four legs.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "legs_quad",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 2,
+      "speedLevel": -1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Hacker Van",
+      "desc": "Mobile netrunner rig.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Cargo Drone",
+      "desc": "Autonomous delivery. Repurposed as bomber.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "vtol",
+      "mods": {
+        "unmanned": 1
+      },
+      "weapons": [],
+      "toughLevel": -2,
+      "armourLevel": -3,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Luxury Hover-Limo",
+      "desc": "CEO transport. Style and protection.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "hover",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 1,
+      "armourLevel": 1,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    }
+  ]
+}

@@ -1,0 +1,300 @@
+{
+  "id": "capital_ships",
+  "name": "Star & Void — Capital Ships of the Void",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Escort Frigate",
+      "desc": "Light warship. Convoy protection.",
+      "notes": "",
+      "image": "",
+      "size": 14,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Dreadnought",
+      "desc": "Capital ship. The iron fist of empire.",
+      "notes": "",
+      "image": "",
+      "size": 25,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 3
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 4,
+      "speedLevel": -2,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Super Dreadnought",
+      "desc": "Ultimate warship. System-killer.",
+      "notes": "",
+      "image": "",
+      "size": 27,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 3
+        }
+      ],
+      "toughLevel": 4,
+      "armourLevel": 5,
+      "speedLevel": -3,
+      "handlingLevel": -4,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Assault Carrier",
+      "desc": "200+ fighters. Fleet carrier supreme.",
+      "notes": "",
+      "image": "",
+      "size": 24,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 3
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 3
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": -1,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Orbital Station",
+      "desc": "Space station. Permanent installation.",
+      "notes": "",
+      "image": "",
+      "size": 28,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 3
+        }
+      ],
+      "toughLevel": 4,
+      "armourLevel": 3,
+      "speedLevel": -5,
+      "handlingLevel": -5,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Colony Ship",
+      "desc": "Generation ship. City in the stars.",
+      "notes": "",
+      "image": "",
+      "size": 26,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 2,
+      "armourLevel": 0,
+      "speedLevel": -4,
+      "handlingLevel": -4,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Battleship",
+      "desc": "Heavy capital. Broadsides in space.",
+      "notes": "",
+      "image": "",
+      "size": 24,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 3
+        },
+        {
+          "weaponId": "missile_rack",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 4,
+      "speedLevel": -2,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Siege Platform",
+      "desc": "Orbital bombardment. Planet cracker.",
+      "notes": "",
+      "image": "",
+      "size": 22,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 2,
+      "speedLevel": -5,
+      "handlingLevel": -5,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Titan",
+      "desc": "Mobile fortress. Quarter-mile long.",
+      "notes": "",
+      "image": "",
+      "size": 30,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_heavy",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "laser_gat",
+          "mount": "turret",
+          "linked": 3
+        }
+      ],
+      "toughLevel": 5,
+      "armourLevel": 5,
+      "speedLevel": -3,
+      "handlingLevel": -5,
+      "woundsLevel": 0
+    },
+    {
+      "name": "World Engine",
+      "desc": "Planet-killing superweapon. Campaign ender.",
+      "notes": "",
+      "image": "",
+      "size": 30,
+      "loco": "jet",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": 5,
+      "armourLevel": 5,
+      "speedLevel": -5,
+      "handlingLevel": -5,
+      "woundsLevel": 0
+    }
+  ]
+}

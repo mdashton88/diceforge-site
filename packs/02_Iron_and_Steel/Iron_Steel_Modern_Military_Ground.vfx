@@ -1,0 +1,307 @@
+{
+  "id": "modern_ground",
+  "name": "Iron & Steel — Modern Military Ground",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "M1A2 Abrams SEP",
+      "desc": "US MBT. Latest upgrade package.",
+      "notes": "",
+      "image": "",
+      "size": 9,
+      "loco": "tracked",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 4,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Stryker ICV",
+      "desc": "US wheeled APC. Rapid deployment.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "wheeled",
+      "mods": {
+        "offroad": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "MRAP Cougar",
+      "desc": "Mine-resistant vehicle. IED protection.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "wheeled",
+      "mods": {
+        "offroad": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": 0,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Leopard 2A7",
+      "desc": "German MBT. NATO's finest.",
+      "notes": "",
+      "image": "",
+      "size": 9,
+      "loco": "tracked",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 4,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "T-90M Proryv",
+      "desc": "Russian MBT. Active protection.",
+      "notes": "",
+      "image": "",
+      "size": 8,
+      "loco": "tracked",
+      "mods": {
+        "enhanced_sensors": 1,
+        "countermeasure_suite": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 3,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Challenger 2",
+      "desc": "British MBT. Chobham armour.",
+      "notes": "",
+      "image": "",
+      "size": 9,
+      "loco": "tracked",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "hmg_modern",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 3,
+      "armourLevel": 4,
+      "speedLevel": 0,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "M2A3 Bradley",
+      "desc": "US IFV. 25mm chain gun + TOW.",
+      "notes": "",
+      "image": "",
+      "size": 7,
+      "loco": "tracked",
+      "mods": {
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "atgm",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "BMP-3",
+      "desc": "Russian IFV. 100mm gun and 30mm autocannon.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "tracked",
+      "mods": {
+        "amphibious": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "cannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Warrior IFV",
+      "desc": "British IFV. 30mm RARDEN.",
+      "notes": "",
+      "image": "",
+      "size": 6,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "autocannon_mod",
+          "mount": "turret",
+          "linked": 0
+        },
+        {
+          "weaponId": "slug_med",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "MQ-9 Reaper Drone",
+      "desc": "Armed UAV. Hellfire and precision strike.",
+      "notes": "",
+      "image": "",
+      "size": 5,
+      "loco": "vtol",
+      "mods": {
+        "unmanned": 1,
+        "enhanced_sensors": 1
+      },
+      "weapons": [
+        {
+          "weaponId": "atgm",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "rocket_pod",
+          "mount": "fixed",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -3,
+      "armourLevel": -4,
+      "speedLevel": -1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    }
+  ]
+}

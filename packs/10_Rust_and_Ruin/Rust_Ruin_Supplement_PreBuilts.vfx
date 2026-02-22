@@ -1,0 +1,69 @@
+{
+  "id": "sup_rust_ruin",
+  "name": "Rust & Ruin — Supplement Pre-Builts",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "3 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Survivor Pickup",
+      "desc": "Patched-up truck. Every bullet hole a story.",
+      "notes": "",
+      "image": "",
+      "size": 4,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": -1,
+      "speedLevel": 0,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Scavenger Trike",
+      "desc": "Three-wheeled scout. Jury-rigged engine.",
+      "notes": "",
+      "image": "",
+      "size": 2,
+      "loco": "wheeled",
+      "mods": {},
+      "weapons": [],
+      "toughLevel": -2,
+      "armourLevel": -3,
+      "speedLevel": 1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Settlement Crawler",
+      "desc": "Mobile community. Generator and workshop.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "tracked",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "hmg",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 2,
+      "armourLevel": 1,
+      "speedLevel": -3,
+      "handlingLevel": -3,
+      "woundsLevel": 0
+    }
+  ]
+}

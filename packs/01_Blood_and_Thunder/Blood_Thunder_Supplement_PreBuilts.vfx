@@ -1,0 +1,100 @@
+{
+  "id": "sup_blood_thunder",
+  "name": "Blood & Thunder — Supplement Pre-Builts",
+  "version": "1.0",
+  "publisher": "DiceForge Studios Ltd.",
+  "description": "3 pre-built vehicles for the Vehicle Forge.",
+  "weapons": [],
+  "mods": [],
+  "specials": [],
+  "vehicles": [
+    {
+      "name": "Frigate (Age of Sail)",
+      "desc": "5th-rate warship. 30-40 guns.",
+      "notes": "",
+      "image": "",
+      "size": 14,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "med_cannon_bp",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "swivel_gun",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 0,
+      "armourLevel": 0,
+      "speedLevel": 1,
+      "handlingLevel": 0,
+      "woundsLevel": 0
+    },
+    {
+      "name": "U-Boat (Type VII)",
+      "desc": "German submarine. WW2 workhorse.",
+      "notes": "",
+      "image": "",
+      "size": 12,
+      "loco": "water_turbo",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "torpedo_ww",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "autocannon_ww",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": 1,
+      "armourLevel": 0,
+      "speedLevel": -1,
+      "handlingLevel": -1,
+      "woundsLevel": 0
+    },
+    {
+      "name": "Ancient Trireme",
+      "desc": "Classical warship with bronze ram.",
+      "notes": "",
+      "image": "",
+      "size": 10,
+      "loco": "water_sail",
+      "mods": {},
+      "weapons": [
+        {
+          "weaponId": "ram_ancient",
+          "mount": "fixed",
+          "linked": 0
+        },
+        {
+          "weaponId": "bow_battery",
+          "mount": "pintle",
+          "linked": 0
+        }
+      ],
+      "toughLevel": -2,
+      "armourLevel": -3,
+      "speedLevel": -1,
+      "handlingLevel": 1,
+      "woundsLevel": 0
+    }
+  ]
+}
