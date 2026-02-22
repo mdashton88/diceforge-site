@@ -1,7 +1,7 @@
 {
   "formatVersion": "1.0",
   "exportType": "batch",
-  "packName": "Chrome & Fury — Wasteland Fleet",
+  "packName": "Chrome & Fury \u2014 Wasteland Fleet",
   "packId": "wasteland_fleet",
   "price": "$2.99",
   "vehicleCount": 10,
@@ -9,8 +9,8 @@
   "vehicles": [
     {
       "name": "War Rig",
-      "desc": "Armoured semi-truck. Road warrior.",
-      "notes": "",
+      "desc": "An eighteen-wheeler from the old world, welded with armour plate, bristling with mounted weapons, and driven by someone who has killed for fuel and will do it again. She carries water, ammunition, and everything a convoy needs to survive the wasteland. She is civilisation's last supply line.",
+      "notes": "The war rig is your campaign centrepiece. Everything revolves around her \u2014 protecting her, fuelling her, crewing her. She's the mobile base, the treasure, and the target. Build your wasteland campaign around the rig and let everything else orbit her.",
       "image": "",
       "size": 10,
       "loco": "wheeled",
@@ -35,8 +35,8 @@
     },
     {
       "name": "Interceptor",
-      "desc": "Supercharged muscle car. V8 fury.",
-      "notes": "",
+      "desc": "A muscle car stripped to the frame and rebuilt for speed, violence, and nothing else. Supercharged engine, reinforced ram bar, and a driver who learned that the fastest car on the road makes the rules.",
+      "notes": "The interceptor is your wasteland player vehicle. She's fast, she's mean, and she carries one or two people who are very good at surviving. She dominates road combat through speed and aggression. She's also a fuel hog \u2014 keeping her running is a constant survival challenge.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -56,8 +56,8 @@
     },
     {
       "name": "Buzz Buggy",
-      "desc": "Dune buggy with spikes and a gunner.",
-      "notes": "",
+      "desc": "A dune buggy with a rollcage, a machine gun, and the ability to cross terrain that would tear the interceptor apart. She's light, she's fast off-road, and she carries a driver and a gunner who've learned to work together at speed.",
+      "notes": "The buzz buggy is your raider vehicle. She goes off-road when the interceptor can't follow and she's cheap enough that wastelanders build them from scrap. Use her in packs \u2014 three or four buggies circling a war rig, taking shots from every angle.",
       "image": "",
       "size": 2,
       "loco": "wheeled",
@@ -77,8 +77,8 @@
     },
     {
       "name": "Thunder Bus",
-      "desc": "Armoured school bus. Raider transport.",
-      "notes": "",
+      "desc": "A school bus reinforced with scrap metal, carrying thirty survivors and whatever weapons they could salvage. She's slow, she's loud, and she's home. The people inside will fight to the death to keep her rolling because the alternative is walking in the wasteland.",
+      "notes": "The thunder bus is your refugee transport. She carries non-combatants \u2014 families, children, the elderly \u2014 through hostile territory. The players protect her because the people inside matter. She's the emotional heart of the campaign. Losing her means losing everyone.",
       "image": "",
       "size": 8,
       "loco": "wheeled",
@@ -103,8 +103,8 @@
     },
     {
       "name": "Fuel Tanker",
-      "desc": "The prize. Precious liquid cargo.",
-      "notes": "",
+      "desc": "Ten thousand litres of gasoline in a rusted steel tank on wheels. She's the most valuable vehicle in the wasteland because she carries the one resource everyone needs and nobody has enough of. Wars are fought over tankers. Entire settlements exist to protect one.",
+      "notes": "The fuel tanker is your MacGuffin on wheels. Every faction wants her. Every encounter on the road is about her. She's also a bomb \u2014 one incendiary round to the tank and she detonates spectacularly. Protect the cargo that can kill you if you fail.",
       "image": "",
       "size": 9,
       "loco": "wheeled",
@@ -118,8 +118,8 @@
     },
     {
       "name": "Scrap Crawler",
-      "desc": "Improvised tracked vehicle from tractor parts.",
-      "notes": "",
+      "desc": "A tracked vehicle welded together from the remains of construction equipment, military surplus, and whatever the mechanic could find. She's slow, she's ugly, and she crosses terrain that destroys wheeled vehicles. She carries salvage and survivors through the worst the wasteland offers.",
+      "notes": "The scrap crawler goes where nothing else can \u2014 rubble fields, collapsed highways, flooded ruins. She's slow but unstoppable. Use her for expeditions into the dead zones where speed doesn't matter because nothing else can reach the destination at all.",
       "image": "",
       "size": 6,
       "loco": "tracked",
@@ -139,8 +139,8 @@
     },
     {
       "name": "Death Bike",
-      "desc": "Stripped-down motorcycle. Nomad outrider.",
-      "notes": "",
+      "desc": "A motorcycle with welded armour plates, a lance, and a rider who considers life a temporary condition. She scouts ahead of the convoy, harasses enemy flanks, and charges into combat with a disregard for personal safety that borders on the religious.",
+      "notes": "The death bike is your wastelander raider. She's cheap, she's fast, and the rider is expendable \u2014 which the rider knows and doesn't care about. Use her in swarms for the iconic wasteland chase: a dozen death bikes roaring out of the dust toward the war rig.",
       "image": "",
       "size": 1,
       "loco": "wheeled",
@@ -160,8 +160,8 @@
     },
     {
       "name": "Spike Truck",
-      "desc": "Pickup with welded rams and blades.",
-      "notes": "",
+      "desc": "A pickup truck covered in welded spikes, chains, and whatever sharp metal was available. She doesn't just ram \u2014 she impales. The spikes are psychological as much as practical: they say 'I am not a person who negotiates.'",
+      "notes": "The spike truck is your raider heavy vehicle. She rams and the spikes do additional damage on collision. Use her as the warlord's personal ride \u2014 the vehicle at the front of the raider convoy that announces his arrival. She's intimidation on wheels.",
       "image": "",
       "size": 6,
       "loco": "wheeled",
@@ -181,8 +181,8 @@
     },
     {
       "name": "Sand Yacht",
-      "desc": "Wind-powered desert racer. Silent.",
-      "notes": "",
+      "desc": "A sailing vessel on wheels \u2014 a hull-shaped body with an outrigger and a single mast that catches the desert wind. She makes no sound, she burns no fuel, and she crosses the salt flats faster than any engine vehicle because the wind is free and infinite.",
+      "notes": "The sand yacht is your silent alternative. No fuel cost, no engine noise, and surprising speed on flat terrain. Use her for stealthy approaches across open desert and as the transport of wasteland communities that have no access to fuel. She's useless in cities and forests.",
       "image": "",
       "size": 4,
       "loco": "water_sail",
@@ -196,8 +196,8 @@
     },
     {
       "name": "Convoy Fortress",
-      "desc": "Mobile settlement. Welded-together vehicles.",
-      "notes": "",
+      "desc": "Not one vehicle but many \u2014 a war rig at the centre, surrounded by escorts, outriders, and support vehicles, all moving together as a rolling city. She carries an entire community across the wasteland, self-sufficient for weeks at a time. She is a nation on wheels.",
+      "notes": "The convoy fortress is your campaign-scale vehicle. She's not one stat block \u2014 she's the entire convoy treated as a unit for long-distance travel. Use her as the players' home faction: a mobile community with politics, resources, and threats that travel with them.",
       "image": "",
       "size": 12,
       "loco": "wheeled",
