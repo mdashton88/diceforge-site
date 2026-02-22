@@ -20,7 +20,12 @@
       "armourLevel": 0,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "haunted",
+        "sentient"
+      ]
     },
     {
       "name": "Cursed Longship",
@@ -56,7 +61,13 @@
       "armourLevel": 0,
       "speedLevel": 2,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "cursed",
+        "sentient",
+        "famous_infamous"
+      ]
     }
   ]
 }

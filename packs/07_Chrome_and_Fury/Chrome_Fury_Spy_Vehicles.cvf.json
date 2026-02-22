@@ -159,13 +159,19 @@
       "image": "",
       "size": 6,
       "loco": "wheeled",
-      "mods": {},
+      "mods": {
+        "sloped_armour": 1
+      },
       "weapons": [],
       "toughLevel": 2,
       "armourLevel": 2,
       "speedLevel": 0,
       "handlingLevel": -1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "spacious"
+      ]
     },
     {
       "name": "Jet Pack",

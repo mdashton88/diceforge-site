@@ -149,13 +149,18 @@
       "image": "",
       "size": 10,
       "loco": "legs_biped",
-      "mods": {},
+      "mods": {
+        "enhanced_sensors": 1
+      },
       "weapons": [],
       "toughLevel": 1,
       "armourLevel": 1,
       "speedLevel": 0,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Artillery Walker (KDF)",

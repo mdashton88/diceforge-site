@@ -180,7 +180,15 @@
       "armourLevel": 0,
       "speedLevel": -4,
       "handlingLevel": -4,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "sealed",
+        "pressurised",
+        "spacious",
+        "long_range",
+        "cargo_bay"
+      ]
     },
     {
       "name": "Battleship",
@@ -293,7 +301,13 @@
       "armourLevel": 5,
       "speedLevel": -5,
       "handlingLevel": -5,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "sealed",
+        "pressurised",
+        "long_range"
+      ]
     }
   ]
 }

@@ -20,7 +20,11 @@
       "armourLevel": -2,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "ram_plate",
+        "loud"
+      ]
     },
     {
       "name": "Giant Eagle",
@@ -35,7 +39,12 @@
       "armourLevel": -4,
       "speedLevel": 2,
       "handlingLevel": 3,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "stol",
+        "night_ops"
+      ]
     },
     {
       "name": "Griffin",
@@ -50,7 +59,12 @@
       "armourLevel": -2,
       "speedLevel": 1,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "stol",
+        "ram_plate"
+      ]
     },
     {
       "name": "Dragon (Young)",
@@ -65,7 +79,14 @@
       "armourLevel": 2,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "fireproof",
+        "long_range",
+        "famous_infamous",
+        "sentient"
+      ]
     },
     {
       "name": "Giant Wolf",
@@ -80,7 +101,12 @@
       "armourLevel": -3,
       "speedLevel": 2,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "all_terrain",
+        "stealth",
+        "night_ops"
+      ]
     },
     {
       "name": "Pegasus",
@@ -95,7 +121,11 @@
       "armourLevel": -3,
       "speedLevel": 1,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "stol"
+      ]
     },
     {
       "name": "Giant Spider",
@@ -110,7 +140,12 @@
       "armourLevel": -3,
       "speedLevel": 0,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "all_terrain",
+        "stealth",
+        "night_ops"
+      ]
     },
     {
       "name": "Nightmare",
@@ -125,7 +160,12 @@
       "armourLevel": -1,
       "speedLevel": 2,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "ram_plate",
+        "fireproof",
+        "cursed"
+      ]
     },
     {
       "name": "Giant Boar",
@@ -140,7 +180,11 @@
       "armourLevel": -2,
       "speedLevel": 0,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "all_terrain",
+        "ram_plate"
+      ]
     },
     {
       "name": "Hippogriff",
@@ -155,7 +199,11 @@
       "armourLevel": -3,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "stol"
+      ]
     }
   ]
 }

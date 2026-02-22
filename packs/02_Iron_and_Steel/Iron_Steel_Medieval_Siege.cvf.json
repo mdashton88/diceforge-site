@@ -172,7 +172,10 @@
       "armourLevel": 0,
       "speedLevel": -3,
       "handlingLevel": -2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top"
+      ]
     },
     {
       "name": "Tower Cart",

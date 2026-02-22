@@ -174,7 +174,12 @@
       "armourLevel": -2,
       "speedLevel": -2,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "loud",
+        "temperamental"
+      ]
     },
     {
       "name": "Aerial Gunboat",

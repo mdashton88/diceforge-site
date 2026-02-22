@@ -46,7 +46,11 @@
       "armourLevel": -1,
       "speedLevel": -1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "stealth"
+      ]
     },
     {
       "name": "Aerial Gunboat",

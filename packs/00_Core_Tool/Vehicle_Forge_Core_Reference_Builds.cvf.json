@@ -20,7 +20,11 @@
       "armourLevel": -3,
       "speedLevel": -2,
       "handlingLevel": -3,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "towing"
+      ]
     },
     {
       "name": "Early Car (Model T)",
@@ -35,7 +39,11 @@
       "armourLevel": -3,
       "speedLevel": -1,
       "handlingLevel": -2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "temperamental"
+      ]
     },
     {
       "name": "Street Bike",
@@ -82,7 +90,10 @@
       "armourLevel": 0,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Mid-Sized Car",
@@ -97,7 +108,11 @@
       "armourLevel": 0,
       "speedLevel": 1,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "cargo_bay"
+      ]
     },
     {
       "name": "Minivan",
@@ -112,7 +127,11 @@
       "armourLevel": 0,
       "speedLevel": 0,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "cargo_bay"
+      ]
     },
     {
       "name": "Sports Utility Vehicle",
@@ -144,7 +163,10 @@
       "armourLevel": 0,
       "speedLevel": 3,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Semi-Truck",
@@ -159,7 +181,13 @@
       "armourLevel": -2,
       "speedLevel": 0,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "cargo_bay",
+        "towing",
+        "loud"
+      ]
     },
     {
       "name": "WW2 Jeep",
@@ -547,7 +575,11 @@
       "armourLevel": -2,
       "speedLevel": -2,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "short_range"
+      ]
     },
     {
       "name": "Cessna Skyhawk",
@@ -562,7 +594,10 @@
       "armourLevel": 0,
       "speedLevel": -2,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Helicopter (Civilian)",
@@ -577,7 +612,11 @@
       "armourLevel": -1,
       "speedLevel": -1,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "stol"
+      ]
     },
     {
       "name": "Learjet",
@@ -592,7 +631,12 @@
       "armourLevel": -2,
       "speedLevel": -1,
       "handlingLevel": 3,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "spacious",
+        "long_range"
+      ]
     },
     {
       "name": "Space Shuttle",
@@ -607,7 +651,12 @@
       "armourLevel": -2,
       "speedLevel": 5,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "sealed",
+        "pressurised"
+      ]
     },
     {
       "name": "B-17 Flying Fortress",
@@ -789,7 +838,11 @@
       "armourLevel": 0,
       "speedLevel": 2,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "spacious"
+      ]
     },
     {
       "name": "City Bus",
@@ -804,7 +857,11 @@
       "armourLevel": -2,
       "speedLevel": -1,
       "handlingLevel": -2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "cargo_bay"
+      ]
     },
     {
       "name": "Speedboat",
@@ -819,7 +876,10 @@
       "armourLevel": -2,
       "speedLevel": 2,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top"
+      ]
     },
     {
       "name": "Yacht",
@@ -834,7 +894,12 @@
       "armourLevel": -2,
       "speedLevel": 0,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "spacious",
+        "long_range"
+      ]
     },
     {
       "name": "Fishing Trawler",
@@ -849,7 +914,12 @@
       "armourLevel": -2,
       "speedLevel": -2,
       "handlingLevel": -1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "cargo_bay",
+        "long_range"
+      ]
     },
     {
       "name": "Jet Fighter (Modern)",
@@ -1058,7 +1128,13 @@
       "armourLevel": -2,
       "speedLevel": 0,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "spacious",
+        "pressurised",
+        "long_range"
+      ]
     },
     {
       "name": "Prop Cargo Plane",
@@ -1073,7 +1149,12 @@
       "armourLevel": -2,
       "speedLevel": -2,
       "handlingLevel": -1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "cargo_bay",
+        "long_range"
+      ]
     },
     {
       "name": "ATV/Quad Bike",
@@ -1105,7 +1186,11 @@
       "armourLevel": -2,
       "speedLevel": 0,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "cargo_bay"
+      ]
     },
     {
       "name": "Ambulance",
@@ -1120,7 +1205,11 @@
       "armourLevel": -1,
       "speedLevel": 1,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "loud"
+      ]
     },
     {
       "name": "Fire Engine",
@@ -1135,7 +1224,11 @@
       "armourLevel": -1,
       "speedLevel": -1,
       "handlingLevel": -1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "loud"
+      ]
     },
     {
       "name": "Police Cruiser",
@@ -1150,7 +1243,10 @@
       "armourLevel": 0,
       "speedLevel": 2,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Bulldozer",
@@ -1165,7 +1261,12 @@
       "armourLevel": -1,
       "speedLevel": -4,
       "handlingLevel": -3,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "ram_plate",
+        "loud"
+      ]
     },
     {
       "name": "Motorboat",
@@ -1180,7 +1281,10 @@
       "armourLevel": -3,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top"
+      ]
     },
     {
       "name": "Canoe",
@@ -1240,7 +1344,11 @@
       "armourLevel": -5,
       "speedLevel": -5,
       "handlingLevel": -4,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "unpowered"
+      ]
     },
     {
       "name": "Stretch Limo",
@@ -1255,7 +1363,11 @@
       "armourLevel": -1,
       "speedLevel": 0,
       "handlingLevel": -1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "spacious"
+      ]
     },
     {
       "name": "Dump Truck",
@@ -1270,7 +1382,12 @@
       "armourLevel": -2,
       "speedLevel": -2,
       "handlingLevel": -2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "loud",
+        "ram_plate"
+      ]
     },
     {
       "name": "Hovercraft (Civilian)",

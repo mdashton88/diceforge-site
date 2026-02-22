@@ -35,7 +35,11 @@
       "armourLevel": -1,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "ram_plate"
+      ]
     },
     {
       "name": "War Elephant",
@@ -50,7 +54,13 @@
       "armourLevel": -1,
       "speedLevel": -1,
       "handlingLevel": -1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "ram_plate",
+        "loud",
+        "towing"
+      ]
     }
   ]
 }

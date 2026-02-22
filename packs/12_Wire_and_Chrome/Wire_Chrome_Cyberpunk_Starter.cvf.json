@@ -15,13 +15,19 @@
       "image": "",
       "size": 5,
       "loco": "vtol",
-      "mods": {},
+      "mods": {
+        "enhanced_sensors": 1
+      },
       "weapons": [],
       "toughLevel": 1,
       "armourLevel": 1,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "sealed"
+      ]
     },
     {
       "name": "Street Racer",
@@ -36,7 +42,10 @@
       "armourLevel": -2,
       "speedLevel": 4,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Tactical Drone",
@@ -162,7 +171,11 @@
       "armourLevel": 1,
       "speedLevel": 1,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "spacious"
+      ]
     },
     {
       "name": "Cargo Drone",

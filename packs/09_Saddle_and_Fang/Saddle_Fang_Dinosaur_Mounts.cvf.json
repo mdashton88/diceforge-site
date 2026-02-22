@@ -20,7 +20,13 @@
       "armourLevel": -1,
       "speedLevel": 0,
       "handlingLevel": -2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "ram_plate",
+        "loud",
+        "temperamental",
+        "famous_infamous"
+      ]
     },
     {
       "name": "Triceratops",
@@ -35,7 +41,11 @@
       "armourLevel": 1,
       "speedLevel": -1,
       "handlingLevel": -1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "ram_plate",
+        "all_terrain"
+      ]
     },
     {
       "name": "Velociraptor Pack",
@@ -65,7 +75,11 @@
       "armourLevel": -4,
       "speedLevel": 1,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "short_range"
+      ]
     },
     {
       "name": "Ankylosaurus",
@@ -80,7 +94,11 @@
       "armourLevel": 2,
       "speedLevel": -2,
       "handlingLevel": -2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "all_terrain",
+        "ram_plate"
+      ]
     },
     {
       "name": "Brontosaurus",
@@ -95,7 +113,12 @@
       "armourLevel": -1,
       "speedLevel": -3,
       "handlingLevel": -3,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "towing",
+        "loud"
+      ]
     },
     {
       "name": "Stegosaurus",
@@ -110,7 +133,11 @@
       "armourLevel": 1,
       "speedLevel": -1,
       "handlingLevel": -1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "all_terrain",
+        "ram_plate"
+      ]
     },
     {
       "name": "Parasaurolophus",
@@ -125,7 +152,11 @@
       "armourLevel": -3,
       "speedLevel": 2,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "all_terrain",
+        "loud"
+      ]
     },
     {
       "name": "Carnotaurus",
@@ -140,7 +171,10 @@
       "armourLevel": -2,
       "speedLevel": 2,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "ram_plate"
+      ]
     },
     {
       "name": "Quetzalcoatlus",
@@ -155,7 +189,10 @@
       "armourLevel": -3,
       "speedLevel": 1,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top"
+      ]
     }
   ]
 }

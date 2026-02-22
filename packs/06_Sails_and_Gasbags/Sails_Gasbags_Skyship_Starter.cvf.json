@@ -21,7 +21,11 @@
       "armourLevel": -4,
       "speedLevel": 2,
       "handlingLevel": 3,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "short_range"
+      ]
     },
     {
       "name": "Cloud Cutter",
@@ -155,7 +159,11 @@
       "armourLevel": -4,
       "speedLevel": -5,
       "handlingLevel": -4,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "unpowered"
+      ]
     },
     {
       "name": "Transport Barge (Sky)",
@@ -170,7 +178,11 @@
       "armourLevel": -1,
       "speedLevel": -2,
       "handlingLevel": -2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "cargo_bay"
+      ]
     },
     {
       "name": "Elven Windrunner",
@@ -185,7 +197,12 @@
       "armourLevel": -2,
       "speedLevel": 2,
       "handlingLevel": 3,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "stealth",
+        "long_range"
+      ]
     },
     {
       "name": "Bomber Dirigible",

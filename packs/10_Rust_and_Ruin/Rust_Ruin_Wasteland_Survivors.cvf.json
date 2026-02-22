@@ -41,7 +41,11 @@
       "armourLevel": 0,
       "speedLevel": -2,
       "handlingLevel": -2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "cargo_bay"
+      ]
     },
     {
       "name": "Farm Tractor (Armoured)",
@@ -113,7 +117,11 @@
       "armourLevel": -4,
       "speedLevel": -1,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "unpowered"
+      ]
     },
     {
       "name": "Scrap Walker",

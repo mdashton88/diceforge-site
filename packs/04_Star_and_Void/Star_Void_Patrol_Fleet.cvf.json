@@ -155,7 +155,14 @@
       "armourLevel": -2,
       "speedLevel": 4,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "sealed",
+        "pressurised",
+        "long_range",
+        "stealth"
+      ]
     },
     {
       "name": "Mining Vessel",
@@ -234,7 +241,12 @@
       "armourLevel": -2,
       "speedLevel": 0,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "sealed",
+        "pressurised"
+      ]
     }
   ]
 }

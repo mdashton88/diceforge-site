@@ -14,13 +14,18 @@
       "image": "",
       "size": 4,
       "loco": "wheeled",
-      "mods": {},
+      "mods": {
+        "enhanced_sensors": 1
+      },
       "weapons": [],
       "toughLevel": 1,
       "armourLevel": 1,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Delivery Drone (Armed)",

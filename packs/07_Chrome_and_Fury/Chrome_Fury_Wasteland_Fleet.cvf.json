@@ -114,7 +114,11 @@
       "armourLevel": -1,
       "speedLevel": -1,
       "handlingLevel": -2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "cargo_bay"
+      ]
     },
     {
       "name": "Scrap Crawler",
@@ -192,7 +196,11 @@
       "armourLevel": -4,
       "speedLevel": 0,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "all_terrain"
+      ]
     },
     {
       "name": "Convoy Fortress",

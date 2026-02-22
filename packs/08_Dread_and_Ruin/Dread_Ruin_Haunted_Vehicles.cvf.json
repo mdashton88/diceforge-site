@@ -20,7 +20,12 @@
       "armourLevel": 0,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "haunted",
+        "sentient"
+      ]
     },
     {
       "name": "Ghost Ship",
@@ -61,7 +66,12 @@
       "armourLevel": 1,
       "speedLevel": 2,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "sentient",
+        "cursed"
+      ]
     },
     {
       "name": "Soul Engine Train",
@@ -76,7 +86,13 @@
       "armourLevel": 1,
       "speedLevel": 2,
       "handlingLevel": -5,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "haunted",
+        "sentient",
+        "sealed"
+      ]
     },
     {
       "name": "Bone Chariot",
@@ -91,7 +107,12 @@
       "armourLevel": -2,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "haunted",
+        "cursed"
+      ]
     },
     {
       "name": "Cursed Submarine",
@@ -179,7 +200,12 @@
       "armourLevel": 0,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "haunted",
+        "cursed"
+      ]
     },
     {
       "name": "Witch's Hut (Walking)",
@@ -194,7 +220,13 @@
       "armourLevel": 0,
       "speedLevel": -1,
       "handlingLevel": -1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "sentient",
+        "haunted",
+        "spacious"
+      ]
     }
   ]
 }

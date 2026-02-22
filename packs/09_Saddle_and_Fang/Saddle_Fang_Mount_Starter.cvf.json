@@ -21,7 +21,11 @@
       "armourLevel": -2,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "ram_plate",
+        "loud"
+      ]
     },
     {
       "name": "Giant Eagle",
@@ -36,7 +40,12 @@
       "armourLevel": -4,
       "speedLevel": 2,
       "handlingLevel": 3,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "stol",
+        "night_ops"
+      ]
     },
     {
       "name": "Griffin",
@@ -51,7 +60,12 @@
       "armourLevel": -2,
       "speedLevel": 1,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "stol",
+        "ram_plate"
+      ]
     },
     {
       "name": "Dragon (Young)",
@@ -66,7 +80,14 @@
       "armourLevel": 2,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "fireproof",
+        "long_range",
+        "famous_infamous",
+        "sentient"
+      ]
     },
     {
       "name": "Dire Wolf",
@@ -81,7 +102,12 @@
       "armourLevel": -3,
       "speedLevel": 2,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "all_terrain",
+        "stealth",
+        "night_ops"
+      ]
     },
     {
       "name": "Wyvern",
@@ -96,7 +122,11 @@
       "armourLevel": -1,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "ram_plate"
+      ]
     },
     {
       "name": "War Elephant",
@@ -111,7 +141,13 @@
       "armourLevel": -1,
       "speedLevel": -1,
       "handlingLevel": -1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "ram_plate",
+        "loud",
+        "towing"
+      ]
     },
     {
       "name": "Giant Spider",
@@ -126,7 +162,12 @@
       "armourLevel": -3,
       "speedLevel": 0,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "all_terrain",
+        "stealth",
+        "night_ops"
+      ]
     },
     {
       "name": "Triceratops",
@@ -141,7 +182,11 @@
       "armourLevel": 1,
       "speedLevel": -1,
       "handlingLevel": -1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "ram_plate",
+        "all_terrain"
+      ]
     },
     {
       "name": "Pegasus",
@@ -156,7 +201,11 @@
       "armourLevel": -3,
       "speedLevel": 1,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "stol"
+      ]
     }
   ]
 }
