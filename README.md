@@ -3,37 +3,46 @@
 **DiceForge Studios — public website and tools.**
 Deployed via Cloudflare Pages at [diceforgestudios.pages.dev](https://diceforgestudios.pages.dev)
 
-## Contents
+## Tools
 
 ```
-index.html        Landing page — DiceForge Studios branding
-builder.html      Character Forge — free SWADE character builder
-swade-core.js     SWADE core rules data module (generated from swade-canon)
+index.html                  Landing page — DiceForge Studios branding
+builder.html                Character Forge — free Savage Worlds character builder
+combat-vehicle-forge.html   Vehicle Forge — free Savage Worlds vehicle construction tool
+vehicle-database.json       Vehicle database (47 SWADE core reference builds)
+vehicle-forge-manual.pdf    Vehicle Forge Companion Guide
+swade-core.js               Savage Worlds core rules data module
 ```
+
+## Vehicle Forge
+
+Interactive vehicle construction tool for Savage Worlds. Original DiceForge design
+rules compatible with Savage Worlds vehicle mechanics (Size, Handling, Toughness,
+Wounds, Mods). Ships with 47 canon reference builds from the Savage Worlds core
+rulebook, three export formats (JSON, Pinnacle stat block, Fantasy Grounds XML),
+and a Vehicle Hangar for saving and managing builds. Supports .vfx extension packs.
+
+## Character Forge
+
+Step-by-step character builder for Savage Worlds. Exports to Fantasy Grounds Unity
+XML, PDF, HTML, and RTF. Displays summary-level reference data to support character
+creation decisions. Full rules text remains in the published Savage Worlds rulebook.
 
 ## Deployment
 
 Pushes to `main` auto-deploy via Cloudflare Pages (~30 seconds).
 
-## Data Pipeline
-
-```
-swade-canon (private)     →  generates  →  swade-core.js (this repo)
-  core/*.json                               ↓
-                                          builder.html consumes at runtime
-```
-
-The Character Builder displays summary-level reference data (one-line descriptions)
-to support character creation decisions. Full rules text remains in the published
-Savage Worlds rulebook.
-
-## Exports
-
-The Character Builder exports to Fantasy Grounds Unity XML, PDF, HTML, and RTF.
-
 ## Legal
 
 Savage Worlds and all related marks © Pinnacle Entertainment Group.
-Used under the Savage Worlds Fan License.
-The Tribute Lands: Paradise Lost © DiceForge Studios Ltd.
+Used under the Savage Worlds Fan License. Pinnacle makes no representation
+or warranty as to the quality, viability, or suitability for purpose of
+this product.
 
+Fantasy Grounds is a trademark of SmiteWorks USA, LLC.
+Foundry Virtual Tabletop is a trademark of Foundry Gaming LLC.
+
+This product is not affiliated with or endorsed by Pinnacle Entertainment
+Group, SmiteWorks, or Foundry Gaming.
+
+Vehicle Forge and Character Forge © DiceForge Studios Ltd.
