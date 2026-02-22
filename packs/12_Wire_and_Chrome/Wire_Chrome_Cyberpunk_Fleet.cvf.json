@@ -104,7 +104,11 @@
       "armourLevel": -3,
       "speedLevel": 2,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "stealth"
+      ]
     },
     {
       "name": "Merc APC",

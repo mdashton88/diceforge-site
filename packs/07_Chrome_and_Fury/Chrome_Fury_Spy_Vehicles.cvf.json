@@ -41,7 +41,10 @@
       "armourLevel": -2,
       "speedLevel": 2,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "stealth"
+      ]
     },
     {
       "name": "Pursuit Helicopter",
@@ -186,7 +189,12 @@
       "armourLevel": -5,
       "speedLevel": 0,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "short_range",
+        "prototype"
+      ]
     },
     {
       "name": "Q-Branch Special",

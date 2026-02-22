@@ -41,7 +41,11 @@
       "armourLevel": -3,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "temperamental"
+      ]
     },
     {
       "name": "Settlement Crawler",

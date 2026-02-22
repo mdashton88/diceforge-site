@@ -58,7 +58,10 @@
       "armourLevel": -2,
       "speedLevel": 2,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top"
+      ]
     },
     {
       "name": "Dirt Bike",
@@ -1113,7 +1116,11 @@
       "armourLevel": -4,
       "speedLevel": -3,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "shallow_draft"
+      ]
     },
     {
       "name": "Airliner",
@@ -1299,7 +1306,12 @@
       "armourLevel": -5,
       "speedLevel": -3,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "shallow_draft",
+        "stealth"
+      ]
     },
     {
       "name": "Snowmobile",
@@ -1314,7 +1326,11 @@
       "armourLevel": -3,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "all_terrain"
+      ]
     },
     {
       "name": "Hang Glider",
@@ -1329,7 +1345,11 @@
       "armourLevel": -5,
       "speedLevel": -3,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "unpowered"
+      ]
     },
     {
       "name": "Hot Air Balloon",
@@ -1419,7 +1439,10 @@
       "armourLevel": -5,
       "speedLevel": -3,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top"
+      ]
     }
   ]
 }

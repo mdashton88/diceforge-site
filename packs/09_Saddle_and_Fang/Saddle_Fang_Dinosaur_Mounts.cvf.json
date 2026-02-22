@@ -60,7 +60,12 @@
       "armourLevel": -4,
       "speedLevel": 3,
       "handlingLevel": 3,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "stealth",
+        "all_terrain",
+        "night_ops"
+      ]
     },
     {
       "name": "Pteranodon",

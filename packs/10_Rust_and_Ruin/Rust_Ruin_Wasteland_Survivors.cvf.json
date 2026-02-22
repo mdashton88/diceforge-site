@@ -81,7 +81,11 @@
       "armourLevel": -4,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "temperamental"
+      ]
     },
     {
       "name": "Armoured Schoolbus",
@@ -178,7 +182,11 @@
       "armourLevel": -4,
       "speedLevel": -4,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "unpowered"
+      ]
     },
     {
       "name": "Frankenstein APC",
