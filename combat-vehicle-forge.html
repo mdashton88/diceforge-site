@@ -704,6 +704,8 @@ function weaponClassLetter(wp,lk){return classLetter(weaponClassVal(wp,lk))}
 // Legacy aliases for compatibility
 function defenceGrade(){return vehicleClassLetter()}
 function defenceGradeLabel(){return vehicleClass()}
+// SFC roman numeral (I-VII for A-G, dash beyond)
+function sfcNumeral(val){var letter=classLetter(val);var map={A:'I',B:'II',C:'III',D:'IV',E:'V',F:'VI',G:'VII'};return map[letter]||'\u2014'}
 // Legacy aliases — weaponGrade now uses unified class system
 function weaponGrade(w,lk){return weaponClassLetter(w,lk)}
 function weaponGradeLabel(w,lk){return weaponClassLabel(w,lk)}
@@ -908,7 +910,7 @@ function addCustomWeapon(){Audio.clunk();var n=document.getElementById('cw_name'
 function renderStats(){var f=getFrame(S.size),used=calcModsUsed(),gained=calcModsGained(),total=f.modSlots+gained,left=total-used;var spd=calcSpeed();var rspd=calcRoadSpeed();var spdLabel=rspd>spd?'Off-Road':'Top Speed';var spdExtra=rspd>spd?'<div class="stat-box"><div class="stat-label">Road Speed</div><div class="stat-value">'+rspd+' ('+speedMPH(rspd)+' MPH)</div></div>':'';
   document.getElementById('statsGrid').innerHTML=
     '<div class="stat-box"><div class="stat-label">Toughness</div><div class="stat-value">'+calcTotalTough()+' ('+calcArmourValue()+')</div></div>'
-    +'<div class="stat-box"><div class="stat-label">Class</div><div class="stat-value" style="color:var(--accent);font-size:20px;font-weight:700">'+vehicleClass()+'</div></div>'
+    +'<div class="stat-box"><div class="stat-label">Class</div><div class="stat-value" style="color:var(--accent);font-size:20px;font-weight:700">'+vehicleClass()+' <span style="font-size:14px;font-weight:400;color:var(--text-dim)">('+sfcNumeral(calcTotalTough())+')</span></div></div>'
     +'<div class="stat-box"><div class="stat-label">Wounds</div><div class="stat-value">'+calcWounds()+'</div></div>'
     +'<div class="stat-box"><div class="stat-label">Handling</div><div class="stat-value">'+(calcHand()>=0?'+':'')+calcHand()+'</div></div>'
     +'<div class="stat-box"><div class="stat-label">'+spdLabel+'</div><div class="stat-value">'+spd+' ('+speedMPH(spd)+' MPH)</div></div>'
@@ -951,7 +953,7 @@ function renderOutput(){var p=document.getElementById('outputContent'),f=getFram
   p.innerHTML=imgHtml+'<div class="stat-block">'
     +'<div class="sb-name">'+(S.name||'Untitled Vehicle')+'</div>'
     +descHtml
-    +'<div class="sb-type">Class '+vehicleClass()+' \u2014 Size '+S.size+' ('+f.cat+'), '+loco.name+', Handling '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)</div>'
+    +'<div class="sb-type">Class '+vehicleClass()+' ('+sfcNumeral(calcTotalTough())+') \u2014 Size '+S.size+' ('+f.cat+'), '+loco.name+', Handling '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)</div>'
     +'<hr class="sb-divider">'
     +'<div class="sb-line"><span class="sb-label">Toughness:</span> '+calcTotalTough()+' ('+calcArmourValue()+')</div>'
     +'<div class="sb-line"><span class="sb-label">Wounds:</span> '+calcWounds()+'</div>'
@@ -987,7 +989,7 @@ function copyBlock(){var f=getFrame(S.size),loco=LOCOS.find(function(l){return l
   if(S.handlingLevel!==0)special.push('Handling: '+handlingLabel(S.handlingLevel)+'.');
   if(S.woundsLevel!==0)special.push('Wounds: '+woundsLabel(S.woundsLevel)+'.');
   var t=S.name+'\n';if(S.desc)t+=S.desc+'\n';
-  t+='Class '+vehicleClass()+' \u2014 Size '+S.size+' ('+f.cat+'), '+loco.name+', Handling '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)\n';
+  t+='Class '+vehicleClass()+' ('+sfcNumeral(calcTotalTough())+') \u2014 Size '+S.size+' ('+f.cat+'), '+loco.name+', Handling '+(calcHand()>=0?'+':'')+calcHand()+', Top Speed '+spd+' ('+speedMPH(spd)+' MPH)\n';
   t+='Toughness: '+calcTotalTough()+' ('+calcArmourValue()+')\nWounds: '+calcWounds()+'\nCrew: '+f.crew+(isWalker()?'\nStrength: '+walkerStr():'')+('\nEnergy: '+calcEnergy()+' days\nCost: $'+fmtC(calcCost())+', Mods '+left+' remaining\n');
   if(notes.length)t+='Mods: '+notes.join(', ')+'.\n';if(wl.length)t+='Weapons:\n'+wl.join('\n')+'\n';
   if(special.length)t+='Special: '+special.join(' ')+'\n';
@@ -1008,7 +1010,7 @@ function genStatBlockText(v){
     var wcls=weaponClassLabel(wp,lk);
     wl.push('  \u2022 '+wp.name+lkTxt+' ['+wcls+'] ('+ml+'): Range '+wp.range+', Damage '+wp.damage+', AP '+wp.ap+', RoF '+wp.rof+(wp.notes?', '+wp.notes:'')+lkBonus)}});
   var t=sv.name+'\n';if(sv.desc)t+=sv.desc+'\n';
-  t+='Class '+tcls+' \u2014 Size '+sv.size+' ('+f.cat+'); Handling '+(hand>=0?'+':'')+hand+'; Top Speed '+spd+'; Toughness '+tough+' ('+arm+')\n';
+  t+='Class '+tcls+' ('+sfcNumeral(tough)+') \u2014 Size '+sv.size+' ('+f.cat+'); Handling '+(hand>=0?'+':'')+hand+'; Top Speed '+spd+'; Toughness '+tough+' ('+arm+')\n';
   t+='Crew: '+f.crew+'; Wounds: '+wounds+'\n';
   if(notes.length)t+='Mods: '+notes.join(', ')+'\n';
   if(wl.length)t+='Weapons:\n'+wl.join('\n')+'\n';
