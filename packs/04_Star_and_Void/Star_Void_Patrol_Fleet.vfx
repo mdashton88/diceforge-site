@@ -1,9 +1,9 @@
 {
-  "id": "patrol_fleet",
+  "id": "star-void-patrol-fleet",
   "name": "Star & Void \u2014 Patrol Fleet",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "description": "10 vehicles \u2014 Star & Void \u2014 Patrol Fleet",
   "weapons": [],
   "mods": [],
   "specials": [],
@@ -156,7 +156,14 @@
       "armourLevel": -2,
       "speedLevel": 4,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "sealed",
+        "pressurised",
+        "long_range",
+        "stealth"
+      ]
     },
     {
       "name": "Mining Vessel",
@@ -235,7 +242,12 @@
       "armourLevel": -2,
       "speedLevel": 0,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "sealed",
+        "pressurised"
+      ]
     }
   ]
 }

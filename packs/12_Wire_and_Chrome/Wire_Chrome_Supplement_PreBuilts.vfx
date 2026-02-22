@@ -1,9 +1,9 @@
 {
-  "id": "sup_wire_chrome",
+  "id": "wire-chrome-supplement-prebuilts",
   "name": "Wire & Chrome \u2014 Supplement Pre-Builts",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "3 pre-built vehicles for the Vehicle Forge.",
+  "description": "3 vehicles \u2014 Wire & Chrome \u2014 Supplement Pre-Builts",
   "weapons": [],
   "mods": [],
   "specials": [],
@@ -15,13 +15,18 @@
       "image": "",
       "size": 4,
       "loco": "wheeled",
-      "mods": {},
+      "mods": {
+        "enhanced_sensors": 1
+      },
       "weapons": [],
       "toughLevel": 1,
       "armourLevel": 1,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Delivery Drone (Armed)",
@@ -59,7 +64,11 @@
       "armourLevel": -3,
       "speedLevel": 2,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "stealth"
+      ]
     }
   ]
 }

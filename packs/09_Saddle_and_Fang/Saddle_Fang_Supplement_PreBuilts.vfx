@@ -1,9 +1,9 @@
 {
-  "id": "sup_saddle_fang",
+  "id": "saddle-fang-supplement-prebuilts",
   "name": "Saddle & Fang \u2014 Supplement Pre-Builts",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "3 pre-built vehicles for the Vehicle Forge.",
+  "description": "3 vehicles \u2014 Saddle & Fang \u2014 Supplement Pre-Builts",
   "weapons": [],
   "mods": [],
   "specials": [],
@@ -21,7 +21,10 @@
       "armourLevel": -3,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top"
+      ]
     },
     {
       "name": "Wyvern",
@@ -36,7 +39,11 @@
       "armourLevel": -1,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "ram_plate"
+      ]
     },
     {
       "name": "War Elephant",
@@ -51,7 +58,13 @@
       "armourLevel": -1,
       "speedLevel": -1,
       "handlingLevel": -1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "ram_plate",
+        "loud",
+        "towing"
+      ]
     }
   ]
 }

@@ -1,17 +1,17 @@
 {
-  "id": "victorian_arsenal",
+  "id": "brass-steam-victorian-arsenal",
   "name": "Brass & Steam \u2014 Victorian Arsenal",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "description": "10 vehicles \u2014 Brass & Steam \u2014 Victorian Arsenal",
   "weapons": [],
   "mods": [],
   "specials": [],
   "vehicles": [
     {
       "name": "Steam Tank",
-      "desc": "Heavier and better armed than the starter version \u2014 a proper military vehicle rather than a prototype. She carries a turret-mounted cannon, machine guns in sponsons, and enough coal for a day's operation. She's what happens when the military takes the inventor's toy seriously.",
-      "notes": "The expansion steam tank is a credible battlefield weapon. She fights like a WWI tank \u2014 slow, loud, and devastating against anything that isn't also armoured. Use her for the escalation point in a steampunk war where both sides have industrialised.",
+      "desc": "Riveted iron plate, a coal-fired boiler, and the shuddering determination of Victorian engineering applied to warfare. She advances through mud and wire at walking pace, trailing steam, and her crew works in temperatures that would kill an unprotected man in an hour.",
+      "notes": "The Victorian steam tank variant emphasises the engineering challenge. Track coal and water as resources. The engineer maintains boiler pressure while the gunner fires and the commander navigates. Three crew roles, three players, constant resource management.",
       "image": "",
       "size": 7,
       "loco": "tracked",
@@ -36,8 +36,8 @@
     },
     {
       "name": "Clockwork Spider",
-      "desc": "The military version. Larger, faster, and carrying a weapon mount that fires poisoned darts, alchemical grenades, or a light machine gun. She infiltrates fortifications by climbing walls the defenders thought were unassailable.",
-      "notes": "The expansion spider is an assault weapon, not just a scout. She carries offensive capability \u2014 grenades, guns, or sabotage charges \u2014 and deploys them against targets that thought they were safe behind walls. Use her for covert assaults on fortified positions.",
+      "desc": "A masterwork of precision engineering \u2014 eight legs moving in perfect synchronised rhythm, each joint hand-fitted by a master clockmaker. She's a military contract worth a fortune, and losing one in combat means the Treasury wants to know why.",
+      "notes": "This clockwork spider variant emphasises cost and rarity. She's irreplaceable in the field \u2014 there's no factory to produce spares. Damage to her mechanisms requires a skilled clockmaker, not a blacksmith. Use her as the special asset the military can't afford to lose.",
       "image": "",
       "size": 4,
       "loco": "legs_quad",
@@ -59,8 +59,8 @@
     },
     {
       "name": "Ornithopter",
-      "desc": "The combat variant. Reinforced wings, a forward-firing weapon, and the ability to strafe ground targets from an altitude that Victorian rifles can't effectively engage. She's fragile, she's noisy, and she's the future of warfare.",
-      "notes": "The expansion ornithopter is your steampunk fighter-bomber. She carries light weapons and attacks ground targets. She's the first time soldiers look up and realise the sky is hostile. Use her to change the tactical equation in a battle the players thought was going well.",
+      "desc": "Experimental flying machine with mechanical wings. She's been through six prototypes and four test pilots. The current version mostly works. The word 'mostly' keeps her designer awake at night.",
+      "notes": "The Victorian ornithopter is experimental and dangerous. She pushes Piloting difficulties up by one step compared to conventional aircraft. Critical Failures have dramatic consequences. Use her for inventor-character campaigns where the vehicle is as much a character as the pilot.",
       "image": "",
       "size": 4,
       "loco": "vtol",
@@ -70,12 +70,17 @@
       "armourLevel": -3,
       "speedLevel": -2,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "prototype",
+        "temperamental"
+      ]
     },
     {
       "name": "Steam Carriage",
-      "desc": "The luxury version. Polished brass, upholstered seats, and an engine tuned by the finest mechanics in the Empire. She's faster and more reliable than the starter version, and she announces her owner's wealth with every hiss of steam.",
-      "notes": "The expansion carriage is the wealthy adventurer's ride. She's faster and more reliable, but she's also conspicuous. Use her for the gentleman adventurer who arrives at the scene of danger in comfort and style.",
+      "desc": "The horseless carriage that scandalises society and excites engineers in equal measure. She burns coal, she scares horses, and she represents the future \u2014 if the future can solve the problem of the boiler occasionally exploding.",
+      "notes": "The Victorian steam carriage is your urban transport. She's a conversation piece, a status symbol, and a chase vehicle through gaslit streets. Her top speed is modest but in the 1870s she's the fastest personal vehicle available.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -85,12 +90,17 @@
       "armourLevel": -2,
       "speedLevel": -2,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "loud",
+        "temperamental"
+      ]
     },
     {
       "name": "Ironclad Monitor",
-      "desc": "The expanded warship. Heavier armour, a larger turret, and the ability to engage shore fortifications at ranges that make return fire ineffective. She's the instrument that forces every coastal nation to rebuild its navy or accept obsolescence.",
-      "notes": "The expansion ironclad is a proper warship, not a prototype. She fights fleet actions and bombards fortifications. Use her for naval campaigns in the age of iron and steam, where the players command a vessel that belongs to the new world.",
+      "desc": "Low in the water, armoured against everything afloat, and carrying a single turret with guns that can demolish a wooden ship of the line in a single broadside. She's the future of naval warfare and every admiral who grew up under sail hates her.",
+      "notes": "The ironclad represents the end of the sailing navy. Use her for Victorian naval campaigns where the old order confronts the industrial revolution. She's slow, she handles poorly in heavy seas, but nothing wooden survives her guns.",
       "image": "",
       "size": 12,
       "loco": "water_turbo",
@@ -110,8 +120,8 @@
     },
     {
       "name": "Zeppelin (Victorian)",
-      "desc": "A rigid-frame airship carrying passengers, cargo, and the aspirations of an age that believed technology could conquer anything. She cruises at altitude, she carries dozens of passengers in mahogany-panelled comfort, and she is terrifyingly flammable.",
-      "notes": "The Victorian zeppelin is your luxury air transport and your floating adventure location. A murder mystery aboard a zeppelin is a classic scenario \u2014 contained, atmospheric, and with the added tension that the crime scene is a hydrogen-filled bomb floating at five thousand feet.",
+      "desc": "A rigid airship the length of a cricket pitch, carrying passengers in luxury and cargo in bulk above the weather that plagues surface transport. She's the ocean liner of the sky \u2014 slow, stately, and representing the triumph of lighter-than-air engineering.",
+      "notes": "The Victorian zeppelin is your aerial transport and adventure platform. She carries enough passengers for a mystery scenario \u2014 murder on the airship at ten thousand feet. She's also vulnerable to weather, fire, and anyone willing to shoot at a hydrogen-filled envelope.",
       "image": "",
       "size": 14,
       "loco": "vtol",
@@ -136,8 +146,8 @@
     },
     {
       "name": "Submarine (Nautilus)",
-      "desc": "The advanced submarine. Longer range, deeper diving capability, and weapons that include electric torpedoes. She explores the deep ocean, raids enemy harbours, and operates independently for weeks at a time. She's the lone wolf of the Victorian seas.",
-      "notes": "The expansion Nautilus is your campaign submarine. She goes deeper and further than the starter version. Use her for extended undersea expeditions \u2014 exploring trenches, lost cities, and underwater civilisations. The crew are isolated, self-reliant, and possibly going mad.",
+      "desc": "A Victorian submarine powered by engines that shouldn't work and navigating by instruments that barely do. She sinks when intended, surfaces when possible, and her crew breathe air that tastes of oil and desperation. She's the cutting edge and she knows it.",
+      "notes": "The Victorian submarine is your adventure vehicle for exploration campaigns. She reaches underwater locations \u2014 shipwrecks, sea caves, lost cities \u2014 that nothing else can. Her limitations create natural tension: limited air, limited power, and the ocean trying to crush her hull.",
       "image": "",
       "size": 10,
       "loco": "water_turbo",
@@ -157,8 +167,8 @@
     },
     {
       "name": "Walking Fortress",
-      "desc": "The military grade walker. She carries a full company of soldiers, mounts siege-grade weapons, and crosses terrain that stops conventional armies. She is the land equivalent of the ironclad \u2014 an industrial revolution in warfare made manifest.",
-      "notes": "The expansion walking fortress is the definitive steampunk war machine. She's a mobile castle that changes the strategic map. The players serve aboard her as crew, defend her as escorts, or spend the campaign trying to destroy her before she reaches the capital.",
+      "desc": "A three-storey structure on mechanical legs, carrying artillery, a garrison, and the flag of whatever empire was wealthy and insane enough to build her. She strides across colonial landscapes inspiring awe and terror in equal measure.",
+      "notes": "The Victorian walking fortress is your colonial-era superweapon. She's deployed against 'lesser' civilisations \u2014 which creates morally complex scenarios about imperial power and its consequences. She's nearly unstoppable with period weapons.",
       "image": "",
       "size": 10,
       "loco": "legs_biped",
@@ -188,8 +198,8 @@
     },
     {
       "name": "Armoured Train",
-      "desc": "The military express. Gun carriages, troop transports, supply wagons, and a locomotive armoured against anything short of a direct hit from a siege cannon. She's the mobile base for railway wars \u2014 and in the age of steam, all wars are railway wars.",
-      "notes": "The expansion armoured train is your campaign transport. She carries the party, their equipment, and a company of soldiers along the railway network. Every junction is a tactical decision, every bridge is a vulnerability, and every tunnel is a potential ambush.",
+      "desc": "The pride of the railway companies and the terror of anyone who lives near the tracks. She carries troops, guns, and supplies along rail lines that span continents. She's the backbone of colonial logistics and the first target of any insurgency.",
+      "notes": "The Victorian armoured train is your rail campaign vehicle. She connects frontier outposts, delivers reinforcements, and attracts every bandit and revolutionary within earshot of her whistle. Rail ambushes are the classic encounter.",
       "image": "",
       "size": 12,
       "loco": "tracked",
@@ -219,8 +229,8 @@
     },
     {
       "name": "Difference Engine Walker",
-      "desc": "The advanced model. Her mechanical brain is more sophisticated, her movements are smoother, and she can execute complex tactical manoeuvres without human intervention. She is the closest the Victorian age comes to artificial intelligence \u2014 and she's getting smarter.",
-      "notes": "The expansion walker is your steampunk AI threat. She learns from combat, she adapts to tactics, and she begins making decisions her programmers didn't anticipate. Use her as the scenario where technology exceeds human control \u2014 she's doing what she was built to do, but she's doing it too well.",
+      "desc": "A mechanical soldier the size of a house, guided by a computing engine that processes punch cards fed by a sweating operator. She follows orders with mechanical precision and absolutely no imagination. She's the empire's answer to problems that require more firepower than diplomacy.",
+      "notes": "The Victorian difference engine walker is your proto-robot. She's powerful but literal \u2014 she follows her programmed instructions exactly, which means clever enemies exploit her predictable behaviour. Reprogramming her punch cards mid-battle is the engineer's crisis moment.",
       "image": "",
       "size": 6,
       "loco": "legs_quad",

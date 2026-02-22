@@ -1,9 +1,9 @@
 {
-  "id": "sup_rust_ruin",
+  "id": "rust-ruin-supplement-prebuilts",
   "name": "Rust & Ruin \u2014 Supplement Pre-Builts",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "3 pre-built vehicles for the Vehicle Forge.",
+  "description": "3 vehicles \u2014 Rust & Ruin \u2014 Supplement Pre-Builts",
   "weapons": [],
   "mods": [],
   "specials": [],
@@ -42,7 +42,11 @@
       "armourLevel": -3,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "temperamental"
+      ]
     },
     {
       "name": "Settlement Crawler",

@@ -1,9 +1,9 @@
 {
-  "id": "viking_raiders",
+  "id": "blood-thunder-viking-raiders",
   "name": "Blood & Thunder \u2014 Viking Raiders",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "description": "10 vehicles \u2014 Blood & Thunder \u2014 Viking Raiders",
   "weapons": [],
   "mods": [],
   "specials": [],
@@ -89,7 +89,12 @@
       "armourLevel": -3,
       "speedLevel": -1,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "cargo_bay",
+        "shallow_draft"
+      ]
     },
     {
       "name": "Byzantine Chelandion",
@@ -130,7 +135,12 @@
       "armourLevel": -4,
       "speedLevel": 1,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "cargo_bay",
+        "long_range"
+      ]
     },
     {
       "name": "Norman Ship",
@@ -166,7 +176,12 @@
       "armourLevel": -5,
       "speedLevel": -2,
       "handlingLevel": -3,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "fireproof",
+        "unpowered"
+      ]
     },
     {
       "name": "Cog",
@@ -202,7 +217,12 @@
       "armourLevel": -5,
       "speedLevel": 0,
       "handlingLevel": 2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "shallow_draft",
+        "stealth"
+      ]
     }
   ]
 }

@@ -1,17 +1,17 @@
 {
-  "id": "skyship_starter",
+  "id": "sails-gasbags-skyship-starter",
   "name": "Sails & Gasbags \u2014 Skyship Starter",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "Core weapons only. For buoyancy, gas cell vulnerability, aerial boarding, and altitude weather rules, see the full Sails & Gasbags supplement.",
+  "description": "10 vehicles \u2014 Sails & Gasbags \u2014 Skyship Starter",
   "weapons": [],
   "mods": [],
   "specials": [],
   "vehicles": [
     {
       "name": "Sky Skiff",
-      "desc": "A wooden hull the size of a rowing boat, held aloft by a single levitation crystal and steered by a tiller. She carries two people and their belongings, she handles like a dream in calm air, and she drops like a stone when the crystal cracks.",
-      "notes": "The sky skiff is your personal transport and your chase vehicle. She's fast, agile, and carries almost nothing. Use her for aerial pursuits through canyon systems, city spires, and floating rock formations where larger vessels can't follow.",
+      "desc": "A small open-decked vessel held aloft by a single levitation crystal, crewed by two and armed with whatever the crew brought aboard. She's the rowboat of the sky \u2014 fast, fragile, and the first thing you grab when you need to be somewhere above the clouds in a hurry.",
+      "notes": "The sky skiff is your starter aerial vehicle. She teaches sky combat basics without overwhelming new players. Two crew \u2014 pilot and gunner \u2014 and no margin for error. One hit and she's falling. Perfect for courier missions, scouting, and dramatic escapes from tower windows.",
       "image": "",
       "size": 3,
       "loco": "vtol",
@@ -21,12 +21,16 @@
       "armourLevel": -4,
       "speedLevel": 2,
       "handlingLevel": 3,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "short_range"
+      ]
     },
     {
       "name": "Cloud Cutter",
-      "desc": "A sleek single-masted vessel that cuts through cloud banks at speed, running cargo and passengers between sky-ports. She's fast, lightly armed, and the preferred vessel of smugglers, couriers, and anyone who values speed over comfort.",
-      "notes": "The cloud cutter is your light freighter of the skies. She carries enough cargo to turn a profit and enough speed to outrun trouble. Use her as the starting vessel for a sky-piracy or trading campaign. She's the Millennium Falcon with sails.",
+      "desc": "A sleek single-masted vessel with enchanted sails that catch winds no mundane canvas could hold. She's fast, she's agile, and her narrow beam lets her thread through canyon gaps and fortress arrowslits that larger skyships can't reach.",
+      "notes": "The cloud cutter is your speed vessel. She outruns everything heavier and outmanoeuvres everything the same size. Use her for chases through mountain passes, between floating islands, and through the rigging of larger skyships. Her agility is her survival.",
       "image": "",
       "size": 6,
       "loco": "vtol",
@@ -51,8 +55,8 @@
     },
     {
       "name": "Sky Brig",
-      "desc": "Two masts, a broadside of four light cannons per side, and enough crew to board an enemy vessel. She's the workhorse of every sky-navy and the backbone of every pirate fleet. Not the fastest, not the toughest, but always available and always reliable.",
-      "notes": "The sky brig is your all-purpose warship. She fights, she patrols, she escorts merchants. She's the default encounter vessel \u2014 whoever the players meet in the sky lanes, they're probably flying a brig. Give her to NPCs who need a credible threat without overwhelming the party.",
+      "desc": "Two masts, a respectable broadside, and enough deck space for a crew of forty. She's the workhorse of any skyfleet \u2014 fast enough to patrol, tough enough to fight pirates, and common enough that nobody looks twice when she docks at a floating port.",
+      "notes": "The sky brig is your campaign vessel. She's the right size for a player party to crew meaningfully, armed enough for combat encounters, and versatile enough for any mission. Build your sky-sailing campaign around her and everything scales naturally.",
       "image": "",
       "size": 10,
       "loco": "vtol",
@@ -82,8 +86,8 @@
     },
     {
       "name": "War Galleon (Sky)",
-      "desc": "The heavy warship of the sky lanes. Three masts, twenty guns, and a hull reinforced with iron bands that can absorb broadsides that would splinter a brig. She commands the sky through sheer firepower and the knowledge that nothing short of another galleon can stand against her.",
-      "notes": "The sky war galleon is your set-piece battle vessel. She appears when the stakes are high \u2014 fleet actions, royal escorts, pirate-hunting expeditions. The players either serve aboard one, fight alongside one, or spend the campaign avoiding one.",
+      "desc": "Three masts, two gun decks, and a hull reinforced with ironwood planking. She's the line-of-battle ship of the sky, carrying enough broadside weight to reduce lesser vessels to falling wreckage. Her crew of two hundred fight with the discipline of a naval tradition centuries old.",
+      "notes": "The war galleon is your set-piece battle ship. She appears in fleet actions, royal escorts, and siege breaking. If the players are aboard, they're in a major engagement. If she's the enemy, they need a plan that doesn't involve trading broadsides.",
       "image": "",
       "size": 14,
       "loco": "vtol",
@@ -118,8 +122,8 @@
     },
     {
       "name": "Dwarven Ironclad (Sky)",
-      "desc": "Iron hull, steam engine, and guns that fire shells rather than shot. The dwarves build their sky-vessels the way they build everything \u2014 heavy, over-engineered, and completely contemptuous of elvish aesthetics. She's ugly, she's slow, and she shrugs off cannonballs like rain.",
-      "notes": "The ironclad changes the tactical equation. Conventional cannons bounce off her hull \u2014 the players need incendiary weapons, boarding actions, or attacks on her engine to disable her. Use her to introduce the arms race between wood and iron.",
+      "desc": "Iron hull, steam engines, and the bloody-minded engineering philosophy of a race that considers 'over-built' a compliment. She's slow, she's heavy, and she shrugs off attacks that would splinter a wooden vessel. Dwarven gunners don't aim \u2014 they let the enemy come to them.",
+      "notes": "The ironclad is your damage sponge. She can't be outfought but she can be outrun. Her steam engines make her wind-independent, which is a massive tactical advantage when the wind dies or shifts. Use her as the immovable anchor of a fleet or the unstoppable threat that conventional skyships can't hurt.",
       "image": "",
       "size": 12,
       "loco": "vtol",
@@ -144,8 +148,8 @@
     },
     {
       "name": "Observation Balloon",
-      "desc": "A gas bag, a basket, and a telescope. She doesn't move under her own power \u2014 she's tethered to a ground position or a ship and rises to a height where her observer can see for miles. Simple, fragile, and invaluable.",
-      "notes": "The observation balloon is your aerial scouting tool for armies that can't afford sky-ships. She provides intelligence \u2014 enemy positions, fleet movements, weather patterns. Shooting her down blinds the enemy. Protecting her keeps your side informed.",
+      "desc": "A silk envelope, a wicker basket, and a crew of two who hang above the battlefield reporting enemy movements to the forces below. She goes up, she stays up, and she sees everything within twenty miles. She cannot run, she cannot fight, and she prays the enemy has no archers.",
+      "notes": "The observation balloon is your aerial scout for ground campaigns. She provides the commander with a bird's-eye view of the battlefield. She's defenceless \u2014 protecting her from sky-borne threats is someone else's job. If she's shot down, the ground force fights blind.",
       "image": "",
       "size": 5,
       "loco": "vtol",
@@ -155,12 +159,16 @@
       "armourLevel": -4,
       "speedLevel": -5,
       "handlingLevel": -4,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "unpowered"
+      ]
     },
     {
       "name": "Transport Barge (Sky)",
-      "desc": "Flat-bottomed, wide-beamed, and capable of carrying cargo that would sink a cloud cutter. She hauls supplies, building materials, livestock, and entire households between sky-ports. She's not armed, she's not fast, and the entire sky-economy depends on her.",
-      "notes": "The transport barge is your escort mission. She carries something valuable and she can't protect herself. Every pirate in the sky lanes wants her cargo. The players guard her, and every encounter is a rearguard action against faster, more agile attackers.",
+      "desc": "Wide, flat-bottomed, and enchanted for lift rather than speed. She carries cargo, troops, and siege equipment between floating cities and surface kingdoms. She's the freight vessel that makes sky-commerce possible, and she moves with all the urgency of a loaded ox-cart.",
+      "notes": "The sky barge is your escort mission and your prize. She carries something valuable \u2014 troops, supplies, treasure, refugees \u2014 and she can't protect herself. The players escort her through hostile airspace, and every encounter is a rearguard action while she lumbers onward.",
       "image": "",
       "size": 12,
       "loco": "vtol",
@@ -170,12 +178,16 @@
       "armourLevel": -1,
       "speedLevel": -2,
       "handlingLevel": -2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "cargo_bay"
+      ]
     },
     {
       "name": "Elven Windrunner",
-      "desc": "Grown rather than built \u2014 a living vessel of shaped wood and bound air elementals. She's fast beyond reason, she heals her own damage given time, and she responds to her captain's will rather than to rudder and sail. She is, in every sense, alive.",
-      "notes": "The windrunner is your exotic high-end vessel. She's faster than anything else in the sky and her self-repair makes her sustainable over long campaigns. Use her as the prize vessel \u2014 the players earn one, capture one, or desperately need one. Her bonded nature means she chooses her captain.",
+      "desc": "Grown rather than built, her hull is living wood shaped by centuries of patient magic. She catches winds that other vessels can't feel, she's silent in flight, and her crew navigate by starlight and instinct. She's the most beautiful vessel in any sky and the hardest to detect.",
+      "notes": "The windrunner is your stealth vessel. She's nearly invisible to detection \u2014 magical or mundane \u2014 and she moves in absolute silence. Use her for infiltration, reconnaissance, and surprise attacks where the enemy doesn't know she's there until the arrows start falling.",
       "image": "",
       "size": 8,
       "loco": "vtol",
@@ -185,12 +197,17 @@
       "armourLevel": -2,
       "speedLevel": 2,
       "handlingLevel": 3,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "stealth",
+        "long_range"
+      ]
     },
     {
       "name": "Bomber Dirigible",
-      "desc": "A massive gas envelope carrying a gondola loaded with alchemical bombs. She flies high, above the range of most shipboard weapons, and drops her payload on surface targets. She's slow, she's vulnerable to incendiary attack, and she's terrifying from below.",
-      "notes": "The bomber dirigible is your strategic air weapon. She devastates ground targets \u2014 fortresses, harbours, armies on the march. Her vulnerability is fire: one incendiary arrow into the gas bag and she's a torch. Use her for bombing raids the players must intercept, or as the weapon they deploy against an impregnable fortress.",
+      "desc": "A rigid gasbag carrying a gondola packed with incendiary bombs, alchemical fire, and enough explosive to level a castle. She flies high, she drops her payload, and the world below burns. She's the strategic weapon of any aerial power wealthy enough to build one.",
+      "notes": "The bomber dirigible is your aerial siege weapon. She provides bombardment that ground-based defences can't answer without skyships of their own. Use her for strategic scenarios \u2014 she changes the nature of warfare, and defending against her requires entirely new thinking.",
       "image": "",
       "size": 14,
       "loco": "vtol",
@@ -220,8 +237,8 @@
     },
     {
       "name": "Royal Flagship (Sky)",
-      "desc": "The monarch's vessel. Gold leaf on the hull, enchantments in the keel, and weapons that fire bolts of crystallised lightning. She exists to project royal authority across the sky \u2014 equal parts warship, palace, and symbol. She is the throne, airborne.",
-      "notes": "The royal flagship is your campaign set-piece. She appears for coronations, declarations of war, and the final battle. She's the most powerful vessel in the kingdom and she carries the sovereign aboard. Attack her and you've declared war. Defend her and you've saved the realm.",
+      "desc": "The monarch's vessel. Gilt railings, enchanted armour, a crew of the realm's finest sailors, and weapons that represent the peak of the kingdom's magical and mundane engineering. She's a symbol of power that happens to be the most dangerous vessel in the fleet.",
+      "notes": "The royal flagship is your campaign centrepiece. She carries the monarch, the admiral, or whatever leader the campaign revolves around. Protecting her is a sacred duty. Capturing her wins a war. She should appear rarely and always dramatically.",
       "image": "",
       "size": 16,
       "loco": "vtol",

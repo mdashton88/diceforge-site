@@ -1,9 +1,9 @@
 {
-  "id": "medieval_siege",
+  "id": "iron-steel-medieval-siege",
   "name": "Iron & Steel \u2014 Medieval Siege",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "description": "10 vehicles \u2014 Iron & Steel \u2014 Medieval Siege",
   "weapons": [],
   "mods": [],
   "specials": [],
@@ -173,7 +173,10 @@
       "armourLevel": 0,
       "speedLevel": -3,
       "handlingLevel": -2,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top"
+      ]
     },
     {
       "name": "Tower Cart",

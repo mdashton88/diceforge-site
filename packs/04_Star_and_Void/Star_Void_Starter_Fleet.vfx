@@ -1,9 +1,9 @@
 {
-  "id": "scifi_starter",
+  "id": "star-void-starter-fleet",
   "name": "Star & Void \u2014 Starter Fleet",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "Uses core weapons only. No .vfx extension required. For expanded fleet operations including crew stations, shields, FTL, and sensor ops, see the full Star & Void supplement.",
+  "description": "10 vehicles \u2014 Star & Void \u2014 Starter Fleet",
   "weapons": [],
   "mods": [],
   "specials": [],

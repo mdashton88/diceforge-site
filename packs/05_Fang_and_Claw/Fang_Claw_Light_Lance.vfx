@@ -1,9 +1,9 @@
 {
-  "id": "light_lance",
+  "id": "fang-claw-light-lance",
   "name": "Fang & Claw \u2014 Light Lance",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "description": "10 vehicles \u2014 Fang & Claw \u2014 Light Lance",
   "weapons": [],
   "mods": [],
   "specials": [],
@@ -227,7 +227,10 @@
       "armourLevel": 0,
       "speedLevel": -1,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Drone Controller",

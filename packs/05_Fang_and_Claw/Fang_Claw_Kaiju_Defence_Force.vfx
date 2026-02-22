@@ -1,9 +1,9 @@
 {
-  "id": "kaiju_defence",
+  "id": "fang-claw-kaiju-defence-force",
   "name": "Fang & Claw \u2014 Kaiju Defence Force",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "description": "10 vehicles \u2014 Fang & Claw \u2014 Kaiju Defence Force",
   "weapons": [],
   "mods": [],
   "specials": [],
@@ -150,13 +150,18 @@
       "image": "",
       "size": 10,
       "loco": "legs_biped",
-      "mods": {},
+      "mods": {
+        "enhanced_sensors": 1
+      },
       "weapons": [],
       "toughLevel": 1,
       "armourLevel": 1,
       "speedLevel": 0,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed"
+      ]
     },
     {
       "name": "Artillery Walker (KDF)",

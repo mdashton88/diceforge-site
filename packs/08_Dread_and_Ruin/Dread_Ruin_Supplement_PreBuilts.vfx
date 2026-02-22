@@ -1,9 +1,9 @@
 {
-  "id": "sup_dread_ruin",
+  "id": "dread-ruin-supplement-prebuilts",
   "name": "Dread & Ruin \u2014 Supplement Pre-Builts",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "3 pre-built vehicles for the Vehicle Forge.",
+  "description": "3 vehicles \u2014 Dread & Ruin \u2014 Supplement Pre-Builts",
   "weapons": [],
   "mods": [],
   "specials": [],
@@ -21,7 +21,12 @@
       "armourLevel": 0,
       "speedLevel": 1,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "haunted",
+        "sentient"
+      ]
     },
     {
       "name": "Cursed Longship",
@@ -42,7 +47,8 @@
       "armourLevel": 0,
       "speedLevel": 0,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": []
     },
     {
       "name": "Demonic Chariot",
@@ -57,7 +63,13 @@
       "armourLevel": 0,
       "speedLevel": 2,
       "handlingLevel": 1,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "cursed",
+        "sentient",
+        "famous"
+      ]
     }
   ]
 }

@@ -368,7 +368,7 @@
       "woundsLevel": 0,
       "specials": [
         "enclosed",
-        "famous_infamous"
+        "famous"
       ]
     },
     {
@@ -753,7 +753,7 @@
           "linked": 1
         },
         {
-          "weaponId": "cannon_20mm",
+          "weaponId": "autocannon_ww",
           "mount": "fixed",
           "linked": 0
         }
@@ -848,7 +848,7 @@
       "mods": {},
       "weapons": [
         {
-          "weaponId": "cannon_25mm",
+          "weaponId": "autocannon_mod",
           "mount": "fixed",
           "linked": 0
         }
@@ -905,7 +905,7 @@
       },
       "weapons": [
         {
-          "weaponId": "cannon_30mm",
+          "weaponId": "cannon_mod",
           "mount": "fixed",
           "linked": 0
         }
@@ -1196,7 +1196,7 @@
       "woundsLevel": 0,
       "weapons": [
         {
-          "weaponId": "cannon_25mm",
+          "weaponId": "autocannon_mod",
           "mount": "turret",
           "linked": 0
         },

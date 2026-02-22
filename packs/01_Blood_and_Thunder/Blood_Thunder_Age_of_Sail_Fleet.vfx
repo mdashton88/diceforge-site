@@ -1,9 +1,9 @@
 {
-  "id": "age_of_sail",
+  "id": "blood-thunder-age-of-sail-fleet",
   "name": "Blood & Thunder \u2014 Age of Sail Fleet",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "10 pre-built vehicles for the Vehicle Forge.",
+  "description": "10 vehicles \u2014 Blood & Thunder \u2014 Age of Sail Fleet",
   "weapons": [],
   "mods": [],
   "specials": [],
@@ -228,7 +228,11 @@
       "armourLevel": -4,
       "speedLevel": 1,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "fireproof",
+        "ram_plate"
+      ]
     },
     {
       "name": "East Indiaman",

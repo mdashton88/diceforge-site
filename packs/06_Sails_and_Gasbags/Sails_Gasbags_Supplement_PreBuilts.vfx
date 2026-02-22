@@ -1,9 +1,9 @@
 {
-  "id": "sup_sails_gasbags",
+  "id": "sails-gasbags-supplement-prebuilts",
   "name": "Sails & Gasbags \u2014 Supplement Pre-Builts",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "3 pre-built vehicles for the Vehicle Forge.",
+  "description": "3 vehicles \u2014 Sails & Gasbags \u2014 Supplement Pre-Builts",
   "weapons": [],
   "mods": [],
   "specials": [],
@@ -21,7 +21,12 @@
       "armourLevel": -1,
       "speedLevel": -1,
       "handlingLevel": 0,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "enclosed",
+        "cargo_bay",
+        "long_range"
+      ]
     },
     {
       "name": "Sky Frigate",
@@ -67,7 +72,11 @@
       "armourLevel": -4,
       "speedLevel": -5,
       "handlingLevel": -4,
-      "woundsLevel": 0
+      "woundsLevel": 0,
+      "specials": [
+        "open_top",
+        "unpowered"
+      ]
     }
   ]
 }

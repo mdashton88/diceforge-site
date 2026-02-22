@@ -1,17 +1,17 @@
 {
-  "id": "sup_blood_thunder",
+  "id": "blood-thunder-supplement-prebuilts",
   "name": "Blood & Thunder \u2014 Supplement Pre-Builts",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
-  "description": "3 pre-built vehicles for the Vehicle Forge.",
+  "description": "3 vehicles \u2014 Blood & Thunder \u2014 Supplement Pre-Builts",
   "weapons": [],
   "mods": [],
   "specials": [],
   "vehicles": [
     {
       "name": "Frigate (Age of Sail)",
-      "desc": "The eyes of the fleet. Fast, well-armed, and the vessel every ambitious captain wanted. She hunts privateers, escorts convoys, and fights single-ship actions that make reputations.",
-      "notes": "The supplement frigate is your quick-start Age of Sail player vessel. She's pre-built and ready to play.",
+      "desc": "Thirty-two guns and the speed to use them. The workhorse of every sailing navy, built for patrol, commerce raiding, and single-ship duels that decided the fate of colonies.",
+      "notes": "The supplement frigate is your ready-to-play age of sail vessel. Drop her into any naval campaign as the player ship or the enemy on the horizon.",
       "image": "",
       "size": 14,
       "loco": "water_sail",
@@ -41,8 +41,8 @@
     },
     {
       "name": "U-Boat (Type VII)",
-      "desc": "The wolf of the Atlantic. She hunts in packs, surfaces at night, and turns convoy routes into killing grounds.",
-      "notes": "The supplement U-boat is your quick-start WWII submarine. Pre-built for immediate play in Battle of the Atlantic scenarios.",
+      "desc": "The wolf of the Atlantic. She hunts in packs, attacks at night, and turns convoy routes into killing grounds. Cramped, dangerous, and feared by every merchant sailor who crosses the ocean.",
+      "notes": "The supplement U-boat is your ready-to-play submarine threat. She appears, fires, and vanishes. Use her for Battle of the Atlantic scenarios.",
       "image": "",
       "size": 12,
       "loco": "water_turbo",
@@ -72,8 +72,8 @@
     },
     {
       "name": "Ancient Trireme",
-      "desc": "One hundred and seventy oars, a bronze ram, and the most manoeuvrable warship of the ancient world. She fights by ramming \u2014 accelerate, strike, back away, watch the enemy sink.",
-      "notes": "The supplement trireme is your quick-start ancient naval vessel. Pre-built for immediate play in Greco-Roman campaigns.",
+      "desc": "Bronze ram, three banks of oars, and the most manoeuvrable warship of the ancient world. She fights by ramming, and every battle is a positioning contest.",
+      "notes": "The supplement trireme is your ready-to-play ancient warship. Ram attacks use collision rules with the bronze ram adding AP.",
       "image": "",
       "size": 10,
       "loco": "water_sail",
