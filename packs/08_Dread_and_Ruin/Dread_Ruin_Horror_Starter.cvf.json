@@ -1,7 +1,7 @@
 {
   "formatVersion": "1.0",
   "exportType": "batch",
-  "packName": "Dread & Ruin — Horror Starter",
+  "packName": "Dread & Ruin \u2014 Horror Starter",
   "packId": "horror_starter",
   "price": "$2.99",
   "vehicleCount": 10,
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "Death Coach",
-      "desc": "Phantom carriage. Appears at crossroads when death is near.",
-      "notes": "",
+      "desc": "A black coach drawn by headless horses, driven by a figure in a tall hat who never speaks. She arrives at midnight for those whose time has come. The wheels make no sound on the cobblestones. The door opens of its own accord.",
+      "notes": "The death coach is your omen and your transport to the underworld. She appears when someone important is about to die. Use her for horror scenarios where the players see the coach before the death occurs \u2014 they know someone will die tonight, but not who.",
       "image": "",
       "size": 5,
       "loco": "wheeled",
@@ -25,8 +25,8 @@
     },
     {
       "name": "Ghost Ship",
-      "desc": "Spectral galleon. Crewed by the damned. Sails against the wind.",
-      "notes": "",
+      "desc": "She sails without crew, without wind, and without regard for the laws of physics. Her rigging is rotted, her hull is encrusted with barnacles, and her hold contains whatever the dead left behind. She appears in fog and vanishes at dawn.",
+      "notes": "The ghost ship is your maritime horror set-piece. She appears from the fog and the players must board her to find whatever the scenario requires \u2014 a lost artefact, a missing person, an answer. The ship itself is the dungeon, and it doesn't want them to leave.",
       "image": "",
       "size": 16,
       "loco": "water_sail",
@@ -40,8 +40,8 @@
     },
     {
       "name": "Possessed Car",
-      "desc": "It drives itself. It repairs itself. It hates you.",
-      "notes": "",
+      "desc": "A perfectly ordinary automobile that murders people. The engine starts by itself, the doors lock when someone's inside, and the steering wheel turns toward pedestrians with deliberate malice. She looks like a car. She is something else entirely.",
+      "notes": "The possessed car is your modern horror vehicle. She attacks through 'accidents' \u2014 running people down, trapping victims inside, driving off bridges. The players need to destroy her, but she's a car: she's fast, she's heavy, and conventional weapons just make dents.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -55,8 +55,8 @@
     },
     {
       "name": "Soul Engine Train",
-      "desc": "Locomotive fuelled by screaming spirits. Next stop: everywhere you don't want to go.",
-      "notes": "",
+      "desc": "A locomotive that burns souls instead of coal. The furnace glows with a light that isn't fire, the whistle sounds like a scream, and the passengers are people who boarded at stations that don't exist on any map. She runs on time. She always runs on time.",
+      "notes": "The soul engine is your horror dungeon on rails. The players board and can't get off \u2014 the doors are locked, the windows show nothing but darkness, and the train is heading somewhere terrible. Each carriage is a different horror encounter. The engine is the final boss.",
       "image": "",
       "size": 12,
       "loco": "tracked",
@@ -70,8 +70,8 @@
     },
     {
       "name": "Bone Chariot",
-      "desc": "Necromantic war chariot. Skeletal steeds that never tire.",
-      "notes": "",
+      "desc": "A war chariot assembled from the bones of the dead, drawn by skeletal horses, and driven by a revenant who remembers nothing except the charge. She emerges from burial mounds on nights when the veil is thin and rides until dawn.",
+      "notes": "The bone chariot is your undead cavalry. She's fast, she's terrifying, and she appears in numbers when a barrow field activates. Use her for horror-fantasy encounters where the ancient dead ride again. She's vulnerable to holy weapons and turns; conventional weapons are less effective.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -85,8 +85,8 @@
     },
     {
       "name": "Infernal War Machine",
-      "desc": "Hellfire-powered assault vehicle. Demon-bound engine. Smells of brimstone.",
-      "notes": "",
+      "desc": "A vehicle from Hell \u2014 literally. Iron, brass, and screaming faces welded into the bodywork. She runs on brimstone and hatred, she's driven by a demon, and she leaves scorched earth in her wake. She exists to carry war into the mortal world.",
+      "notes": "The infernal war machine is your demonic vehicle encounter. She's physically powerful and magically resistant. The players need blessed weapons, holy water, or a banishing ritual to stop her permanently. Conventional damage repairs itself between rounds.",
       "image": "",
       "size": 8,
       "loco": "wheeled",
@@ -106,8 +106,8 @@
     },
     {
       "name": "Flying Dutchman",
-      "desc": "The eternal ship. Sails every sea. Docks at none.",
-      "notes": "",
+      "desc": "The most famous ghost ship in the world. Cursed to sail forever, she appears before storms, crewed by the damned, carrying a captain who can never make port. Every sailor knows the story. Every sailor prays they never see her lights on the horizon.",
+      "notes": "The Flying Dutchman is your ultimate maritime horror. She's not just a ship \u2014 she's a curse. The players must either break the curse or escape before they become part of her crew forever. The captain is tragic rather than evil \u2014 he's been sailing for centuries and he's tired.",
       "image": "",
       "size": 18,
       "loco": "water_sail",
@@ -121,8 +121,8 @@
     },
     {
       "name": "Hearse of the Damned",
-      "desc": "Sentient hearse. Arrives before you die. Knows something you don't.",
-      "notes": "",
+      "desc": "A black hearse that arrives uninvited at funerals and takes the wrong body. She drives herself, her back door opens to somewhere that isn't the cemetery, and whatever rides in the back isn't resting in peace.",
+      "notes": "The hearse is your modern death omen. She appears at funerals, hospitals, and accident scenes. Following her leads to the horror encounter. Use her as the recurring thread \u2014 the players keep seeing the same hearse, and each sighting brings them closer to the truth.",
       "image": "",
       "size": 5,
       "loco": "wheeled",
@@ -136,8 +136,8 @@
     },
     {
       "name": "Cursed Submarine",
-      "desc": "The crew never left. The hatches won't open. The engine still runs.",
-      "notes": "",
+      "desc": "A vessel lost during a war that never surfaced \u2014 until now. She appears in waters she was never deployed to, crewed by men who died decades ago, and she still follows her last orders. The crew don't know they're dead. They don't react well to being told.",
+      "notes": "The cursed submarine is your underwater ghost ship. She surfaces near the players' vessel, her crew acts normally until confronted with evidence of their own death, and then the horror begins. The submarine itself is the contained environment \u2014 underwater, claustrophobic, and inescapable.",
       "image": "",
       "size": 10,
       "loco": "water_turbo",
@@ -157,8 +157,8 @@
     },
     {
       "name": "Witch's Hut",
-      "desc": "Chicken-legged cottage. Baba Yaga sends her regards.",
-      "notes": "",
+      "desc": "A wooden cottage on chicken legs that walks through the forest at night. She obeys the witch who lives inside \u2014 crouching to allow entry, standing to flee pursuit, and kicking anyone who approaches without permission. She is a vehicle, a home, and a trap.",
+      "notes": "Baba Yaga's hut is your mobile horror lair. She appears in forests, moves to new locations between sessions, and the players must enter to find what they need. The hut itself is alive and hostile \u2014 doors slam, stairs shift, and rooms rearrange to confuse intruders.",
       "image": "",
       "size": 6,
       "loco": "legs_biped",

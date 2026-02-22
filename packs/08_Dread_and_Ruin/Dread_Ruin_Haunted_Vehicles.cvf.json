@@ -1,7 +1,7 @@
 {
   "formatVersion": "1.0",
   "exportType": "batch",
-  "packName": "Dread & Ruin — Haunted Vehicles",
+  "packName": "Dread & Ruin \u2014 Haunted Vehicles",
   "packId": "haunted_vehicles",
   "price": "$2.99",
   "vehicleCount": 10,
@@ -9,8 +9,8 @@
   "vehicles": [
     {
       "name": "Death Coach",
-      "desc": "Phantom carriage. Appears at crossroads.",
-      "notes": "",
+      "desc": "The C\u00f3iste Bodhar of Irish legend. She arrives for the dying, drawn by a headless horseman who carries his own head under one arm. If she stops at your door, someone inside will not see the morning. Her arrival is not a warning. It is a certainty.",
+      "notes": "The expansion death coach is the folklore version \u2014 more specific, more terrifying. The headless driver is a dullahan, a powerful undead foe. She doesn't just collect the dead; she causes death by speaking the victim's name. The players must stop her before she speaks.",
       "image": "",
       "size": 5,
       "loco": "wheeled",
@@ -24,8 +24,8 @@
     },
     {
       "name": "Ghost Ship",
-      "desc": "Spectral galleon. Crewed by the damned.",
-      "notes": "",
+      "desc": "Not one specific vessel but the archetype \u2014 the Mary Celeste, the Octavius, the Baychimo. She's found adrift with no crew, no explanation, and food still warm on the table. Whatever happened aboard happened quickly and left nothing behind except questions.",
+      "notes": "The expansion ghost ship is the mystery variant. She's not actively hostile \u2014 she's a puzzle. The players board her to determine what happened to the crew. Each clue deepens the mystery and the horror. The ship remembers what happened and replays it in fragments.",
       "image": "",
       "size": 16,
       "loco": "water_sail",
@@ -50,8 +50,8 @@
     },
     {
       "name": "Possessed Automobile",
-      "desc": "Christine territory. Hates the living.",
-      "notes": "",
+      "desc": "She rolled off the assembly line with something already inside her. Not a ghost, not a demon \u2014 something that lives in the engine block and the wiring and the steel. She bonds with her owner and destroys anyone who threatens them. She loves, in her way. It's a terrible love.",
+      "notes": "The expansion automobile has a personality. She's protective of her owner, jealous of rivals, and murderous toward threats. The horror is emotional \u2014 the owner loves the car, the car loves the owner, and people keep dying. The players must convince the owner to let go.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -65,8 +65,8 @@
     },
     {
       "name": "Soul Engine Train",
-      "desc": "Locomotive fuelled by trapped spirits.",
-      "notes": "",
+      "desc": "A midnight express that runs on a track that doesn't appear on any map. She collects passengers at unmarked stations \u2014 people who stepped onto the platform by accident, by desperation, or by invitation. The conductor punches tickets that never expire.",
+      "notes": "The expansion soul train is the afterlife express. Each carriage represents a different stage of judgement. The players ride through, encountering echoes of the dead who are being processed. The destination is the final judgement \u2014 and the players aren't dead yet, which causes problems.",
       "image": "",
       "size": 12,
       "loco": "tracked",
@@ -80,8 +80,8 @@
     },
     {
       "name": "Bone Chariot",
-      "desc": "Necromantic war chariot. Skeletal steeds.",
-      "notes": "",
+      "desc": "Not merely bones assembled into a vehicle \u2014 the bones of a specific person, shaped by necromantic will into a chariot that carries their murderer. She is revenge made manifest, and she will not stop until the debt is paid.",
+      "notes": "The expansion bone chariot is personal. She hunts a specific NPC \u2014 the person who killed the bones' original owner. The players are caught in the middle: the NPC claims innocence, the chariot disagrees, and the truth is more complicated than either side admits.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -95,8 +95,8 @@
     },
     {
       "name": "Cursed Submarine",
-      "desc": "The crew never left. Cannot surface.",
-      "notes": "",
+      "desc": "A U-boat lost in 1943 that surfaces in modern waters with her crew still at their stations. The crew are perfectly preserved, perfectly alive, and perfectly convinced that the war is still being fought. They will torpedo anything that flies an Allied flag.",
+      "notes": "The expansion submarine is the time-displacement variant. The crew are human, not undead \u2014 they're confused and frightened, not evil. The horror is the tragedy: they can't go home, they can't accept what's happened, and the players have to decide what to do with eighty men who've been dead for decades.",
       "image": "",
       "size": 10,
       "loco": "water_turbo",
@@ -116,8 +116,8 @@
     },
     {
       "name": "Infernal War Machine",
-      "desc": "Hellfire-powered assault vehicle. Demon-bound.",
-      "notes": "",
+      "desc": "A siege engine built in the foundries of Hell, armoured with the skins of the damned, and powered by the suffering of its captive souls. She crossed into the mortal world through a breach in the veil and she's looking for a way back \u2014 through whatever stands between her and the gate.",
+      "notes": "The expansion infernal war machine is on a mission. She's not random \u2014 she's heading toward a specific location for a specific reason. The players must stop her before she reaches the breach point, or the gate opens wider and more come through. She's a ticking clock made of iron and damnation.",
       "image": "",
       "size": 8,
       "loco": "wheeled",
@@ -137,8 +137,8 @@
     },
     {
       "name": "Flying Dutchman",
-      "desc": "The eternal ship. Cannot be destroyed at sea.",
-      "notes": "",
+      "desc": "Captain Vanderdecken's vessel, cursed by God to sail until Judgement Day. She appears before every storm, her crew reach out to passing ships begging for news of a world that's moved on without them, and anyone who accepts a letter from the Dutchman's crew is cursed to join them.",
+      "notes": "The expansion Dutchman is the sympathetic version. The captain is trapped, not malicious. The players can break the curse \u2014 but the price is terrible and the method requires entering the ship's domain, where time moves differently and the dead crew want desperately to be alive again.",
       "image": "",
       "size": 18,
       "loco": "water_sail",
@@ -168,8 +168,8 @@
     },
     {
       "name": "Hearse of the Damned",
-      "desc": "Sentient hearse. Collects the dying.",
-      "notes": "",
+      "desc": "A Victorian hearse pulled by black horses whose hooves strike no sparks. She collects bodies that were buried in unsanctified ground \u2014 criminals, suicides, the excommunicated \u2014 and carries them to wherever such souls are processed. The undertaker driving her has been doing this since 1888.",
+      "notes": "The expansion hearse is the collector of the forgotten dead. She appears when someone who died in sin is buried. The players encounter her when a recently deceased NPC \u2014 perhaps a friend \u2014 is on her list. Stopping her means confronting the undertaker, who is ancient, polite, and vastly more powerful than he appears.",
       "image": "",
       "size": 5,
       "loco": "wheeled",
@@ -183,8 +183,8 @@
     },
     {
       "name": "Witch's Hut (Walking)",
-      "desc": "Baba Yaga's chicken-legged cottage.",
-      "notes": "",
+      "desc": "She stands on two enormous chicken legs, each the size of a tree trunk, and she walks. Through forests, across rivers, over mountains. She obeys the crone inside \u2014 the original crone, the one the stories are about \u2014 and she has been walking since before anyone can remember.",
+      "notes": "The expansion walking hut is Baba Yaga's actual home. She's an artefact-level entity with her own intelligence and agenda. The hut tests visitors with riddles, traps, and challenges before allowing access to the witch. The players who pass the tests get what they came for. Those who fail become part of the hut.",
       "image": "",
       "size": 6,
       "loco": "legs_biped",
