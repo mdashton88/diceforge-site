@@ -1,6 +1,6 @@
 {
   "id": "sup_rust_ruin",
-  "name": "Rust & Ruin — Supplement Pre-Builts",
+  "name": "Rust & Ruin \u2014 Supplement Pre-Builts",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
   "description": "3 pre-built vehicles for the Vehicle Forge.",
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "Survivor Pickup",
-      "desc": "Patched-up truck. Every bullet hole a story.",
-      "notes": "",
+      "desc": "A pickup truck held together with wire and hope. She carries everything a wasteland family owns and she's the most common vehicle on the broken roads.",
+      "notes": "Pre-built pickup for immediate wasteland play. The starting vehicle for any post-apocalyptic campaign.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -31,8 +31,8 @@
     },
     {
       "name": "Scavenger Trike",
-      "desc": "Three-wheeled scout. Jury-rigged engine.",
-      "notes": "",
+      "desc": "Three wheels, a cargo basket, and an engine salvaged from something else. She goes where cars can't and carries what bikes can't.",
+      "notes": "Pre-built trike for immediate wasteland scouting. Light, cheap, and available when nothing else is.",
       "image": "",
       "size": 2,
       "loco": "wheeled",
@@ -46,8 +46,8 @@
     },
     {
       "name": "Settlement Crawler",
-      "desc": "Mobile community. Generator and workshop.",
-      "notes": "",
+      "desc": "A tracked vehicle that carries an entire small community \u2014 living quarters, workshop, water recycling. She's a settlement that moves.",
+      "notes": "Pre-built crawler for immediate mobile-settlement campaigns. She's home, transport, and fortress rolled into one.",
       "image": "",
       "size": 10,
       "loco": "tracked",

@@ -1,6 +1,6 @@
 {
   "id": "sup_blood_thunder",
-  "name": "Blood & Thunder — Supplement Pre-Builts",
+  "name": "Blood & Thunder \u2014 Supplement Pre-Builts",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
   "description": "3 pre-built vehicles for the Vehicle Forge.",
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "Frigate (Age of Sail)",
-      "desc": "5th-rate warship. 30-40 guns.",
-      "notes": "",
+      "desc": "The eyes of the fleet. Fast, well-armed, and the vessel every ambitious captain wanted. She hunts privateers, escorts convoys, and fights single-ship actions that make reputations.",
+      "notes": "The supplement frigate is your quick-start Age of Sail player vessel. She's pre-built and ready to play.",
       "image": "",
       "size": 14,
       "loco": "water_sail",
@@ -41,8 +41,8 @@
     },
     {
       "name": "U-Boat (Type VII)",
-      "desc": "German submarine. WW2 workhorse.",
-      "notes": "",
+      "desc": "The wolf of the Atlantic. She hunts in packs, surfaces at night, and turns convoy routes into killing grounds.",
+      "notes": "The supplement U-boat is your quick-start WWII submarine. Pre-built for immediate play in Battle of the Atlantic scenarios.",
       "image": "",
       "size": 12,
       "loco": "water_turbo",
@@ -72,8 +72,8 @@
     },
     {
       "name": "Ancient Trireme",
-      "desc": "Classical warship with bronze ram.",
-      "notes": "",
+      "desc": "One hundred and seventy oars, a bronze ram, and the most manoeuvrable warship of the ancient world. She fights by ramming \u2014 accelerate, strike, back away, watch the enemy sink.",
+      "notes": "The supplement trireme is your quick-start ancient naval vessel. Pre-built for immediate play in Greco-Roman campaigns.",
       "image": "",
       "size": 10,
       "loco": "water_sail",

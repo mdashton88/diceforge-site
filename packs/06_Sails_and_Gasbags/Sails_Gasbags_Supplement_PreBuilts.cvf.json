@@ -1,7 +1,7 @@
 {
   "formatVersion": "1.0",
   "exportType": "batch",
-  "packName": "Sails & Gasbags — Supplement Pre-Builts",
+  "packName": "Sails & Gasbags \u2014 Supplement Pre-Builts",
   "packId": "sup_sails_gasbags",
   "price": "$5.99",
   "vehicleCount": 3,
@@ -9,8 +9,8 @@
   "vehicles": [
     {
       "name": "Trade Windship",
-      "desc": "Standard cargo skyship. Reliable and slow.",
-      "notes": "",
+      "desc": "A sky-merchant carrying goods between floating islands. She's the economic backbone of the sky lanes and everyone's favourite target.",
+      "notes": "Pre-built trade vessel for immediate sky-trading campaigns. She carries cargo and trouble in equal measure.",
       "image": "",
       "size": 10,
       "loco": "water_sail",
@@ -24,8 +24,8 @@
     },
     {
       "name": "Sky Frigate",
-      "desc": "Warship of the clouds. Broadside-armed.",
-      "notes": "",
+      "desc": "The warship of the sky navy. Fast, armed, and projecting authority across the cloud lanes.",
+      "notes": "Pre-built sky frigate for immediate sky-naval campaigns. The default player warship for fantasy skyfleet settings.",
       "image": "",
       "size": 14,
       "loco": "vtol",
@@ -55,8 +55,8 @@
     },
     {
       "name": "Observation Balloon",
-      "desc": "Tethered balloon. Spotter platform.",
-      "notes": "",
+      "desc": "A gas bag, a basket, and the best view in any army. She sees everything and hopes nothing sees her.",
+      "notes": "Pre-built observation balloon for immediate reconnaissance. Tethered, fragile, and invaluable.",
       "image": "",
       "size": 5,
       "loco": "vtol",

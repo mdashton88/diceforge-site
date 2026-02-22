@@ -1,6 +1,6 @@
 {
   "id": "vietnam_air",
-  "name": "Talons & Contrails — Vietnam Air Cav",
+  "name": "Talons & Contrails \u2014 Vietnam Air Cav",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
   "description": "10 pre-built vehicles for the Vehicle Forge.",
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "UH-1 Huey",
-      "desc": "Iconic transport helicopter. Sound of Vietnam.",
-      "notes": "",
+      "desc": "The sound of Vietnam. That distinctive thwop-thwop-thwop meant reinforcements, medevac, resupply, or death \u2014 depending on which side you were on. She carried everything the war needed: troops, ammunition, wounded, and the door gunners who kept the LZ clear.",
+      "notes": "The Huey is your Vietnam campaign vehicle. She carries a squad, she's armed with door guns, and she goes where the fighting is. Every Vietnam scenario starts or ends with a Huey. The door gunners fire from open sides \u2014 exposed but with excellent fields of fire.",
       "image": "",
       "size": 7,
       "loco": "vtol",
@@ -36,8 +36,8 @@
     },
     {
       "name": "F-4 Phantom II",
-      "desc": "US multirole fighter. Mach 2 monster.",
-      "notes": "",
+      "desc": "Two engines, two crew, and enough ordnance to level a village. The Phantom was designed as a fleet interceptor and ended up doing everything \u2014 air superiority, ground attack, reconnaissance, Wild Weasel suppression. She's big, she's fast, and she's not subtle.",
+      "notes": "The Phantom is your multi-role player aircraft. Two crew means pilot and weapons officer \u2014 two player roles per aircraft. She carries both air-to-air missiles and bombs, which makes her flexible. Her lack of a gun in early models is historically accurate and creates interesting tactical constraints.",
       "image": "",
       "size": 8,
       "loco": "jet",
@@ -67,8 +67,8 @@
     },
     {
       "name": "MiG-21 Fishbed",
-      "desc": "Soviet interceptor. Fast, agile, simple.",
-      "notes": "",
+      "desc": "Small, fast, and carrying a single Atoll missile that the Vietnamese pilots used to devastating effect against American formations. She's a point interceptor \u2014 climb fast, fire, and run. She doesn't have the fuel or the armament for a prolonged dogfight.",
+      "notes": "The MiG-21 is your hit-and-run threat. She appears from nowhere, fires a missile, and dives away. The players in their Phantoms have better radar and more weapons, but the MiG chooses when and where to fight. Use her for ambush encounters over North Vietnam.",
       "image": "",
       "size": 6,
       "loco": "jet",
@@ -93,8 +93,8 @@
     },
     {
       "name": "A-1 Skyraider",
-      "desc": "US attack plane. The Spad. Massive ordnance.",
-      "notes": "",
+      "desc": "A propeller-driven anachronism in the jet age. She's slow, she's ugly, and she carries more ordnance than a B-17 on pylons that cover every inch of her wings. The Skyraider loitered over the battlefield for hours, delivering precisely aimed bombs exactly where the ground troops needed them.",
+      "notes": "The Skyraider is your close air support workhorse. She's slow enough to aim carefully and tough enough to absorb ground fire. Use her for search and rescue missions \u2014 Skyraiders flew cover for downed pilots while the helicopters came in. Her long loiter time means she's overhead when the Phantoms have gone home to refuel.",
       "image": "",
       "size": 7,
       "loco": "turboprop",
@@ -124,8 +124,8 @@
     },
     {
       "name": "CH-47 Chinook",
-      "desc": "Heavy-lift helicopter. Flying banana.",
-      "notes": "",
+      "desc": "Twin rotors, a rear cargo ramp, and the ability to carry an artillery battery into a mountaintop firebase. The Chinook moved everything the war needed \u2014 guns, ammunition, vehicles, and entire companies of infantry. She's the heavy lifter that made airmobile warfare possible.",
+      "notes": "The Chinook is your logistics helicopter. She carries heavy loads that the Huey can't manage. Use her for firebase construction, artillery repositioning, and large-scale troop movements. She's a high-value target \u2014 losing a loaded Chinook is a catastrophe. Escort missions write themselves.",
       "image": "",
       "size": 10,
       "loco": "vtol",
@@ -150,8 +150,8 @@
     },
     {
       "name": "AH-1 Cobra",
-      "desc": "First dedicated attack helicopter.",
-      "notes": "",
+      "desc": "The first purpose-built attack helicopter. Narrow profile, a chin turret with a minigun, and rocket pods that turn a tree line into matchwood. She flies ahead of the Hueys, prepping the LZ with fire that makes the enemy keep their heads down long enough for the slicks to land.",
+      "notes": "The Cobra is your gunship. She preps the landing zone before the Hueys arrive and provides fire support during the extraction. Her narrow profile makes her harder to hit from the front. Use her in paired teams \u2014 one Cobra rolls in hot while the other covers, then they swap.",
       "image": "",
       "size": 6,
       "loco": "vtol",
@@ -176,8 +176,8 @@
     },
     {
       "name": "O-1 Bird Dog",
-      "desc": "Observation aircraft. Forward air control.",
-      "notes": "",
+      "desc": "A Cessna in olive drab with smoke rockets under the wings. She flies low and slow over the jungle, spotting enemy positions and marking them with white phosphorus for the fast movers. The FAC pilot in the Bird Dog sees everything and controls the air strike that follows.",
+      "notes": "The Bird Dog is your forward air controller. She finds the target, marks it with smoke, and talks the fighters onto it. Without her, the Phantoms are dropping bombs blind. The FAC pilot is the most important person in any close air support chain \u2014 and the most vulnerable, flying slow and low over enemy guns.",
       "image": "",
       "size": 4,
       "loco": "turboprop",
@@ -197,8 +197,8 @@
     },
     {
       "name": "AC-130 Spectre",
-      "desc": "Gunship. Side-firing artillery platform.",
-      "notes": "",
+      "desc": "A cargo plane turned into a flying battleship. Side-firing cannons \u2014 a 20mm Vulcan, a 40mm Bofors, and a 105mm howitzer \u2014 pour fire onto a single point while the aircraft orbits overhead. She fights at night, guided by infrared sensors, and nothing on the ground survives her attention.",
+      "notes": "The AC-130 is your apocalyptic fire support. She orbits overhead and destroys everything in the target area with surgical precision. Use her as the ultimate support asset the players can call in \u2014 or the ultimate threat if they're on the receiving end. She's vulnerable to SAMs and fighters, which creates escort requirements.",
       "image": "",
       "size": 12,
       "loco": "turboprop",
@@ -228,8 +228,8 @@
     },
     {
       "name": "F-105 Thunderchief",
-      "desc": "US strike fighter. \"Thud\". Bomb truck.",
-      "notes": "",
+      "desc": "The Thud. A single-seat fighter-bomber that carried the air war to Hanoi through the heaviest air defences since Berlin. She was fast, she carried a huge bomb load, and she flew into SAM envelopes that no sane pilot would enter voluntarily. More Thuds were lost than any other American aircraft in Vietnam.",
+      "notes": "The Thunderchief is your strike aircraft for Rolling Thunder campaigns. She flies into heavily defended targets \u2014 bridges, factories, rail yards \u2014 through SAMs and AAA. Use her for high-stakes strike missions where the defences are the real enemy. The Thud pilots earned their reputation the hard way.",
       "image": "",
       "size": 8,
       "loco": "jet",
@@ -254,8 +254,8 @@
     },
     {
       "name": "B-52 Stratofortress",
-      "desc": "Strategic bomber. Arc Light carpet bombing.",
-      "notes": "",
+      "desc": "Eight engines, a wingspan of one hundred and eighty-five feet, and a bomb load that turns a square kilometre of jungle into cratered moonscape. She flies at forty thousand feet \u2014 invisible, inaudible \u2014 and the first warning is the sound of the world ending beneath your feet.",
+      "notes": "The B-52 is your strategic asset. She doesn't appear in dogfights \u2014 she appears as the ultimate escalation. An arc-light strike from B-52s is terrain-changing. Use her for Linebacker II missions over Hanoi where the SAM threat makes high-altitude bombing genuinely dangerous for the first time.",
       "image": "",
       "size": 14,
       "loco": "jet",

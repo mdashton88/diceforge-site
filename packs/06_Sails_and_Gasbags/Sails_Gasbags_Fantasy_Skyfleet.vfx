@@ -1,6 +1,6 @@
 {
   "id": "fantasy_skyfleet",
-  "name": "Sails & Gasbags — Fantasy Skyfleet",
+  "name": "Sails & Gasbags \u2014 Fantasy Skyfleet",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
   "description": "10 pre-built vehicles for the Vehicle Forge.",
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "Sky Cutter",
-      "desc": "Fast patrol airship. Corsair favourite.",
-      "notes": "",
+      "desc": "A fast patrol vessel with a single mast and a crystalline keel that hums with levitation magic. She runs messages between sky-ports, intercepts smugglers, and chases pirates through cloud banks. Light enough to manoeuvre through storm fronts that ground heavier ships.",
+      "notes": "The sky cutter is your patrol and pursuit vessel. She's fast and nimble in the tight spaces between floating islands and storm walls. Use her for chase encounters where the terrain \u2014 clouds, updrafts, lightning \u2014 is as dangerous as the enemy.",
       "image": "",
       "size": 5,
       "loco": "vtol",
@@ -36,8 +36,8 @@
     },
     {
       "name": "Cloud Galleon",
-      "desc": "Heavy sky-trader. Broadside-armed.",
-      "notes": "",
+      "desc": "The merchant queen of the sky lanes. Three masts of enchanted silk, a hull of iron-banded oak, and a cargo hold large enough to supply an entire sky-port for a season. She carries wealth that makes her a target and enough guns to remind pirates of the fact.",
+      "notes": "The cloud galleon is your high-value target and your campaign base for merchant campaigns. She carries enough cargo to make every voyage profitable and enough crew to make boarding her a serious fight. Losing one disrupts the economy of an entire region.",
       "image": "",
       "size": 14,
       "loco": "water_sail",
@@ -67,8 +67,8 @@
     },
     {
       "name": "War Zeppelin",
-      "desc": "Armoured dirigible. Bomber and troop carrier.",
-      "notes": "",
+      "desc": "A rigid-frame dirigible the size of a castle, carrying broadside batteries in gondolas slung beneath the gas envelope. She's slow, she's enormous, and she dominates the airspace above her through sheer volume of fire. Nothing flies near her without permission.",
+      "notes": "The war zeppelin is your aerial fortress. She controls a volume of sky through overlapping fields of fire. Use her as the centrepiece of a defensive fleet or the anchor of an invasion force. Her weakness is fire \u2014 one good hit to the gas cells and she burns spectacularly.",
       "image": "",
       "size": 16,
       "loco": "vtol",
@@ -98,8 +98,8 @@
     },
     {
       "name": "Sky Skiff",
-      "desc": "One-person flyer. Scout and messenger.",
-      "notes": "",
+      "desc": "Barely more than a plank with a levitation rune and a prayer. She carries one or two people at reckless speed through gaps that proper vessels would never attempt. Racers, messengers, and lunatics love them equally.",
+      "notes": "The expansion sky skiff is your racing and courier vehicle. She's faster than the starter version and even more fragile. Use her for races through obstacle courses, desperate message runs, and the moment when the players need to reach something faster than any proper ship can manage.",
       "image": "",
       "size": 3,
       "loco": "vtol",
@@ -113,8 +113,8 @@
     },
     {
       "name": "Dwarven Ironclad",
-      "desc": "Steam-powered flying fortress. Heavily armoured.",
-      "notes": "",
+      "desc": "Riveted iron plates over a steel frame, driven by a coal-fired engine that belches black smoke across the sky. She doesn't glide \u2014 she hammers through the air by force of engineering. The dwarves don't trust magic to keep them aloft. They trust iron.",
+      "notes": "The expansion ironclad is heavier and better armed than the starter version. Her steam engine means she doesn't depend on wind or magic, which makes her reliable in conditions that ground sail-powered vessels. Use her to show the industrialisation of sky warfare.",
       "image": "",
       "size": 12,
       "loco": "vtol",
@@ -144,8 +144,8 @@
     },
     {
       "name": "Elven Windrunner",
-      "desc": "Graceful sky-yacht. Magic-assisted.",
-      "notes": "",
+      "desc": "A living ship of shaped heartwood, bonded to an air elemental that serves as engine and navigator. She moves with the wind because the wind moves for her. She's the fastest vessel in any sky, and she answers only to the captain the elemental has chosen.",
+      "notes": "The expansion windrunner is the premium vessel. She out-performs everything and her living hull repairs itself. Use her as the prize \u2014 the vessel that an elven lord arrives in, or that the players spend a campaign earning the right to captain.",
       "image": "",
       "size": 10,
       "loco": "water_sail",
@@ -165,8 +165,8 @@
     },
     {
       "name": "Pirate Sky-Brig",
-      "desc": "Sky corsair. Boarding hooks.",
-      "notes": "",
+      "desc": "A standard brig modified for raiding \u2014 extra speed from stripped-down weight, grappling hooks and boarding planks mounted at every rail, and a crew of cutthroats who fight like cornered rats. She flies a black flag and everyone knows what it means.",
+      "notes": "The pirate brig is your recurring antagonist vessel. She attacks, she boards, she loots, and she vanishes into a cloud bank before the navy arrives. Use her for the pirate captain who becomes the campaign's nemesis \u2014 a named ship with a named crew.",
       "image": "",
       "size": 10,
       "loco": "water_sail",
@@ -191,8 +191,8 @@
     },
     {
       "name": "Goblin Balloon Bomb",
-      "desc": "Improvised hot-air bomber. Unreliable.",
-      "notes": "",
+      "desc": "A sack of volatile gas, a basket of goblin engineers, and enough alchemical explosives to level a city block. She's steered \u2014 loosely \u2014 by venting gas in the general direction of the target. The goblins consider a fifty percent survival rate an acceptable mission success.",
+      "notes": "The goblin balloon bomb is your comedy weapon and your genuine threat. She's ridiculous and she's lethal. Use her for goblin encounters where the absurdity of the delivery system doesn't diminish the danger. The goblins are enthusiastic, expendable, and completely unconcerned about safety.",
       "image": "",
       "size": 4,
       "loco": "vtol",
@@ -212,8 +212,8 @@
     },
     {
       "name": "Royal Flagship (Sky)",
-      "desc": "Floating palace-warship. Crown of the fleet.",
-      "notes": "",
+      "desc": "The throne ship. Enchanted hull, crystal-powered weapons, wards that deflect hostile magic, and quarters fit for a sovereign. She carries the monarch across the sky in comfort and safety, accompanied by an honour guard of war galleons. She is the symbol of the realm's power.",
+      "notes": "The expansion royal flagship is the ultimate sky vessel. She's the campaign's most powerful ship and the one the players must protect or capture to win. Use her for climactic battles \u2014 whoever controls the flagship controls the sky.",
       "image": "",
       "size": 18,
       "loco": "vtol",
@@ -243,8 +243,8 @@
     },
     {
       "name": "Dragon-Rider Platform",
-      "desc": "Howdah carrier for wyvern-back combat.",
-      "notes": "",
+      "desc": "Not a ship at all \u2014 a harness and fighting platform strapped to the back of a trained dragon. The rider directs the beast while archers or mages mounted behind provide ranged support. She's the most mobile and most terrifying air unit in any sky fleet.",
+      "notes": "The dragon platform is your ultimate air superiority unit. She's faster than ships, more agile, and the dragon's breath weapon is devastating. Use her as the ace \u2014 one dragon-rider can turn a battle. The dragon's temperament is the complication: she's a living creature, not a machine, and she has opinions.",
       "image": "",
       "size": 8,
       "loco": "vtol",

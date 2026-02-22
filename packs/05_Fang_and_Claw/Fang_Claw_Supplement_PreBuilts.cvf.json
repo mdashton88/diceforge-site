@@ -1,7 +1,7 @@
 {
   "formatVersion": "1.0",
   "exportType": "batch",
-  "packName": "Fang & Claw — Supplement Pre-Builts",
+  "packName": "Fang & Claw \u2014 Supplement Pre-Builts",
   "packId": "sup_fang_claw",
   "price": "$5.99",
   "vehicleCount": 3,
@@ -9,8 +9,8 @@
   "vehicles": [
     {
       "name": "Scout Mech",
-      "desc": "Light reconnaissance walker.",
-      "notes": "",
+      "desc": "Light, fast, and built to find the enemy before the enemy finds you. She runs, she watches, and she reports.",
+      "notes": "Pre-built scout mech for immediate reconnaissance scenarios. Start new mech pilots here.",
       "image": "",
       "size": 5,
       "loco": "legs_biped",
@@ -35,8 +35,8 @@
     },
     {
       "name": "Heavy Battlemech",
-      "desc": "Main battle walker. Walking tank.",
-      "notes": "",
+      "desc": "Sixty tons of walking firepower. She anchors the lance and everything she shoots at stops existing.",
+      "notes": "Pre-built heavy mech for immediate large-scale mech combat. The centrepiece of any lance.",
       "image": "",
       "size": 10,
       "loco": "legs_biped",
@@ -66,8 +66,8 @@
     },
     {
       "name": "Assault Quad",
-      "desc": "Four-legged heavy. Ultra-stable platform.",
-      "notes": "",
+      "desc": "Four-legged stability, heavy weapons, and the refusal to fall down. She plants herself and fires until the battlefield is quiet.",
+      "notes": "Pre-built quad assault for immediate deployment. Stable platform, devastating firepower, difficult to topple.",
       "image": "",
       "size": 10,
       "loco": "legs_quad",

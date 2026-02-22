@@ -1,6 +1,6 @@
 {
   "id": "naval_starter",
-  "name": "Blood & Thunder — Naval Starter",
+  "name": "Blood & Thunder \u2014 Naval Starter",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
   "description": "Core weapons only. For broadside arcs, boarding, weather gauge, crew quality, and submarine warfare, see the full Blood & Thunder supplement.",
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "Patrol Boat",
-      "desc": "Fast coastal craft. First responder, last line of defence.",
-      "notes": "",
+      "desc": "Small, fast, and lightly armed. She runs coastal patrols, intercepts smugglers, and responds to distress calls. She's the first naval vessel most civilians ever see and the smallest that carries any real authority.",
+      "notes": "The patrol boat is your low-level naval encounter. She checks manifests, inspects cargo, and calls for backup when she finds something beyond her capability. Use her as the first rung of naval response.",
       "image": "",
       "size": 6,
       "loco": "water_turbo",
@@ -36,8 +36,8 @@
     },
     {
       "name": "Corvette",
-      "desc": "Light escort. Convoy guardian. Submarine hunter.",
-      "notes": "",
+      "desc": "The smallest proper warship. She escorts convoys, hunts submarines, and patrols waters too dangerous for patrol boats but not important enough for destroyers. She punches above her weight and her crew knows it.",
+      "notes": "The corvette is your starter warship. She's big enough to have distinct crew roles but small enough that every player matters. Use her for patrol campaigns where the crew handles whatever the sea throws at them.",
       "image": "",
       "size": 12,
       "loco": "water_turbo",
@@ -67,8 +67,8 @@
     },
     {
       "name": "Destroyer",
-      "desc": "Fleet workhorse. Fast, armed, expendable in the admiral's calculus.",
-      "notes": "",
+      "desc": "Fast, well-armed, and the most versatile warship afloat. She screens the fleet, hunts submarines, and launches torpedo attacks against capital ships. She does everything and she does it at thirty knots.",
+      "notes": "The destroyer is your player vessel for naval campaigns. She's involved in every type of naval action. Her speed and versatility mean the players make tactical decisions every round.",
       "image": "",
       "size": 16,
       "loco": "water_turbo",
@@ -103,8 +103,8 @@
     },
     {
       "name": "Heavy Cruiser",
-      "desc": "Independent operations. When one ship must do everything.",
-      "notes": "",
+      "desc": "Eight-inch guns, thick armour, and the ability to operate independently for months. She commands task forces, shows the flag in foreign ports, and fights anything short of a battleship.",
+      "notes": "The heavy cruiser is your independent command vessel. She operates alone in waters where the fleet can't reach. Use her for campaigns where the players make their own decisions far from headquarters.",
       "image": "",
       "size": 19,
       "loco": "water_turbo",
@@ -139,8 +139,8 @@
     },
     {
       "name": "Battleship",
-      "desc": "Capital ship. Big guns, heavy armour, unmistakable intent.",
-      "notes": "",
+      "desc": "The most powerful warship afloat. She anchors the battle line, absorbs punishment, and delivers broadsides that can destroy a city. She is naval power incarnate \u2014 expensive, prestigious, and occasionally obsolete.",
+      "notes": "The battleship is your fleet set-piece. She appears for major engagements and her presence changes the strategic picture. Use her as the ultimate naval asset or the ultimate target.",
       "image": "",
       "size": 23,
       "loco": "water_turbo",
@@ -175,8 +175,8 @@
     },
     {
       "name": "Carrier",
-      "desc": "Floating airfield. The centrepiece of modern naval power.",
-      "notes": "",
+      "desc": "A floating airfield. She projects power through her air wing across distances that gun-armed ships can't reach. She doesn't fight ships \u2014 she fights wars.",
+      "notes": "The carrier is your campaign base for air-naval campaigns. She's where the pilots live and launch from. She's also a strategic target whose loss changes the war.",
       "image": "",
       "size": 22,
       "loco": "water_turbo",
@@ -206,8 +206,8 @@
     },
     {
       "name": "Submarine",
-      "desc": "Unseen predator. The most feared vessel afloat — or below.",
-      "notes": "",
+      "desc": "She hides beneath the waves, she strikes without warning, and she vanishes before the escorts arrive. The submarine is the most feared vessel afloat because you never know she's there until the torpedo hits.",
+      "notes": "The submarine is your stealth vessel. She hunts from concealment and her attacks are ambushes by definition. Use her for tension-heavy scenarios where the threat is invisible and the first warning is an explosion.",
       "image": "",
       "size": 13,
       "loco": "water_turbo",
@@ -237,8 +237,8 @@
     },
     {
       "name": "Landing Craft",
-      "desc": "Beach assault. Drops the ramp, delivers the marines, prays.",
-      "notes": "",
+      "desc": "A flat-bottomed steel box that carries troops from ship to shore under fire. The ramp drops and the soldiers run. She exists for one purpose: delivering infantry to a hostile beach.",
+      "notes": "The landing craft is your amphibious assault vehicle. The approach under fire is the scenario \u2014 survival is the victory condition. Every round on the water is another round under enemy fire.",
       "image": "",
       "size": 5,
       "loco": "water_turbo",
@@ -258,8 +258,8 @@
     },
     {
       "name": "Gunboat",
-      "desc": "River or coastal fire support. Big gun, small hull.",
-      "notes": "",
+      "desc": "A small vessel carrying an oversized gun. She patrols rivers, bombards shore positions, and provides fire support in waters too shallow for proper warships. She's the brown-water navy's main battery.",
+      "notes": "The gunboat is your river and coastal fire support. She goes where destroyers can't fit and provides the heavy gun that infantry can't carry. Use her for river patrol campaigns \u2014 Vietnam, colonial wars, and frontier operations.",
       "image": "",
       "size": 8,
       "loco": "water_turbo",
@@ -284,8 +284,8 @@
     },
     {
       "name": "Fast Attack Craft",
-      "desc": "Missile boat. Hit fast, run faster, hope they don't shoot back.",
-      "notes": "",
+      "desc": "A missile boat or torpedo boat \u2014 small, fast, and carrying weapons that can sink ships ten times her size. She attacks at speed, fires her ordnance, and runs before the escorts can react.",
+      "notes": "The fast attack craft is your modern PT boat. She carries anti-ship missiles that threaten capital ships. Use her for asymmetric naval warfare where small boats with big missiles change the equation.",
       "image": "",
       "size": 7,
       "loco": "water_turbo",

@@ -1,7 +1,7 @@
 {
   "formatVersion": "1.0",
   "exportType": "batch",
-  "packName": "Star & Void — Supplement Pre-Builts",
+  "packName": "Star & Void \u2014 Supplement Pre-Builts",
   "packId": "sup_star_void",
   "price": "$7.99",
   "vehicleCount": 3,
@@ -9,8 +9,8 @@
   "vehicles": [
     {
       "name": "Light Freighter",
-      "desc": "Tramp trader. Han Solo territory.",
-      "notes": "",
+      "desc": "The tramp steamer of space. She carries cargo, crew, and the faint hope of profit across the void between stars.",
+      "notes": "Pre-built light freighter for immediate space trading and smuggling campaigns. The default player vessel.",
       "image": "",
       "size": 12,
       "loco": "jet",
@@ -30,8 +30,8 @@
     },
     {
       "name": "Fighter (Snub)",
-      "desc": "Single-seat space superiority fighter.",
-      "notes": "",
+      "desc": "A single-seat space fighter. She launches from carriers, dogfights in the void, and the pilot's skill matters more than the machine.",
+      "notes": "Pre-built snub fighter for immediate space combat. The player's personal combat vessel for carrier-based campaigns.",
       "image": "",
       "size": 6,
       "loco": "jet",
@@ -56,8 +56,8 @@
     },
     {
       "name": "Assault Shuttle",
-      "desc": "Troop insertion craft. Armoured.",
-      "notes": "",
+      "desc": "Armoured, fast on approach, and carrying a boarding party that would rather be anywhere else. She crosses the gap between ships under fire.",
+      "notes": "Pre-built assault shuttle for immediate boarding actions. The vehicle that delivers players to the enemy hull.",
       "image": "",
       "size": 8,
       "loco": "jet",

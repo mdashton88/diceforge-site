@@ -1,6 +1,6 @@
 {
   "id": "sup_iron_steel",
-  "name": "Iron & Steel — Supplement Pre-Builts",
+  "name": "Iron & Steel \u2014 Supplement Pre-Builts",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
   "description": "3 pre-built vehicles for the Vehicle Forge.",
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "M4A3 Sherman (Easy Eight)",
-      "desc": "Upgraded Sherman with HVSS suspension.",
-      "notes": "",
+      "desc": "America's workhorse tank with the improved 76mm gun. She can finally hurt a Panther from the front, which is all her crews ever asked for.",
+      "notes": "Pre-built Sherman for immediate play. The baseline Allied tank for any WWII Western Front scenario.",
       "image": "",
       "size": 8,
       "loco": "tracked",
@@ -41,8 +41,8 @@
     },
     {
       "name": "Tiger I",
-      "desc": "German heavy tank. The terror of Normandy.",
-      "notes": "",
+      "desc": "Eighty-eight millimetres of fear. She kills at two kilometres and her reputation precedes her by ten.",
+      "notes": "Pre-built Tiger for immediate deployment as a boss encounter. Every Allied player should dread seeing one.",
       "image": "",
       "size": 8,
       "loco": "tracked",
@@ -67,8 +67,8 @@
     },
     {
       "name": "T-34/85",
-      "desc": "Upgraded T-34 with 85mm gun.",
-      "notes": "",
+      "desc": "The improved T-34 with a bigger turret and an 85mm gun that finally matches the Panzer IV. She wins through numbers and reliability.",
+      "notes": "Pre-built T-34 for immediate play in Eastern Front scenarios. The definitive Soviet medium tank.",
       "image": "",
       "size": 7,
       "loco": "tracked",

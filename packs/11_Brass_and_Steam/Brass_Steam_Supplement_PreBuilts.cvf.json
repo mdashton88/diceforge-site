@@ -1,7 +1,7 @@
 {
   "formatVersion": "1.0",
   "exportType": "batch",
-  "packName": "Brass & Steam — Supplement Pre-Builts",
+  "packName": "Brass & Steam \u2014 Supplement Pre-Builts",
   "packId": "sup_brass_steam",
   "price": "$4.99",
   "vehicleCount": 3,
@@ -9,8 +9,8 @@
   "vehicles": [
     {
       "name": "Steam Landship",
-      "desc": "Iron-hulled land cruiser. Coal-fired.",
-      "notes": "",
+      "desc": "A ground vessel the size of a small ship, driven by steam and crawling across the landscape on tracks or wheels. She carries troops, guns, and the confidence of an industrial civilisation.",
+      "notes": "Pre-built landship for immediate steampunk land-warfare scenarios. The centrepiece of any Victorian military campaign.",
       "image": "",
       "size": 8,
       "loco": "tracked",
@@ -35,8 +35,8 @@
     },
     {
       "name": "Clockwork Carriage",
-      "desc": "Spring-wound transport. Silent running.",
-      "notes": "",
+      "desc": "A carriage driven by wound springs and mechanical precision. She needs no coal, no water, and no horses \u2014 just someone to wind the mainspring every few hours.",
+      "notes": "Pre-built clockwork carriage for immediate steampunk travel. Silent, reliable, and elegantly mechanical.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -50,8 +50,8 @@
     },
     {
       "name": "Aerial Gunboat",
-      "desc": "Light combat airship. Twin propellers.",
-      "notes": "",
+      "desc": "A steam-powered dirigible carrying broadside cannons. She floats above the battlefield and rains fire on positions that have no answer to attack from the sky.",
+      "notes": "Pre-built aerial gunboat for immediate steampunk air support. She changes the battlefield by existing.",
       "image": "",
       "size": 8,
       "loco": "vtol",

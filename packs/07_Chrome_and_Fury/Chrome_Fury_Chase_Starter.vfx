@@ -1,6 +1,6 @@
 {
   "id": "chase_starter",
-  "name": "Chrome & Fury — Chase Starter",
+  "name": "Chrome & Fury \u2014 Chase Starter",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
   "description": "Core weapons only. For extended chase rules, sideswipe/ram, convoy defence, train combat, and gadgets, see the full Chrome & Fury supplement.",
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "Pursuit Muscle Car",
-      "desc": "V8 fury. Loud, fast, angry. The highway is its arena.",
-      "notes": "",
+      "desc": "Four hundred horsepower in a body designed in the decade that taste forgot. She's loud, she's fast, and she drinks petrol like water. Chrome pipes, wide tyres, and a paint job that says the driver has made some choices.",
+      "notes": "The muscle car is your player vehicle for modern chase campaigns. She's fast in a straight line, handles well enough on open roads, and looks fantastic doing it. She's also conspicuous \u2014 you can hear her coming from three streets away.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -31,8 +31,8 @@
     },
     {
       "name": "Police Interceptor",
-      "desc": "Pursuit-rated cruiser. Siren screaming, engine howling.",
-      "notes": "",
+      "desc": "A pursuit-rated sedan with a bigger engine, upgraded brakes, and a partition between front and back. She's faster than the civilian version, she handles better, and the driver has been trained to use her as a weapon.",
+      "notes": "The interceptor is your pursuit threat. She's the thing in the rear-view mirror with flashing lights. Use her in pairs \u2014 one follows while the other cuts ahead. The radio means backup is always en route. The players need to lose her before the net closes.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -52,8 +52,8 @@
     },
     {
       "name": "Armoured Escort",
-      "desc": "VIP transport. Bulletproof glass and a bad attitude.",
-      "notes": "",
+      "desc": "A heavy sedan with ballistic panels in the doors, run-flat tyres, and enough reinforcement to survive a burst of automatic fire. She doesn't look armoured \u2014 that's the point. She carries VIPs who have enemies.",
+      "notes": "The armoured escort absorbs hits that would disable a standard car. Use her for protection details \u2014 the players guard a VIP in the back seat while attackers try to stop the convoy. Her armour buys time, not immunity.",
       "image": "",
       "size": 6,
       "loco": "wheeled",
@@ -73,8 +73,8 @@
     },
     {
       "name": "Pursuit Bike",
-      "desc": "Fast, nimble, terrifyingly exposed. Weave through traffic.",
-      "notes": "",
+      "desc": "A high-performance motorcycle stripped to the essentials. She splits lanes, she climbs kerbs, and she goes places cars can't follow. The rider is exposed to everything, but the rider is also gone before you can aim.",
+      "notes": "The pursuit bike dominates urban chases. She goes through alleys, down staircases, and across rooftops that no car can reach. Her weakness is the rider's total lack of protection. One good hit and the chase is over permanently.",
       "image": "",
       "size": 1,
       "loco": "wheeled",
@@ -94,8 +94,8 @@
     },
     {
       "name": "Getaway Van",
-      "desc": "Panel van. Unremarkable until the side door slides open.",
-      "notes": "",
+      "desc": "A panel van with a modified engine and no rear windows. She carries the crew, the equipment, and the proceeds of whatever job just went sideways. She's anonymous on any street in the world \u2014 white vans are invisible.",
+      "notes": "The getaway van is your heist vehicle. She carries the whole party plus loot, and she disappears into traffic because nobody looks twice at a van. Use her for the escape phase of any job. Her anonymity is her best weapon.",
       "image": "",
       "size": 5,
       "loco": "wheeled",
@@ -115,8 +115,8 @@
     },
     {
       "name": "Convoy Truck",
-      "desc": "The payload. Everything else exists to protect this.",
-      "notes": "",
+      "desc": "An eighteen-wheeler with a reinforced cab and a trailer that could carry anything \u2014 weapons, contraband, hostages, or enough explosives to flatten a building. She's the centrepiece of any road convoy and the prize everyone's fighting over.",
+      "notes": "The convoy truck is your mobile objective. The players protect her, hijack her, or stop her. She can't manoeuvre, she can't hide, and whatever she's carrying is worth killing for. Highway chase scenarios build naturally around her.",
       "image": "",
       "size": 8,
       "loco": "wheeled",
@@ -130,8 +130,8 @@
     },
     {
       "name": "Sports Coupe",
-      "desc": "Italian engineering. Corners like it's on rails. Fragile as glass.",
-      "notes": "",
+      "desc": "Low, fast, and worth more than most houses. She's a two-seater with an engine that belongs in a racing car and a price tag that belongs in a museum. The driver either stole her or can afford to replace her. Either way, they're not slowing down.",
+      "notes": "The sports coupe is your high-end chase vehicle. She's faster than the muscle car, handles better, and costs ten times as much. Use her for wealthy antagonists, car thieves, and any scene that needs to look expensive. She's also fragile \u2014 every dent costs a fortune.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -145,8 +145,8 @@
     },
     {
       "name": "Pursuit Helicopter",
-      "desc": "Eye in the sky. Nowhere to hide when this is overhead.",
-      "notes": "",
+      "desc": "A light helicopter with a searchlight and a thermal camera. She follows from above, reporting the target's position to ground units. She can't be outrun, she can't be lost in traffic, and she sees everything.",
+      "notes": "The pursuit helicopter makes ground chases dramatically harder. The players can't simply turn a corner and vanish \u2014 the helicopter tracks them from above. Losing her requires tunnels, parking garages, or shooting her down. She escalates any chase.",
       "image": "",
       "size": 6,
       "loco": "vtol",
@@ -168,8 +168,8 @@
     },
     {
       "name": "Armoured SUV",
-      "desc": "Government black. Tinted windows. Run-flat tyres.",
-      "notes": "",
+      "desc": "A luxury SUV with ballistic glass, run-flat tyres, and armour plating hidden under the bodywork. She's the vehicle of choice for corporate executives, diplomats, and drug lords \u2014 anyone who needs to survive an ambush without looking like they expected one.",
+      "notes": "The armoured SUV is your modern protection vehicle. She looks civilian but takes hits like a military vehicle. Use her for VIP convoys, executive protection, and any modern scenario where the threat is small arms ambush on city streets.",
       "image": "",
       "size": 5,
       "loco": "wheeled",
@@ -189,8 +189,8 @@
     },
     {
       "name": "Supercar",
-      "desc": "Two million dollars of speed. Zero dollars of common sense.",
-      "notes": "",
+      "desc": "A million pounds of engineering, carbon fibre, and ego. She does zero to sixty in under three seconds, corners like she's on rails, and sounds like the apocalypse. She is, objectively, more car than any public road needs.",
+      "notes": "The supercar is the fastest ground vehicle in the set. She wins every straight-line chase and most cornering duels. Her weakness is ground clearance \u2014 speed bumps, dirt roads, and rough terrain stop her dead. She's the villain's car, the prize, or the thing the players stole five minutes ago.",
       "image": "",
       "size": 4,
       "loco": "wheeled",

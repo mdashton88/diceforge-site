@@ -1,6 +1,6 @@
 {
   "id": "sup_talons",
-  "name": "Talons & Contrails — Supplement Pre-Builts",
+  "name": "Talons & Contrails \u2014 Supplement Pre-Builts",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
   "description": "3 pre-built vehicles for the Vehicle Forge.",
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "P-47 Thunderbolt",
-      "desc": "US fighter-bomber. The Jug.",
-      "notes": "",
+      "desc": "The Jug. Eight .50-calibre guns, a radial engine that absorbs damage, and the ability to carry bombs and rockets that make her the best fighter-bomber of the war.",
+      "notes": "Pre-built Thunderbolt for immediate ground-attack scenarios. She's tougher than a Mustang and carries more ordnance.",
       "image": "",
       "size": 7,
       "loco": "turboprop",
@@ -51,8 +51,8 @@
     },
     {
       "name": "F-16 Fighting Falcon",
-      "desc": "US multirole fighter. Light and agile.",
-      "notes": "",
+      "desc": "The lightweight fighter that outperforms aircraft twice her cost. She does everything \u2014 air superiority, ground attack, suppression of enemy air defences \u2014 and she does it affordably.",
+      "notes": "Pre-built F-16 for modern air combat. The most common Western fighter in the world and the default player aircraft for modern campaigns.",
       "image": "",
       "size": 7,
       "loco": "jet",
@@ -82,8 +82,8 @@
     },
     {
       "name": "Apache AH-64",
-      "desc": "US attack helicopter. Tank killer.",
-      "notes": "",
+      "desc": "Longbow radar, Hellfire missiles, and a chain gun that follows the pilot's eyes. She kills tanks from eight kilometres away while hiding behind a tree line.",
+      "notes": "Pre-built Apache for immediate anti-armour scenarios. The most lethal attack helicopter in any modern military.",
       "image": "",
       "size": 7,
       "loco": "vtol",

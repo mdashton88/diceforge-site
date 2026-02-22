@@ -1,6 +1,6 @@
 {
   "id": "fantasy_mounts",
-  "name": "Saddle & Fang — Fantasy Bestiary Mounts",
+  "name": "Saddle & Fang \u2014 Fantasy Bestiary Mounts",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
   "description": "10 pre-built vehicles for the Vehicle Forge.",
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "Warhorse (Destrier)",
-      "desc": "Trained war mount. Heavy cavalry.",
-      "notes": "",
+      "desc": "The knight's horse. Bred for size, trained for violence, and worth more than the knight's armour. She carries an armoured rider at a gallop and hits a shield wall with the force of a small siege engine. She is the medieval main battle tank.",
+      "notes": "The destrier is the premium warhorse. She's larger and stronger than the starter version, carrying heavier barding and an armoured rider without speed loss. Use her for heavy cavalry charges where the impact damage is the primary weapon.",
       "image": "",
       "size": 3,
       "loco": "legs_quad",
@@ -25,8 +25,8 @@
     },
     {
       "name": "Giant Eagle",
-      "desc": "Intelligent avian mount.",
-      "notes": "",
+      "desc": "A raptor large enough to carry a halfling comfortably and a human awkwardly. She sees a mouse at a mile and she dives at speeds that terrify the rider as much as the target. Her loyalty, once earned, is absolute.",
+      "notes": "The expansion eagle is your scout and aerial combatant. She excels at dive attacks \u2014 the altitude-to-speed conversion adds damage. Use her for reconnaissance missions and the dramatic rescue where she snatches a falling player from mid-air.",
       "image": "",
       "size": 5,
       "loco": "vtol",
@@ -40,8 +40,8 @@
     },
     {
       "name": "Griffin",
-      "desc": "Lion-eagle hybrid. Noble cavalry.",
-      "notes": "",
+      "desc": "Half eagle, half lion, and entirely lethal. She nests in mountain peaks, hunts elk-sized prey, and regards anyone approaching her territory as either a threat or food. Taming one requires either magic or a suicidal confidence that griffins respect.",
+      "notes": "The expansion griffin is your prestige aerial mount. She's stronger than the starter version and her territorial aggression is a feature, not a bug \u2014 she attacks anything that approaches the rider unbidden. Use her for nobles and elite cavalry.",
       "image": "",
       "size": 6,
       "loco": "vtol",
@@ -55,8 +55,8 @@
     },
     {
       "name": "Dragon (Young)",
-      "desc": "Juvenile dragon. Breath weapon developing.",
-      "notes": "",
+      "desc": "Adolescent and already terrifying. She breathes destruction, she flies with arrogant ease, and she speaks \u2014 which means she argues, bargains, and occasionally refuses orders she considers beneath her. A young dragon is a partner, not a pet.",
+      "notes": "The expansion young dragon is more powerful than the starter version. She's a character in her own right \u2014 Smarts d8, speaks languages, has goals and opinions. The rider negotiates rather than commands. Use her relationship with the player as a subplot.",
       "image": "",
       "size": 10,
       "loco": "vtol",
@@ -70,8 +70,8 @@
     },
     {
       "name": "Giant Wolf",
-      "desc": "Dire wolf mount. Orcish cavalry.",
-      "notes": "",
+      "desc": "A wolf the size of a cavalry horse with the intelligence to understand complex commands and the pack instincts to coordinate with other wolves without direction. She's the mount of choice for rangers, orcs, and anyone who prefers forests to roads.",
+      "notes": "The expansion wolf is your tactical pack mount. Multiple giant wolves coordinate their attacks, flanking and surrounding targets. Use them in groups \u2014 a mounted wolf pack is terrifying. Their coordination bonus increases with pack size.",
       "image": "",
       "size": 4,
       "loco": "legs_quad",
@@ -85,8 +85,8 @@
     },
     {
       "name": "Pegasus",
-      "desc": "Winged horse. Paladin steed.",
-      "notes": "",
+      "desc": "Wings of white feathers, a coat like fresh snow, and the disturbing habit of judging everyone she meets. She serves the virtuous and abandons the fallen. She cannot be bought, coerced, or fooled. She knows what you are.",
+      "notes": "The expansion pegasus has an alignment sense \u2014 she detects evil intent. She won't carry someone planning betrayal and she'll warn her rider of danger through behaviour changes. Use her as the moral barometer of the party.",
       "image": "",
       "size": 5,
       "loco": "vtol",
@@ -100,8 +100,8 @@
     },
     {
       "name": "Giant Spider",
-      "desc": "Drow mount. Wall-climbing.",
-      "notes": "",
+      "desc": "Hairy, multi-eyed, and capable of spinning webs strong enough to catch a horse. She walks on walls and ceilings, she sees in total darkness, and she wraps her prey in silk before feeding. She's loyal to her rider in the way a spider is loyal to anything \u2014 conditionally.",
+      "notes": "The expansion spider is larger and more capable than the starter. Her web spinning creates battlefield control \u2014 blocking passages, trapping enemies, building bridges. She's the ultimate dungeon mount. Her eight eyes give the rider near-360 vision.",
       "image": "",
       "size": 4,
       "loco": "legs_quad",
@@ -115,8 +115,8 @@
     },
     {
       "name": "Nightmare",
-      "desc": "Flaming hooves. Extraplanar steed.",
-      "notes": "",
+      "desc": "A horse forged in the fires of the lower planes. Her mane is flame, her hooves scorch the earth, and her breath smells of brimstone. She serves dark riders \u2014 death knights, antipaladins, and those who've bargained with powers they shouldn't have.",
+      "notes": "The nightmare is your evil mount. She burns \u2014 her hoofstrikes do fire damage, she sets things alight in passing, and she can plane shift to the lower planes. Use her for villains and for players who've made dark bargains. She's the anti-pegasus.",
       "image": "",
       "size": 4,
       "loco": "legs_quad",
@@ -130,8 +130,8 @@
     },
     {
       "name": "Giant Boar",
-      "desc": "Tusked charger. Dwarven mount.",
-      "notes": "",
+      "desc": "A tusked monster the size of a bull, covered in coarse bristle that turns arrows, with a charge that hits like a cavalry lance. She's mean, she's tough, and she doesn't care about pain. Dwarves and orcs ride them. Nobody else is stubborn enough.",
+      "notes": "The giant boar is your dwarven and orcish mount. She's tough, aggressive, and harder to kill than she has any right to be. Her tusks do piercing damage on charges and she has the Hardy ability \u2014 difficult to put down permanently. Use her for characters who value toughness over speed.",
       "image": "",
       "size": 4,
       "loco": "legs_quad",
@@ -145,8 +145,8 @@
     },
     {
       "name": "Hippogriff",
-      "desc": "Horse-eagle. More tractable than griffins.",
-      "notes": "",
+      "desc": "Eagle head and wings on a horse's body \u2014 faster than a griffin in level flight, easier to train, and considerably less likely to eat the stable boy. She's the cavalry mount for armies that need air power but can't afford dragons.",
+      "notes": "The hippogriff is your military aerial mount. She's easier to train than a griffin, available in larger numbers, and reliable in formation flying. Use her for aerial cavalry units \u2014 disciplined, trained mounts rather than the wild individuals that griffins tend to be.",
       "image": "",
       "size": 5,
       "loco": "vtol",

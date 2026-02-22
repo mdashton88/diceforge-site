@@ -1,6 +1,6 @@
 {
   "id": "sup_dread_ruin",
-  "name": "Dread & Ruin — Supplement Pre-Builts",
+  "name": "Dread & Ruin \u2014 Supplement Pre-Builts",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
   "description": "3 pre-built vehicles for the Vehicle Forge.",
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "Phantom Stage",
-      "desc": "Ghostly stagecoach appearing on moonless nights.",
-      "notes": "",
+      "desc": "A stagecoach that appears on lonely roads at midnight, driven by no one visible. She stops for passengers who didn't flag her down and takes them somewhere that isn't on the map.",
+      "notes": "Pre-built phantom coach for immediate horror encounters. She appears, she collects, she delivers \u2014 to somewhere terrible.",
       "image": "",
       "size": 5,
       "loco": "wheeled",
@@ -25,8 +25,8 @@
     },
     {
       "name": "Cursed Longship",
-      "desc": "Draugr-crewed vessel. Returns to shore endlessly.",
-      "notes": "",
+      "desc": "A Viking ship crewed by draugr \u2014 the undead Norse warriors who refuse to stop raiding just because they're dead. She appears from the fog, she raids, and she vanishes.",
+      "notes": "Pre-built cursed longship for immediate maritime horror. Undead Vikings on a ghost ship \u2014 the scenario writes itself.",
       "image": "",
       "size": 12,
       "loco": "water_sail",
@@ -46,8 +46,8 @@
     },
     {
       "name": "Demonic Chariot",
-      "desc": "Infernal war chariot. Nightmare steeds.",
-      "notes": "",
+      "desc": "A war chariot from the lower planes, wreathed in hellfire and pulled by beasts that shouldn't exist in the mortal world. She carries a demon lord to war.",
+      "notes": "Pre-built demonic chariot for immediate infernal encounters. The vehicle of the campaign's ultimate antagonist.",
       "image": "",
       "size": 4,
       "loco": "legs_quad",

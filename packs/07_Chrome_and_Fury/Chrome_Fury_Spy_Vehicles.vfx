@@ -1,6 +1,6 @@
 {
   "id": "spy_vehicles",
-  "name": "Chrome & Fury — Spy Vehicles",
+  "name": "Chrome & Fury \u2014 Spy Vehicles",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
   "description": "10 pre-built vehicles for the Vehicle Forge.",
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "Spy Car (Classic)",
-      "desc": "Aston Martin with extras. Shaken, not stirred.",
-      "notes": "",
+      "desc": "An Aston Martin with machine guns behind the headlights, an ejector seat, and an oil slick dispenser. She's the classic secret agent vehicle \u2014 gorgeous, lethal, and equipped with gadgets that Q Branch swore would work this time.",
+      "notes": "The spy car is your Bond vehicle. Each gadget is a one-use ability \u2014 the oil slick, the smoke screen, the tyre shredders. Once used, they're gone. The drama is choosing when to deploy them. Use her for espionage campaigns that embrace the genre.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -31,8 +31,8 @@
     },
     {
       "name": "Stealth Motorcycle",
-      "desc": "Electric silent runner. Night ops.",
-      "notes": "",
+      "desc": "Electric drive, matte black finish, and a sensor suite that maps every surveillance camera within a mile. She's silent, she's invisible at night, and she carries one operative into places they aren't supposed to be.",
+      "notes": "The stealth bike is your infiltration vehicle. Silent approach, small profile, and fast extraction. Use her for missions where the player needs to reach the target undetected. Her electric drive means no engine noise, but she has limited range.",
       "image": "",
       "size": 1,
       "loco": "wheeled",
@@ -46,8 +46,8 @@
     },
     {
       "name": "Pursuit Helicopter",
-      "desc": "Agency chopper. Fast and armed.",
-      "notes": "",
+      "desc": "A light helicopter painted in civilian colours, carrying surveillance equipment that can read a newspaper from two miles away. She follows targets through urban environments without them knowing they're being watched.",
+      "notes": "The spy helicopter is your surveillance platform. She tracks targets from altitude where she's invisible, feeding real-time video to the ground team. Use her for the surveillance phase of espionage operations \u2014 the players watch the target's routine before making their move.",
       "image": "",
       "size": 6,
       "loco": "vtol",
@@ -74,8 +74,8 @@
     },
     {
       "name": "Submersible Car",
-      "desc": "Lotus Esprit territory.",
-      "notes": "",
+      "desc": "She drives on roads. She dives beneath the waves. She's the most impractical vehicle ever conceived and the most spectacular escape in any agent's repertoire. Drive off the pier, hit the switch, and vanish beneath the harbour.",
+      "notes": "The submersible car is your ultimate escape trick. The enemy thinks you've driven into the sea and died. You're actually cruising along the seabed toward the extraction point. Use her for the one moment in the campaign where the players need to disappear completely.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -91,8 +91,8 @@
     },
     {
       "name": "Surveillance Van",
-      "desc": "Unmarked van. Full electronic suite.",
-      "notes": "",
+      "desc": "A panel van packed with listening equipment, cameras, recording devices, and enough coffee to keep the surveillance team conscious for a seventy-two-hour stakeout. She's parked across the street and nobody notices her.",
+      "notes": "The surveillance van is your stakeout vehicle. She's where the players spend hours watching the target, recording conversations, and waiting for the moment to move. Use her for the patient phase of espionage \u2014 the gathering of intelligence that makes the action phase possible.",
       "image": "",
       "size": 5,
       "loco": "wheeled",
@@ -108,8 +108,8 @@
     },
     {
       "name": "Armed Speedboat",
-      "desc": "Agency boat. Fast and lethal.",
-      "notes": "",
+      "desc": "A rigid-hulled inflatable with a concealed weapons mount and enough speed to intercept anything in coastal waters. She operates from a yacht or a submarine, striking fast and disappearing before the coast guard arrives.",
+      "notes": "The armed speedboat is your coastal action vehicle. She's fast, she carries enough firepower for a short engagement, and she vanishes when the job's done. Use her for harbour raids, waterside extractions, and the moment the agent's cover is blown at the marina.",
       "image": "",
       "size": 5,
       "loco": "water_turbo",
@@ -129,8 +129,8 @@
     },
     {
       "name": "Gyrocopter",
-      "desc": "Little Nellie. Personal autogyro.",
-      "notes": "",
+      "desc": "A single-seat autogyro \u2014 part helicopter, part aeroplane, entirely ridiculous. She takes off in fifty feet, flies at a hundred knots, and folds up small enough to fit in a trailer. She's the personal aircraft for agents who need to go over the wall rather than through it.",
+      "notes": "The gyrocopter is your personal escape aircraft. She fits on a rooftop, she launches from a car park, and she gets one person out of a situation that's gone terminal. Use her for emergency extractions when every other exit is compromised.",
       "image": "",
       "size": 2,
       "loco": "vtol",
@@ -155,8 +155,8 @@
     },
     {
       "name": "Armoured Limo",
-      "desc": "VIP transport. Bulletproof glass.",
-      "notes": "",
+      "desc": "A stretch limousine with ballistic glass, reactive armour under the bodywork, and a drinks cabinet that conceals a weapons locker. She carries the spymaster to meetings with people who might try to kill them on the way home.",
+      "notes": "The armoured limo is your mobile meeting room and your ambush target. Whatever conversation happens in the back seat matters enormously. Use her for the ride where the mission briefing happens, or the ride where the assassination attempt does.",
       "image": "",
       "size": 6,
       "loco": "wheeled",
@@ -170,8 +170,8 @@
     },
     {
       "name": "Jet Pack",
-      "desc": "Personal flight. 30-second fuel.",
-      "notes": "",
+      "desc": "Thirty seconds of flight time, a deafening roar, and the most dramatic exit in espionage history. She straps to the operative's back and launches them over walls, across rooftops, and into the waiting extraction vehicle. She's not practical. She's spectacular.",
+      "notes": "The jet pack is your emergency vertical escape. Thirty seconds of flight \u2014 that's two rounds in Savage Worlds. Use her for the moment when the ground floor exit is blocked and the only way out is up. She's a one-use device that saves one life in spectacular fashion.",
       "image": "",
       "size": 0,
       "loco": "vtol",
@@ -185,8 +185,8 @@
     },
     {
       "name": "Q-Branch Special",
-      "desc": "Prototype. Loaded with experimental tech.",
-      "notes": "",
+      "desc": "A vehicle that shouldn't exist. She looks like a standard car but she carries weapons, gadgets, and countermeasures that break the laws of physics and common sense in roughly equal measure. She is the prototype, and the briefing specifically said not to damage her.",
+      "notes": "The Q-Branch Special is your gadget vehicle \u2014 everything the spy car has, doubled. Each mission, the GM stocks her with three to five unique gadgets. The players don't know what they are until they press the buttons. Use her for the campaign's most audacious missions.",
       "image": "",
       "size": 4,
       "loco": "wheeled",

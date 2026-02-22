@@ -1,6 +1,6 @@
 {
   "id": "dinosaur_mounts",
-  "name": "Saddle & Fang — Dinosaur Mounts",
+  "name": "Saddle & Fang \u2014 Dinosaur Mounts",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
   "description": "10 pre-built vehicles for the Vehicle Forge.",
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "Tyrannosaurus Rex",
-      "desc": "Apex predator. Barely controllable.",
-      "notes": "",
+      "desc": "Forty feet of apex predator with jaws that crush bone and a roar that freezes prey where they stand. She's not a mount in any practical sense \u2014 she's a weapon system that tolerates a howdah bolted to her back because the handlers keep her fed.",
+      "notes": "The T-Rex is your dinosaur boss mount. She's Gargantuan, she causes Fear, and her bite attack is devastating. She's nearly uncontrollable \u2014 Riding checks are required every round in combat. Use her for the chieftain's mount in a lost-world campaign.",
       "image": "",
       "size": 10,
       "loco": "legs_biped",
@@ -25,8 +25,8 @@
     },
     {
       "name": "Triceratops",
-      "desc": "Living battering ram. Horned shield.",
-      "notes": "",
+      "desc": "Three horns, a shield of solid bone, and the temperament of a very large, very angry bull. She charges anything that threatens her or her herd, and her impact hits with the force of a small vehicle. She's herbivorous and territorial, which makes her surprisingly good as a war mount.",
+      "notes": "The triceratops is your heavy cavalry dinosaur. Her charge is devastating and her frill protects the rider from frontal attacks. She's easier to control than the T-Rex \u2014 she's a herd animal, not a predator. Use her for shield-wall charges where the horns break the formation.",
       "image": "",
       "size": 8,
       "loco": "legs_quad",
@@ -40,8 +40,8 @@
     },
     {
       "name": "Velociraptor Pack",
-      "desc": "Pack of trained raptors. Scout mounts.",
-      "notes": "",
+      "desc": "Not one mount but a pack of six \u2014 small, fast, intelligent, and coordinated. They hunt together, communicate with chirps and barks, and bring down prey ten times their size through teamwork. A rider doesn't control the pack \u2014 they direct it.",
+      "notes": "The raptor pack is your swarm mount. The rider directs six coordinated predators that flank, surround, and overwhelm targets. Use Gang Up bonuses for each raptor in melee contact. They're fragile individually but devastating as a pack.",
       "image": "",
       "size": 2,
       "loco": "legs_biped",
@@ -55,8 +55,8 @@
     },
     {
       "name": "Pteranodon",
-      "desc": "Flying reptile. Aerial scout.",
-      "notes": "",
+      "desc": "Twenty-foot wingspan, a bony crest for aerodynamic stability, and the ability to soar for hours on thermals without effort. She's not strong enough to fight in the air, but she's the best aerial scout in any lost-world setting.",
+      "notes": "The pteranodon is your aerial scout mount. She's light and fast but she can't fight effectively \u2014 her beak is for fishing, not combat. Use her for reconnaissance and message-carrying in campaigns where the players need eyes in the sky.",
       "image": "",
       "size": 4,
       "loco": "vtol",
@@ -70,8 +70,8 @@
     },
     {
       "name": "Ankylosaurus",
-      "desc": "Armoured tank lizard. Club tail.",
-      "notes": "",
+      "desc": "A living tank. Armoured plates cover her back, a bony club on her tail shatters bones, and she weighs several tons. She's slow, she's docile until provoked, and she's the most heavily armoured animal that's ever lived.",
+      "notes": "The ankylosaurus is your defensive mount. Her natural armour gives her Toughness that rivals vehicles, and her tail club does massive damage. She's slow \u2014 painfully slow \u2014 but nearly indestructible. Use her as a mobile fortress for players who prefer defence.",
       "image": "",
       "size": 7,
       "loco": "legs_quad",
@@ -85,8 +85,8 @@
     },
     {
       "name": "Brontosaurus",
-      "desc": "Titanic herbivore. Walking siege tower.",
-      "notes": "",
+      "desc": "Seventy feet long, thirty tons, and utterly indifferent to anything smaller than herself. She carries a platform on her back that holds a dozen passengers and their equipment. She's not a war mount \u2014 she's a living transport that happens to be invulnerable to everything short of a T-Rex.",
+      "notes": "The brontosaurus is your mobile platform. She carries a full party plus camp on her back. She doesn't fight \u2014 she doesn't need to. Nothing attacks something this large. Use her as the campaign's mobile base in a lost-world setting.",
       "image": "",
       "size": 14,
       "loco": "legs_quad",
@@ -100,8 +100,8 @@
     },
     {
       "name": "Stegosaurus",
-      "desc": "Plated herbivore. Thagomizer tail.",
-      "notes": "",
+      "desc": "Plates along her spine, spikes on her tail, and a brain the size of a walnut that somehow manages to control four tons of armoured herbivore. She's slow, she's stupid, and her tail spike \u2014 the thagomizer \u2014 kills anything it hits.",
+      "notes": "The stegosaurus is your tail-weapon mount. The thagomizer does incredible damage to anything behind her. The rider sits between the dorsal plates, which provide Cover. She's too stupid to train for complex manoeuvres \u2014 she has two modes: graze and kill.",
       "image": "",
       "size": 7,
       "loco": "legs_quad",
@@ -115,8 +115,8 @@
     },
     {
       "name": "Parasaurolophus",
-      "desc": "Fast herbivore. Alert mount.",
-      "notes": "",
+      "desc": "A crested hadrosaur whose hollow headcrest produces a sound that carries for miles. She's a herd animal \u2014 fast, alert, and capable of warning the entire herd with a single blast. She's the dinosaur equivalent of a cavalry trumpet.",
+      "notes": "The parasaurolophus is your signal and communication mount. Her call carries vast distances and can be modulated to convey simple messages. Use her for scouting parties that need to communicate across jungle terrain where line-of-sight is impossible.",
       "image": "",
       "size": 5,
       "loco": "legs_biped",
@@ -130,8 +130,8 @@
     },
     {
       "name": "Carnotaurus",
-      "desc": "Fast pursuit predator. Horned skull.",
-      "notes": "",
+      "desc": "Bull horns, a deep skull, and the fastest sprint of any large theropod. She's smaller than a T-Rex but faster over short distances \u2014 a predator built for the charge rather than the chase. Her horns hit like a battering ram.",
+      "notes": "The carnotaurus is your cavalry charge dinosaur. She's fast enough to run down prey and her horn impact on a charge is devastating. Use her for mounted charges where the initial impact matters more than sustained combat. She's more controllable than a T-Rex but still aggressive.",
       "image": "",
       "size": 6,
       "loco": "legs_biped",
@@ -145,8 +145,8 @@
     },
     {
       "name": "Quetzalcoatlus",
-      "desc": "Largest flying reptile. Terrifying bomber.",
-      "notes": "",
+      "desc": "Thirty-five feet of wingspan, the largest flying animal that ever lived. She launches from cliff edges, soars on thermals at thousands of feet, and can carry a single rider across distances that ground mounts measure in weeks. She's the pterosaur that makes dragons jealous.",
+      "notes": "The quetzalcoatlus is your long-range aerial mount. She covers vast distances by soaring and can carry one rider plus light equipment. She's too fragile for aerial combat but she's the fastest way to cross a continent in a world without aircraft. Use her for strategic movement and epic journeys.",
       "image": "",
       "size": 6,
       "loco": "vtol",

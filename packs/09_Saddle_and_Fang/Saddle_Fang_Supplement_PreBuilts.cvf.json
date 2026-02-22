@@ -1,7 +1,7 @@
 {
   "formatVersion": "1.0",
   "exportType": "batch",
-  "packName": "Saddle & Fang — Supplement Pre-Builts",
+  "packName": "Saddle & Fang \u2014 Supplement Pre-Builts",
   "packId": "sup_saddle_fang",
   "price": "$5.99",
   "vehicleCount": 3,
@@ -9,8 +9,8 @@
   "vehicles": [
     {
       "name": "Riding Horse",
-      "desc": "Standard mount. Every adventurer's first ride.",
-      "notes": "",
+      "desc": "A standard riding horse. Not a warhorse, not a destrier \u2014 a horse that carries you where you need to go and doesn't kick anyone unless provoked.",
+      "notes": "Pre-built riding horse for immediate mounted travel. The default mount for any fantasy or historical campaign.",
       "image": "",
       "size": 2,
       "loco": "legs_quad",
@@ -24,8 +24,8 @@
     },
     {
       "name": "Wyvern",
-      "desc": "Two-legged winged drake. Venomous tail.",
-      "notes": "",
+      "desc": "Smaller than a dragon, less intelligent, and considerably more aggressive. She flies, she stings, and she tolerates a rider if properly trained.",
+      "notes": "Pre-built wyvern for immediate aerial mount encounters. Dangerous, available, and cheaper than a dragon.",
       "image": "",
       "size": 7,
       "loco": "vtol",
@@ -39,8 +39,8 @@
     },
     {
       "name": "War Elephant",
-      "desc": "Armoured pachyderm with howdah.",
-      "notes": "",
+      "desc": "Twelve feet at the shoulder, carrying a howdah of archers, and trained to crush infantry underfoot. She's the ancient world's main battle tank.",
+      "notes": "Pre-built war elephant for immediate large-scale battle scenarios. Devastating on the charge, unpredictable when wounded.",
       "image": "",
       "size": 8,
       "loco": "legs_quad",

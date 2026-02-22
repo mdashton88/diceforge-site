@@ -1,6 +1,6 @@
 {
   "id": "wasteland_starter",
-  "name": "Rust & Ruin — Wasteland Starter",
+  "name": "Rust & Ruin \u2014 Wasteland Starter",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
   "description": "Core weapons only. For fuel-as-currency, salvage tables, jury-rig construction, and wasteland hazards, see the full Rust & Ruin supplement.",
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "Survivor Pickup",
-      "desc": "Patched truck. Every dent earned. Every mile survived.",
-      "notes": "",
+      "desc": "A pickup truck held together with wire, prayer, and replacement parts scavenged from a dozen dead vehicles. She carries a family, their tools, and everything they own. She's the most common vehicle in the wasteland because she was the most common vehicle before it.",
+      "notes": "The survivor pickup is your starting vehicle. She does everything badly and nothing well, which is exactly what the wasteland requires. She carries people and gear. She's expendable and replaceable. Start the players here and let them upgrade.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -31,8 +31,8 @@
     },
     {
       "name": "War Rig",
-      "desc": "Armoured semi. The road belongs to whoever's biggest.",
-      "notes": "",
+      "desc": "The queen of the road. A semi-truck fortified with welded plate, gun mounts, and enough cargo space to supply a settlement for a month. Whoever controls the war rig controls the supply line, and whoever controls the supply line controls survival.",
+      "notes": "The starter war rig is the convoy centrepiece. She's the objective, the base, and the thing everyone fights over. Build the campaign around protecting, fuelling, and crewing her. She defines the wasteland campaign.",
       "image": "",
       "size": 9,
       "loco": "wheeled",
@@ -57,8 +57,8 @@
     },
     {
       "name": "Interceptor",
-      "desc": "V8 fury. Last of its kind. Worth killing for.",
-      "notes": "",
+      "desc": "Speed, aggression, and a driver with nothing left to lose. A muscle car stripped to the frame and rebuilt for combat \u2014 ram bars, armoured windscreen, and an engine that screams defiance at the wasteland.",
+      "notes": "The interceptor is your player vehicle for lone-wolf wasteland campaigns. She's fast, she's mean, and she runs on fuel the player can't afford to waste. Every chase is a commitment. Every gallon matters.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -78,8 +78,8 @@
     },
     {
       "name": "Death Bike",
-      "desc": "Two wheels, one gun, no future. Ride eternal.",
-      "notes": "",
+      "desc": "A motorcycle with welded armour, improvised weapons, and a rider who treats survival as someone else's problem. She scouts, she harasses, and she dies in numbers that don't seem to discourage the next rider.",
+      "notes": "Death bikes come in swarms. Use five to ten of them circling the war rig, taking potshots, and peeling off wounded. They're individually fragile but they force the players to split their attention across multiple threats.",
       "image": "",
       "size": 1,
       "loco": "wheeled",
@@ -99,8 +99,8 @@
     },
     {
       "name": "Scrap Crawler",
-      "desc": "Tractor chassis with welded plate. Ugly. Effective.",
-      "notes": "",
+      "desc": "Tracked, armoured in salvaged plate, and slow enough that walking beside her is a reasonable option. She crosses rubble, ruins, and broken terrain that destroys wheeled vehicles. She carries the salvage that keeps the settlement alive.",
+      "notes": "The scrap crawler goes where nothing else can. She's the expedition vehicle for dead zones, ruins, and irradiated wastelands. She's slow but she arrives, which is more than the fast vehicles can promise on broken ground.",
       "image": "",
       "size": 6,
       "loco": "tracked",
@@ -120,8 +120,8 @@
     },
     {
       "name": "Buzz Buggy",
-      "desc": "Dune buggy. Spikes optional. Screaming mandatory.",
-      "notes": "",
+      "desc": "A dune buggy with a rollcage, a machine gun, and the kind of driver who thinks jumps are tactical manoeuvres. She's light, she's fast off-road, and she breaks constantly \u2014 but she's simple enough to fix with a wrench and a curse.",
+      "notes": "The buzz buggy is the raider's vehicle. Cheap, fast, and expendable. Use her in packs for ambush encounters. She's also the player vehicle for the wasteland crew that can't afford an interceptor yet.",
       "image": "",
       "size": 2,
       "loco": "wheeled",
@@ -141,8 +141,8 @@
     },
     {
       "name": "Thunder Bus",
-      "desc": "Armoured school bus. Thirty passengers. One destiny.",
-      "notes": "",
+      "desc": "A bus, armoured with whatever was available, carrying the people who couldn't fight their way onto anything faster. She moves a community. She's slow, she's vulnerable, and the people inside are counting on her.",
+      "notes": "The thunder bus is your escort objective. She carries civilians \u2014 families, children, the injured. The players protect her because the people matter. Losing the bus isn't a tactical failure; it's a moral catastrophe.",
       "image": "",
       "size": 7,
       "loco": "wheeled",
@@ -167,8 +167,8 @@
     },
     {
       "name": "Sand Yacht",
-      "desc": "Wind-powered. Silent. No fuel. The patient predator.",
-      "notes": "",
+      "desc": "Sails on wheels. She crosses flat wasteland at speed using nothing but wind, which makes her the only vehicle that doesn't need fuel. She's silent, she's free, and she's useless anywhere there isn't flat ground and steady wind.",
+      "notes": "The sand yacht is your fuel-free alternative. She crosses salt flats and deserts where fuel-dependent vehicles can't sustain operations. Use her for long-range wasteland travel where the journey is measured in days, not hours.",
       "image": "",
       "size": 4,
       "loco": "water_sail",
@@ -182,8 +182,8 @@
     },
     {
       "name": "Fuel Tanker",
-      "desc": "Most valuable thing on wheels. Wars start over this.",
-      "notes": "",
+      "desc": "The most valuable vehicle in the wasteland. She carries fuel \u2014 the blood of civilisation \u2014 and everything alive on the road wants what she's carrying. She's a target, a prize, and a bomb.",
+      "notes": "The fuel tanker is your campaign MacGuffin. Every faction wants her. She's also a catastrophic explosion waiting to happen \u2014 one incendiary round to the tank and she detonates with a Large Burst Template.",
       "image": "",
       "size": 8,
       "loco": "wheeled",
@@ -197,8 +197,8 @@
     },
     {
       "name": "Frankenstein APC",
-      "desc": "Three vehicles welded into one. Ugly as sin. Refuses to die.",
-      "notes": "",
+      "desc": "Built from the corpses of a dozen military vehicles \u2014 a hull from a wrecked APC, tracks from a bulldozer, weapons from everything. She's ugly, she's unreliable, and she's the closest thing the wasteland has to a proper armoured vehicle.",
+      "notes": "The Frankenstein APC is the wasteland's heavy. She's tougher than anything else the survivors can build, but she breaks down frequently. Roll Repair after every major engagement. She's the campaign's mobile fortress \u2014 if you can keep her running.",
       "image": "",
       "size": 7,
       "loco": "tracked",

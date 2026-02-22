@@ -1,6 +1,6 @@
 {
   "id": "sup_chrome_fury",
-  "name": "Chrome & Fury — Supplement Pre-Builts",
+  "name": "Chrome & Fury \u2014 Supplement Pre-Builts",
   "version": "1.0",
   "publisher": "DiceForge Studios Ltd.",
   "description": "3 pre-built vehicles for the Vehicle Forge.",
@@ -10,8 +10,8 @@
   "vehicles": [
     {
       "name": "Muscle Car (Pursuit)",
-      "desc": "Classic pursuit vehicle. Big engine, narrow roads.",
-      "notes": "",
+      "desc": "Four hundred horsepower and a driver who considers speed limits a suggestion. She's fast, she's loud, and she's the vehicle of choice for anyone outrunning the law.",
+      "notes": "Pre-built muscle car for immediate chase scenarios. The default player vehicle for modern vehicle combat.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -31,8 +31,8 @@
     },
     {
       "name": "Police Interceptor",
-      "desc": "Law enforcement pursuit vehicle.",
-      "notes": "",
+      "desc": "Pursuit-rated, radio-equipped, and driven by someone trained to use a car as a weapon. She's what's in the rear-view mirror.",
+      "notes": "Pre-built interceptor for immediate pursuit scenarios. The default law enforcement opposition.",
       "image": "",
       "size": 4,
       "loco": "wheeled",
@@ -52,8 +52,8 @@
     },
     {
       "name": "Armoured Convoy Truck",
-      "desc": "Escort vehicle. Protect the payload.",
-      "notes": "",
+      "desc": "She carries the cargo that matters through territory where 'cargo that matters' means 'target.' Armoured, armed, and slow.",
+      "notes": "Pre-built convoy truck for immediate escort and ambush scenarios. The centrepiece of any road-combat encounter.",
       "image": "",
       "size": 8,
       "loco": "wheeled",
